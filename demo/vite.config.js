@@ -5,7 +5,7 @@ import { resolve } from 'path'
 export default defineConfig({
   plugins: [react()],
   root: resolve(__dirname),
-  publicDir: resolve(__dirname, '../../plantilla duralux/duralux-admin'),
+  publicDir: resolve(__dirname, 'public'),
   resolve: {
     alias: {
       '@duralux/ui': resolve(__dirname, '../src/index.js'),
