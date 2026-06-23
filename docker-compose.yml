@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  demo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: duralux-demo:latest
+    ports:
+      - "5200:80"
+    restart: unless-stopped
+
+  dev:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: sh -c "npm ci && npm run dev:demo -- --host 0.0.0.0 --port 5200"
+    ports:
+      - "5200:5200"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
