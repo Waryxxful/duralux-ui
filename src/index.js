@@ -24,6 +24,10 @@ export { FormField } from './components/form/FormField'
 export { Input } from './components/form/Input'
 export { Select } from './components/form/Select'
 export { Textarea } from './components/form/Textarea'
+export { Checkbox } from './components/form/Checkbox'
+export { Radio } from './components/form/Radio'
+export { FileInput } from './components/form/FileInput'
+export { InputGroup } from './components/form/InputGroup'
 
 // Data
 export { DataTable } from './components/data/DataTable'

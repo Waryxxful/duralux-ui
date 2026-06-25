@@ -1,11 +1,11 @@
-import { Input, Select, Textarea, FormField } from '@duralux/ui'
+import { Input, Select, Textarea, FormField, Checkbox, Radio, FileInput, InputGroup } from '@duralux/ui'
 import { ShowcaseSection } from '../ShowcaseSection'
 
 export function FormsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Forms</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Input · Select · Textarea · FormField</p>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>Input · Select · Textarea · FormField · Checkbox · Radio · FileInput · InputGroup</p>
 
       <ShowcaseSection
         title="Input"
@@ -85,6 +85,87 @@ export function FormsPage() {
         code={`<FormField label="Notas" htmlFor="notas">
   <Textarea id="notas" rows={4} placeholder="Escribe aquí..." />
 </FormField>`}
+      />
+
+      <ShowcaseSection
+        title="Checkbox"
+        description="Props: label, error, indeterminate + todos los props nativos de input (excepto type)"
+        preview={
+          <div className="d-flex flex-column gap-2">
+            <Checkbox label="Aceptar términos y condiciones" />
+            <Checkbox label="Con error" error />
+            <Checkbox label="Indeterminado" indeterminate />
+            <Checkbox label="Deshabilitado" disabled />
+          </div>
+        }
+        code={`<Checkbox label="Aceptar términos y condiciones" />
+<Checkbox label="Con error" error />
+<Checkbox label="Indeterminado" indeterminate />
+<Checkbox label="Deshabilitado" disabled />`}
+      />
+
+      <ShowcaseSection
+        title="Radio"
+        description="Props: label, error + todos los props nativos de input (excepto type)"
+        preview={
+          <div className="d-flex flex-column gap-2">
+            <Radio label="Opción A" name="demo-radio" defaultChecked />
+            <Radio label="Opción B" name="demo-radio" />
+            <Radio label="Con error" name="demo-radio-err" error />
+            <Radio label="Deshabilitado" name="demo-radio-dis" disabled />
+          </div>
+        }
+        code={`<Radio label="Opción A" name="grupo" defaultChecked />
+<Radio label="Opción B" name="grupo" />
+<Radio label="Con error" name="grupo" error />`}
+      />
+
+      <ShowcaseSection
+        title="FileInput"
+        description="Props: label, error (boolean | string), helpText + props nativos de input"
+        preview={
+          <div style={{ maxWidth: 400 }} className="d-flex flex-column gap-3">
+            <FileInput label="Subir documento" helpText="Formatos aceptados: PDF, DOCX (máx. 5 MB)" />
+            <FileInput label="Con error como texto" error="El archivo supera el tamaño máximo permitido" />
+            <FileInput label="Con error booleano" error />
+          </div>
+        }
+        code={`<FileInput label="Subir documento" helpText="Máx. 5 MB" />
+
+// Error como string (muestra mensaje)
+<FileInput label="Archivo" error="El archivo es demasiado grande" />
+
+// Error booleano (solo marca is-invalid)
+<FileInput label="Archivo" error />`}
+      />
+
+      <ShowcaseSection
+        title="InputGroup"
+        description="Props: prepend, append, className, children"
+        preview={
+          <div style={{ maxWidth: 400 }} className="d-flex flex-column gap-3">
+            <InputGroup prepend="@">
+              <input className="form-control" placeholder="usuario" />
+            </InputGroup>
+            <InputGroup append=".cl">
+              <input className="form-control" placeholder="dominio" />
+            </InputGroup>
+            <InputGroup prepend="$" append="CLP">
+              <input className="form-control" type="number" placeholder="0" />
+            </InputGroup>
+          </div>
+        }
+        code={`<InputGroup prepend="@">
+  <input className="form-control" placeholder="usuario" />
+</InputGroup>
+
+<InputGroup append=".cl">
+  <input className="form-control" placeholder="dominio" />
+</InputGroup>
+
+<InputGroup prepend="$" append="CLP">
+  <input className="form-control" type="number" placeholder="0" />
+</InputGroup>`}
       />
 
       <ShowcaseSection
