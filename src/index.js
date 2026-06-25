@@ -49,6 +49,9 @@ export { ChatBubble, ChatTypingIndicator } from './components/chat/ChatBubble'
 export { ChatInputBar } from './components/chat/ChatInputBar'
 export { ChatWindow } from './components/chat/ChatWindow'
 
+// Conversation
+export { MessageBubble } from './components/conversation/MessageBubble'
+
 // Layout
 export { AppLayout } from './components/layout/AppLayout'
 export { AuthLayout } from './components/layout/AuthLayout'

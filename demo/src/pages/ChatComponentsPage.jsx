@@ -1,4 +1,4 @@
-import { ChatBubble, ChatTypingIndicator, ChatInputBar, ChatWindow, ChatSidebar } from '@duralux/ui'
+import { ChatBubble, ChatTypingIndicator, ChatInputBar, ChatWindow, ChatSidebar, MessageBubble } from '@duralux/ui'
 import { ShowcaseSection } from '../ShowcaseSection'
 
 const MSG_OTHER = { id: 1, text: 'Hola, ¿cómo va el proyecto? ¿Ya terminaron el módulo de pagos?', time: '10:05 AM', sender: { name: 'Ana M.', avatar: '/assets/images/avatar/2.png' }, mine: false }
@@ -15,7 +15,7 @@ export function ChatComponentsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Chat Components</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>ChatBubble · ChatTypingIndicator · ChatInputBar · ChatWindow · ChatSidebar</p>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>ChatBubble · ChatTypingIndicator · ChatInputBar · ChatWindow · ChatSidebar · MessageBubble</p>
 
       <ShowcaseSection
         title="ChatBubble + ChatTypingIndicator"
@@ -40,6 +40,37 @@ export function ChatComponentsPage() {
 
 // Indicador de escritura
 <ChatTypingIndicator name="Ana M." />`}
+      />
+
+      <ShowcaseSection
+        title="MessageBubble (variantes)"
+        preview={
+          <div style={{ maxWidth: 520, background: '#f8fafc', borderRadius: 12, padding: 16 }}>
+            <MessageBubble variant="incoming">
+              Hola, ¿cómo estás?
+            </MessageBubble>
+            <MessageBubble variant="outgoing" meta="10:30 AM">
+              ¡Muy bien, gracias!
+            </MessageBubble>
+            <MessageBubble variant="incoming" header="Sistema" highlighted>
+              Nuevo mensaje de soporte disponible
+            </MessageBubble>
+            <MessageBubble variant="system">
+              Ana entró a la conversación
+            </MessageBubble>
+          </div>
+        }
+        code={`<MessageBubble variant="incoming">
+  Hola, ¿cómo estás?
+</MessageBubble>
+
+<MessageBubble variant="outgoing" meta="10:30 AM">
+  ¡Muy bien, gracias!
+</MessageBubble>
+
+<MessageBubble variant="system">
+  Ana entró a la conversación
+</MessageBubble>`}
       />
 
       <ShowcaseSection
