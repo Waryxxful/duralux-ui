@@ -17,6 +17,7 @@ import { RechartsPage } from './pages/RechartsPage'
 import { FormsPage } from './pages/FormsPage'
 import { ChatComponentsPage } from './pages/ChatComponentsPage'
 import { LayoutPage } from './pages/LayoutPage'
+import { FeedbackPage } from './pages/FeedbackPage'
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="forms" element={<FormsPage />} />
         <Route path="chat" element={<ChatComponentsPage />} />
         <Route path="layout" element={<LayoutPage />} />
+        <Route path="feedback" element={<FeedbackPage />} />
       </Route>
     </Routes>
   )
