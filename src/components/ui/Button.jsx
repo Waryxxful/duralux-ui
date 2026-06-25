@@ -2,18 +2,23 @@
  * Button — botón con variantes, tamaños y estado de carga.
  *
  * Props:
- *   variant  — "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark"
- *              Prefix with "outline-" for outlined. "light-brand" for the brand light variant.
- *   size     — "sm" | "md" | "lg"
- *   loading  — muestra spinner y deshabilita
- *   icon     — feather class string shown before label
- *   as       — element type (default "button")
+ *   variant   — "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "light-brand"
+ *   outline   — boolean → usa btn-outline-${variant} en lugar de btn-${variant}
+ *   size      — "sm" | "md" | "lg"
+ *   loading   — muestra spinner y deshabilita
+ *   icon      — feather class string shown before label (legacy; prefer startIcon)
+ *   startIcon — bare feather name → leading icon
+ *   endIcon   — bare feather name → trailing icon
+ *   as        — element type (default "button")
  */
 export function Button({
   variant = 'primary',
+  outline,
   size,
   loading,
   icon,
+  startIcon,
+  endIcon,
   disabled,
   onClick,
   href,
@@ -24,8 +29,8 @@ export function Button({
   ...props
 }) {
   const sizeClass = size ? ` btn-${size}` : ''
-  const variantClass = variant.startsWith('outline-') || variant === 'light-brand'
-    ? `btn-${variant}`
+  const variantClass = outline
+    ? `btn-outline-${variant}`
     : `btn-${variant}`
 
   return (
@@ -39,9 +44,13 @@ export function Button({
     >
       {loading
         ? <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-        : icon && <i className={`${icon} me-2`}></i>
+        : (startIcon
+            ? <i className={`feather-${startIcon} me-2`} aria-hidden />
+            : icon && <i className={`${icon} me-2`}></i>
+          )
       }
       {children}
+      {!loading && endIcon && <i className={`feather-${endIcon} ms-2`} aria-hidden />}
     </Tag>
   )
 }
@@ -59,18 +68,20 @@ export function LinkButton({ href, ...props }) {
  * IconButton — Button solo con icono, sin texto.
  *
  * Props:
- *   icon       — feather class string (e.g. "feather-edit")
- *   aria-label — requerido para accesibilidad
- *   variant, size, disabled, loading, className, ...rest
+ *   icon    — bare feather name (e.g. "edit")
+ *   label   — REQUIRED; used as aria-label and title
+ *   variant, size, outline, ...rest
  */
-export function IconButton({ icon, 'aria-label': label, className = '', ...props }) {
+export function IconButton({ icon, label, variant, size, outline, className = '', ...rest }) {
   return (
-    <Button
-      icon={icon}
+    <button
+      type="button"
+      className={['btn', outline ? `btn-outline-${variant || 'primary'}` : `btn-${variant || 'primary'}`, size ? `btn-${size}` : '', 'btn-icon', className].filter(Boolean).join(' ')}
       aria-label={label}
       title={label}
-      className={`btn-icon ${className}`}
-      {...props}
-    />
+      {...rest}
+    >
+      <i className={`feather-${icon}`} aria-hidden />
+    </button>
   )
 }

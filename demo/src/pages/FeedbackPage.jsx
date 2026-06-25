@@ -13,13 +13,13 @@ export function FeedbackPage() {
         title="EmptyState"
         preview={
           <EmptyState
-            icon="feather-inbox"
+            icon="inbox"
             title="Sin resultados"
             message="No hay datos disponibles para mostrar en este momento."
           />
         }
         code={`<EmptyState
-  icon="feather-inbox"
+  icon="inbox"
   title="Sin resultados"
   message="No hay datos disponibles para mostrar en este momento."
 />`}

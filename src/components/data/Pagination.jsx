@@ -49,7 +49,7 @@ export function Pagination({
             disabled={page === 1}
             aria-label="Página anterior"
           >
-            &laquo;
+            <i className="feather-chevron-left" aria-hidden />
           </button>
         </li>
 
@@ -75,7 +75,7 @@ export function Pagination({
             disabled={page === totalPages}
             aria-label="Página siguiente"
           >
-            &raquo;
+            <i className="feather-chevron-right" aria-hidden />
           </button>
         </li>
       </ul>

@@ -8,6 +8,7 @@ export function MessageBubble({
   highlighted,
   bubbleRef,
   className,
+  'data-raw': dataRaw,
 }) {
   if (variant === 'system') {
     return (
@@ -34,7 +35,7 @@ export function MessageBubble({
 
   return (
     <div className={`d-flex ${justifyContent} mb-2`}>
-      <div ref={bubbleRef} className={bubbleClasses}>
+      <div ref={bubbleRef} className={bubbleClasses} data-raw={dataRaw}>
         {header && <div className="fw-bold small mb-1">{header}</div>}
         {children}
         {meta && <div className="small text-muted mt-1">{meta}</div>}

@@ -5,7 +5,7 @@ export function ButtonsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Button</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>variant, size, loading, disabled, icon, onClick, href, as, className, children, type</code></p>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>variant, size, outline, loading, disabled, icon, startIcon, endIcon, onClick, href, as, className, children, type</code></p>
 
       <ShowcaseSection
         title="Variantes"
@@ -54,6 +54,21 @@ export function ButtonsPage() {
       />
 
       <ShowcaseSection
+        title="Outline + startIcon"
+        description="outline genera btn-outline-variant; startIcon/endIcon usan nombre bare."
+        preview={
+          <div className="d-flex flex-wrap gap-2">
+            <Button variant="primary" outline startIcon="plus">Nuevo</Button>
+            <Button variant="danger" outline startIcon="trash-2">Eliminar</Button>
+            <Button variant="success" outline endIcon="external-link">Ver más</Button>
+          </div>
+        }
+        code={`<Button variant="primary" outline startIcon="plus">Nuevo</Button>
+<Button variant="danger" outline startIcon="trash-2">Eliminar</Button>
+<Button variant="success" outline endIcon="external-link">Ver más</Button>`}
+      />
+
+      <ShowcaseSection
         title="Icono solo (btn-icon)"
         preview={
           <div className="d-flex gap-2">
@@ -76,28 +91,28 @@ export function ButtonsPage() {
         preview={
           <div className="d-flex align-items-center gap-3">
             {['xs','sm','md','lg','xl'].map(s => (
-              <Icon key={s} name="feather-star" size={s} aria-label={`estrella ${s}`} />
+              <Icon key={s} name="star" size={s} aria-label={`estrella ${s}`} />
             ))}
           </div>
         }
-        code={`<Icon name="feather-star" size="xs" />
-<Icon name="feather-star" size="sm" />
-<Icon name="feather-star" size="md" />
-<Icon name="feather-star" size="lg" />
-<Icon name="feather-star" size="xl" />`}
+        code={`<Icon name="star" size="xs" />
+<Icon name="star" size="sm" />
+<Icon name="star" size="md" />
+<Icon name="star" size="lg" />
+<Icon name="star" size="xl" />`}
       />
 
       <ShowcaseSection
         title="Iconos decorativos (aria-hidden)"
         preview={
           <div className="d-flex gap-3">
-            {['feather-home','feather-user','feather-settings','feather-bell','feather-mail'].map(n => (
+            {['home','user','settings','bell','mail'].map(n => (
               <Icon key={n} name={n} size="lg" />
             ))}
           </div>
         }
-        code={`<Icon name="feather-home" size="lg" />
-<Icon name="feather-user" size="lg" />`}
+        code={`<Icon name="home" size="lg" />
+<Icon name="user" size="lg" />`}
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>LinkButton</h1>
@@ -128,35 +143,33 @@ export function ButtonsPage() {
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>IconButton</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>icon, aria-label, variant, size, disabled, loading</code>. Solo icono, sin texto.</p>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>icon (bare name), label (required), variant, size, outline, disabled</code>. Solo icono, sin texto.</p>
 
       <ShowcaseSection
         title="Variantes"
         preview={
           <div className="d-flex flex-wrap gap-2">
             {['primary','secondary','success','danger','warning','light-brand'].map(v => (
-              <IconButton key={v} variant={v} icon="feather-edit" aria-label={`Editar (${v})`} />
+              <IconButton key={v} variant={v} icon="edit" label={`Editar (${v})`} />
             ))}
           </div>
         }
-        code={`<IconButton variant="primary" icon="feather-edit" aria-label="Editar" />
-<IconButton variant="danger" icon="feather-trash-2" aria-label="Eliminar" />`}
+        code={`<IconButton variant="primary" icon="edit" label="Editar" />
+<IconButton variant="danger" icon="trash-2" label="Eliminar" />`}
       />
 
       <ShowcaseSection
         title="Tamaños y estados"
         preview={
           <div className="d-flex align-items-center flex-wrap gap-2">
-            <IconButton variant="primary" icon="feather-search" size="sm" aria-label="Buscar pequeño" />
-            <IconButton variant="primary" icon="feather-search" aria-label="Buscar mediano" />
-            <IconButton variant="primary" icon="feather-search" size="lg" aria-label="Buscar grande" />
-            <IconButton variant="primary" icon="feather-search" aria-label="Cargando" loading />
-            <IconButton variant="primary" icon="feather-search" aria-label="Deshabilitado" disabled />
+            <IconButton variant="primary" icon="search" size="sm" label="Buscar pequeño" />
+            <IconButton variant="primary" icon="search" label="Buscar mediano" />
+            <IconButton variant="primary" icon="search" size="lg" label="Buscar grande" />
+            <IconButton variant="primary" icon="search" label="Deshabilitado" disabled />
           </div>
         }
-        code={`<IconButton variant="primary" icon="feather-search" size="sm" aria-label="Buscar" />
-<IconButton variant="primary" icon="feather-search" aria-label="Buscar" loading />
-<IconButton variant="primary" icon="feather-search" aria-label="Buscar" disabled />`}
+        code={`<IconButton variant="primary" icon="search" size="sm" label="Buscar" />
+<IconButton variant="primary" icon="search" label="Buscar" disabled />`}
       />
     </div>
   )
