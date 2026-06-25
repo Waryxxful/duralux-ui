@@ -1,7 +1,8 @@
 // UI
 export { Avatar } from './components/ui/Avatar'
 export { Badge } from './components/ui/Badge'
-export { Button } from './components/ui/Button'
+export { Button, LinkButton, IconButton } from './components/ui/Button'
+export { Icon } from './components/ui/Icon'
 export { Alert } from './components/ui/Alert'
 export { Modal } from './components/ui/Modal'
 export { Card } from './components/ui/Card'

@@ -45,3 +45,32 @@ export function Button({
     </Tag>
   )
 }
+
+/**
+ * LinkButton — Button renderizado como ancla (<a>).
+ *
+ * Props: mismas que Button + href requerido.
+ */
+export function LinkButton({ href, ...props }) {
+  return <Button as="a" href={href} {...props} />
+}
+
+/**
+ * IconButton — Button solo con icono, sin texto.
+ *
+ * Props:
+ *   icon       — feather class string (e.g. "feather-edit")
+ *   aria-label — requerido para accesibilidad
+ *   variant, size, disabled, loading, className, ...rest
+ */
+export function IconButton({ icon, 'aria-label': label, className = '', ...props }) {
+  return (
+    <Button
+      icon={icon}
+      aria-label={label}
+      title={label}
+      className={`btn-icon ${className}`}
+      {...props}
+    />
+  )
+}
