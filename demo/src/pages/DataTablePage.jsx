@@ -1,4 +1,5 @@
-import { DataTable, Badge, Button } from '@duralux/ui'
+import { useState } from 'react'
+import { DataTable, Badge, Button, Table, Pagination, ResponsiveTable } from '@duralux/ui'
 import { ShowcaseSection } from '../ShowcaseSection'
 
 const COLUMNS = [
@@ -27,7 +28,20 @@ const ACTIONS = [
   { label: 'Eliminar', icon: 'feather-trash-2', onClick: (row) => alert(`Eliminar: ${row.name}`) },
 ]
 
+const TABLE_COLUMNS = [
+  { key: 'name', header: 'Cliente', render: (row) => row.name },
+  { key: 'email', header: 'Email', render: (row) => row.email },
+  { key: 'group', header: 'Grupo', render: (row) => <Badge variant="primary" soft>{row.group}</Badge> },
+  { key: 'status', header: 'Estado', render: (row) => (
+    <Badge variant={row.status === 'Activo' ? 'success' : row.status === 'Inactivo' ? 'warning' : 'danger'} soft>
+      {row.status}
+    </Badge>
+  )},
+]
+
 export function DataTablePage() {
+  const [page, setPage] = useState(1)
+
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>DataTable</h1>
@@ -65,6 +79,100 @@ const ACTIONS = [
   selectable
   pageSize={10}
   actions={ACTIONS}
+/>`}
+      />
+
+      <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>Table</h1>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>columns, rows, rowKey, emptyMessage, loading, className, striped, hover</code></p>
+
+      <ShowcaseSection
+        title="Table básica con striped y hover"
+        preview={
+          <Table
+            columns={TABLE_COLUMNS}
+            rows={DATA}
+            rowKey={(row) => row.id}
+            striped
+            hover
+          />
+        }
+        code={`<Table
+  columns={TABLE_COLUMNS}
+  rows={DATA}
+  rowKey={(row) => row.id}
+  striped
+  hover
+/>`}
+      />
+
+      <ShowcaseSection
+        title="Table sin registros"
+        preview={
+          <Table
+            columns={TABLE_COLUMNS}
+            rows={[]}
+            rowKey={(row) => row.id}
+          />
+        }
+        code={`<Table columns={TABLE_COLUMNS} rows={[]} rowKey={(row) => row.id} />`}
+      />
+
+      <ShowcaseSection
+        title="Table cargando"
+        preview={
+          <Table
+            columns={TABLE_COLUMNS}
+            rows={[]}
+            rowKey={(row) => row.id}
+            loading
+          />
+        }
+        code={`<Table columns={TABLE_COLUMNS} rows={[]} rowKey={(row) => row.id} loading />`}
+      />
+
+      <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>Pagination</h1>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>page, totalPages, onPageChange, sibling, className</code></p>
+
+      <ShowcaseSection
+        title="Paginación (página actual: {page})"
+        preview={
+          <Pagination
+            page={page}
+            totalPages={10}
+            onPageChange={setPage}
+            sibling={1}
+          />
+        }
+        code={`const [page, setPage] = useState(1)
+
+<Pagination
+  page={page}
+  totalPages={10}
+  onPageChange={setPage}
+  sibling={1}
+/>`}
+      />
+
+      <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>ResponsiveTable</h1>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: mismos que Table más <code>wrapperClassName</code></p>
+
+      <ShowcaseSection
+        title="ResponsiveTable (scroll horizontal en pantallas pequeñas)"
+        preview={
+          <ResponsiveTable
+            columns={TABLE_COLUMNS}
+            rows={DATA}
+            rowKey={(row) => row.id}
+            striped
+            hover
+          />
+        }
+        code={`<ResponsiveTable
+  columns={TABLE_COLUMNS}
+  rows={DATA}
+  rowKey={(row) => row.id}
+  striped
+  hover
 />`}
       />
     </div>

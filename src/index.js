@@ -31,6 +31,9 @@ export { InputGroup } from './components/form/InputGroup'
 
 // Data
 export { DataTable } from './components/data/DataTable'
+export { Table } from './components/data/Table'
+export { Pagination } from './components/data/Pagination'
+export { ResponsiveTable } from './components/data/ResponsiveTable'
 
 // Charts
 export { ApexChart } from './components/charts/ApexChart'
