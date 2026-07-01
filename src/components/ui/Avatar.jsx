@@ -5,10 +5,13 @@
  *   src      — image URL
  *   name     — used to derive initials when no src
  *   size     — "sm" | "md" | "lg" | "xl" (default "md")
- *   rounded  — "circle" | "3" (default "circle")
- *   bg       — background class when showing initials
+ *   rounded  — "circle" | "3" (default "circle") | boolean
+ *   variant  — color de fondo semántico para las iniciales (alias legacy: bg="bg-...")
+ *   alt      — texto alternativo de la imagen (default: name)
  */
-export function Avatar({ src, name = '', size = 'md', rounded = 'circle', bg = 'bg-primary' }) {
+export function Avatar({ src, name = '', size = 'md', rounded = 'circle', variant, bg, alt }) {
+  const bgClass = bg ?? (variant ? `bg-${variant}` : 'bg-primary')
+  const roundedClass = rounded === true ? 'circle' : rounded
   const initials = name
     .split(' ')
     .map((w) => w[0])
@@ -19,13 +22,13 @@ export function Avatar({ src, name = '', size = 'md', rounded = 'circle', bg = '
   if (src) {
     return (
       <div className={`avatar-image avatar-${size}`}>
-        <img src={src} alt={name} className="img-fluid" style={{ borderRadius: rounded === 'circle' ? '50%' : undefined }} />
+        <img src={src} alt={alt ?? name} className="img-fluid" style={{ borderRadius: roundedClass === 'circle' ? '50%' : undefined }} />
       </div>
     )
   }
 
   return (
-    <div className={`avatar-text avatar-${size} rounded-${rounded} ${bg} text-white`}>
+    <div className={`avatar-text avatar-${size} rounded-${roundedClass} ${bgClass} text-white`}>
       {initials || '?'}
     </div>
   )

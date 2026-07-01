@@ -1,30 +1,26 @@
 /**
- * Input — input con ícono opcional al inicio.
+ * Input — input con addon/ícono opcional.
  *
  * Props:
- *   icon    — feather class string, e.g. "feather-user"
- *   prefix  — texto fijo delante del input (e.g. "https://")
- *   invalid — estado de error (agrega is-invalid)
+ *   icon      — feather class string, e.g. "feather-user" (alias legacy)
+ *   prefix    — texto fijo delante del input (alias legacy)
+ *   startAddon — nodo antes del input (input-group-text)
+ *   endAddon   — nodo después del input
+ *   error     — estado de error → is-invalid (alias legacy: invalid)
  *   Todos los props nativos de <input> son válidos.
  */
-export function Input({ icon, prefix, invalid, className = '', ...props }) {
-  if (!icon && !prefix) {
-    return (
-      <input
-        className={`form-control${invalid ? ' is-invalid' : ''} ${className}`}
-        {...props}
-      />
-    )
-  }
-
+export function Input({ icon, prefix, startAddon, endAddon, invalid, error, className = '', ...props }) {
+  const isInvalid = invalid || error
+  const lead = startAddon ?? (icon ? <i className={icon}></i> : prefix != null ? prefix : null)
+  const input = (
+    <input className={`form-control${isInvalid ? ' is-invalid' : ''} ${className}`} {...props} />
+  )
+  if (lead == null && endAddon == null) return input
   return (
     <div className="input-group">
-      {icon && <div className="input-group-text"><i className={icon}></i></div>}
-      {prefix && <div className="input-group-text">{prefix}</div>}
-      <input
-        className={`form-control${invalid ? ' is-invalid' : ''} ${className}`}
-        {...props}
-      />
+      {lead != null && <div className="input-group-text">{lead}</div>}
+      {input}
+      {endAddon != null && <div className="input-group-text">{endAddon}</div>}
     </div>
   )
 }

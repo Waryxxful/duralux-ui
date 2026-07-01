@@ -7,16 +7,17 @@ import { createPortal } from 'react-dom'
  *   open     — boolean
  *   onClose  — called when backdrop or X is clicked
  *   title    — modal title
- *   size     — "sm" | "lg" | "xl" | undefined (default medium)
- *   footer   — JSX for footer (usually buttons)
+ *   size       — "sm" | "lg" | "xl" | "fullscreen" | undefined (default medium)
+ *   scrollable — cuerpo con scroll interno (modal-dialog-scrollable)
+ *   footer     — JSX for footer (usually buttons)
  */
-export function Modal({ open, onClose, title, size, footer, children }) {
+export function Modal({ open, onClose, title, size, scrollable, footer, children }) {
   if (!open) return null
 
   return createPortal(
     <>
       <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" onClick={(e) => { if (e.target === e.currentTarget) onClose?.() }}>
-        <div className={`modal-dialog${size ? ` modal-${size}` : ''} modal-dialog-centered`}>
+        <div className={`modal-dialog${size ? ` modal-${size}` : ''} modal-dialog-centered${scrollable ? ' modal-dialog-scrollable' : ''}`}>
           <div className="modal-content">
             {title && (
               <div className="modal-header">

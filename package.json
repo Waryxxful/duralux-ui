@@ -14,7 +14,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
+    "audit-contract": "node scripts/audit-contract.mjs",
+    "build": "node scripts/audit-contract.mjs && vite build",
     "prepare": "vite build",
     "dev:demo": "vite --config demo/vite.config.js",
     "preview:demo": "vite preview --config demo/vite.config.js"

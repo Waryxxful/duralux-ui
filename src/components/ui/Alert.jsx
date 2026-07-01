@@ -7,14 +7,16 @@ import { useState } from 'react'
  *   variant     — "primary" | "success" | "warning" | "danger" | "info"
  *   icon        — feather class string
  *   dismissible — muestra botón de cierre
+ *   onDismiss   — callback al cerrar (también muestra el botón de cierre)
  *   title       — bold prefix text
  */
-export function Alert({ variant = 'primary', icon, dismissible, title, children }) {
+export function Alert({ variant = 'primary', icon, dismissible, onDismiss, title, children }) {
   const [visible, setVisible] = useState(true)
   if (!visible) return null
 
+  const closable = dismissible || onDismiss
   return (
-    <div className={`alert alert-${variant} d-flex align-items-center gap-3${dismissible ? ' alert-dismissible' : ''}`} role="alert">
+    <div className={`alert alert-${variant} d-flex align-items-center gap-3${closable ? ' alert-dismissible' : ''}`} role="alert">
       {icon && (
         <div className={`avatar-text avatar-sm rounded bg-${variant} text-white flex-shrink-0`}>
           <i className={icon}></i>
@@ -24,11 +26,11 @@ export function Alert({ variant = 'primary', icon, dismissible, title, children 
         {title && <strong>{title} </strong>}
         {children}
       </div>
-      {dismissible && (
+      {closable && (
         <button
           type="button"
           className="btn-close ms-auto"
-          onClick={() => setVisible(false)}
+          onClick={() => { setVisible(false); onDismiss?.() }}
         ></button>
       )}
     </div>

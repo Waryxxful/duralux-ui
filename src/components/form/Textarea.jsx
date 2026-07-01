@@ -3,15 +3,16 @@
  *
  * Props:
  *   icon    — feather class string
- *   invalid — estado de error
+ *   error   — estado de error → is-invalid (alias legacy: invalid)
  *   rows    — número de filas (default 4)
  *   Todos los props nativos de <textarea> son válidos.
  */
-export function Textarea({ icon, invalid, rows = 4, className = '', ...props }) {
+export function Textarea({ icon, invalid, error, rows = 4, className = '', ...props }) {
+  const isInvalid = invalid || error
   if (!icon) {
     return (
       <textarea
-        className={`form-control${invalid ? ' is-invalid' : ''} ${className}`}
+        className={`form-control${isInvalid ? ' is-invalid' : ''} ${className}`}
         rows={rows}
         {...props}
       />
@@ -22,7 +23,7 @@ export function Textarea({ icon, invalid, rows = 4, className = '', ...props }) 
     <div className="input-group align-items-start">
       <div className="input-group-text"><i className={icon}></i></div>
       <textarea
-        className={`form-control${invalid ? ' is-invalid' : ''} ${className}`}
+        className={`form-control${isInvalid ? ' is-invalid' : ''} ${className}`}
         rows={rows}
         {...props}
       />

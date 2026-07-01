@@ -6,12 +6,13 @@
  *   subtitle    — optional line under the title
  *   breadcrumbs — [{ label, href }] (last item has no href)
  *   actions     — right-side actions (buttons, filters, etc.)
+ *   className   — clases extra en el contenedor
  *   children    — same as actions; kept for backward compat (actions wins)
  */
-export function PageHeader({ title, subtitle, breadcrumbs = [], actions, children }) {
+export function PageHeader({ title, subtitle, breadcrumbs = [], actions, className = '', children }) {
   const right = actions ?? children;
   return (
-    <div className="page-header">
+    <div className={`page-header${className ? ' ' + className : ''}`}>
       <div className="page-header-left d-flex align-items-center">
         <div className="page-header-title">
           <h5 className="m-b-10">{title}</h5>
@@ -21,7 +22,7 @@ export function PageHeader({ title, subtitle, breadcrumbs = [], actions, childre
           <ul className="breadcrumb">
             {breadcrumbs.map((crumb, i) =>
               crumb.href
-                ? <li key={i} className="breadcrumb-item"><a href={crumb.href}>{crumb.label}</a></li>
+                ? <li key={i} className="breadcrumb-item"><a href={crumb.href} onClick={crumb.onClick}>{crumb.label}</a></li>
                 : <li key={i} className="breadcrumb-item">{crumb.label}</li>
             )}
           </ul>

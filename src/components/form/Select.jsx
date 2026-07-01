@@ -3,13 +3,14 @@
  *
  * Props:
  *   options  — [{ value, label }] o [string]
- *   invalid  — estado de error
+ *   error    — estado de error → is-invalid (alias legacy: invalid)
  *   Todos los props nativos de <select> son válidos.
  */
-export function Select({ options = [], invalid, className = '', children, ...props }) {
+export function Select({ options = [], invalid, error, className = '', children, ...props }) {
+  const isInvalid = invalid || error
   return (
     <select
-      className={`form-control form-select${invalid ? ' is-invalid' : ''} ${className}`}
+      className={`form-control form-select${isInvalid ? ' is-invalid' : ''} ${className}`}
       {...props}
     >
       {children || options.map((opt) => {
