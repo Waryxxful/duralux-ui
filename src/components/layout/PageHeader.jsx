@@ -3,15 +3,19 @@
  *
  * Props:
  *   title       — page title string
+ *   subtitle    — optional line under the title
  *   breadcrumbs — [{ label, href }] (last item has no href)
- *   children    — right-side actions (buttons, filters, etc.)
+ *   actions     — right-side actions (buttons, filters, etc.)
+ *   children    — same as actions; kept for backward compat (actions wins)
  */
-export function PageHeader({ title, breadcrumbs = [], children }) {
+export function PageHeader({ title, subtitle, breadcrumbs = [], actions, children }) {
+  const right = actions ?? children;
   return (
     <div className="page-header">
       <div className="page-header-left d-flex align-items-center">
         <div className="page-header-title">
           <h5 className="m-b-10">{title}</h5>
+          {subtitle && <p className="text-muted m-b-0">{subtitle}</p>}
         </div>
         {breadcrumbs.length > 0 && (
           <ul className="breadcrumb">
@@ -23,11 +27,11 @@ export function PageHeader({ title, breadcrumbs = [], children }) {
           </ul>
         )}
       </div>
-      {children && (
+      {right && (
         <div className="page-header-right ms-auto">
           <div className="page-header-right-items">
             <div className="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-              {children}
+              {right}
             </div>
           </div>
         </div>
