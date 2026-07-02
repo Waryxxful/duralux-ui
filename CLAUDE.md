@@ -19,17 +19,18 @@ propio de GranCRM.
 
 ## Si editás un componente acá, hay que propagar el cambio a mano
 
-`file:` dependencies de pnpm/npm **no se trackean en vivo** — son una copia tomada en el
-momento del install. Editar y buildear acá no le llega solo a nadie.
+`grancrm-ui` bundlea este código con un alias de esbuild directo a `src/index.js` (tu
+fuente, no `dist/`) — **no hace falta correr `npm run build` acá** para que grancrm-ui
+vea el cambio. Verificado en vivo: un edit en `src/` aparece en `grancrm-ui/dist/index.js`
+con un solo rebuild de grancrm-ui, sin buildear este repo antes. (`npm run build` acá solo
+hace falta para otros consumidores que instalen el paquete publicado normal, ej. la demo
+standalone — no para esta cadena.)
 
 ```bash
-# 1. Buildear este repo
-cd /home/admincrm/duralux-ui && npm run build
-
-# 2. Refrescar + rebuildear grancrm-ui (su hook `prepare` encadena el build)
+# 1. Refrescar + rebuildear grancrm-ui (su hook `prepare` encadena el build)
 cd /home/admincrm/orquestador/frontend && pnpm install
 
-# 3. Propagar a cada consumidor externo (repo separado) — verificado en vivo: ni
+# 2. Propagar a cada consumidor externo (repo separado) — verificado en vivo: ni
 #    `pnpm install`, ni `--force`, ni bumpear versiones fuerzan la actualización acá.
 #    Único fix confiable es nuke node_modules del lado del consumidor:
 cd /home/admincrm/call_reviews/frontend && rm -rf node_modules && pnpm install
