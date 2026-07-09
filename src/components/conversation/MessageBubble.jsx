@@ -1,5 +1,13 @@
 import React from 'react'
 
+/**
+ * MessageBubble — portable chat/transcript bubble.
+ *
+ * Uses gcu-message-* classes (token-driven via grancrm-ui CSS) instead of raw
+ * Bootstrap bg-light/bg-primary, which lose contrast under light and dark hosts.
+ *
+ * variant: "incoming" | "outgoing" | "system"
+ */
 export function MessageBubble({
   variant,
   children,
@@ -12,33 +20,28 @@ export function MessageBubble({
 }) {
   if (variant === 'system') {
     return (
-      <div className={`d-flex justify-content-center mb-2 ${className || ''}`.trim()}>
-        <div className="bg-secondary-subtle text-muted small text-center rounded p-2">
-          {children}
-        </div>
+      <div className={['gcu-message-row', className].filter(Boolean).join(' ')}>
+        <div className="gcu-message-system">{children}</div>
       </div>
     )
   }
 
-  const isOutgoing = variant === 'outgoing'
-  const justifyContent = isOutgoing ? 'justify-content-end' : 'justify-content-start'
-
-  const bubbleClasses = [
-    'rounded',
-    'p-2',
-    isOutgoing ? 'bg-primary text-white' : 'bg-light',
-    highlighted ? 'border border-warning' : '',
+  const side = variant === 'outgoing' ? 'outgoing' : 'incoming'
+  const bubbleClass = [
+    'gcu-message-bubble',
+    `gcu-message-bubble--${side}`,
+    highlighted ? 'gcu-message-bubble--highlighted' : '',
     className,
   ]
     .filter(Boolean)
     .join(' ')
 
   return (
-    <div className={`d-flex ${justifyContent} mb-2`}>
-      <div ref={bubbleRef} className={bubbleClasses} data-raw={dataRaw}>
-        {header && <div className="fw-bold small mb-1">{header}</div>}
+    <div className={`gcu-message-row gcu-message-row--${side}`}>
+      <div ref={bubbleRef} className={bubbleClass} data-raw={dataRaw}>
+        {header ? <div className="gcu-message-bubble__header">{header}</div> : null}
         {children}
-        {meta && <div className="small text-muted mt-1">{meta}</div>}
+        {meta ? <div className="gcu-message-bubble__meta">{meta}</div> : null}
       </div>
     </div>
   )
