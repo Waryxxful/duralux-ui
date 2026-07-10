@@ -9,7 +9,7 @@
  *   variant  — color de fondo semántico para las iniciales (alias legacy: bg="bg-...")
  *   alt      — texto alternativo de la imagen (default: name)
  */
-export function Avatar({ src, name = '', size = 'md', rounded = 'circle', variant, bg, alt }) {
+export function Avatar({ src = null, name = '', size = 'md', rounded = 'circle', variant = 'primary', bg = null, alt = '', className = '', style = undefined, ...rest }) {
   const bgClass = bg ?? (variant ? `bg-${variant}` : 'bg-primary')
   const roundedClass = rounded === true ? 'circle' : rounded
   const initials = name
@@ -21,14 +21,14 @@ export function Avatar({ src, name = '', size = 'md', rounded = 'circle', varian
 
   if (src) {
     return (
-      <div className={`avatar-image avatar-${size}`}>
+      <div className={`avatar-image avatar-${size} ${className}`} style={style} {...rest}>
         <img src={src} alt={alt ?? name} className="img-fluid" style={{ borderRadius: roundedClass === 'circle' ? '50%' : undefined }} />
       </div>
     )
   }
 
   return (
-    <div className={`avatar-text avatar-${size} rounded-${roundedClass} ${bgClass} text-white`}>
+    <div className={`avatar-text avatar-${size} rounded-${roundedClass} ${bgClass} text-white ${className}`} style={style} {...rest}>
       {initials || '?'}
     </div>
   )

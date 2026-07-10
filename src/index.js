@@ -55,6 +55,20 @@ export { MessageBubble } from './components/conversation/MessageBubble'
 // Layout
 export { AppLayout } from './components/layout/AppLayout'
 export { AuthLayout } from './components/layout/AuthLayout'
+export { ShellHeader } from './components/shell/ShellHeader'
+export { ShellNav } from './components/shell/ShellNav'
+export { ThemeScope } from './components/shell/ThemeScope'
+export { ConfirmDialog } from './components/shell/ConfirmDialog'
+export { CardHeader, CardBody, CardFooter, StatusBadge, StatusButton, StatCard } from './components/shell/GranCrmExtras'
+
+// Contrato de sesión/manifest/nav del shell GranCRM
+export * from './contract'
+
+// Design tokens
+export * from './tokens'
+
+// Cliente API (fetch con CSRF + credenciales same-origin)
+export { apiFetch } from './api/client'
 export { Header } from './components/layout/Header'
 export { Sidebar } from './components/layout/Sidebar'
 export { PageHeader } from './components/layout/PageHeader'

@@ -11,7 +11,7 @@ import { createPortal } from 'react-dom'
  *   scrollable — cuerpo con scroll interno (modal-dialog-scrollable)
  *   footer     — JSX for footer (usually buttons)
  */
-export function Modal({ open, onClose, title, size, scrollable, footer, children }) {
+export function Modal({ open = false, onClose, title, size = undefined, scrollable = false, footer = null, children }) {
   if (!open) return null
 
   return createPortal(

@@ -17,7 +17,7 @@ const sizeMap = {
   xl: '1.5rem',
 }
 
-export function Icon({ name, size, 'aria-label': label, className = '', style, ...rest }) {
+export function Icon({ name, size = undefined, 'aria-label': label = undefined, className = '', style = undefined, ...rest }) {
   const resolvedSize = typeof size === 'number' ? size : sizeMap[size]
   const inlineSize = resolvedSize ? { fontSize: resolvedSize, ...style } : style
   const cls = ['feather-' + name, className].filter(Boolean).join(' ')

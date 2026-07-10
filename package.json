@@ -4,19 +4,24 @@
   "description": "Librería de componentes React + Duralux CSS",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "style": "./dist/styles/grancrm-ui.css",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./styles/grancrm-ui.css": "./dist/styles/grancrm-ui.css",
+    "./styles/feather-icons.css": "./dist/styles/feather-icons.css",
+    "./styles.css": "./dist/styles/grancrm-ui.css"
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "audit-contract": "node scripts/audit-contract.mjs",
-    "build": "node scripts/audit-contract.mjs && vite build",
-    "prepare": "vite build",
+    "build": "vite build && node scripts/copy-styles.mjs && node scripts/write-index-dts.mjs",
+    "prepare": "npm run build",
     "dev:demo": "vite --config demo/vite.config.js",
     "preview:demo": "vite preview --config demo/vite.config.js"
   },
@@ -30,11 +35,21 @@
     "recharts": "^3.8.1"
   },
   "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.5",
-    "vite": "^6.0.5"
+    "typescript": "^5.9.3",
+    "vite": "^6.0.5",
+    "vite-plugin-dts": "^5.0.3"
   },
-  "sideEffects": false
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Waryxxful/duralux-ui.git"
+  }
 }

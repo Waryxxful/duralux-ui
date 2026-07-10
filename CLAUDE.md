@@ -1,47 +1,82 @@
 # @duralux/ui
 
-Sistema de diseño React puro (Bootstrap + tema Duralux/NXL). Fuente de verdad visual
-para todas las apps de GranCRM. No conoce nada de GranCRM/shell/sesión — eso vive en
-`grancrm-ui` (capa de arriba).
+**Único paquete compartido** del ecosistema GranCRM frontend.
 
-Ver `CLAUDE.snippet.md` para el catálogo de componentes y cómo se importa desde una app.
+Contiene:
 
-## Consumidores (nadie te importa directo salvo uno)
+1. **Design system Duralux** — componentes React con markup 1:1 del template (cards, forms, tables, charts, chat, layout genérico).
+2. **Contrato shell↔satélite** — `GranCrmSession`, `AppManifestEntry`, `AppNavItem`, `EventBus`, `GranCrmRemoteProps`, `appHref` (`src/contract.ts`).
+3. **Shell UI** — `ShellHeader`, `ShellNav`, `ThemeScope`, `ConfirmDialog`, extras GranCRM (`CardHeader`/`CardBody`/`StatCard`/`StatusBadge`, …) en `src/components/shell/`.
+4. **Tokens** — `src/tokens.ts` (`SemanticVariant`, `StatusVariant`, colores/spacing).
+5. **Cliente API** — `apiFetch` con CSRF + credentials same-origin (`src/api/client.ts`).
+6. **Estilos del glue shell** — `src/styles/grancrm-ui.css` + feather icons (exportados en `dist/styles/`).
+
+Repo: `github.com/Waryxxful/duralux-ui`. Nombre npm: `@duralux/ui`.
+
+> **`grancrm-ui` está deprecado.** Vivía en `orquestador/frontend/packages/grancrm-ui` y se fusionó acá. No crear capas intermedias nuevas.
+
+Ver `CLAUDE.snippet.md` para el catálogo de componentes.
+
+## Estructura relevante
 
 ```
-duralux-ui  →  grancrm-ui (/home/admincrm/orquestador/frontend/packages/grancrm-ui)  →  shell, call_reviews
+src/
+  index.js                 # re-exports públicos
+  contract.ts              # contrato MF (única fuente de verdad)
+  tokens.ts
+  api/client.ts
+  components/
+    shell/                 # ShellHeader, ShellNav, ThemeScope, ConfirmDialog, GranCrmExtras
+    ui/ layout/ form/ …   # design system
+  styles/
+    grancrm-ui.css
+    feather-icons.css
+    fonts/feather.woff
 ```
 
-**`grancrm-ui` es el único consumidor directo permitido.** Ninguna otra app (call_reviews,
-incitrack, wsp_platform, etc.) debe importar `@duralux/ui` directo — todas pasan por
-`grancrm-ui`, que bundlea este paquete adentro (tsup `noExternal`) y agrega el glue
-propio de GranCRM.
+## Consumo (siempre vía git, nunca `file:`)
 
-## Si editás un componente acá, hay que propagar el cambio a mano
+```json
+{
+  "dependencies": {
+    "@duralux/ui": "github:Waryxxful/duralux-ui"
+  }
+}
+```
 
-`grancrm-ui` bundlea este código con un alias de esbuild directo a `src/index.js` (tu
-fuente, no `dist/`) — **no hace falta correr `npm run build` acá** para que grancrm-ui
-vea el cambio. Verificado en vivo: un edit en `src/` aparece en `grancrm-ui/dist/index.js`
-con un solo rebuild de grancrm-ui, sin buildear este repo antes. (`npm run build` acá solo
-hace falta para otros consumidores que instalen el paquete publicado normal, ej. la demo
-standalone — no para esta cadena.)
+```ts
+import {
+  ShellHeader, ShellNav, Button, PageHeader,
+  type GranCrmRemoteProps, type GranCrmSession, apiFetch,
+} from '@duralux/ui';
+import '@duralux/ui/styles/grancrm-ui.css';
+```
+
+- El **shell** carga el CSS del glue una vez y monta `ShellHeader`/`ShellNav`.
+- Las **satélites** importan componentes + tipos del paquete; **no** copian `types.ts` a mano.
+- El CSS global del theme Duralux (`theme.min.css` / Bootstrap) lo sigue sirviendo el shell vía staticfiles del orquestador (hasta consolidar SCSS en este paquete — ver plan Fase 0/D2).
+
+## Build
+
+En este repo usar **`npm`**, no `pnpm` (bug de sandbox con el store SQLite de pnpm en este entorno — ver `plans/handoff.md`).
 
 ```bash
-# 1. Refrescar + rebuildear grancrm-ui (su hook `prepare` encadena el build)
-cd /home/admincrm/orquestador/frontend && pnpm install
-
-# 2. Propagar a cada consumidor externo (repo separado) — verificado en vivo: ni
-#    `pnpm install`, ni `--force`, ni bumpear versiones fuerzan la actualización acá.
-#    Único fix confiable es nuke node_modules del lado del consumidor:
-cd /home/admincrm/call_reviews/frontend && rm -rf node_modules && pnpm install
-cd /home/admincrm/call_reviews/frontend && pnpm build && docker compose restart web   # deploy
+cd /home/admincrm/duralux-ui
+npm install
+npm run build
+# produce dist/index.js, dist/index.cjs, dist/index.d.ts, dist/styles/
 ```
 
-Detalle completo del porqué (caché de pnpm por lockfile, no por contenido) está
-documentado en `orquestador/frontend/packages/grancrm-ui/CLAUDE.md`.
+- Tipos reales (`contract`, `tokens`, shell components, `apiFetch`) se generan con `vite-plugin-dts` desde el `.ts`/`.tsx` fuente.
+- Los ~26 componentes `.jsx` legacy se declaran como `any` en `scripts/write-index-dts.mjs` (mismo nivel de laxitud de siempre).
+- `prepare` corre el build al instalar desde git, así los consumidores reciben `dist/` listo.
 
-## Permisos (máquina compartida, usuarios `admincrm`/`tomas`/`pancho`)
+## Propagar un cambio a consumidores
 
-`dist/` puede quedar con archivos de otro usuario del grupo `admincrm` sin permiso de
-escritura de grupo. Si `npm run build` falla con `EACCES` al borrar algo en `dist/`:
-`sudo chmod -R g+w dist/`.
+1. Editá en `src/`, corré `npm run build` acá, commit + push a este repo.
+2. En cada consumidor: `rm -rf node_modules && pnpm install` (pnpm cachea por commit del git dep; sin nuke a veces no refresca).
+3. Rebuild del consumidor (`pnpm build`) y deploy según su README.
+
+## Permisos (máquina compartida)
+
+`dist/` puede quedar con archivos de otro usuario del grupo `admincrm` sin permiso de escritura de grupo. Si `npm run build` falla con `EACCES`: `sudo chmod -R g+w dist/`.
