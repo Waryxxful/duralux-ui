@@ -14,13 +14,19 @@
     },
     "./styles/grancrm-ui.css": "./dist/styles/grancrm-ui.css",
     "./styles/feather-icons.css": "./dist/styles/feather-icons.css",
-    "./styles.css": "./dist/styles/grancrm-ui.css"
+    "./styles.css": "./dist/styles/grancrm-ui.css",
+    "./theme.css": "./dist/theme.css",
+    "./theme.min.css": "./dist/theme.min.css",
+    "./bootstrap.css": "./dist/bootstrap.css",
+    "./bootstrap.min.css": "./dist/bootstrap.min.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "scss"
   ],
   "scripts": {
-    "build": "vite build && node scripts/copy-styles.mjs && node scripts/write-index-dts.mjs",
+    "build:scss": "node scripts/build-scss.mjs",
+    "build": "npm run build:scss && vite build && node scripts/copy-styles.mjs && node scripts/write-index-dts.mjs",
     "prepare": "npm run build",
     "dev:demo": "vite --config demo/vite.config.js",
     "preview:demo": "vite preview --config demo/vite.config.js"
@@ -41,6 +47,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.1.5",
+    "sass": "^1.101.0",
     "typescript": "^5.9.3",
     "vite": "^6.0.5",
     "vite-plugin-dts": "^5.0.3"
