@@ -48,8 +48,8 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 export declare function Badge(props: BadgeProps): React.ReactElement;
 
 export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  title?: React.ReactNode; actions?: React.ReactNode; footer?: React.ReactNode;
-  noPadding?: boolean; bodyClassName?: string; elementRef?: React.Ref<HTMLDivElement>;
+  title?: React.ReactNode; subtitle?: React.ReactNode; actions?: React.ReactNode; footer?: React.ReactNode;
+  noPadding?: boolean; stretch?: boolean; bodyClassName?: string; elementRef?: React.Ref<HTMLDivElement>;
 }
 export declare function Card(props: CardProps): React.ReactElement;
 
