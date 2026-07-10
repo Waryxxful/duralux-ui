@@ -43,7 +43,7 @@ export interface IconProps extends React.HTMLAttributes<HTMLElement> {
 export declare function Icon(props: IconProps): React.ReactElement;
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: Exclude<SemanticVariant, 'link'>; soft?: boolean;
+  variant?: Exclude<SemanticVariant, 'link'>; soft?: boolean; pill?: boolean;
 }
 export declare function Badge(props: BadgeProps): React.ReactElement;
 
