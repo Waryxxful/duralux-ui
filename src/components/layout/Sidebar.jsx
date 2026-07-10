@@ -1,8 +1,11 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useMatch } from 'react-router-dom'
 
+// Duralux pinta el fondo "pill" del item activo vía `.nxl-item.active > .nxl-link`
+// (ver theme.min.css) — la clase `active` tiene que ir en el <li>, no solo en el <a>.
 function NavItem({ item, openKey, setOpenKey }) {
   const isOpen = openKey === item._key
+  const match = useMatch({ path: item.to || '', end: item.end !== false })
 
   if (item.type === 'caption') {
     return (
@@ -14,7 +17,7 @@ function NavItem({ item, openKey, setOpenKey }) {
 
   if (item.children) {
     return (
-      <li className={`nxl-item nxl-hasmenu${isOpen ? ' active pc-trigger' : ''}`}>
+      <li className={`nxl-item nxl-hasmenu${isOpen ? ' nxl-trigger' : ''}`}>
         <a
           href="#"
           className="nxl-link"
@@ -40,7 +43,7 @@ function NavItem({ item, openKey, setOpenKey }) {
 
   if (item.to) {
     return (
-      <li className="nxl-item">
+      <li className={`nxl-item${match ? ' active' : ''}`}>
         <NavLink
           to={item.to}
           className={({ isActive }) => `nxl-link${isActive ? ' active' : ''}`}
@@ -65,10 +68,11 @@ function NavItem({ item, openKey, setOpenKey }) {
 
 function SubNavItem({ item }) {
   const [open, setOpen] = useState(false)
+  const match = useMatch({ path: item.to || '', end: item.end !== false })
 
   if (item.children) {
     return (
-      <li className={`nxl-item nxl-hasmenu${open ? ' active pc-trigger' : ''}`}>
+      <li className={`nxl-item nxl-hasmenu${open ? ' nxl-trigger' : ''}`}>
         <a href="#" className="nxl-link" onClick={(e) => { e.preventDefault(); setOpen((o) => !o) }}>
           <span className="nxl-mtext">{item.label}</span>
           <span className="nxl-arrow"><i className="feather-chevron-right"></i></span>
@@ -84,7 +88,7 @@ function SubNavItem({ item }) {
 
   if (item.to) {
     return (
-      <li className="nxl-item">
+      <li className={`nxl-item${match ? ' active' : ''}`}>
         <NavLink
           to={item.to}
           className={({ isActive }) => `nxl-link${isActive ? ' active' : ''}`}
