@@ -3,7 +3,7 @@
  *
  * Props:
  *   icon      — feather class string, e.g. "feather-dollar-sign"
- *   iconBg    — background class, e.g. "bg-gray-200" | "bg-primary-100"
+ *   iconBg    — background class, e.g. "bg-gray-200" | "bg-soft-primary"
  *   value     — string or number to display big
  *   label     — description text
  *   trend     — { value: "36.85%", up: true } (optional)
@@ -26,10 +26,10 @@ export function StatsCard({ icon, iconBg = 'bg-gray-200', value, label, trend, p
             </div>
           </div>
           {trend && (
-            <span className={`fs-12 fw-semibold text-${trend.up ? 'success' : 'danger'}`}>
+            <div className={`badge bg-soft-${trend.up ? 'success' : 'danger'} text-${trend.up ? 'success' : 'danger'}`}>
               <i className={`feather-arrow-${trend.up ? 'up' : 'down'} fs-10 me-1`}></i>
               {trend.value}
-            </span>
+            </div>
           )}
         </div>
 

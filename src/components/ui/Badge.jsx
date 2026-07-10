@@ -3,7 +3,7 @@
  *
  * Props:
  *   variant — "success" | "warning" | "danger" | "primary" | "info" | "secondary" | "light" | "dark"
- *   soft    — variante suave (bg-*-100 text-*)
+ *   soft    — variante suave (bg-soft-* text-*)
  *   pill    — rounded-pill
  *   className / rest — passthrough HTML
  *
@@ -22,7 +22,7 @@ export function Badge({
   if (variant === 'light') {
     tone = 'gcu-badge gcu-badge--light'
   } else if (soft) {
-    tone = `bg-${variant}-100 text-${variant}`
+    tone = `bg-soft-${variant} text-${variant}`
   } else {
     tone = `bg-${variant}`
   }

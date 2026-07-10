@@ -17,7 +17,7 @@ function NotifDropdown({ notifications, onClose }) {
         {notifications.map((n, i) => (
           <a key={i} href={n.href || '#'} className="dropdown-item py-3">
             <div className="d-flex align-items-center gap-3">
-              <div className={`avatar-text avatar-md bg-${n.color || 'primary'}-100 text-${n.color || 'primary'}`}>
+              <div className={`avatar-text avatar-md bg-soft-${n.color || 'primary'} text-${n.color || 'primary'}`}>
                 <i className={n.icon || 'feather-bell'}></i>
               </div>
               <div>

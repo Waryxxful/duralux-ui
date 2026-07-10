@@ -26,7 +26,7 @@
   ],
   "scripts": {
     "build:scss": "node scripts/build-scss.mjs",
-    "build": "vite build && node scripts/copy-styles.mjs && node scripts/write-index-dts.mjs && npm run build:scss",
+    "build": "node scripts/audit-contract.mjs && vite build && node scripts/copy-styles.mjs && node scripts/write-index-dts.mjs && npm run build:scss",
     "prepare": "npm run build",
     "dev:demo": "vite --config demo/vite.config.js",
     "preview:demo": "vite preview --config demo/vite.config.js"

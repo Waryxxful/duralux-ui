@@ -7,7 +7,7 @@ export function Table({
   emptyMessage = 'Sin registros.',
   loading,
   className,
-  striped = true,
+  striped = false,
   hover = true,
 }) {
   const tableCls = [

@@ -3,7 +3,7 @@
  *
  * Props:
  *   variant   — "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "light-brand"
- *   outline   — boolean → usa btn-outline-${variant} en lugar de btn-${variant}
+ *   outline   — DEPRECADO e ignorado: la plantilla Duralux no usa variantes outline; usá variant="light-brand"
  *   size      — "sm" | "md" | "lg"
  *   loading   — muestra spinner y deshabilita
  *   icon      — feather class string shown before label (legacy; prefer startIcon)
@@ -29,9 +29,7 @@ export function Button({
   ...props
 }) {
   const sizeClass = size ? ` btn-${size}` : ''
-  const variantClass = outline
-    ? `btn-outline-${variant}`
-    : `btn-${variant}`
+  const variantClass = `btn-${variant}` // outline deprecado: la plantilla no usa variantes outline
 
   return (
     <Tag
@@ -70,13 +68,13 @@ export function LinkButton({ href, ...props }) {
  * Props:
  *   icon    — bare feather name (e.g. "edit")
  *   label   — REQUIRED; used as aria-label and title
- *   variant, size, outline, ...rest
+ *   variant (default "light-brand", canónico del template), size, ...rest (outline deprecado e ignorado)
  */
 export function IconButton({ icon, label, variant, size, outline, className = '', ...rest }) {
   return (
     <button
       type="button"
-      className={['btn', outline ? `btn-outline-${variant || 'primary'}` : `btn-${variant || 'primary'}`, size ? `btn-${size}` : '', 'btn-icon', className].filter(Boolean).join(' ')}
+      className={['btn', 'btn-icon', `btn-${variant || 'light-brand'}`, size ? `btn-${size}` : '', className].filter(Boolean).join(' ')}
       aria-label={label}
       title={label}
       {...rest}

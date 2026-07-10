@@ -12,7 +12,7 @@ export function MiniStatCard({ icon, value, label, color = 'primary' }) {
   return (
     <div className={`card stretch stretch-full border border-dashed border-gray-5`}>
       <div className="card-body rounded-3 text-center py-4">
-        <div className={`avatar-text avatar-lg bg-${color}-100 text-${color} mx-auto mb-3`}>
+        <div className={`avatar-text avatar-lg bg-soft-${color} text-${color} mx-auto mb-3`}>
           <i className={icon}></i>
         </div>
         <div className="fs-4 fw-bolder text-dark mb-1">{value}</div>

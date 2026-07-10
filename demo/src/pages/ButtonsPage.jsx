@@ -54,18 +54,18 @@ export function ButtonsPage() {
       />
 
       <ShowcaseSection
-        title="Outline + startIcon"
-        description="outline genera btn-outline-variant; startIcon/endIcon usan nombre bare."
+        title="Iconos (startIcon/endIcon)"
+        description="startIcon/endIcon usan nombre feather bare. outline está deprecado (la plantilla no usa variantes outline; usá light-brand)."
         preview={
           <div className="d-flex flex-wrap gap-2">
-            <Button variant="primary" outline startIcon="plus">Nuevo</Button>
-            <Button variant="danger" outline startIcon="trash-2">Eliminar</Button>
-            <Button variant="success" outline endIcon="external-link">Ver más</Button>
+            <Button variant="primary" startIcon="plus">Nuevo</Button>
+            <Button variant="danger" startIcon="trash-2">Eliminar</Button>
+            <Button variant="light-brand" endIcon="external-link">Ver más</Button>
           </div>
         }
-        code={`<Button variant="primary" outline startIcon="plus">Nuevo</Button>
-<Button variant="danger" outline startIcon="trash-2">Eliminar</Button>
-<Button variant="success" outline endIcon="external-link">Ver más</Button>`}
+        code={`<Button variant="primary" startIcon="plus">Nuevo</Button>
+<Button variant="danger" startIcon="trash-2">Eliminar</Button>
+<Button variant="light-brand" endIcon="external-link">Ver más</Button>`}
       />
 
       <ShowcaseSection

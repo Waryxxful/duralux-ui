@@ -15,7 +15,7 @@ export function Timeline({ items = [] }) {
         <li key={item.id || i} className={`d-flex gap-3${i < items.length - 1 ? ' mb-4' : ''}`}>
           {/* Icon */}
           <div className="flex-shrink-0">
-            <div className={`avatar-text avatar-sm rounded-circle ${item.iconBg || 'bg-primary-100'} text-${item.color || 'primary'}`}>
+            <div className={`avatar-text avatar-sm rounded-circle ${item.iconBg || 'bg-soft-primary'} text-${item.color || 'primary'}`}>
               <i className={item.icon || 'feather-activity'}></i>
             </div>
           </div>
