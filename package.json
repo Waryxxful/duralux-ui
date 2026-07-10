@@ -1,7 +1,7 @@
 {
   "name": "@duralux/ui",
-  "version": "0.1.0",
-  "description": "Librería de componentes React + Duralux CSS",
+  "version": "1.0.0",
+  "description": "Librer\u00eda de componentes React + Duralux CSS",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
