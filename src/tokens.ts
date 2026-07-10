@@ -75,5 +75,6 @@ export type SemanticVariant =
   | 'dark'
   | 'light'
   | 'link'
+  | 'light-brand'
 
 export type StatusVariant = 'success' | 'danger' | 'warning' | 'info' | 'secondary'
