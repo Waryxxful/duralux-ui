@@ -11,18 +11,36 @@
  *   className   — extra classes for the card
  *   elementRef  — ref al div raíz
  */
-export function Card({ title, actions, headerRight, footer, stretch, noPadding, noPad, bodyClassName = '', className = '', elementRef, children, ...rest }) {
+export function Card({
+  title,
+  subtitle,
+  actions,
+  headerRight,
+  footer,
+  stretch,
+  noPadding,
+  noPad,
+  bodyClassName = '',
+  className = '',
+  elementRef,
+  children,
+  ...rest
+}) {
   const right = actions ?? headerRight
   const flush = noPadding ?? noPad
+  const showHeader = title != null || subtitle != null || right
   return (
-    <div ref={elementRef} className={`card${stretch ? ' stretch stretch-full' : ''} ${className}`} {...rest}>
-      {(title || right) && (
+    <div ref={elementRef} className={`card${stretch ? ' stretch stretch-full' : ''}${className ? ` ${className}` : ''}`} {...rest}>
+      {showHeader && (
         <div className="card-header">
-          <h5 className="card-title">{title}</h5>
+          <div className="min-w-0">
+            {title != null && <h5 className="card-title mb-0">{title}</h5>}
+            {subtitle != null && <div className="text-muted fs-12 mt-1">{subtitle}</div>}
+          </div>
           {right && <div className="card-header-action">{right}</div>}
         </div>
       )}
-      <div className={`card-body${flush ? ' p-0' : ''}${bodyClassName ? ' ' + bodyClassName : ''}`}>
+      <div className={`card-body${flush ? ' p-0' : ''}${bodyClassName ? ` ${bodyClassName}` : ''}`}>
         {children}
       </div>
       {footer && <div className="card-footer">{footer}</div>}

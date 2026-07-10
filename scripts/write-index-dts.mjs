@@ -201,6 +201,7 @@ export * from './components/shell/ShellNav';
 export * from './components/shell/ThemeScope';
 export * from './components/shell/ConfirmDialog';
 export * from './components/shell/GranCrmExtras';
+export * from './theme/ThemeProvider';
 `;
 
 await writeFile(join(distDir, 'index.d.ts'), dts, 'utf8');

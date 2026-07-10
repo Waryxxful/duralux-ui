@@ -67,6 +67,14 @@ export * from './contract'
 // Design tokens
 export * from './tokens'
 
+// Theme (dark + mini sidebar) — un solo mecanismo
+export {
+  ThemeProvider,
+  useTheme,
+  useThemeOptional,
+  THEME_HEAD_SNIPPET,
+} from './theme/ThemeProvider'
+
 // Cliente API (fetch con CSRF + credenciales same-origin)
 export { apiFetch } from './api/client'
 export { Header } from './components/layout/Header'

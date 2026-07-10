@@ -99,3 +99,29 @@
 .gcu-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 
 @media (max-width:575px){.gcu-page-header{align-items:flex-start;flex-direction:column}.gcu-page-header__actions{width:100%;margin-left:0}.gcu-message-bubble{max-width:88%}.gcu-modal{padding:10px}.gcu-modal__content{max-height:calc(100vh - 20px)}}
+
+/* ── Page header actions always visible in SPA shell/satélites ─────────────
+   En el template multipágina, .page-header-right-items es un drawer off-canvas
+   en mobile (visibility:hidden). En la SPA las CTAs (Nueva cuenta/llamada) deben
+   verse siempre. Forzamos el estado "open" del customizer Duralux. */
+.page-header .page-header-right-items {
+  position: static !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  height: auto !important;
+  width: auto !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.page-header .page-header-right-open-toggle,
+.page-header .page-header-right-close-toggle {
+  display: none !important;
+}
+
+/* Self-chrome (iframe sin nav del shell) */
+html.app-self-chrome .nxl-navigation { display: none !important; }
+html.app-self-chrome .nxl-header { left: 0 !important; }
+html.app-self-chrome .nxl-container { margin-left: 0 !important; }
+html.app-skin-dark .nxl-navigation .m-header .logo-lg { filter: none !important; }
