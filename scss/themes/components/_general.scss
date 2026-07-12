@@ -10,7 +10,10 @@ body {
 	font-size: $font-body;
 	scroll-behavior: smooth;
 	font-family: $font-inter;
-	transition: all 0.3s ease;
+	/* Never transition: all — only theme-related paint props */
+	transition:
+		background-color 0.2s cubic-bezier(0.23, 1, 0.32, 1),
+		color 0.2s cubic-bezier(0.23, 1, 0.32, 1);
 	-webkit-font-smoothing: antialiased;
 	background-color: rgba(243, 244, 246);
 }
@@ -26,7 +29,7 @@ a {
 	color: $brand-dark;
 	text-decoration: none;
 	font-weight: $font-600;
-	transition: all 0.3s ease;
+	transition: color 0.15s cubic-bezier(0.23, 1, 0.32, 1);
 	&:hover {
 		color: $primary;
 		text-decoration: none;

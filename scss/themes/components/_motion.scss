@@ -1,0 +1,88 @@
+/*
+ * Motion craft layer — design engineering defaults (crisp product UI).
+ * Tokens + press feedback + reduced-motion. Does not add decorative motion.
+ */
+
+:root {
+	/* Strong ease-out for UI responses (Emil / animations.dev) */
+	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+	--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+	--duration-press: 140ms;
+	--duration-fast: 160ms;
+	--duration-ui: 200ms;
+	--duration-panel: 250ms;
+}
+
+/* Buttons: specific properties (never transition: all), snappy press */
+.btn {
+	transition:
+		color var(--duration-fast) var(--ease-out),
+		background-color var(--duration-fast) var(--ease-out),
+		border-color var(--duration-fast) var(--ease-out),
+		box-shadow var(--duration-fast) var(--ease-out),
+		transform var(--duration-press) var(--ease-out);
+
+	&:active:not(:disabled):not(.disabled) {
+		transform: scale(0.97);
+	}
+}
+
+/* Icon-only buttons: same press language */
+.btn-icon:active:not(:disabled):not(.disabled) {
+	transform: scale(0.96);
+}
+
+/* Nav tabs (Bootstrap): color only — no layout thrash */
+.nav-tabs .nav-link {
+	transition:
+		color var(--duration-fast) var(--ease-out),
+		background-color var(--duration-fast) var(--ease-out),
+		border-color var(--duration-fast) var(--ease-out);
+}
+
+/* Form controls: border/shadow only */
+.form-control,
+.form-select {
+	transition:
+		border-color var(--duration-fast) var(--ease-out),
+		box-shadow var(--duration-fast) var(--ease-out),
+		background-color var(--duration-fast) var(--ease-out);
+}
+
+/* Progress fill — GPU-friendly width is layout; keep short + ease-out for perceived speed */
+.progress-bar {
+	transition: width var(--duration-panel) var(--ease-out);
+}
+
+/* Reduced motion: drop transforms; keep short color/opacity if any */
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--duration-press: 0ms;
+		--duration-fast: 0ms;
+		--duration-ui: 0ms;
+		--duration-panel: 0ms;
+	}
+
+	html {
+		scroll-behavior: auto;
+	}
+
+	.btn,
+	.btn-icon {
+		transition: none;
+
+		&:active:not(:disabled):not(.disabled) {
+			transform: none;
+		}
+	}
+
+	.progress-bar {
+		transition: none;
+	}
+
+	.nav-tabs .nav-link,
+	.form-control,
+	.form-select {
+		transition: none;
+	}
+}

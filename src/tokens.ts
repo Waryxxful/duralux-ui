@@ -56,10 +56,21 @@ export const tokens = {
     lg: '0 4px 20px rgba(0,0,0,.16)',
   },
   spacing: { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24 },
+  /** Motion craft — alineado a scss/themes/components/_motion.scss */
+  motion: {
+    easeOut: 'cubic-bezier(0.23, 1, 0.32, 1)',
+    easeInOut: 'cubic-bezier(0.77, 0, 0.175, 1)',
+    durationPress: 140,
+    durationFast: 160,
+    durationUi: 200,
+    durationPanel: 250,
+    pressScale: 0.97,
+  },
   /** Ruta SCSS de origen para auditoría */
   source: {
     variables: 'scss/themes/_variables.scss',
     bsCustom: 'scss/themes/_bs-custom-variables.scss',
+    motion: 'scss/themes/components/_motion.scss',
   },
 } as const
 

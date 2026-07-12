@@ -52,6 +52,8 @@
 @import "themes/components/table";
 @import "themes/components/offcanvas";
 @import "themes/components/miscellaneous";
+// Motion craft (press feedback, tokens, reduced-motion) — after base components
+@import "themes/components/motion";
 
 // Widgets
 @import "themes/widgets/widgets-lists";
