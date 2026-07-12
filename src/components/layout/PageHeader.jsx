@@ -4,8 +4,8 @@
  * Plantilla (una sola fila, min-height 65px):
  *   .page-header
  *     .page-header-left.d-flex.align-items-center
- *       .page-header-title > h5
- *       ul.breadcrumb
+ *       .page-header-title > h1.h5  (h1 semántico, look h5 del theme)
+ *       ul.breadcrumb[aria-label]
  *     .page-header-right.ms-auto > ...actions
  *
  * `subtitle` NO va dentro del page-header (rompe la fila del theme).
@@ -18,20 +18,35 @@ export function PageHeader({ title, subtitle, breadcrumbs = [], actions, classNa
       <div className={`page-header${className ? ` ${className}` : ''}`}>
         <div className="page-header-left d-flex align-items-center">
           <div className="page-header-title">
-            <h5 className="m-b-10 mb-0">{title}</h5>
+            {/* h1 semántico + clase .h5 para conservar tipografía del theme */}
+            <h1 className="h5 m-b-10 mb-0">{title}</h1>
           </div>
           {breadcrumbs.length > 0 && (
-            <ul className="breadcrumb">
-              {breadcrumbs.map((crumb, i) =>
-                crumb.href
-                  ? (
-                    <li key={i} className="breadcrumb-item">
-                      <a href={crumb.href} onClick={crumb.onClick}>{crumb.label}</a>
-                    </li>
+            <nav aria-label="Miga de pan">
+              <ul className="breadcrumb">
+                {breadcrumbs.map((crumb, i) => {
+                  const isLast = i === breadcrumbs.length - 1
+                  if (crumb.href && !isLast) {
+                    return (
+                      <li key={i} className="breadcrumb-item">
+                        <a href={crumb.href} onClick={crumb.onClick}>{crumb.label}</a>
+                      </li>
                     )
-                  : <li key={i} className="breadcrumb-item">{crumb.label}</li>
-              )}
-            </ul>
+                  }
+                  return (
+                    <li
+                      key={i}
+                      className="breadcrumb-item"
+                      aria-current={isLast ? 'page' : undefined}
+                    >
+                      {crumb.href && isLast
+                        ? <a href={crumb.href} onClick={crumb.onClick} aria-current="page">{crumb.label}</a>
+                        : crumb.label}
+                    </li>
+                  )
+                })}
+              </ul>
+            </nav>
           )}
         </div>
         {right && (

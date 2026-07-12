@@ -9,22 +9,22 @@
  */
 export const tokens = {
   colors: {
-    // _bs-custom-variables.scss
+    // _bs-custom-variables.scss — WCAG AA (text on white / white on solid)
     primary: '#3454d1',   // $blue / $primary
-    success: '#25b865',   // $success (plantilla; gcu soft usa #17c666 en badges)
-    danger: '#d13b4c',    // $danger
-    warning: '#ffa21d',
-    info: '#3dc7be',
+    success: '#15803d',   // $green / $success
+    danger: '#b91c1c',    // $red / $danger
+    warning: '#a16207',   // $yellow / $warning
+    info: '#0e7490',      // $cyan
     dark: '#283c50',      // $brand-dark
     darken: '#001327',
-    secondary: '#6c757d',
+    secondary: '#4b5563', // $gray-600
     light: '#f8f9fa',
     // _variables.scss brand
     brand: '#283c50',
-    brandBody: '#6b7885', // $brand-body
-    brandMuted: '#7587a7', // $brand-muted
+    brandBody: '#4b5563', // $brand-body
+    brandMuted: '#4a5d7a', // $brand-muted (breadcrumbs)
     brandLight: '#eaebef', // $brand-light
-    bg: '#f3f4f6',
+    bg: '#f0f2f8',        // $body-bg
     border: '#dcdee4',    // $border-color-2
   },
   font: {

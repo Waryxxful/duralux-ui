@@ -93,7 +93,10 @@ export declare function LoadingState(props: LoadingStateProps): React.ReactEleme
 
 export interface ProgressProps {
   value: number; max?: number; variant?: Exclude<SemanticVariant, 'link'>;
-  striped?: boolean; animated?: boolean; label?: string; showValue?: boolean;
+  striped?: boolean; animated?: boolean;
+  /** Accessible name (aria-label). Defaults to "{value} de {max}". Not rendered as visible text. */
+  label?: string;
+  showValue?: boolean;
   height?: number; className?: string;
 }
 export declare function Progress(props: ProgressProps): React.ReactElement;

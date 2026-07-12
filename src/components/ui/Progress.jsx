@@ -7,7 +7,8 @@
  *   variant   — "primary" | "secondary" | "success" | "danger" | "warning" | "info"
  *   striped   — agrega rayas a la barra
  *   animated  — anima las rayas (requiere striped)
- *   label     — texto aria-label accesible
+ *   label     — nombre accesible (aria-label). Si se omite, se genera desde value/max.
+ *               No se pinta como texto visible (usar showValue para el %).
  *   showValue — muestra el porcentaje dentro de la barra
  *   height    — altura en px de la barra contenedora
  *   className — clases adicionales al contenedor
@@ -24,6 +25,9 @@ export function Progress({
   className,
 }) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100))
+  const accessibleName =
+    (label && String(label).trim()) ||
+    `${Math.round(Number(value))} de ${max}`
 
   const barClasses = [
     'progress-bar',
@@ -44,10 +48,9 @@ export function Progress({
         aria-valuenow={value}
         aria-valuemin={0}
         aria-valuemax={max}
-        aria-label={label}
+        aria-label={accessibleName}
       >
-        {showValue && `${Math.round(pct)}%`}
-        {!showValue && label}
+        {showValue ? `${Math.round(pct)}%` : null}
       </div>
     </div>
   )

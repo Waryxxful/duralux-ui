@@ -166,7 +166,10 @@
 		display: inline-block;
 	}
 
-	h5 {
+	// h1 (semántico) y h5 legacy comparten el look del title del theme.
+	h1,
+	h5,
+	.h5 {
 		margin-bottom: 0;
 		margin-right: 8px;
 		padding-right: 10px;
@@ -198,8 +201,10 @@
 				top: 2px;
 			}
 
+			// Sin opacity: el 0.75 sobre $brand-muted caía bajo WCAG AA.
+			// El peso más liviano ya marca el crumb actual.
 			&:last-child {
-				opacity: 0.75;
+				color: $brand-muted;
 				font-weight: $font-400;
 			}
 		}

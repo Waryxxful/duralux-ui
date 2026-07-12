@@ -10,42 +10,51 @@
 */
 
 // Gray Color
+// $gray-600 / $text-muted darkened for WCAG AA on $body-bg (#f0f2f8) and white.
 $white: #ffffff;
 $gray-100: #eff0f6;
 $gray-200: #e9ecef;
 $gray-300: #e5e7eb;
 $gray-400: #ced4da;
 $gray-500: #91a1b6;
-$gray-600: #64748b;
+$gray-600: #4b5563;
 $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
 $black: #000000;
 
 // fusv-enable
+// Semantic greens/yellows/reds tuned so BOTH:
+//   - .text-{variant} on white / body-bg ≥ 4.5:1
+//   - white text on .bg-{variant} / solid badges ≥ 4.5:1
+// Bootstrap button-variant() picks black or white via color-contrast().
 $blue: #3454d1;
 $indigo: #6610f2;
 $purple: #6f42c1;
 $pink: #e83e8c;
-$red: #ea4d4d;
-$orange: #fd7e14;
-$yellow: #ffa21d;
-$green: #17c666;
-$teal: #41b2c4;
-$cyan: #3dc7be;
+$red: #b91c1c;
+$orange: #c2410c;
+$yellow: #a16207;
+$green: #15803d;
+$teal: #0f766e;
+$cyan: #0e7490;
 $white: #ffffff;
-$secondary: #727981;
-$success: #25b865;
-$warning: #e49e3d;
-$info: #02a0e4;
-$danger: #d13b4c;
+$secondary: #4b5563;
+$success: #15803d;
+$warning: #a16207;
+$info: #0369a1;
+$danger: #b91c1c;
 $dark: #283c50; // new added
 $darken: #001327; // new added
 
 // Body
 $body-bg: #f0f2f8;
 $body-color: #4b5563;
-$text-muted: #64748b;
+// Solid muted (no rgba/opacity) so form-text / .text-muted pass WCAG AA on white and $body-bg.
+// Re-assign $form-text-color after $text-muted: Bootstrap sets it from the default rgba muted
+// earlier in variables.scss and would keep the low-contrast value otherwise.
+$text-muted: #4b5563;
+$form-text-color: $text-muted;
 
 // Colors Map
 $primary: $blue;

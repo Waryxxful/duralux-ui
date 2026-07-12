@@ -34,7 +34,8 @@ export function Card({
       {showHeader && (
         <div className="card-header">
           <div className="min-w-0">
-            {title != null && <h5 className="card-title mb-0">{title}</h5>}
+            {/* h2 semántico (tras page h1); clase .h5 conserva tipografía Duralux */}
+            {title != null && <h2 className="h5 card-title mb-0">{title}</h2>}
             {subtitle != null && <div className="text-muted fs-12 mt-1">{subtitle}</div>}
           </div>
           {right && <div className="card-header-action">{right}</div>}

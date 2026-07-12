@@ -1,7 +1,12 @@
 import { useId, useRef, useEffect } from 'react'
 
-export function Checkbox({ label, error, indeterminate, className, ...rest }) {
-  const id = useId()
+/**
+ * Checkbox — form-check Bootstrap con label asociado.
+ * Respeta `id` del caller; si no hay, genera uno estable con useId.
+ */
+export function Checkbox({ label, error, indeterminate, className, id: idProp, ...rest }) {
+  const autoId = useId()
+  const id = idProp ?? autoId
   const inputRef = useRef(null)
 
   useEffect(() => {

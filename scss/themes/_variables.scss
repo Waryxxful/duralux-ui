@@ -12,9 +12,10 @@
 <--!----------------------------------------------------------------!-->
 */
 $font-body: 0.84rem;
-$brand-body: #6b7885;
+$brand-body: #4b5563;
+// brand-muted used for breadcrumbs and secondary chrome — must pass WCAG AA on white.
 $brand-dark: #283c50;
-$brand-muted: #7587a7;
+$brand-muted: #4a5d7a;
 $brand-light: #eaebef;
 $border-color-2: #dcdee4;
 

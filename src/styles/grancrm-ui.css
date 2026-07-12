@@ -3,9 +3,9 @@
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 
 :root,.gcu-theme,[data-gcu-theme="light"]{
-  --gcu-primary:#3454d1;--gcu-secondary:#6b7885;--gcu-success:#17c666;--gcu-danger:#ea4d4d;
-  --gcu-warning:#ffa21d;--gcu-info:#3dc7be;--gcu-dark:#283c50;--gcu-light:#f8f9fa;
-  --gcu-text:#283c50;--gcu-muted:#6b7885;--gcu-surface:#fff;--gcu-surface-subtle:#f3f4f6;
+  --gcu-primary:#3454d1;--gcu-secondary:#4b5563;--gcu-success:#15803d;--gcu-danger:#b91c1c;
+  --gcu-warning:#a16207;--gcu-info:#0e7490;--gcu-dark:#283c50;--gcu-light:#f8f9fa;
+  --gcu-text:#283c50;--gcu-muted:#4b5563;--gcu-surface:#fff;--gcu-surface-subtle:#f3f4f6;
   --gcu-border:#e5e7eb;--gcu-focus:rgba(52,84,209,.2);--gcu-radius:6px;
   --gcu-shadow:0 1px 4px rgba(31,45,61,.08);--gcu-font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
@@ -41,7 +41,7 @@
 .gcu-btn:focus-visible,.gcu-control:focus-visible,.gcu-check__input:focus-visible,.gcu-pagination__button:focus-visible,.gcu-close:focus-visible{outline:0;box-shadow:0 0 0 3px var(--gcu-focus)}
 .gcu-btn:disabled,.gcu-btn[aria-disabled="true"]{opacity:.6;cursor:not-allowed}
 .gcu-btn--secondary{--gcu-btn-color:var(--gcu-secondary)}.gcu-btn--success{--gcu-btn-color:var(--gcu-success)}.gcu-btn--danger{--gcu-btn-color:var(--gcu-danger)}
-.gcu-btn--warning{--gcu-btn-color:var(--gcu-warning);color:#302100}.gcu-btn--info{--gcu-btn-color:var(--gcu-info)}.gcu-btn--dark{--gcu-btn-color:var(--gcu-dark)}
+.gcu-btn--warning{--gcu-btn-color:var(--gcu-warning);color:#fff}.gcu-btn--info{--gcu-btn-color:var(--gcu-info)}.gcu-btn--dark{--gcu-btn-color:var(--gcu-dark)}
 .gcu-btn--light{--gcu-btn-color:var(--gcu-border);color:var(--gcu-text);background:var(--gcu-surface)}.gcu-btn--link{border-color:transparent;background:transparent;color:var(--gcu-primary)}
 .gcu-btn--outline{background:transparent;color:var(--gcu-btn-color)}.gcu-btn--outline:hover:not(:disabled){background:var(--gcu-btn-color);color:#fff;filter:none}
 .gcu-btn--sm{min-height:30px;padding:5px 10px;font-size:12px}.gcu-btn--lg{min-height:44px;padding:10px 18px;font-size:14px}
@@ -52,14 +52,14 @@
 
 .gcu-badge{--gcu-badge-color:var(--gcu-primary);display:inline-flex;align-items:center;padding:4px 8px;border-radius:4px;background:var(--gcu-badge-color);color:#fff;font:600 11px/1 var(--gcu-font);white-space:nowrap}
 .gcu-badge--secondary{--gcu-badge-color:var(--gcu-secondary)}.gcu-badge--success{--gcu-badge-color:var(--gcu-success)}.gcu-badge--danger{--gcu-badge-color:var(--gcu-danger)}
-.gcu-badge--warning{--gcu-badge-color:var(--gcu-warning);color:#302100}.gcu-badge--info{--gcu-badge-color:var(--gcu-info)}.gcu-badge--dark{--gcu-badge-color:var(--gcu-dark)}
+.gcu-badge--warning{--gcu-badge-color:var(--gcu-warning);color:#fff}.gcu-badge--info{--gcu-badge-color:var(--gcu-info)}.gcu-badge--dark{--gcu-badge-color:var(--gcu-dark)}
 .gcu-badge--light{--gcu-badge-color:var(--gcu-light);color:var(--gcu-text)}.gcu-badge--soft{background:color-mix(in srgb,var(--gcu-badge-color) 14%,var(--gcu-surface));color:var(--gcu-badge-color)}
 .gcu-status-button{border:0;cursor:pointer}.gcu-status-button:focus-visible{outline:2px solid var(--gcu-badge-color);outline-offset:2px}
 
 .gcu-avatar{display:inline-flex;align-items:center;justify-content:center;overflow:hidden;flex:none;font-family:var(--gcu-font)}
 .gcu-avatar img{display:block;width:100%;height:100%;object-fit:cover}.gcu-avatar--circle{border-radius:50%}.gcu-avatar--rounded{border-radius:6px}
 .gcu-avatar--text{background:var(--gcu-primary);color:#fff;font-weight:700}.gcu-avatar--secondary{background:var(--gcu-secondary)}.gcu-avatar--success{background:var(--gcu-success)}
-.gcu-avatar--danger{background:var(--gcu-danger)}.gcu-avatar--warning{background:var(--gcu-warning);color:#302100}.gcu-avatar--info{background:var(--gcu-info)}.gcu-avatar--dark{background:var(--gcu-dark)}
+.gcu-avatar--danger{background:var(--gcu-danger)}.gcu-avatar--warning{background:var(--gcu-warning);color:#fff}.gcu-avatar--info{background:var(--gcu-info)}.gcu-avatar--dark{background:var(--gcu-dark)}
 
 .gcu-card{box-sizing:border-box;border:1px solid var(--gcu-border);border-radius:var(--gcu-radius);background:var(--gcu-surface);color:var(--gcu-text);box-shadow:var(--gcu-shadow);font-family:var(--gcu-font)}
 .gcu-card__header{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;padding:12px 18px;border-bottom:1px solid var(--gcu-border)}
