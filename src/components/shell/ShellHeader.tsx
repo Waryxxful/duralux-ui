@@ -1,8 +1,18 @@
 import { Fragment, useEffect, useState } from 'react';
-import type { AppManifestEntry } from '../../contract';
+import type { AppManifestEntry, Notificacion } from '../../contract';
 import { Icon } from '../ui/Icon';
 import { Avatar } from '../ui/Avatar';
 import { Badge } from '../ui/Badge';
+
+function tiempoRelativo(iso: string): string {
+  const segundos = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  if (segundos < 60) return 'hace un momento';
+  const minutos = Math.floor(segundos / 60);
+  if (minutos < 60) return `hace ${minutos} min`;
+  const horas = Math.floor(minutos / 60);
+  if (horas < 24) return `hace ${horas} h`;
+  return `hace ${Math.floor(horas / 24)} d`;
+}
 
 // El template original abre TODOS los dropdowns del header con hover (además de
 // click), vía un listener en DOMContentLoaded que en el shell nunca dispara sobre
@@ -128,7 +138,9 @@ export interface ShellHeaderProps {
   onVolverSa: () => void;
   appHref: (app: AppManifestEntry) => string;
   csrfToken: string;
-  notifications?: unknown[];
+  notifications?: Notificacion[];
+  onMarkAllRead?: () => void;
+  onNotificationClick?: (e: React.MouseEvent, n: Notificacion) => void;
 }
 
 // ─── ShellHeader Component ────────────────────────────────────────────────────
@@ -152,7 +164,10 @@ export function ShellHeader({
   appHref,
   csrfToken,
   notifications = [],
+  onMarkAllRead,
+  onNotificationClick,
 }: ShellHeaderProps) {
+  const noLeidas = notifications.filter(n => !n.leida).length;
   useHeaderDropdownHover();
 
   // Group apps by category
@@ -394,15 +409,19 @@ export function ShellHeader({
                 aria-label="Notificaciones"
               >
                 <Icon name="bell" />
-                {notifications.length > 0 && (
-                  <Badge variant="danger" className="nxl-h-badge">{notifications.length}</Badge>
+                {noLeidas > 0 && (
+                  <Badge variant="danger" className="nxl-h-badge">{noLeidas}</Badge>
                 )}
               </a>
               <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-notifications-menu">
                 <div className="d-flex justify-content-between align-items-center notifications-head">
                   <h6 className="fw-bold text-dark mb-0">Notificaciones</h6>
-                  {notifications.length > 0 && (
-                    <a href="#" onClick={(e) => e.preventDefault()} className="fs-11 text-success text-end ms-auto">
+                  {noLeidas > 0 && (
+                    <a
+                      href="#"
+                      onClick={(e) => { e.preventDefault(); onMarkAllRead?.(); }}
+                      className="fs-11 text-success text-end ms-auto"
+                    >
                       <Icon name="check" />
                       <span> Marcar como leído</span>
                     </a>
@@ -418,22 +437,28 @@ export function ShellHeader({
                     </div>
                   </div>
                 ) : (
-                  notifications.map((_, i) => (
-                    <div key={i} className="notifications-item">
-                      <Avatar name="N" variant="primary" size="md" className="me-3" style={{ borderRadius: '50%' }} />
+                  notifications.map((n) => (
+                    <div key={n.id} className={`notifications-item ${n.leida ? '' : 'fw-semibold'}`}>
+                      <Avatar
+                        name={(n.aplicacion_nombre ?? 'N').charAt(0)}
+                        variant={n.leida ? 'secondary' : 'primary'}
+                        size="md"
+                        className="me-3"
+                        style={{ borderRadius: '50%' }}
+                      />
                       <div className="notifications-desc">
-                        <a href="#" onClick={(e) => e.preventDefault()} className="font-body text-truncate-2-line">
-                          Notificación
+                        <a
+                          href="#"
+                          onClick={(e) => { e.preventDefault(); onNotificationClick?.(e, n); }}
+                          className="font-body text-truncate-2-line"
+                        >
+                          {n.mensaje}
                         </a>
+                        <div className="fs-11 text-muted">{tiempoRelativo(n.creada_en)}</div>
                       </div>
                     </div>
                   ))
                 )}
-                <div className="text-center notifications-footer">
-                  <a href="#" onClick={(e) => e.preventDefault()} className="fs-13 fw-semibold text-dark">
-                    Ver todas las notificaciones
-                  </a>
-                </div>
               </div>
             </div>
 

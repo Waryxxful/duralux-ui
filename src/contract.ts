@@ -76,3 +76,12 @@ export interface GranCrmRemoteProps {
   session: GranCrmSession;
   bus: EventBus;
 }
+
+export interface Notificacion {
+  id: number;
+  mensaje: string;
+  url: string;
+  leida: boolean;
+  creada_en: string;
+  aplicacion_nombre: string | null;
+}
