@@ -34,6 +34,10 @@
 		position: relative;
 		border-right: 1px solid $border-color;
 		height: calc(100vh - #{$header-height});
+		height: calc(100dvh - #{$header-height});
+		overflow-y: auto;
+		overscroll-behavior-y: contain;
+		-webkit-overflow-scrolling: touch;
 
 		ul {
 			list-style: none;
@@ -133,14 +137,14 @@
 
 		.nxl-item {
 			&.disabled {
-				a {
+				.nxl-link {
 					cursor: not-allowed;
 					user-select: none;
 				}
 			}
 
 			&.active,
-			&:hover {
+			&:not(.disabled):hover {
 				>.nxl-link {
 					color: $darken;
 					background-color: $brand-light;

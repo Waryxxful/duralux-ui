@@ -20,7 +20,7 @@ const sizeMap = {
 export function Icon({ name, size = undefined, 'aria-label': label = undefined, className = '', style = undefined, ...rest }) {
   const resolvedSize = typeof size === 'number' ? size : sizeMap[size]
   const inlineSize = resolvedSize ? { fontSize: resolvedSize, ...style } : style
-  const cls = ['feather-' + name, className].filter(Boolean).join(' ')
+  const cls = ['gcu-icon', 'feather-' + name, className].filter(Boolean).join(' ')
 
   if (label) {
     return <i className={cls} role="img" aria-label={label} style={inlineSize} {...rest} />

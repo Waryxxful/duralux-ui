@@ -26,7 +26,8 @@
 		.nxl-navigation-toggle {
 			line-height: normal;
 
-			a {
+			a,
+			button {
 				color: $brand-dark;
 			}
 
@@ -444,6 +445,11 @@
 				overflow-x: hidden;
 				max-height: calc(100vh - 150px);
 
+				.searching-for {
+					overflow-y: auto;
+					overscroll-behavior-y: contain;
+				}
+
 				.search-form {
 					padding: 7px 10px;
 
@@ -566,6 +572,11 @@
 		.nxl-notifications-menu {
 			padding: 0;
 			min-width: 20rem;
+
+			.gcu-notifications-list {
+				overflow-y: auto;
+				overscroll-behavior-y: contain;
+			}
 
 			.notifications-head {
 				padding: 20px;

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useId, useRef, useState } from 'react';
 import type { AppManifestEntry, Notificacion } from '../../contract';
 import { Icon } from '../ui/Icon';
 import { Avatar } from '../ui/Avatar';
@@ -19,26 +19,53 @@ function tiempoRelativo(iso: string): string {
 // nada real (el header recién existe después del fetch de sesión). Se porta el
 // mismo comportamiento como efecto de React. Solo el nivel superior (.nxl-h-item):
 // las categorías anidadas del mega-menu ya manejan su propio hover con estado React.
-function useHeaderDropdownHover() {
+const DESKTOP_MEDIA_QUERY = '(hover: hover) and (min-width: 1024.01px)';
+
+function useDesktopHover() {
+  const [enabled, setEnabled] = useState(() => (
+    typeof window !== 'undefined' && window.matchMedia(DESKTOP_MEDIA_QUERY).matches
+  ));
+
   useEffect(() => {
-    if (window.innerWidth <= 992) return;
+    const mediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
+    const onChange = () => setEnabled(mediaQuery.matches);
+    onChange();
+    mediaQuery.addEventListener('change', onChange);
+    return () => mediaQuery.removeEventListener('change', onChange);
+  }, []);
+
+  return enabled;
+}
+
+function useHeaderDropdownHover(enabled: boolean) {
+  useEffect(() => {
+    if (!enabled) return;
     const items = document.querySelectorAll<HTMLElement>('.nxl-header .header-wrapper .dropdown.nxl-h-item');
     const cleanups: Array<() => void> = [];
     items.forEach((item) => {
-      const trigger = item.querySelector<HTMLElement>('a[data-bs-toggle]');
+      const trigger = item.querySelector<HTMLElement>('[data-bs-toggle]');
       const menu = trigger?.nextElementSibling as HTMLElement | null;
       if (!trigger || !menu) return;
-      const onEnter = () => { trigger.classList.add('show'); menu.classList.add('show'); };
-      const onLeave = () => { trigger.classList.remove('show'); menu.classList.remove('show'); };
+      const onEnter = () => {
+        trigger.classList.add('show');
+        trigger.setAttribute('aria-expanded', 'true');
+        menu.classList.add('show');
+      };
+      const onLeave = () => {
+        trigger.classList.remove('show');
+        trigger.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('show');
+      };
       item.addEventListener('mouseenter', onEnter);
       item.addEventListener('mouseleave', onLeave);
       cleanups.push(() => {
         item.removeEventListener('mouseenter', onEnter);
         item.removeEventListener('mouseleave', onLeave);
+        onLeave();
       });
     });
     return () => cleanups.forEach((fn) => fn());
-  }, []);
+  }, [enabled]);
 }
 
 // ─── Sub-components (ported from shell/src/Layout.tsx) ───────────────────────
@@ -79,26 +106,37 @@ function AppCategoryMenu({
   apps,
   appHref,
   onSelect,
+  desktopHover,
 }: {
   category: string;
   apps: AppManifestEntry[];
   appHref: (app: AppManifestEntry) => string;
   onSelect: (e: React.MouseEvent, app: AppManifestEntry) => void;
+  desktopHover: boolean;
 }) {
+  const menuId = useId();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!desktopHover) setOpen(false);
+  }, [desktopHover]);
 
   return (
     <div
       className="dropdown nxl-level-menu"
-      onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => setOpen(false)}
+      onMouseEnter={() => {
+        if (desktopHover) setOpen(true);
+      }}
+      onMouseLeave={() => {
+        if (desktopHover) setOpen(false);
+      }}
     >
-      <a
-        href="#"
-        className={`dropdown-item ${open ? 'show' : ''}`}
+      <button
+        type="button"
+        className={`dropdown-item d-flex align-items-center ${open ? 'show' : ''}`}
+        aria-controls={menuId}
         aria-expanded={open}
         onClick={(e) => {
-          e.preventDefault();
           e.stopPropagation();
           setOpen(value => !value);
         }}
@@ -108,8 +146,8 @@ function AppCategoryMenu({
           <span>{category}</span>
         </span>
         <Icon name="chevron-right" className="ms-auto me-0" />
-      </a>
-      <div className={`dropdown-menu nxl-h-dropdown ${open ? 'show' : ''}`}>
+      </button>
+      <div id={menuId} className={`dropdown-menu nxl-h-dropdown ${open ? 'show' : ''}`}>
         {apps.map(app => (
           <AppMenuItem key={app.id} app={app} appHref={appHref} onSelect={onSelect} />
         ))}
@@ -168,7 +206,18 @@ export function ShellHeader({
   onNotificationClick,
 }: ShellHeaderProps) {
   const noLeidas = notifications.filter(n => !n.leida).length;
-  useHeaderDropdownHover();
+  const modulesMenuId = useId();
+  const searchMenuId = useId();
+  const modulesTriggerRef = useRef<HTMLButtonElement>(null);
+  const modulesMenuRef = useRef<HTMLDivElement>(null);
+  const modulesBackRef = useRef<HTMLButtonElement>(null);
+  const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const searchMenuRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [modulesOpen, setModulesOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const desktopHover = useDesktopHover();
+  useHeaderDropdownHover(desktopHover);
 
   // Group apps by category
   const appsByCategory = apps.reduce<Map<string, AppManifestEntry[]>>((groups, app) => {
@@ -184,6 +233,63 @@ export function ShellHeader({
   const filteredApps = search
     ? apps.filter(app => app.nombre.toLowerCase().includes(search.toLowerCase()))
     : apps;
+  const notificationsApp = apps.find((app) => app.route_prefix.replace(/\/$/, '') === '/notificaciones');
+  const notificationsHref = notificationsApp ? appHref(notificationsApp) : '/notificaciones';
+
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus();
+  }, [searchOpen]);
+
+  useEffect(() => {
+    if (!modulesOpen) return;
+    const mediaQuery = window.matchMedia('(max-width: 1024px)');
+    const moveFocusForLayout = () => {
+      if (mediaQuery.matches) {
+        modulesBackRef.current?.focus();
+      } else if (modulesBackRef.current?.contains(document.activeElement)) {
+        modulesTriggerRef.current?.focus();
+      }
+    };
+
+    moveFocusForLayout();
+    mediaQuery.addEventListener('change', moveFocusForLayout);
+    return () => mediaQuery.removeEventListener('change', moveFocusForLayout);
+  }, [modulesOpen]);
+
+  useEffect(() => {
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (
+        modulesOpen
+        && !modulesMenuRef.current?.contains(target)
+        && !modulesTriggerRef.current?.contains(target)
+      ) {
+        setModulesOpen(false);
+      }
+      if (
+        searchOpen
+        && !searchMenuRef.current?.contains(target)
+        && !searchTriggerRef.current?.contains(target)
+      ) {
+        setSearchOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      if (!searchOpen && !modulesOpen) return;
+      event.preventDefault();
+      setSearchOpen(false);
+      setModulesOpen(false);
+      (searchOpen ? searchTriggerRef : modulesTriggerRef).current?.focus();
+    };
+
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [modulesOpen, searchOpen]);
 
   return (
     <header className="nxl-header">
@@ -193,11 +299,11 @@ export function ShellHeader({
         <div className="header-left d-flex align-items-center gap-4">
 
           {/* Mobile hamburger (Duralux nxl-head-mobile-toggler) */}
-          <a
-            href="javascript:void(0);"
-            className="nxl-head-mobile-toggler"
+          <button
+            type="button"
+            className="nxl-head-mobile-toggler gcu-header-icon-button"
             id="mobile-collapse"
-            onClick={(e) => { e.preventDefault(); onToggleMobileNav(); }}
+            onClick={onToggleMobileNav}
             aria-label="Abrir navegación móvil"
           >
             <div className="hamburger hamburger--arrowturn">
@@ -205,59 +311,86 @@ export function ShellHeader({
                 <div className="hamburger-inner"></div>
               </div>
             </div>
-          </a>
+          </button>
 
-          {/* Sidebar toggle: dos anchors (mini/expand), visibilidad ligada a `mini`
+          {/* Sidebar toggle: dos controles (mini/expand), visibilidad ligada a `mini`
               — en el template original esto lo hacía jQuery a mano; acá es el estado. */}
           <div className="nxl-navigation-toggle">
-            <a
-              href="javascript:void(0);"
+            <button
+              type="button"
               id="menu-mini-button"
-              onClick={(e) => { e.preventDefault(); onToggleMini(); }}
+              className="gcu-header-icon-button"
+              onClick={onToggleMini}
               aria-label="Colapsar menú"
               style={{ display: mini ? 'none' : undefined }}
             >
               <Icon name="align-left" />
-            </a>
-            <a
-              href="javascript:void(0);"
+            </button>
+            <button
+              type="button"
               id="menu-expend-button"
-              onClick={(e) => { e.preventDefault(); onToggleMini(); }}
+              className="gcu-header-icon-button"
+              onClick={onToggleMini}
               aria-label="Expandir menú"
               style={{ display: mini ? undefined : 'none' }}
             >
               <Icon name="arrow-right" />
-            </a>
+            </button>
           </div>
 
           {/* Mega-menu dropdown with MÓDULOS button */}
-          <div className="nxl-drp-link nxl-lavel-mega-menu">
-            <div className="nxl-lavel-mega-menu-wrapper d-flex gap-3">
-              <div className="dropdown nxl-h-item nxl-lavel-menu">
-                <a
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  className="btn bg-white border px-3 py-2 fw-semibold fs-12 text-dark d-flex align-items-center gap-2"
-                  data-bs-toggle="dropdown"
-                  data-bs-auto-close="outside"
-                >
-                  <Icon name="grid" className="text-primary" />
-                  MÓDULOS
-                  <Icon name="chevron-down" />
-                </a>
-                <div className="dropdown-menu nxl-h-dropdown">
-                  {[...appsByCategory.entries()].map(([category, categoryApps], index) => (
-                    <Fragment key={category}>
-                      <AppCategoryMenu
-                        category={category}
-                        apps={categoryApps}
-                        appHref={appHref}
-                        onSelect={onOpenApp}
-                      />
-                      {index < appsByCategory.size - 1 && <div className="dropdown-divider"></div>}
-                    </Fragment>
-                  ))}
-                </div>
+          <div className="nxl-drp-link gcu-modules">
+            <button
+              ref={modulesTriggerRef}
+              type="button"
+              className="btn bg-white border px-3 py-2 fw-semibold fs-12 text-dark d-flex align-items-center gap-2 gcu-modules-trigger"
+              aria-expanded={modulesOpen}
+              aria-controls={modulesMenuId}
+              onClick={() => {
+                setSearchOpen(false);
+                setModulesOpen((value) => !value);
+              }}
+            >
+              <Icon name="grid" className="text-primary" />
+              <span className="gcu-modules-trigger-label">MÓDULOS</span>
+              <Icon name="chevron-down" />
+            </button>
+            <div
+              ref={modulesMenuRef}
+              id={modulesMenuId}
+              className={`dropdown-menu nxl-h-dropdown gcu-modules-menu${modulesOpen ? ' show' : ''}`}
+            >
+              <button
+                ref={modulesBackRef}
+                type="button"
+                className="gcu-modules-back"
+                onClick={() => {
+                  setModulesOpen(false);
+                  modulesTriggerRef.current?.focus();
+                }}
+              >
+                <Icon name="chevron-left" />
+                <span>Volver</span>
+              </button>
+              <div className="gcu-modules-list">
+                {[...appsByCategory.entries()].map(([category, categoryApps], index) => (
+                  <Fragment key={category}>
+                    <AppCategoryMenu
+                      category={category}
+                      apps={categoryApps}
+                      appHref={appHref}
+                      desktopHover={desktopHover}
+                      onSelect={(e, app) => {
+                        setModulesOpen(false);
+                        onOpenApp(e, app);
+                      }}
+                    />
+                    {index < appsByCategory.size - 1 && <div className="dropdown-divider"></div>}
+                  </Fragment>
+                ))}
+                {appsByCategory.size === 0 && (
+                  <p className="fs-12 text-muted px-3 py-2 mb-0">Sin módulos disponibles</p>
+                )}
               </div>
             </div>
           </div>
@@ -265,19 +398,20 @@ export function ShellHeader({
           {/* SA client selector */}
           {(rol === 'admin_ti' || viewAsSa) && (
             <div className="dropdown nxl-h-item">
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
+              <button
+                type="button"
                 className={`btn border px-3 py-2 fw-semibold fs-12 d-flex align-items-center gap-2 ${
                   viewAsSa ? 'text-warning border-warning bg-warning-subtle' : 'text-dark bg-white'
                 }`}
                 data-bs-toggle="dropdown"
                 data-bs-auto-close="outside"
+                aria-label={viewAsSa ? `Cliente actual: ${cuentaNombre}` : 'Elegir cliente'}
+                aria-expanded="false"
               >
                 <Icon name="eye" />
-                {viewAsSa ? cuentaNombre : 'Elegir cliente'}
+                <span className="gcu-client-selector-label">{viewAsSa ? cuentaNombre : 'Elegir cliente'}</span>
                 <Icon name="chevron-down" />
-              </a>
+              </button>
               <div className="dropdown-menu nxl-h-dropdown" style={{ minWidth: 220 }}>
                 {viewAsSa && (
                   <div className="px-3 py-2 border-bottom">
@@ -292,10 +426,10 @@ export function ShellHeader({
                   <p className="fs-12 text-muted px-3 py-2 mb-0">Sin clientes activos</p>
                 )}
                 {cuentas.map(c => (
-                  <a
+                  <button
                     key={c.slug}
-                    href="#"
-                    onClick={(e) => { e.preventDefault(); onSelectCuenta(c.slug); }}
+                    type="button"
+                    onClick={() => onSelectCuenta(c.slug)}
                     className={`dropdown-item d-flex align-items-center gap-2 py-2 ${
                       cuentaNombre === c.nombre ? 'fw-bold text-warning' : ''
                     }`}
@@ -305,19 +439,19 @@ export function ShellHeader({
                     {cuentaNombre === c.nombre && (
                       <Icon name="check" size="sm" className="ms-auto text-warning" />
                     )}
-                  </a>
+                  </button>
                 ))}
                 {viewAsSa && (
                   <>
                     <div className="dropdown-divider my-1"></div>
-                    <a
-                      href="#"
-                      onClick={(e) => { e.preventDefault(); onVolverSa(); }}
+                    <button
+                      type="button"
+                      onClick={onVolverSa}
                       className="dropdown-item d-flex align-items-center gap-2 py-2 text-secondary"
                     >
                       <Icon name="shield" size={14} />
                       <span className="fs-13">Volver al Panel SA</span>
-                    </a>
+                    </button>
                   </>
                 )}
               </div>
@@ -331,43 +465,76 @@ export function ShellHeader({
 
             {/* Search — controlled input that actually filters */}
             <div className="dropdown nxl-h-item nxl-header-search">
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="nxl-head-link me-0"
-                data-bs-toggle="dropdown"
-                data-bs-auto-close="outside"
+              <button
+                ref={searchTriggerRef}
+                type="button"
+                onClick={() => {
+                  setModulesOpen(false);
+                  setSearchOpen((value) => !value);
+                }}
+                className="nxl-head-link me-0 gcu-header-icon-button"
                 aria-label="Buscar módulo"
+                aria-expanded={searchOpen}
+                aria-controls={searchMenuId}
               >
                 <Icon name="search" />
-              </a>
-              <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-search-dropdown">
+              </button>
+              <div
+                ref={searchMenuRef}
+                id={searchMenuId}
+                className={`dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-search-dropdown${searchOpen ? ' show' : ''}`}
+              >
                 <div className="input-group search-form">
                   <span className="input-group-text">
                     <Icon name="search" size="sm" className="text-muted" />
                   </span>
                   <input
+                    ref={searchInputRef}
                     type="text"
+                    name="module-search"
+                    autoComplete="off"
                     className="form-control search-input-field"
-                    placeholder="Buscar módulo..."
+                    placeholder="Buscar módulo…"
+                    aria-label="Buscar módulo"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
+                  <span className="input-group-text">
+                    <button
+                      type="button"
+                      className="gcu-search-close"
+                      aria-label="Cerrar búsqueda"
+                      onClick={() => {
+                        setSearchOpen(false);
+                        searchTriggerRef.current?.focus();
+                      }}
+                    >
+                      <Icon name="x" />
+                    </button>
+                  </span>
                 </div>
                 <div className="dropdown-divider mt-0"></div>
-                <div className="searching-for px-4 py-2">
+                <div className="searching-for gcu-search-results px-4 py-2">
                   <p className="fs-11 fw-medium text-muted mb-2">Módulos disponibles</p>
                   <div className="d-flex flex-wrap gap-1">
                     {filteredApps.map(app => (
                       <a
                         key={app.id}
                         href={appHref(app)}
-                        onClick={(e) => onOpenApp(e, app)}
+                        onClick={(e) => {
+                          setSearchOpen(false);
+                          onOpenApp(e, app);
+                        }}
                         className="flex-fill border rounded py-1 px-2 text-center fs-11 fw-semibold"
                       >
                         {app.nombre}
                       </a>
                     ))}
+                    {filteredApps.length === 0 && (
+                      <p className="w-100 fs-12 text-muted text-center py-3 mb-0" role="status">
+                        {search ? `Sin resultados para “${search}”` : 'Sin módulos disponibles'}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -376,105 +543,120 @@ export function ShellHeader({
             {/* Dark mode toggle — Duralux .dark-button/.light-button pattern */}
             <div className="nxl-h-item dark-light-theme">
               {!dark && (
-                <a
-                  href="#"
-                  onClick={(e) => { e.preventDefault(); onToggleDark(); }}
-                  className="nxl-head-link me-0 dark-button"
+                <button
+                  type="button"
+                  onClick={onToggleDark}
+                  className="nxl-head-link me-0 dark-button gcu-header-icon-button"
                   aria-label="Activar modo oscuro"
                 >
                   <Icon name="moon" />
-                </a>
+                </button>
               )}
               {dark && (
-                <a
-                  href="#"
-                  onClick={(e) => { e.preventDefault(); onToggleDark(); }}
-                  className="nxl-head-link me-0 light-button"
+                <button
+                  type="button"
+                  onClick={onToggleDark}
+                  className="nxl-head-link me-0 light-button gcu-header-icon-button"
                   aria-label="Activar modo claro"
                 >
                   <Icon name="sun" />
-                </a>
+                </button>
               )}
             </div>
 
             {/* Notifications — no hardcoded badge; empty state when no notifications */}
             <div className="dropdown nxl-h-item">
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="nxl-head-link me-0"
+              <button
+                type="button"
+                className="nxl-head-link me-0 gcu-header-icon-button"
                 data-bs-toggle="dropdown"
-                role="button"
                 data-bs-auto-close="outside"
-                aria-label="Notificaciones"
+                aria-label={`Notificaciones${noLeidas > 0 ? `, ${noLeidas} sin leer` : ''}`}
+                aria-expanded="false"
               >
                 <Icon name="bell" />
                 {noLeidas > 0 && (
-                  <Badge variant="danger" className="nxl-h-badge">{noLeidas}</Badge>
+                  <Badge variant="danger" className="nxl-h-badge">{noLeidas > 99 ? '99+' : noLeidas}</Badge>
                 )}
-              </a>
+              </button>
               <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-notifications-menu">
                 <div className="d-flex justify-content-between align-items-center notifications-head">
                   <h6 className="fw-bold text-dark mb-0">Notificaciones</h6>
                   {noLeidas > 0 && (
-                    <a
-                      href="#"
-                      onClick={(e) => { e.preventDefault(); onMarkAllRead?.(); }}
-                      className="fs-11 text-success text-end ms-auto"
+                    <button
+                      type="button"
+                      onClick={onMarkAllRead}
+                      className="fs-11 text-success text-end ms-auto gcu-link-button"
                     >
                       <Icon name="check" />
                       <span> Marcar como leído</span>
-                    </a>
+                    </button>
                   )}
                 </div>
-                {notifications.length === 0 ? (
-                  <div className="notifications-item">
-                    <Avatar name="I" variant="primary" size="md" className="me-3" style={{ borderRadius: '50%' }} />
-                    <div className="notifications-desc">
-                      <a href="#" onClick={(e) => e.preventDefault()} className="font-body text-truncate-2-line">
-                        Sin notificaciones nuevas.
-                      </a>
-                    </div>
-                  </div>
-                ) : (
-                  notifications.map((n) => (
-                    <div key={n.id} className={`notifications-item ${n.leida ? '' : 'fw-semibold'}`}>
-                      <Avatar
-                        name={(n.aplicacion_nombre ?? 'N').charAt(0)}
-                        variant={n.leida ? 'secondary' : 'primary'}
-                        size="md"
-                        className="me-3"
-                        style={{ borderRadius: '50%' }}
-                      />
+                <div className="gcu-notifications-list">
+                  {notifications.length === 0 ? (
+                    <div className="notifications-item">
+                      <Avatar name="I" variant="primary" size="md" className="me-3" style={{ borderRadius: '50%' }} />
                       <div className="notifications-desc">
-                        <a
-                          href="#"
-                          onClick={(e) => { e.preventDefault(); onNotificationClick?.(e, n); }}
-                          className="font-body text-truncate-2-line"
-                        >
-                          {n.mensaje}
-                        </a>
-                        <div className="fs-11 text-muted">{tiempoRelativo(n.creada_en)}</div>
+                        <p className="font-body text-truncate-2-line mb-0">
+                          Sin notificaciones nuevas.
+                        </p>
                       </div>
                     </div>
-                  ))
-                )}
+                  ) : (
+                    notifications.map((n) => {
+                      const hasMatchingSpaApp = apps.some(
+                        app => app.modo !== 'external_link' && app.nombre === n.aplicacion_nombre,
+                      );
+
+                      return (
+                        <div key={n.id} className={`notifications-item ${n.leida ? '' : 'fw-semibold'}`}>
+                          <Avatar
+                            name={(n.aplicacion_nombre ?? 'N').charAt(0)}
+                            variant={n.leida ? 'secondary' : 'primary'}
+                            size="md"
+                            className="me-3"
+                            style={{ borderRadius: '50%' }}
+                          />
+                          <div className="notifications-desc">
+                            <a
+                              href={n.url || notificationsHref}
+                              onClick={onNotificationClick && hasMatchingSpaApp ? (e) => {
+                                if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+                                e.preventDefault();
+                                onNotificationClick(e, n);
+                              } : undefined}
+                              className="font-body text-truncate-2-line"
+                            >
+                              {n.mensaje}
+                            </a>
+                            <div className="fs-11 text-muted">{tiempoRelativo(n.creada_en)}</div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+                <div className="notifications-footer text-center">
+                  <a href={notificationsHref} className="fs-12 fw-semibold">
+                    Ver todas las notificaciones
+                  </a>
+                </div>
               </div>
             </div>
 
             {/* User + logout */}
             <div className="dropdown nxl-h-item ms-2">
-              <a
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="d-flex align-items-center gap-2 nxl-head-link me-0"
+              <button
+                type="button"
+                className="d-flex align-items-center gap-2 nxl-head-link me-0 gcu-header-icon-button gcu-avatar-trigger"
                 data-bs-toggle="dropdown"
-                role="button"
                 data-bs-auto-close="outside"
                 aria-label="Menú de usuario"
+                aria-expanded="false"
               >
-                <Avatar name={nombre} size="md" variant="primary" />
-              </a>
+                <Avatar name={nombre} size="md" variant="primary" className="gcu-header-avatar" />
+              </button>
               <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-user-dropdown">
                 <div className="dropdown-header border-bottom pb-3 mb-1">
                   <div className="d-flex align-items-center gap-3">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { Icon } from '../ui/Icon';
 
 // ─── ShellNav Props ───────────────────────────────────────────────────────────
@@ -39,6 +39,19 @@ export interface ShellNavProps {
 // Item de nav: hoja (href) o grupo colapsable (children). Mismo patrón que
 // @duralux/ui Sidebar (nxl-hasmenu/nxl-submenu/nxl-arrow, clase nxl-trigger
 // mientras está abierto, active en el <li> para el fondo "pill" de Duralux).
+function hasActiveItem(item: ShellNavItem): boolean {
+  return Boolean(item.active || item.children?.some(hasActiveItem));
+}
+
+function navItemIdentifier(item: ShellNavItem): string {
+  return `${item.href ?? 'group'}:${item.label}`;
+}
+
+function navSectionIdentifier(section: ShellNavSection): string {
+  if (section.caption) return `caption:${section.caption}`;
+  return `section:${section.items.map(navItemIdentifier).sort().join('|')}`;
+}
+
 function NavItemRow({
   item,
   onNavigate,
@@ -46,12 +59,25 @@ function NavItemRow({
   item: ShellNavItem;
   onNavigate: (href: string, e: React.MouseEvent) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const submenuId = useId();
+  const active = hasActiveItem(item);
+  const [open, setOpen] = useState(active);
+
+  useEffect(() => {
+    if (active) setOpen(true);
+  }, [active]);
 
   if (item.children && item.children.length > 0) {
     return (
-      <li className={`nxl-item nxl-hasmenu${item.active ? ' active' : ''}${open ? ' nxl-trigger' : ''}`}>
-        <a href="#" className="nxl-link" onClick={(e) => { e.preventDefault(); setOpen((o) => !o); }}>
+      <li className={`nxl-item nxl-hasmenu${active ? ' active' : ''}${open ? ' nxl-trigger' : ''}`}>
+        <button
+          type="button"
+          className="nxl-link gcu-nav-group"
+          aria-label={item.label}
+          aria-expanded={open}
+          aria-controls={submenuId}
+          onClick={() => setOpen((value) => !value)}
+        >
           <span className="nxl-micon">
             <Icon name={item.icon} />
           </span>
@@ -59,14 +85,27 @@ function NavItemRow({
           <span className="nxl-arrow">
             <Icon name="chevron-right" />
           </span>
-        </a>
+        </button>
         {open && (
-          <ul className="nxl-submenu">
-            {item.children.map((child, i) => (
-              <NavItemRow key={i} item={child} onNavigate={onNavigate} />
+          <ul id={submenuId} className="nxl-submenu">
+            {item.children.map((child) => (
+              <NavItemRow key={navItemIdentifier(child)} item={child} onNavigate={onNavigate} />
             ))}
           </ul>
         )}
+      </li>
+    );
+  }
+
+  if (!item.href) {
+    return (
+      <li className="nxl-item disabled">
+        <span className="nxl-link" aria-disabled="true">
+          <span className="nxl-micon">
+            <Icon name={item.icon} />
+          </span>
+          <span className="nxl-mtext">{item.label}</span>
+        </span>
       </li>
     );
   }
@@ -75,8 +114,10 @@ function NavItemRow({
     <li className={`nxl-item${item.active ? ' active' : ''}`}>
       <a
         href={item.href}
-        onClick={(e) => onNavigate(item.href ?? '#', e)}
+        onClick={(e) => onNavigate(item.href!, e)}
         className={`nxl-link${item.active ? ' active' : ''}`}
+        aria-label={item.label}
+        aria-current={item.active ? 'page' : undefined}
       >
         <span className="nxl-micon">
           <Icon name={item.icon} />
@@ -113,15 +154,15 @@ export function ShellNav({ brand, sections, onNavigate, mobileOpen = false }: Sh
         </div>
         <div className="navbar-content">
           <ul className="nxl-navbar">
-            {sections.map((section, sIdx) => (
-              <React.Fragment key={sIdx}>
+            {sections.map((section) => (
+              <React.Fragment key={navSectionIdentifier(section)}>
                 {section.caption && (
                   <li className="nxl-item nxl-caption">
                     <label>{section.caption}</label>
                   </li>
                 )}
-                {section.items.map((item, iIdx) => (
-                  <NavItemRow key={iIdx} item={item} onNavigate={onNavigate} />
+                {section.items.map((item) => (
+                  <NavItemRow key={navItemIdentifier(item)} item={item} onNavigate={onNavigate} />
                 ))}
               </React.Fragment>
             ))}

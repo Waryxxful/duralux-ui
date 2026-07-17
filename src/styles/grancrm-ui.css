@@ -125,3 +125,96 @@ html.app-self-chrome .nxl-navigation { display: none !important; }
 html.app-self-chrome .nxl-header { left: 0 !important; }
 html.app-self-chrome .nxl-container { margin-left: 0 !important; }
 html.app-skin-dark .nxl-navigation .m-header .logo-lg { filter: none !important; }
+
+/* Shell navigation and header controls use the Duralux chrome without relying
+   on anchor-only or vendor-icon behavior. */
+.gcu-header-icon-button,.gcu-link-button,.gcu-nav-group,.gcu-modules-back,.gcu-search-close{font:inherit;cursor:pointer}
+.gcu-header-icon-button,.gcu-link-button,.gcu-search-close{border:0;background:transparent;color:inherit}
+.gcu-link-button{border-radius:4px;transition:background-color .15s ease}
+.gcu-link-button:hover{background-color:var(--gcu-surface-subtle)}
+.nxl-navigation .navbar-content{overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
+.nxl-navigation .gcu-nav-group{width:calc(100% - 30px);border:0;background:transparent;appearance:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.nxl-navigation .gcu-nav-group .nxl-arrow{margin-left:auto}
+html.minimenu .nxl-navigation .gcu-nav-group{width:calc(100% - 40px);margin:0 20px}
+.gcu-header-icon-button:focus-visible,.gcu-link-button:focus-visible,.gcu-nav-group:focus-visible,.gcu-modules-trigger:focus-visible,.gcu-modules-back:focus-visible,.gcu-search-close:focus-visible,.nxl-navigation .nxl-link:focus-visible,.nxl-navigation .b-brand:focus-visible,.gcu-search-results a:focus-visible,.gcu-notifications-list a:focus-visible,.nxl-notifications-menu .notifications-footer a:focus-visible{outline:2px solid var(--gcu-primary);outline-offset:2px}
+
+.nxl-header .header-wrapper{min-height:80px}
+.nxl-header .gcu-header-icon-button{justify-content:center}
+.nxl-header .nxl-head-mobile-toggler.gcu-header-icon-button{display:inline-flex;width:44px;height:44px;margin-inline:-12px;padding:12px;align-items:center;flex:0 0 auto}
+.nxl-header .nxl-navigation-toggle .gcu-header-icon-button{display:inline-flex;width:40px;height:40px;padding:8px;align-items:center;border-radius:50%;color:#283c50;transition:background-color .15s ease,color .15s ease}
+.nxl-header .nxl-navigation-toggle .gcu-header-icon-button:hover,.nxl-header .nxl-navigation-toggle .gcu-header-icon-button:focus-visible{background:var(--gcu-surface-subtle);color:var(--gcu-primary)}
+.app-header-dark .nxl-header .nxl-navigation-toggle .gcu-header-icon-button,.app-skin-dark .nxl-header .nxl-navigation-toggle .gcu-header-icon-button{color:#fff}
+.nxl-header .gcu-avatar-trigger{width:40px;height:40px;padding:0}
+.nxl-header .gcu-header-avatar{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;max-width:40px!important;max-height:40px!important}
+.nxl-header .nxl-h-badge{min-width:18px;justify-content:center}
+
+.gcu-modules{position:relative}
+.gcu-modules-menu{left:0;min-width:250px;padding:8px 0}
+.gcu-modules-back{display:none}
+.gcu-modules-list{overflow:visible}
+.gcu-modules-menu .nxl-level-menu>.dropdown-menu{top:0!important;left:100%!important}
+.gcu-search-close{display:grid;width:32px;height:32px;padding:0;place-items:center;border-radius:50%}
+.gcu-search-close:hover{background:var(--gcu-surface-subtle)}
+.gcu-search-results{max-height:min(360px,calc(100dvh - 190px));overflow-y:auto;overscroll-behavior-y:contain}
+.gcu-notifications-list{max-height:min(420px,calc(100dvh - 220px));overflow-y:auto;overscroll-behavior-y:contain}
+.nxl-header .notifications-footer a{display:block}
+
+@media (min-width:1024.01px){
+  html.minimenu .nxl-navigation:hover .gcu-nav-group{width:calc(100% - 30px);margin:0 15px 3px}
+}
+
+@media (min-width:1024.01px) and (max-width:1199.98px){
+  .nxl-header{left:280px}
+  .nxl-container{margin-left:280px}
+  html.minimenu .nxl-header{left:100px}
+  html.minimenu .nxl-container{margin-left:100px}
+}
+
+@media (min-width:1024.01px) and (max-width:1199.98px){
+  .nxl-header .header-left{min-width:0;gap:12px!important}
+  .nxl-header .header-left>.dropdown>.btn{max-width:160px;padding-right:10px!important;padding-left:10px!important;gap:4px!important;white-space:nowrap}
+  .nxl-header .gcu-client-selector-label{display:block;min-width:0;max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+
+@media (max-width:1024px){
+  .nxl-header{left:0!important}
+  .nxl-header .header-wrapper{padding-right:20px;padding-left:20px}
+  .nxl-header .header-left{gap:12px!important}
+  .nxl-navigation{left:-280px;width:280px}
+  .nxl-navigation.mob-navigation-active{left:0!important}
+  .nxl-navigation .navbar-content{height:calc(100dvh - 80px)}
+  .nxl-container{margin-left:0}
+  .page-header{left:0}
+  html.minimenu .nxl-navigation{width:280px}
+  html.minimenu .nxl-navigation .logo-lg,html.minimenu .nxl-navigation .nxl-mtext,html.minimenu .nxl-navigation .nxl-arrow{display:inline-block}
+  html.minimenu .nxl-navigation .logo-sm{display:none}
+  html.minimenu .nxl-navigation .navbar-content{width:100%}
+  html.minimenu .nxl-navigation .navbar-content .nxl-caption:before{content:none}
+  html.minimenu .nxl-navigation .navbar-content .nxl-caption label{display:block}
+  html.minimenu .nxl-navigation .navbar-content .nxl-hasmenu.nxl-trigger>.nxl-submenu{display:block}
+  .nxl-navigation .nxl-link{display:flex;min-height:44px;align-items:center}
+
+  .gcu-modules{position:static}
+  .gcu-modules-menu{display:flex;position:fixed!important;z-index:1030;top:0!important;right:auto!important;bottom:0;left:0!important;width:min(300px,100vw);max-width:none;height:100dvh;margin:0;padding:0;overflow:hidden;flex-direction:column;border-radius:0;opacity:0;visibility:hidden;pointer-events:none;transform:translateX(-100%);transition:transform .18s ease,opacity .18s ease,visibility 0s linear .18s}
+  .gcu-modules-menu.show{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0);transition-delay:0s}
+  .gcu-modules-back{display:flex;width:100%;min-height:80px;padding:0 24px;align-items:center;gap:10px;border:0;border-bottom:1px solid var(--gcu-border);background:var(--gcu-surface);color:var(--gcu-text);font-weight:600}
+  .gcu-modules-list{min-height:0;max-height:none;padding:20px;flex:1;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain}
+  .gcu-modules-menu .nxl-level-menu>.dropdown-menu{position:static!important;width:100%;margin:0;border:0;box-shadow:none}
+  .gcu-modules-menu .nxl-level-menu>.dropdown-menu:not(.show){display:none}
+  .gcu-modules-menu .nxl-level-menu>.dropdown-menu.show{display:block}
+}
+
+@media (max-width:575.98px){
+  .nxl-header .header-wrapper{padding-right:12px;padding-left:12px}
+  .nxl-header .header-left{gap:6px!important}
+  .nxl-header .gcu-modules-trigger{width:44px;height:44px;padding:0!important;justify-content:center}
+  .nxl-header .gcu-modules-trigger-label,.nxl-header .gcu-modules-trigger .feather-chevron-down,.nxl-header .gcu-client-selector-label{display:none}
+  .nxl-header .header-left>.dropdown>.btn{width:44px;height:44px;padding:0!important;justify-content:center}
+  .nxl-header .header-left>.dropdown>.btn .feather-chevron-down{display:none}
+  .nxl-header .nxl-head-link{padding:10px}
+  .nxl-header .dropdown.nxl-h-item.ms-2{margin-left:0!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow,.gcu-modules-menu{transition:none!important}
+}

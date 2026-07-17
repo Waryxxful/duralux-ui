@@ -47,10 +47,10 @@
 
 /*
 <--!----------------------------------------------------------------!-->
-<--! @media (min-width: 1024px) !-->
+<--! @media (min-width: 1024.01px) !-->
 <--!----------------------------------------------------------------!-->
 */
-@media (min-width: 1024px) {
+@media (min-width: 1024.01px) {
 	.nxl-head-mobile-toggler {
 		display: none;
 	}
@@ -578,10 +578,10 @@
 
 /*
 <--!----------------------------------------------------------------!-->
-<--! @media (max-width: 1023.98px) !-->
+<--! @media (max-width: 1024px) !-->
 <--!----------------------------------------------------------------!-->
 */
-@media (max-width: 1023.98px) {
+@media (max-width: 1024px) {
 	#tasksDetailsOffcanvas {
 		&.w-50 {
 			width: 100% !important;
@@ -598,7 +598,7 @@
 	.nxl-header {
 		top: 0;
 		left: 0 !important;
-		transition: all 0.15s ease-in-out;
+		transition: top 0.15s ease-in-out, left 0.15s ease-in-out;
 		.nxl-head-link {
 			display: inline-flex;
 			&#mobile-collapse {
@@ -636,13 +636,52 @@
 	.nxl-navigation {
 		left: -#{$navigation-width};
 		box-shadow: none;
-		transition: all 0.15s ease-in-out;
+		transition: left 0.15s ease-in-out;
+
+		.navbar-content {
+			height: calc(100dvh - #{$header-height});
+			overflow-y: auto;
+			overscroll-behavior-y: contain;
+			-webkit-overflow-scrolling: touch;
+		}
+
 		&.mob-navigation-active {
 			left: 0 !important;
 			.navbar-wrapper {
 				position: relative;
 				z-index: 5;
 				background: inherit;
+			}
+		}
+	}
+	html.minimenu .nxl-navigation {
+		width: $navigation-width;
+
+		.logo-lg,
+		.nxl-mtext,
+		.nxl-arrow {
+			display: inline-block;
+		}
+
+		.logo-sm {
+			display: none;
+		}
+
+		.navbar-content {
+			width: 100%;
+
+			.nxl-caption {
+				&:before {
+					content: none;
+				}
+
+				label {
+					display: block;
+				}
+			}
+
+			.nxl-hasmenu.nxl-trigger > .nxl-submenu {
+				display: block;
 			}
 		}
 	}
@@ -655,6 +694,8 @@
 		}
 	}
 	.nxl-container {
+		margin-left: 0;
+
 		.nxl-content {
 			.help-center-content-header {
 				.search-form {
@@ -662,6 +703,9 @@
 				}
 			}
 		}
+	}
+	.page-header {
+		left: 0;
 	}
 }
 
@@ -689,7 +733,6 @@
 		}
 	}
 	.nxl-container {
-		margin-left: 0px;
 		&.apps-container {
 			.nxl-content {
 				&.without-header {

@@ -982,6 +982,11 @@ html {
 		/* <---------------! Header !---------------> */
 		.nxl-header {
 			.header-wrapper {
+				.nxl-navigation-toggle {
+					button {
+						color: $white;
+					}
+				}
 				.header-left {
 					.nxl-mega-menu {
 						.nxl-h-dropdown {
