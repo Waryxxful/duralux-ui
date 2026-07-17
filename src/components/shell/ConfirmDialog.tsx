@@ -34,7 +34,7 @@ export function ConfirmDialog({
       size="sm"
       footer={
         <>
-          <Button variant="secondary" outline onClick={onCancel} disabled={loading}>
+          <Button variant="light-brand" onClick={onCancel} disabled={loading}>
             {cancelLabel}
           </Button>
           <Button variant={variant} onClick={onConfirm} loading={loading}>
