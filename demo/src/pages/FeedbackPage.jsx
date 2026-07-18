@@ -1,12 +1,15 @@
-import { EmptyState, ErrorState, LoadingState, Progress } from '@duralux/ui'
+import { useState } from 'react'
+import { EmptyState, ErrorState, LoadingState, Progress, Toast, Button } from '@duralux/ui'
 import { ShowcaseSection } from '../ShowcaseSection'
 
 export function FeedbackPage() {
+  const [toast, setToast] = useState(null)
+
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Feedback</h1>
       <p style={{ color: '#64748b', marginBottom: 32 }}>
-        Componentes: <code>EmptyState, ErrorState, LoadingState, Progress</code>
+        Componentes: <code>EmptyState, ErrorState, LoadingState, Progress, Toast</code>
       </p>
 
       <ShowcaseSection
@@ -67,6 +70,38 @@ export function FeedbackPage() {
 <Progress value={90} variant="danger" showValue />
 <Progress value={60} variant="info" striped showValue />
 <Progress value={40} variant="primary" striped animated showValue />`}
+      />
+
+      <ShowcaseSection
+        title="Toast"
+        description="Feedback tipo SweetAlert2 (top-end, auto-dismiss ~3s), sin dependencia nueva. Controlado: show/onClose por instancia."
+        preview={
+          <div className="d-flex flex-wrap gap-2">
+            <Button variant="success" onClick={() => setToast('success')}>success</Button>
+            <Button variant="danger" onClick={() => setToast('danger')}>danger</Button>
+            <Button variant="warning" onClick={() => setToast('warning')}>warning</Button>
+            <Button variant="info" onClick={() => setToast('info')}>info</Button>
+            <Toast
+              variant={toast || 'success'}
+              show={!!toast}
+              onClose={() => setToast(null)}
+              title={
+                toast === 'success' ? 'Cambios guardados correctamente'
+                  : toast === 'danger' ? 'No se pudo guardar el registro'
+                  : toast === 'warning' ? 'Hay campos sin completar'
+                  : 'Sincronización en curso'
+              }
+            />
+          </div>
+        }
+        code={`const [show, setShow] = useState(false)
+
+<Toast
+  variant="success"
+  title="Cambios guardados correctamente"
+  show={show}
+  onClose={() => setShow(false)}
+/>`}
       />
     </div>
   )

@@ -18,6 +18,8 @@ import { FormsPage } from './pages/FormsPage'
 import { ChatComponentsPage } from './pages/ChatComponentsPage'
 import { LayoutPage } from './pages/LayoutPage'
 import { FeedbackPage } from './pages/FeedbackPage'
+import { ConnectionCardPage } from './pages/ConnectionCardPage'
+import { ActivityFeedPage } from './pages/ActivityFeedPage'
 
 export default function App() {
   return (
@@ -32,6 +34,8 @@ export default function App() {
         <Route path="avatars" element={<AvatarsPage />} />
         <Route path="alerts" element={<AlertsPage />} />
         <Route path="timeline" element={<TimelinePage />} />
+        <Route path="connection-card" element={<ConnectionCardPage />} />
+        <Route path="activity-feed" element={<ActivityFeedPage />} />
         <Route path="progress" element={<ProgressPage />} />
         <Route path="stats-cards" element={<StatsCardsPage />} />
         <Route path="datatable" element={<DataTablePage />} />

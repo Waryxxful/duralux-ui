@@ -204,6 +204,9 @@ export * from './components/shell/ShellNav';
 export * from './components/shell/ThemeScope';
 export * from './components/shell/ConfirmDialog';
 export * from './components/shell/GranCrmExtras';
+export * from './components/ui/ConnectionCard';
+export * from './components/ui/ActivityFeed';
+export * from './components/ui/Toast';
 export * from './theme/ThemeProvider';
 `;
 

@@ -13,6 +13,9 @@ export { Timeline } from './components/ui/Timeline'
 export { ProgressRing } from './components/ui/ProgressRing'
 export { Progress } from './components/ui/Progress'
 export { Tabs } from './components/ui/Tabs'
+export { ConnectionCard } from './components/ui/ConnectionCard'
+export { ActivityFeed } from './components/ui/ActivityFeed'
+export { Toast } from './components/ui/Toast'
 
 // Feedback
 export { EmptyState } from './components/feedback/EmptyState'
