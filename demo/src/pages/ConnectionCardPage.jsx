@@ -27,21 +27,21 @@ export function ConnectionCardPage() {
         preview={
           <div>
             <ConnectionCard
-              icon={<DemoIcon name="feather-database" />}
+              icon={<DemoIcon name="database" />}
               title="Google Drive: almacenamiento y compartición"
               description="Búsqueda y colaboración integradas para tu equipo."
               checked={google}
               onChange={setGoogle}
             />
             <ConnectionCard
-              icon={<DemoIcon name="feather-message-square" />}
+              icon={<DemoIcon name="message-square" />}
               title="Slack: notificaciones del equipo"
               description="Recibí alertas de nuevos leads directo en el canal."
               checked={slack}
               onChange={setSlack}
             />
             <ConnectionCard
-              icon={<DemoIcon name="feather-shield" />}
+              icon={<DemoIcon name="shield" />}
               title="Integración deshabilitada"
               description="Este conector está bloqueado por política de la cuenta."
               checked={false}
@@ -51,7 +51,7 @@ export function ConnectionCardPage() {
           </div>
         }
         code={`<ConnectionCard
-  icon={<Icon name="feather-database" />}
+  icon={<Icon name="database" />}
   title="Google Drive: almacenamiento y compartición"
   description="Búsqueda y colaboración integradas para tu equipo."
   checked={checked}
