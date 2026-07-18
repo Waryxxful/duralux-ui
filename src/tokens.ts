@@ -9,12 +9,12 @@
  */
 export const tokens = {
   colors: {
-    // _bs-custom-variables.scss — WCAG AA (text on white / white on solid)
+    // _bs-custom-variables.scss — DESIGN.md brand semantic colors
     primary: '#3454d1',   // $blue / $primary
-    success: '#15803d',   // $green / $success
-    danger: '#b91c1c',    // $red / $danger
-    warning: '#a16207',   // $yellow / $warning
-    info: '#0e7490',      // $cyan
+    success: '#17c666',   // $green / $success
+    danger: '#ea4d4d',    // $red / $danger
+    warning: '#ffa21d',   // $yellow / $warning
+    info: '#3dc7be',      // $cyan
     dark: '#283c50',      // $brand-dark
     darken: '#001327',
     secondary: '#4b5563', // $gray-600
@@ -56,14 +56,16 @@ export const tokens = {
     lg: '0 4px 20px rgba(0,0,0,.16)',
   },
   spacing: { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24 },
-  /** Motion craft — alineado a scss/themes/components/_motion.scss */
+  /** Motion craft — alineado a scss/themes/components/_motion.scss.
+   *  DESIGN.md house signature: `all 0.3s ease` on interactive surfaces
+   *  (scoped to paint props here instead of literal `all`). */
   motion: {
-    easeOut: 'cubic-bezier(0.23, 1, 0.32, 1)',
-    easeInOut: 'cubic-bezier(0.77, 0, 0.175, 1)',
-    durationPress: 140,
-    durationFast: 160,
-    durationUi: 200,
-    durationPanel: 250,
+    easeOut: 'ease',
+    easeInOut: 'ease',
+    durationPress: 300,
+    durationFast: 300,
+    durationUi: 300,
+    durationPanel: 300,
     pressScale: 0.97,
   },
   /** Ruta SCSS de origen para auditoría */

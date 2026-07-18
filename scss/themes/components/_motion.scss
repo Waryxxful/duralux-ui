@@ -1,16 +1,21 @@
 /*
  * Motion craft layer — design engineering defaults (crisp product UI).
  * Tokens + press feedback + reduced-motion. Does not add decorative motion.
+ *
+ * DESIGN.md house motion signature is `all 0.3s ease` on interactive
+ * surfaces (Do's: "Apply transition: all 0.3s ease to interactive surfaces
+ * — it is the house motion signature"). This layer keeps properties scoped
+ * (never literal `all`, to avoid transitioning layout props) but the
+ * duration/easing tokens below now resolve to spec: 0.3s ease.
  */
 
 :root {
-	/* Strong ease-out for UI responses (Emil / animations.dev) */
-	--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-	--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-	--duration-press: 140ms;
-	--duration-fast: 160ms;
-	--duration-ui: 200ms;
-	--duration-panel: 250ms;
+	--ease-out: ease;
+	--ease-in-out: ease;
+	--duration-press: 300ms;
+	--duration-fast: 300ms;
+	--duration-ui: 300ms;
+	--duration-panel: 300ms;
 }
 
 /* Buttons: specific properties (never transition: all), snappy press */

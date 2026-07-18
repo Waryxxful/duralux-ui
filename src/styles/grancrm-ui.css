@@ -3,20 +3,20 @@
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 
 :root,.gcu-theme,[data-gcu-theme="light"]{
-  --gcu-primary:#3454d1;--gcu-secondary:#4b5563;--gcu-success:#15803d;--gcu-danger:#b91c1c;
-  --gcu-warning:#a16207;--gcu-info:#0e7490;--gcu-dark:#283c50;--gcu-light:#f8f9fa;
+  --gcu-primary:#3454d1;--gcu-secondary:#4b5563;--gcu-success:#17c666;--gcu-danger:#ea4d4d;
+  --gcu-warning:#ffa21d;--gcu-info:#3dc7be;--gcu-dark:#283c50;--gcu-light:#f8f9fa;
   --gcu-text:#283c50;--gcu-muted:#4b5563;--gcu-surface:#fff;--gcu-surface-subtle:#f3f4f6;
-  --gcu-border:#e5e7eb;--gcu-focus:rgba(52,84,209,.2);--gcu-radius:6px;
-  --gcu-shadow:0 1px 4px rgba(31,45,61,.08);--gcu-font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --gcu-border:#e5e7eb;--gcu-focus:rgba(52,84,209,.2);--gcu-radius:10px;
+  --gcu-shadow:0 1px 3px 0 rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1);--gcu-font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 [data-gcu-theme="dark"],.app-skin-dark{
-  --gcu-text:#e5e7eb;--gcu-muted:#9aa4b2;--gcu-surface:#172033;--gcu-surface-subtle:#0f172a;
-  --gcu-border:#2b3548;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 1px 4px rgba(0,0,0,.3);
+  --gcu-text:#b1b4c0;--gcu-muted:#9aa4b2;--gcu-surface:#121a2d;--gcu-surface-subtle:#0f172a;
+  --gcu-border:#1b2436;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
 /* ponytail: .gcu-theme re-declares light vars; this overrides them when the shell is in dark mode */
 .app-skin-dark .gcu-theme:not([data-gcu-theme="light"]){
-  --gcu-text:#e5e7eb;--gcu-muted:#9aa4b2;--gcu-surface:#172033;--gcu-surface-subtle:#0f172a;
-  --gcu-border:#2b3548;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 1px 4px rgba(0,0,0,.3);
+  --gcu-text:#b1b4c0;--gcu-muted:#9aa4b2;--gcu-surface:#121a2d;--gcu-surface-subtle:#0f172a;
+  --gcu-border:#1b2436;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
 
 .gcu-theme{font-family:var(--gcu-font);color:var(--gcu-text)}
@@ -36,7 +36,7 @@
 .feather-trending-down:before{content:"\e9f3"}.feather-trending-up:before{content:"\e9f4"}.feather-upload:before{content:"\e9fe"}
 .feather-user:before{content:"\ea00"}.feather-user-check:before{content:"\ea01"}.feather-users:before{content:"\ea05"}
 
-.gcu-btn{--gcu-btn-color:var(--gcu-primary);display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:7px 14px;border:1px solid var(--gcu-btn-color);border-radius:5px;background:var(--gcu-btn-color);color:#fff;font:600 13px/1.25 var(--gcu-font);text-decoration:none;cursor:pointer;transition:background .14s cubic-bezier(.23,1,.32,1),border-color .14s cubic-bezier(.23,1,.32,1),box-shadow .14s cubic-bezier(.23,1,.32,1),transform .14s cubic-bezier(.23,1,.32,1),filter .14s cubic-bezier(.23,1,.32,1)}
+.gcu-btn{--gcu-btn-color:var(--gcu-primary);display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:7px 14px;border:1px solid var(--gcu-btn-color);border-radius:5px;background:var(--gcu-btn-color);color:#fff;font:600 13px/1.25 var(--gcu-font);text-decoration:none;cursor:pointer;transition:background-color .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease,filter .3s ease}
 .gcu-btn:hover:not(:disabled){filter:brightness(.94);color:#fff}.gcu-btn:active:not(:disabled){transform:scale(.97)}
 .gcu-btn:focus-visible,.gcu-control:focus-visible,.gcu-check__input:focus-visible,.gcu-pagination__button:focus-visible,.gcu-close:focus-visible{outline:0;box-shadow:0 0 0 3px var(--gcu-focus)}
 .gcu-btn:disabled,.gcu-btn[aria-disabled="true"]{opacity:.6;cursor:not-allowed}
@@ -62,8 +62,8 @@
 .gcu-avatar--danger{background:var(--gcu-danger)}.gcu-avatar--warning{background:var(--gcu-warning);color:#fff}.gcu-avatar--info{background:var(--gcu-info)}.gcu-avatar--dark{background:var(--gcu-dark)}
 
 .gcu-card{box-sizing:border-box;border:1px solid var(--gcu-border);border-radius:var(--gcu-radius);background:var(--gcu-surface);color:var(--gcu-text);box-shadow:var(--gcu-shadow);font-family:var(--gcu-font)}
-.gcu-card__header{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;padding:12px 18px;border-bottom:1px solid var(--gcu-border)}
-.gcu-card__title{margin:0;color:var(--gcu-text);font-size:14px;font-weight:700}.gcu-card__actions{margin-left:auto}.gcu-card__body{padding:18px}.gcu-card__body--flush{padding:0}.gcu-card__footer{padding:12px 18px;border-top:1px solid var(--gcu-border)}
+.gcu-card__header{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;padding:25px;border-bottom:1px solid var(--gcu-border)}
+.gcu-card__title{margin:0;color:var(--gcu-text);font-size:16px;font-weight:700}.gcu-card__actions{margin-left:auto}.gcu-card__body{padding:25px}.gcu-card__body--flush{padding:0}.gcu-card__footer{padding:25px;border-top:1px solid var(--gcu-border)}
 .gcu-stat-card__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.gcu-stat-card__label{margin:0;color:var(--gcu-muted);font-size:12px}
 .gcu-stat-card__icon{display:grid;width:30px;height:30px;place-items:center;border-radius:6px;background:color-mix(in srgb,var(--gcu-primary) 13%,transparent);color:var(--gcu-primary)}
 .gcu-stat-card__icon--secondary{background:color-mix(in srgb,var(--gcu-secondary) 13%,transparent);color:var(--gcu-secondary)}.gcu-stat-card__icon--success{background:color-mix(in srgb,var(--gcu-success) 13%,transparent);color:var(--gcu-success)}.gcu-stat-card__icon--danger{background:color-mix(in srgb,var(--gcu-danger) 13%,transparent);color:var(--gcu-danger)}.gcu-stat-card__icon--warning{background:color-mix(in srgb,var(--gcu-warning) 13%,transparent);color:var(--gcu-warning)}.gcu-stat-card__icon--info{background:color-mix(in srgb,var(--gcu-info) 13%,transparent);color:var(--gcu-info)}

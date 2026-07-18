@@ -24,26 +24,32 @@ $gray-900: #212529;
 $black: #000000;
 
 // fusv-enable
-// Semantic greens/yellows/reds tuned so BOTH:
-//   - .text-{variant} on white / body-bg ≥ 4.5:1
-//   - white text on .bg-{variant} / solid badges ≥ 4.5:1
-// Bootstrap button-variant() picks black or white via color-contrast().
+// DESIGN.md brand semantic colors (Duralux template fidelity).
+// NOTE: an earlier pass ("fix(a11y): WCAG AA contrast...", commit 1005aee)
+// darkened these on purpose with the rationale kept below for the record —
+// spec fidelity wins here per Tarea token-realignment, so the original
+// Duralux hues are restored. If a WCAG AA gap resurfaces, fix it locally
+// (e.g. a darker text-on-badge override) instead of redefining the brand hue:
+//   "Semantic greens/yellows/reds tuned so BOTH:
+//      - .text-{variant} on white / body-bg ≥ 4.5:1
+//      - white text on .bg-{variant} / solid badges ≥ 4.5:1
+//    Bootstrap button-variant() picks black or white via color-contrast()."
 $blue: #3454d1;
 $indigo: #6610f2;
 $purple: #6f42c1;
 $pink: #e83e8c;
-$red: #b91c1c;
+$red: #ea4d4d;
 $orange: #c2410c;
-$yellow: #a16207;
-$green: #15803d;
+$yellow: #ffa21d;
+$green: #17c666;
 $teal: #0f766e;
-$cyan: #0e7490;
+$cyan: #3dc7be;
 $white: #ffffff;
 $secondary: #4b5563;
-$success: #15803d;
-$warning: #a16207;
-$info: #0369a1;
-$danger: #b91c1c;
+$success: #17c666;
+$warning: #ffa21d;
+$info: #3dc7be;
+$danger: #ea4d4d;
 $dark: #283c50; // new added
 $darken: #001327; // new added
 

@@ -75,13 +75,15 @@ button,
 	text-transform: $font-uppercase;
 	letter-spacing: $text-spacing-md;
 	border-radius: 3px;
-	/* Specific props — see components/_motion.scss for press + tokens */
+	/* House motion signature (DESIGN.md): all 0.3s ease — scoped props here
+	   instead of literal `all`; see components/_motion.scss for the .btn
+	   override that actually wins the cascade. */
 	transition:
-		color 0.16s cubic-bezier(0.23, 1, 0.32, 1),
-		background-color 0.16s cubic-bezier(0.23, 1, 0.32, 1),
-		border-color 0.16s cubic-bezier(0.23, 1, 0.32, 1),
-		box-shadow 0.16s cubic-bezier(0.23, 1, 0.32, 1),
-		transform 0.14s cubic-bezier(0.23, 1, 0.32, 1);
+		color 0.3s ease,
+		background-color 0.3s ease,
+		border-color 0.3s ease,
+		box-shadow 0.3s ease,
+		transform 0.3s ease;
 	&:hover,
 	&:focus,
 	&:active,
