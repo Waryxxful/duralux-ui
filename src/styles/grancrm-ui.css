@@ -154,6 +154,7 @@ html.minimenu .nxl-navigation .gcu-nav-group{width:calc(100% - 40px);margin:0 20
 .nxl-header .header-wrapper{min-height:80px}
 .nxl-header .gcu-header-icon-button{justify-content:center}
 .nxl-header .nxl-head-mobile-toggler.gcu-header-icon-button{display:inline-flex;width:44px;height:44px;margin-inline:-12px;padding:12px;align-items:center;flex:0 0 auto}
+@media (min-width: 1024.01px){.nxl-header .nxl-head-mobile-toggler.gcu-header-icon-button{display:none}}
 .nxl-header .nxl-navigation-toggle .gcu-header-icon-button{display:inline-flex;width:40px;height:40px;padding:8px;align-items:center;border-radius:50%;color:#283c50;transition:background-color .15s ease,color .15s ease}
 .nxl-header .nxl-navigation-toggle .gcu-header-icon-button:hover,.nxl-header .nxl-navigation-toggle .gcu-header-icon-button:focus-visible{background:var(--gcu-surface-subtle);color:var(--gcu-primary)}
 .app-header-dark .nxl-header .nxl-navigation-toggle .gcu-header-icon-button,.app-skin-dark .nxl-header .nxl-navigation-toggle .gcu-header-icon-button{color:#fff}
