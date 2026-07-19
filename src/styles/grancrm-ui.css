@@ -135,8 +135,8 @@
 
 /* Self-chrome (iframe sin nav del shell) */
 html.app-self-chrome .nxl-navigation { display: none !important; }
-html.app-self-chrome .nxl-header { left: 0 !important; }
-html.app-self-chrome .nxl-container { margin-left: 0 !important; }
+html.app-self-chrome .nxl-header { display: none !important; }
+html.app-self-chrome .nxl-container { margin-left: 0 !important; top: 0 !important; min-height: 100vh !important; }
 html.app-skin-dark .nxl-navigation .m-header .logo-lg { filter: none !important; }
 
 /* Shell navigation and header controls use the Duralux chrome without relying
