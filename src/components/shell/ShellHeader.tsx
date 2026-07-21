@@ -567,7 +567,7 @@ export function ShellHeader({
                     <div className="notifications-item">
                       <Avatar name="I" variant="primary" size="md" className="me-3" style={{ borderRadius: '50%' }} />
                       <div className="notifications-desc">
-                        <p className="font-body text-truncate-2-line mb-0">
+                        <p className="font-body text-body text-truncate-2-line mb-0">
                           Sin notificaciones nuevas.
                         </p>
                       </div>
@@ -595,7 +595,7 @@ export function ShellHeader({
                                 e.preventDefault();
                                 onNotificationClick(e, n);
                               } : undefined}
-                              className="font-body text-truncate-2-line"
+                              className="font-body text-body text-truncate-2-line"
                             >
                               {n.mensaje}
                             </a>
