@@ -812,6 +812,12 @@ html {
 			a {
 				color: $white;
 			}
+
+			// misma especificidad que la regla clara de _nxl-common.scss
+			// (.breadcrumb-item:last-child): sin esto, gana la clara por orden.
+			.breadcrumb-item:last-child {
+				color: $dark-theme-color;
+			}
 		}
 
 		/* <---------------! Progress !---------------> */
