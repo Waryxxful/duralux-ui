@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useThemeOptional } from '../../theme/ThemeProvider'
+import { registerDismissableLayer } from '../../utils/dismissableLayer'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 
 /**
  * AppLayout — monta el shell Duralux (sidebar + header + footer).
- * Los atributos data-pc-* van en <html> y nxl-sidebar-mini en <body>
- * para que el CSS del tema los tome correctamente.
+ * Las clases globales del tema se aplican en <html>, como espera Duralux.
  */
 export function AppLayout({
   children,
@@ -15,30 +16,52 @@ export function AppLayout({
   user = {},
   notifications = [],
   theme = 'light',
-  preset = 'preset-1',
   promoCard,
 }) {
+  const themeContext = useThemeOptional()
+  const hasThemeProvider = themeContext !== null
   const [mini, setMini] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const mobileLayerRef = useRef(null)
 
-  // data-pc-* en <html> — el CSS del tema los busca ahí
   useEffect(() => {
+    if (hasThemeProvider) return
+
     const el = document.documentElement
-    el.setAttribute('data-pc-preset', preset)
-    el.setAttribute('data-pc-direction', 'ltr')
-    el.setAttribute('data-pc-theme', theme)
-  }, [theme, preset])
+    const wasDark = el.classList.contains('app-skin-dark')
+    const dark = theme === 'dark'
+    el.classList.toggle('app-skin-dark', dark)
+
+    return () => {
+      // Do not overwrite a newer owner that changed the class while mounted.
+      if (el.classList.contains('app-skin-dark') === dark) {
+        el.classList.toggle('app-skin-dark', wasDark)
+      }
+    }
+  }, [theme, hasThemeProvider])
 
   // minimenu en <html> — así lo espera el CSS de Duralux (html.minimenu selector)
   useEffect(() => {
-    document.documentElement.classList.toggle('minimenu', mini)
-    return () => document.documentElement.classList.remove('minimenu')
-  }, [mini])
+    if (hasThemeProvider) return
 
-  // mob-sidebar-active en <body>
+    const el = document.documentElement
+    const wasMini = el.classList.contains('minimenu')
+    el.classList.toggle('minimenu', mini)
+
+    return () => {
+      if (el.classList.contains('minimenu') === mini) {
+        el.classList.toggle('minimenu', wasMini)
+      }
+    }
+  }, [mini, hasThemeProvider])
+
   useEffect(() => {
-    document.body.classList.toggle('mob-sidebar-active', mobileOpen)
-    return () => document.body.classList.remove('mob-sidebar-active')
+    if (!mobileOpen) return
+
+    return registerDismissableLayer({
+      element: mobileLayerRef.current,
+      onEscape: () => setMobileOpen(false),
+    })
   }, [mobileOpen])
 
   return (
@@ -48,12 +71,14 @@ export function AppLayout({
         logo={logo}
         logoAbbr={logoAbbr}
         promoCard={promoCard}
+        mobileOpen={mobileOpen}
+        onNavigate={() => setMobileOpen(false)}
       />
 
       <Header
         user={user}
         notifications={notifications}
-        onToggleMini={() => setMini((m) => !m)}
+        onToggleMini={themeContext?.toggleMini ?? (() => setMini((m) => !m))}
         onToggleMobile={() => setMobileOpen((m) => !m)}
       />
 
@@ -75,7 +100,8 @@ export function AppLayout({
 
       {mobileOpen && (
         <div
-          className="nxl-navbar-overlay"
+          ref={mobileLayerRef}
+          className="nxl-menu-overlay"
           onClick={() => setMobileOpen(false)}
         />
       )}

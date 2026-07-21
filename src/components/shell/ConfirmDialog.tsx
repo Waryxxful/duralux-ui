@@ -30,6 +30,9 @@ export function ConfirmDialog({
     <Modal
       open={open}
       onClose={onCancel}
+      closeOnEscape={!loading}
+      closeOnBackdrop={!loading}
+      showCloseButton={!loading}
       title={title}
       size="sm"
       footer={

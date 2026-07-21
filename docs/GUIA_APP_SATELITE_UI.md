@@ -17,7 +17,8 @@ Receta estándar para **apps nuevas** y migraciones (call_reviews es la de refer
 
 - **Siempre** `github:Waryxxful/duralux-ui` (pin opcional: `#semver:^0.1.0` o commit SHA).
 - **Nunca** `file:` local ni copiar `types.ts` / CSS del theme a mano.
-- Prohibido: bootstrap npm, otra librería de componentes, otro set de iconos.
+- No instales Bootstrap ni jQuery: el paquete publica el CSS necesario y sus componentes React no requieren Bootstrap JS ni el runtime vendor/jQuery.
+- Prohibido: otra librería de componentes u otro set de iconos.
 
 Tras un bump del paquete en consumidores:
 
@@ -30,9 +31,17 @@ npm run build
 
 | Contexto | Qué cargar |
 |----------|------------|
-| **Montado en el shell (prod MF)** | **Nada** de theme. El shell ya carga `bootstrap.min.css` + `theme.min.css` + glue. |
-| **DevShell standalone** | `import '@duralux/ui/bootstrap.min.css'` + `import '@duralux/ui/theme.min.css'` + `import '@duralux/ui/styles/grancrm-ui.css'` |
+| **Montado en el shell (prod MF)** | **Nada** en la satélite. El shell ya carga `@duralux/ui/bootstrap.min.css`, `@duralux/ui/theme.min.css` y `@duralux/ui/styles/grancrm-ui.css`. |
+| **DevShell standalone** | Importar los tres estilos del paquete en el orden indicado abajo. |
 | **CSS propio de dominio** | Un solo archivo (ej. `app.css`) usando variables Duralux/`--gcu-*`. Sin hex literales nuevos. |
+
+```tsx
+import '@duralux/ui/bootstrap.min.css';
+import '@duralux/ui/theme.min.css';
+import '@duralux/ui/styles/grancrm-ui.css';
+```
+
+Para depurar están disponibles las variantes expandidas `@duralux/ui/bootstrap.css` y `@duralux/ui/theme.css`. El glue incluye los iconos Feather; no cargues `vendors.min.css`. El theme compilado es la adaptación canónica de Duralux para GranCRM, no una salida byte a byte del CSS original de la plantilla.
 
 ## 3. Contrato MF
 
@@ -61,7 +70,7 @@ import {
 2. ¿Es genérico y lo necesitarán otras apps? → PR a `duralux-ui` + página en `demo/`.
 3. ¿Es de dominio? → solo en la app.
 
-### PageHeader 1:1 Duralux
+### PageHeader canónico GranCRM/Duralux
 
 ```tsx
 <PageHeader
@@ -120,9 +129,13 @@ docker compose restart web   # o el proceso de deploy de la app
 - [ ] Importa de `@duralux/ui`, no copias
 - [ ] Cero hex literales de diseño
 - [ ] Dark mode OK (montado en shell)
-- [ ] Probadomontado en shell, no solo standalone
+- [ ] Probado montado en shell, no solo standalone
 - [ ] Versión de `@duralux/ui` ≤ shell mayor
 
 ## 8. Scaffold mínimo de remote
 
 Copiar esqueleto de `call_reviews/frontend` (vite + MF + `src/App.tsx` + `src/types.ts` re-export). No hace falta generador hasta 3+ apps nuevas/año.
+
+## 9. `DESIGN.md`
+
+`/home/admincrm/docs-repo/DESIGN.md` es la referencia de estilo Duralux (tokens, frame, page-header, mapeo de componentes) — genérica, sin nada específico de ninguna app. Copiala tal cual a la raíz de tu repo como `DESIGN.md` al arrancar la app; no la reescribas a mano ni la generes de cero.

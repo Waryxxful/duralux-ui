@@ -3,11 +3,11 @@ import React from 'react';
 /**
  * ActivityFeed — feed de log/eventos con riel de color por tipo de evento.
  *
- * Markup 1:1 de duralux-admin/widgets-lists.html:
+ * Estructura basada en duralux-admin/widgets-lists.html:
  *   ul.list-unstyled.mb-0.activity-feed-1 > li.feed-item.feed-item-{variant}
  * El riel de color es CSS puro (::before/::after) — ya está compilado en
- * scss/themes/widgets/_widgets-lists.scss (idéntico byte-a-byte a la
- * plantilla origen), no se portó nada nuevo.
+ * scss/themes/widgets/_widgets-lists.scss y se mantiene con la adaptación
+ * GranCRM del theme.
  */
 export type ActivityFeedVariant = 'primary' | 'success' | 'danger' | 'warning' | 'info';
 

@@ -1,10 +1,8 @@
 # @duralux/ui
 
-Librería de componentes React construida sobre el tema Duralux (Bootstrap 5). Lista para usar en cualquier proyecto que tenga los estilos Duralux cargados.
+Paquete compartido del frontend GranCRM: componentes React, shell UI, contrato shell-satélite, tokens, cliente API y estilos basados en Duralux/Bootstrap 5.
 
-**33 componentes** · **6 categorías** · Vite lib mode (ESM + CJS) · Demo showcase incluida
-
----
+La UI genérica compartida vive acá. Las aplicaciones satélite consumen estos exports y conservan únicamente componentes específicos de su dominio.
 
 ## Instalación
 
@@ -12,166 +10,227 @@ Librería de componentes React construida sobre el tema Duralux (Bootstrap 5). L
 npm install github:Waryxxful/duralux-ui
 ```
 
-> El script `prepare` ejecuta `vite build` automáticamente al instalar — no necesitas construir manualmente.
+El host debe proveer los tres peer dependencies del paquete:
 
-El proyecto host necesita los estilos Duralux en su `index.html`:
-
-```html
-<link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/assets/vendors/css/vendors.min.css" />
-<link rel="stylesheet" href="/assets/css/theme.min.css" />
+```json
+{
+  "react": ">=18",
+  "react-dom": ">=18",
+  "react-router-dom": "^6.0.0 || ^7.0.0"
+}
 ```
 
----
+`react-router-dom` es un peer requerido, no una dependencia opcional de `AppLayout`. El script `prepare` construye `dist/` automáticamente al instalar desde git.
 
-## Uso
+## Estilos
+
+En una aplicación standalone, importá el stack canónico en este orden:
 
 ```jsx
-import { Button, Card, StatsCard, DataTable, ApexChart } from '@duralux/ui'
+import '@duralux/ui/bootstrap.min.css'
+import '@duralux/ui/theme.min.css'
+import '@duralux/ui/styles/grancrm-ui.css'
+```
 
-function MiPagina() {
+Una satélite montada en el shell no repite estos imports: el shell carga el stack una sola vez.
+
+| Export | Contenido |
+|---|---|
+| `@duralux/ui/bootstrap.css` / `bootstrap.min.css` | Bootstrap compilado desde `scss/bootstrap/bootstrap.scss` |
+| `@duralux/ui/theme.css` / `theme.min.css` | Theme Duralux adaptado, compilado desde `scss/theme.scss` |
+| `@duralux/ui/styles/grancrm-ui.css` | Tokens y glue GranCRM; incluye Feather Icons y su fuente |
+| `@duralux/ui/styles/feather-icons.css` | Feather Icons por separado, para usos parciales |
+| `@duralux/ui/styles.css` | Alias de `styles/grancrm-ui.css` |
+
+No se necesita Bootstrap JS, `vendors.min.css` ni jQuery para los componentes del paquete.
+
+El theme es una adaptación deliberada del lenguaje visual Duralux para GranCRM. El SCSS mantenido por este repositorio es la fuente de verdad; los CSS compilados no pretenden ser byte a byte idénticos a los archivos publicados por la plantilla original.
+
+## Uso rápido
+
+```jsx
+import { Badge, Button, Card, DataTable } from '@duralux/ui'
+
+const columns = [
+  { key: 'name', label: 'Cliente', sortable: true },
+  {
+    key: 'status',
+    label: 'Estado',
+    render: (_row, value) => <Badge variant="success" soft>{value}</Badge>,
+  },
+]
+
+export function ClientesPage({ clientes }) {
   return (
-    <Card title="Clientes" headerRight={<Button variant="primary" icon="feather-plus">Nuevo</Button>}>
-      <DataTable columns={columns} data={data} rowKey="id" selectable pageSize={10} />
+    <Card
+      title="Clientes"
+      actions={<Button variant="primary" startIcon="plus">Nuevo</Button>}
+      noPadding
+    >
+      <DataTable columns={columns} data={clientes} rowKey="id" selectable pageSize={10} />
     </Card>
   )
 }
 ```
 
----
+## Contratos principales
 
-## Componentes
+### Button y LinkButton
 
-### UI Base
+`Button` acepta props nativos de botón, `variant`, `size`, `loading`, `disabled`, `startIcon`, `endIcon`, `icon`, `as` y `href`. `startIcon`/`endIcon` reciben el nombre Feather sin prefijo (`"plus"`); `icon` conserva el formato legacy de clase completa (`"feather-plus"`).
 
-| Componente | Props principales |
-|---|---|
-| `Button` | `variant`, `size`, `icon`, `loading`, `disabled`, `as`, `href` |
-| `Card` | `title`, `subtitle`, `headerRight`, `footer`, `noPadding` |
-| `Badge` | `variant`, `soft`, `pill` |
-| `Alert` | `variant`, `title`, `dismissible`, `icon` |
-| `Modal` | `show`, `onHide`, `title`, `size`, `footer` |
-| `Tabs` | `tabs=[{key,label,icon}]`, `activeKey`, `onChange` |
-| `Avatar` | `src`, `name`, `size`, `bg`, `status` |
-| `Timeline` | `items=[{icon,iconBg,title,subtitle,time,content}]` |
-| `ProgressRing` | `value`, `size`, `color`, `label` |
+`LinkButton` renderiza un `<a>`, requiere `href` y comparte `variant`, `size`, `loading`, `disabled`, `icon`, `startIcon` y `endIcon`. En estado `loading` o `disabled` elimina `href`, sale del orden de tabulación y expone `aria-disabled`.
 
-`variant` acepta: `primary` · `secondary` · `success` · `danger` · `warning` · `info` · `light-brand`
-
-### Stats / KPI
-
-| Componente | Props principales |
-|---|---|
-| `StatsCard` | `icon`, `iconBg`, `value`, `label`, `trend={value,up}`, `progress={value,color,label}` |
-| `MiniStatCard` | `icon`, `value`, `label`, `color` |
-| `ColoredStatCard` | `icon`, `value`, `label`, `trend`, `trendUp`, `bg` |
-
-### Formularios
-
-| Componente | Props |
-|---|---|
-| `FormField` | `label`, `htmlFor`, `error`, `hint`, `required` |
-| `Input` | `icon`, `invalid` + todos los props nativos de `<input>` |
-| `Select` | `options` (`string[]` ó `{value,label}[]`), `invalid` |
-| `Textarea` | `rows`, `invalid` + props nativos de `<textarea>` |
-
-### Datos
-
-| Componente | Props principales |
-|---|---|
-| `DataTable` | `columns`, `data`, `rowKey`, `selectable`, `pageSize`, `actions`, `onSelectionChange` |
-
-`columns`: `{ key, label, sortable?, render?(row) => ReactNode }`  
-`actions`: `[{ label, icon, onClick(row) }]`
-
-### Charts — ApexCharts
-
-| Componente | Props |
-|---|---|
-| `ApexChart` | `type`, `options`, `series`, `height`, `width` |
-| `ChartCard` | `title`, `subtitle`, `actions=[{label,onClick}]`, `children` |
-
-`type` acepta cualquier tipo de ApexCharts: `area` · `bar` · `line` · `donut` · `pie` · `radialBar` · `heatmap`
-
-### Charts — Recharts (wrappers rápidos)
-
-| Componente | Props |
-|---|---|
-| `AreaChartWidget` | `data`, `series=[{key,color,label}]`, `height` |
-| `BarChartWidget` | `data`, `series`, `height`, `stacked` |
-| `LineChartWidget` | `data`, `series`, `height` |
-| `PieChartWidget` | `data=[{name,value,color}]`, `donut`, `height` |
-
-### Chat
-
-| Componente | Props |
-|---|---|
-| `ChatBubble` | `message={id,text,time,sender,mine}` |
-| `ChatTypingIndicator` | `name` |
-| `ChatInputBar` | `onSend`, `placeholder` |
-| `ChatWindow` | `contact={name,avatar,online,role}`, `children` |
-| `ChatSidebar` | `contacts`, `selectedId`, `onSelect`, `onSearch` |
-
-### Layout
-
-| Componente | Props |
-|---|---|
-| `AppLayout` | `navItems`, `user`, `notifications`, `children` |
-| `AuthLayout` | `children` |
-| `Header` | (interno — usado por AppLayout) |
-| `Sidebar` | (interno — usado por AppLayout) |
-| `PageHeader` | `title`, `breadcrumbs=[{label,href}]`, `children` |
-
-`navItems` acepta `{ type:'caption', label }` para separadores y `{ icon, label, to }` ó `{ icon, label, children:[...] }` para items con sub-menú.
-
----
-
-## Ejemplos
-
-### Stats + Tabla
+### Modal
 
 ```jsx
-import { StatsCard, Card, DataTable, Badge } from '@duralux/ui'
+<Modal
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Editar cliente"
+  size="lg"
+  closeOnEscape
+  closeOnBackdrop={false}
+  showCloseButton
+  footer={<Button onClick={save}>Guardar</Button>}
+>
+  Contenido
+</Modal>
+```
 
-const COLUMNS = [
-  { key: 'name', label: 'Cliente', sortable: true },
-  { key: 'status', label: 'Estado',
-    render: (row) => <Badge variant="success" soft>{row.status}</Badge> },
+`open` controla la visibilidad y `onClose` recibe las solicitudes de cierre. `closeOnEscape`, `closeOnBackdrop` y `showCloseButton` valen `true` por defecto. También admite `size`, `scrollable`, `title`, `footer` y `children`; el componente gestiona portal, bloqueo de body, foco y modales apilados sin Bootstrap JS.
+
+### FormField y Select
+
+`FormField` acepta `label`, `htmlFor`, `required`, `error`, `helpText`, el alias `hint` y `className`. `children` puede ser un nodo React o una función `(id) => ReactNode`:
+
+```jsx
+<FormField label="Nombre" required helpText="Usá el nombre legal">
+  <Input />
+</FormField>
+
+<FormField label="Estado" error={error}>
+  {(id) => (
+    <Select
+      id={id}
+      placeholder="Elegí un estado"
+      invalid={Boolean(error)}
+      options={[
+        'Pendiente',
+        { value: 'active', label: 'Activo' },
+        { value: 'archived', label: 'Archivado', disabled: true },
+      ]}
+    />
+  )}
+</FormField>
+```
+
+Con un único control, `FormField` lo asocia automáticamente con el label y los mensajes accesibles. El render prop recibe el id generado o el `htmlFor` explícito.
+
+`Select` acepta todos los props nativos de `<select>`, incluido `disabled`, además de `options`, `placeholder`, `invalid` y `error`. `options` puede mezclar strings y objetos `{ value, label, disabled? }`; `placeholder` crea una opción vacía deshabilitada.
+
+### Tabs
+
+Cada tab tiene `{ key, label, content?, icon? }`, con keys `string | number`.
+
+```jsx
+const tabs = [
+  { key: 'profile', label: 'Perfil', content: <Profile /> },
+  { key: 'security', label: 'Seguridad', icon: 'feather-lock', content: <Security /> },
 ]
 
-export function ClientesPage() {
-  return (
-    <>
-      <div className="row g-3 mb-4">
-        <div className="col-md-3">
-          <StatsCard icon="feather-users" value="1,254" label="Total Clientes"
-            trend={{ value: '+12%', up: true }} />
-        </div>
-      </div>
-      <Card>
-        <DataTable columns={COLUMNS} data={clientes} rowKey="id" selectable pageSize={10}
-          actions={[{ label: 'Ver', icon: 'feather-eye', onClick: (r) => navigate(`/clientes/${r.id}`) }]} />
-      </Card>
-    </>
-  )
-}
+// No controlado: defaultActiveKey solo define la selección inicial.
+<Tabs tabs={tabs} defaultActiveKey="profile" onChange={trackTab} />
+
+// Controlado: el consumidor actualiza activeKey.
+<Tabs tabs={tabs} activeKey={activeKey} onChange={setActiveKey} />
 ```
+
+También admite `className` y `tabClassName`. Implementa asociación tab/panel y navegación por teclado sin Bootstrap JS.
+
+### DataTable
+
+```ts
+type DataTableColumn<
+  Row extends object,
+  K extends Extract<keyof Row, string> = Extract<keyof Row, string>,
+> = K extends Extract<keyof Row, string> ? {
+  key: K
+  label: React.ReactNode
+  sortable?: boolean
+  render?: (row: Row, value: Row[K], rowIndex: number) => React.ReactNode
+} : never
+```
+
+El tipo se distribuye por las keys string de la fila: permite arrays heterogéneos y tipa cada `value` como `Row[K]`, mientras rechaza keys inexistentes. El renderer siempre recibe `(row, value, rowIndex)` en ese orden. `rowIndex` corresponde a la página visible después del ordenamiento.
+
+`DataTable` acepta `columns`, `data`, `rowKey`, `pageSize`, `actions`, `selectable` y `onSelectionChange`. Las acciones tienen `{ label, icon, onClick(row) }`; la selección es interna y `onSelectionChange` recibe los ids tomados de `row[rowKey]`.
+
+```jsx
+<DataTable
+  columns={columns}
+  data={clientes}
+  rowKey="id"
+  pageSize={10}
+  selectable
+  onSelectionChange={(ids) => setSelectedIds(ids)}
+  actions={[
+    { label: 'Ver', icon: 'feather-eye', onClick: (row) => navigate(`/clientes/${row.id}`) },
+  ]}
+/>
+```
+
+### Dropdown
+
+`Dropdown` es el primitivo React para menús del paquete. Soporta estado no controlado (`defaultOpen`) o controlado (`open`, `onOpenChange`), alineación `start | end`, cierre exterior/Escape y `desktopHover`. `DropdownMenu` admite `as` y `closeOnSelect`.
+
+```jsx
+<Dropdown
+  align="end"
+  trigger={(triggerProps, { open }) => (
+    <button {...triggerProps} className="btn btn-light-brand">
+      Acciones {open ? '▲' : '▼'}
+    </button>
+  )}
+>
+  <DropdownMenu as="ul">
+    <li><button type="button" className="dropdown-item">Editar</button></li>
+    <li><button type="button" className="dropdown-item">Archivar</button></li>
+  </DropdownMenu>
+</Dropdown>
+```
+
+## Otros exports
+
+- UI y feedback: `Card`, `Badge`, `Alert`, `Avatar`, `Timeline`, `Progress`, `ProgressRing`, `Toast`, estados vacíos/error/carga.
+- Formularios y datos: `Input`, `Textarea`, `Checkbox`, `Radio`, `FileInput`, `InputGroup`, `Table`, `ResponsiveTable`, `Pagination`.
+- Visualización: stats cards, `ApexChart`, `ChartCard` y widgets Recharts.
+- Chat y conversación: sidebar, ventana, input, typing indicator y message bubbles.
+- Layout y shell: `AppLayout`, `AuthLayout`, `PageHeader`, `ShellHeader`, `ShellNav`, `ThemeScope`, `ThemeProvider`, `ConfirmDialog` y extras GranCRM.
+- Contratos y utilidades: tipos de sesión/manifest/remotes, tokens y `apiFetch`.
+
+`dist/index.d.ts` combina tipos generados y declaraciones manuales. Aún permanecen como `any` estas superficies legacy: `StatsCard`, `MiniStatCard`, `ColoredStatCard`, `Timeline`, `ProgressRing`; `ApexChart`, `ChartCard`, `AreaChartWidget`, `BarChartWidget`, `LineChartWidget`, `PieChartWidget`; `ChatSidebar`, `ChatBubble`, `ChatTypingIndicator`, `ChatInputBar`, `ChatWindow`; `AppLayout`, `AuthLayout`, `Header` y `Sidebar`.
+
+## Ejemplos
 
 ### Chart con Card
 
 ```jsx
-import { ChartCard, ApexChart } from '@duralux/ui'
+import { ApexChart, ChartCard } from '@duralux/ui'
 
-<ChartCard title="Ventas" subtitle="Últimos 6 meses"
-  actions={[{ label: 'Mensual', onClick: () => {} }]}>
-  <ApexChart type="area" height={250}
+<ChartCard
+  title="Ventas"
+  subtitle="Últimos 6 meses"
+  actions={[{ label: 'Mensual', onClick: () => setRange('month') }]}
+>
+  <ApexChart
+    type="area"
+    height={250}
     options={{
       colors: ['#3454d1'],
       stroke: { curve: 'smooth', width: 2 },
-      fill: { type: 'gradient', gradient: { opacityFrom: 0.4, opacityTo: 0 } },
-      xaxis: { categories: ['Ene','Feb','Mar','Abr','May','Jun'] },
+      xaxis: { categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'] },
       dataLabels: { enabled: false },
-      grid: { borderColor: '#f1f5f9' },
       chart: { toolbar: { show: false } },
     }}
     series={[{ name: 'Ventas', data: [31, 40, 28, 51, 42, 82] }]}
@@ -179,34 +238,20 @@ import { ChartCard, ApexChart } from '@duralux/ui'
 </ChartCard>
 ```
 
-### AppLayout completo
+### AppLayout con router
 
 ```jsx
 import { AppLayout } from '@duralux/ui'
-import { RouterProvider, createBrowserRouter, Outlet } from 'react-router-dom'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-const NAV = [
+const navItems = [
   { type: 'caption', label: 'Principal' },
-  { icon: 'feather-airplay', label: 'Dashboards', children: [
-    { label: 'CRM', to: '/', end: true },
-    { label: 'Analytics', to: '/analytics' },
-  ]},
+  { icon: 'feather-airplay', label: 'Dashboard', to: '/' },
   { icon: 'feather-users', label: 'Clientes', to: '/clientes' },
-  { icon: 'feather-briefcase', label: 'Proyectos', to: '/proyectos' },
 ]
 
-const USER = {
-  name: 'Admin', email: 'admin@empresa.cl',
-  avatar: '/assets/images/avatar/1.png',
-  menuItems: [
-    { label: 'Mi Perfil', icon: 'feather-user', href: '#' },
-    { divider: true },
-    { label: 'Cerrar Sesión', icon: 'feather-log-out', href: '/login' },
-  ],
-}
-
 const router = createBrowserRouter([{
-  element: <AppLayout navItems={NAV} user={USER}><Outlet /></AppLayout>,
+  element: <AppLayout navItems={navItems} user={user}><Outlet /></AppLayout>,
   children: [
     { path: '/', element: <DashboardPage /> },
     { path: '/clientes', element: <ClientesPage /> },
@@ -218,67 +263,46 @@ export default function App() {
 }
 ```
 
----
-
-## Showcase (demo local)
+## Demo local
 
 ```bash
 git clone https://github.com/Waryxxful/duralux-ui
 cd duralux-ui
 npm install
 npm run dev:demo
-# → http://localhost:5200
+# http://localhost:5200
 ```
 
-17 páginas interactivas con preview en vivo y código copiable para cada componente.
+El demo compila directamente el Bootstrap SCSS, el theme adaptado y el glue del paquete, por lo que no depende de copias CSS en `demo/public`.
 
----
+## Desarrollo
 
-## Desarrollo de la librería
+En este repositorio se usa `npm`:
 
 ```bash
 npm install
-npm run build          # → dist/index.js (ESM) + dist/index.cjs (CJS)
-npm run dev:demo       # showcase en localhost:5200
+npm run typecheck
+npm test
+npm run build
+npm run typecheck:public
+npm run dev:demo
 ```
 
-### Estructura
+`npm run build` genera los bundles ESM/CJS, declaraciones, estilos copiados y CSS compilado en `dist/`, y luego valida las declaraciones con el fixture estricto de `test-types/`. `npm run typecheck:public` permite repetir esa validación contra un `dist/` ya generado.
 
-```
+```text
 src/
-├── index.js                    ← barrel export (33 componentes)
-├── components/
-│   ├── ui/                     ← Button, Card, Badge, Modal, Tabs, Avatar, Alert, Timeline, ProgressRing
-│   ├── form/                   ← FormField, Input, Select, Textarea
-│   ├── data/                   ← DataTable
-│   ├── charts/                 ← ApexChart, ChartCard, *Widget (Recharts)
-│   ├── chat/                   ← ChatBubble, ChatInputBar, ChatWindow, ChatSidebar
-│   └── layout/                 ← AppLayout, AuthLayout, Header, Sidebar, PageHeader
-└── hooks/
-    └── useClickOutside.js
-
-demo/
-├── src/
-│   ├── App.jsx                 ← 17 rutas
-│   ├── ShowcaseLayout.jsx      ← sidebar de navegación
-│   ├── ShowcaseSection.jsx     ← preview + CodeBlock
-│   └── pages/                  ← una página por componente/categoría
-└── vite.config.js              ← alias @duralux/ui → ../src/index.js
+  index.js                 exports públicos
+  contract.ts              contrato shell-satélite
+  tokens.ts                tokens compartidos
+  components/              UI, forms, data, charts, chat, layout y shell
+  styles/                  glue GranCRM y Feather Icons
+scss/
+  bootstrap/bootstrap.scss Bootstrap adaptado
+  theme.scss               theme Duralux adaptado
+demo/                      showcase Vite
 ```
-
----
-
-## Peer dependencies
-
-```json
-{
-  "react": ">=18",
-  "react-dom": ">=18"
-}
-```
-
-`react-router-dom` se requiere si usas `AppLayout`, `Sidebar` o `Header`.
 
 ## Stack
 
-React 18 · Vite 6 · Bootstrap 5 + Duralux CSS · ApexCharts · Recharts
+React 18+ · React Router 6/7 · Vite · Bootstrap 5 SCSS · Duralux adaptado · ApexCharts · Recharts

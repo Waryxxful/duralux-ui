@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 /**
@@ -54,41 +54,54 @@ export function Toast({ variant, title, show, onClose, autoHideMs = 3000, classN
   const [closing, setClosing] = useState(false);
   const hideTimer = useRef<ReturnType<typeof setTimeout>>();
   const closeTimer = useRef<ReturnType<typeof setTimeout>>();
+  const closeRequested = useRef(false);
+  const onCloseRef = useRef(onClose);
 
-  function requestClose() {
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  const requestClose = useCallback(() => {
+    if (closeRequested.current) return;
+    closeRequested.current = true;
     clearTimeout(hideTimer.current);
+    hideTimer.current = undefined;
+    clearTimeout(closeTimer.current);
+    closeTimer.current = undefined;
     if (prefersReducedMotion()) {
-      onClose();
+      onCloseRef.current();
       return;
     }
     setClosing(true);
-    closeTimer.current = setTimeout(onClose, 300);
-  }
-
-  useEffect(() => {
-    clearTimeout(hideTimer.current);
-    clearTimeout(closeTimer.current);
-    setClosing(false);
-    if (!show || !autoHideMs) return undefined;
-    hideTimer.current = setTimeout(requestClose, autoHideMs);
-    return () => clearTimeout(hideTimer.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [show, autoHideMs]);
-
-  useEffect(() => () => {
-    clearTimeout(hideTimer.current);
-    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => {
+      closeTimer.current = undefined;
+      onCloseRef.current();
+    }, 300);
   }, []);
 
+  useEffect(() => {
+    closeRequested.current = false;
+    setClosing(false);
+    if (show && autoHideMs) hideTimer.current = setTimeout(requestClose, autoHideMs);
+    return () => {
+      clearTimeout(hideTimer.current);
+      clearTimeout(closeTimer.current);
+      hideTimer.current = undefined;
+      closeTimer.current = undefined;
+    };
+  }, [show, autoHideMs, requestClose]);
+
   if (!show) return null;
+  const assertive = variant === 'danger' || variant === 'warning';
 
   return createPortal(
     <div
       className={['gcu-toast', `gcu-toast--${variant}`, closing ? 'gcu-toast--closing' : '', className]
         .filter(Boolean)
         .join(' ')}
-      role="status"
-      aria-live="polite"
+      role={assertive ? 'alert' : 'status'}
+      aria-live={assertive ? 'assertive' : 'polite'}
+      aria-atomic="true"
     >
       <i className={`gcu-icon gcu-toast__icon feather-${VARIANT_ICON[variant]}`} aria-hidden="true" />
       <div className="gcu-toast__title">{title}</div>

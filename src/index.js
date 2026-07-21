@@ -16,6 +16,7 @@ export { Tabs } from './components/ui/Tabs'
 export { ConnectionCard } from './components/ui/ConnectionCard'
 export { ActivityFeed } from './components/ui/ActivityFeed'
 export { Toast } from './components/ui/Toast'
+export { Dropdown, DropdownMenu } from './components/ui/Dropdown'
 
 // Feedback
 export { EmptyState } from './components/feedback/EmptyState'

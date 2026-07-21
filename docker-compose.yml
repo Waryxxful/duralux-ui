@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
 
   dev:
-    image: node:18
+    image: node:22
     working_dir: /app
     volumes:
       - ./:/app

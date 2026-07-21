@@ -43,7 +43,7 @@ export function ActivityFeedPage() {
 
       <ShowcaseSection
         title="Feed de actividad"
-        description="Markup 1:1 de widgets-lists.html (ul.activity-feed-1 > li.feed-item.feed-item-{variant}); el riel de color es CSS puro."
+        description="Estructura basada en widgets-lists.html (ul.activity-feed-1 > li.feed-item.feed-item-{variant}); el riel de color es CSS puro."
         preview={<ActivityFeed items={ITEMS} />}
         code={`<ActivityFeed items={[
   {

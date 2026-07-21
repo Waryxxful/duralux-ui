@@ -1,3 +1,5 @@
+import { Dropdown, DropdownMenu } from '../ui/Dropdown'
+
 /**
  * ChartCard — card wrapper para gráficos con header de acciones estilo Duralux.
  *
@@ -17,24 +19,28 @@ export function ChartCard({ title, subtitle, actions = [], noPad, children }) {
           {subtitle && <p className="fs-12 text-muted mb-0 mt-1">{subtitle}</p>}
         </div>
         {actions.length > 0 && (
-          <div className="dropdown">
-            <button
-              className="avatar-text avatar-sm bg-transparent border-0 text-muted"
-              data-bs-toggle="dropdown"
-              type="button"
-            >
-              <i className="feather-more-vertical"></i>
-            </button>
-            <ul className="dropdown-menu dropdown-menu-end">
+          <Dropdown
+            align="end"
+            trigger={(triggerProps, { open }) => (
+              <button
+                {...triggerProps}
+                className={`avatar-text avatar-sm bg-transparent border-0 text-muted${open ? ' show' : ''}`}
+                aria-label={typeof title === 'string' ? `Acciones de ${title}` : 'Acciones del gráfico'}
+              >
+                <i className="feather-more-vertical"></i>
+              </button>
+            )}
+          >
+            <DropdownMenu as="ul">
               {actions.map((a, i) => (
                 <li key={i}>
-                  <button className="dropdown-item" onClick={a.onClick}>
+                  <button type="button" className="dropdown-item" onClick={a.onClick}>
                     {a.label}
                   </button>
                 </li>
               ))}
-            </ul>
-          </div>
+            </DropdownMenu>
+          </Dropdown>
         )}
       </div>
       <div className={`card-body${noPad ? ' p-0' : ''}`}>

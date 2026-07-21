@@ -30,15 +30,26 @@ export function Button({
 }) {
   const sizeClass = size ? ` btn-${size}` : ''
   const variantClass = `btn-${variant}` // outline deprecado: la plantilla no usa variantes outline
+  const isDisabled = disabled || loading
+  const isAnchor = Tag === 'a'
+  const isDisabledAnchor = isAnchor && isDisabled
+  const handleClick = isDisabledAnchor
+    ? (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+    : onClick
 
   return (
     <Tag
-      className={`btn ${variantClass}${sizeClass} ${className}`}
-      onClick={onClick}
-      disabled={disabled || loading}
-      href={href}
-      type={Tag === 'button' ? type : undefined}
       {...props}
+      className={`btn ${variantClass}${sizeClass} ${className}`}
+      onClick={handleClick}
+      disabled={isAnchor ? undefined : isDisabled}
+      href={isDisabledAnchor ? undefined : href}
+      type={Tag === 'button' ? type : undefined}
+      aria-disabled={isDisabledAnchor ? true : props['aria-disabled']}
+      tabIndex={isDisabledAnchor ? -1 : props.tabIndex}
     >
       {loading
         ? <span className="spinner-border spinner-border-sm me-2" role="status"></span>

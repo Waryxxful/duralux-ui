@@ -4,6 +4,10 @@ export type ThemeMode = 'light' | 'dark';
 
 const STORAGE_KEY = 'grancrm-theme';
 const MINI_KEY = 'grancrm-menu-mini';
+const LEGACY_MINI_KEY = 'nexel-classic-dashboard-menu-mini-theme';
+// MINI_KEY remains compatible; this marker identifies an explicit user choice rather than responsive state.
+const MINI_PIN_KEY = 'grancrm-menu-mini-pinned';
+const MINI_PIN_VERSION = '1';
 
 export interface ThemeContextValue {
   mode: ThemeMode;
@@ -25,23 +29,44 @@ function readStoredMode(): ThemeMode {
   }
 }
 
-function readStoredMini(): boolean {
+function parseStoredMini(value: string | null): boolean | null {
+  if (value === '1' || value === 'true' || value === 'menu-mini-theme') return true;
+  if (value === '0' || value === 'false' || value === 'menu-expend-theme') return false;
+  return null;
+}
+
+function readStoredMiniPreference(): boolean | null {
   try {
-    // Plantilla: nexel-classic-dashboard-menu-mini-theme; GranCRM: grancrm-menu-mini
-    const v = localStorage.getItem(MINI_KEY) ?? localStorage.getItem('nexel-classic-dashboard-menu-mini-theme');
-    return v === '1' || v === 'menu-mini-theme' || v === 'true';
+    if (localStorage.getItem(MINI_PIN_KEY) !== MINI_PIN_VERSION) return null;
+    return parseStoredMini(localStorage.getItem(MINI_KEY))
+      ?? parseStoredMini(localStorage.getItem(LEGACY_MINI_KEY));
   } catch {
-    return false;
+    return null;
   }
 }
 
 /** Snippet anti-FOUC para <head> — exportado como string para apps. */
-export const THEME_HEAD_SNIPPET = `try{var t=localStorage.getItem('${STORAGE_KEY}');if(t==='dark')document.documentElement.classList.add('app-skin-dark');var m=localStorage.getItem('${MINI_KEY}');if(m==='1'||m==='true')document.documentElement.classList.add('minimenu')}catch(e){}`;
+export const THEME_HEAD_SNIPPET = `try{var t=localStorage.getItem('${STORAGE_KEY}');if(t==='dark')document.documentElement.classList.add('app-skin-dark');var p=localStorage.getItem('${MINI_PIN_KEY}'),m=localStorage.getItem('${MINI_KEY}')||localStorage.getItem('${LEGACY_MINI_KEY}');if(p==='${MINI_PIN_VERSION}'&&(m==='1'||m==='true'||m==='menu-mini-theme'))document.documentElement.classList.add('minimenu')}catch(e){}`;
+
+interface MiniState {
+  mini: boolean;
+  userPinnedMini: boolean;
+}
+
+function readInitialMiniState(): MiniState {
+  const preference = readStoredMiniPreference();
+  if (preference !== null) return { mini: preference, userPinnedMini: true };
+
+  return {
+    mini: typeof document !== 'undefined' && document.documentElement.classList.contains('minimenu'),
+    userPinnedMini: false,
+  };
+}
 
 /**
  * Un solo mecanismo de theming (plan D4):
  * - dark: clase `app-skin-dark` en <html> + localStorage grancrm-theme
- * - mini sidebar: clase `minimenu` en <html> + localStorage grancrm-menu-mini
+ * - mini sidebar: clase `minimenu` en <html>; solo elecciones explícitas se persisten
  * Comportamiento de resize alineado al common-init de la plantilla Duralux:
  *   width ∈ [1024, 1600] → mini; width > 1600 → expandido (salvo preferencia usuario).
  */
@@ -57,12 +82,8 @@ export function ThemeProvider({
       ? 'dark'
       : readStoredMode(),
   );
-  const [mini, setMiniState] = useState<boolean>(() =>
-    typeof document !== 'undefined' && document.documentElement.classList.contains('minimenu')
-      ? true
-      : readStoredMini(),
-  );
-  const [userPinnedMini, setUserPinnedMini] = useState(false);
+  const [miniState, setMiniState] = useState<MiniState>(readInitialMiniState);
+  const { mini, userPinnedMini } = miniState;
 
   const setMode = useCallback((next: ThemeMode) => {
     setModeState(next);
@@ -73,13 +94,11 @@ export function ThemeProvider({
   }, []);
 
   const setMini = useCallback((next: boolean) => {
-    setUserPinnedMini(true);
-    setMiniState(next);
+    setMiniState({ mini: next, userPinnedMini: true });
   }, []);
 
   const toggleMini = useCallback(() => {
-    setUserPinnedMini(true);
-    setMiniState(v => !v);
+    setMiniState(current => ({ mini: !current.mini, userPinnedMini: true }));
   }, []);
 
   useEffect(() => {
@@ -93,22 +112,31 @@ export function ThemeProvider({
   useEffect(() => {
     const html = document.documentElement;
     html.classList.toggle('minimenu', mini);
+    if (!userPinnedMini) return;
     try {
       localStorage.setItem(MINI_KEY, mini ? '1' : '0');
+      localStorage.setItem(MINI_PIN_KEY, MINI_PIN_VERSION);
       localStorage.setItem(
-        'nexel-classic-dashboard-menu-mini-theme',
+        LEGACY_MINI_KEY,
         mini ? 'menu-mini-theme' : 'menu-expend-theme',
       );
     } catch { /* ignore */ }
-  }, [mini]);
+  }, [mini, userPinnedMini]);
 
   // Mirror plantilla common-init resize: auto mini between 1024 and 1600
   useEffect(() => {
     if (!enableResponsiveMini || userPinnedMini) return;
     const apply = () => {
       const w = window.innerWidth;
-      if (w >= 1024 && w <= 1600) setMiniState(true);
-      else if (w > 1600) setMiniState(false);
+      let next: boolean;
+      if (w >= 1024 && w <= 1600) next = true;
+      else if (w > 1600) next = false;
+      else return;
+
+      setMiniState(current => {
+        if (current.userPinnedMini || current.mini === next) return current;
+        return { ...current, mini: next };
+      });
     };
     apply();
     window.addEventListener('resize', apply);

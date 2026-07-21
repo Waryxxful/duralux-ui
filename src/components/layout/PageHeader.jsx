@@ -1,5 +1,5 @@
 /**
- * PageHeader — markup 1:1 del template Duralux (`page-header`).
+ * PageHeader — estructura React adaptada al patrón Duralux (`page-header`).
  *
  * Plantilla (una sola fila, min-height 65px):
  *   .page-header

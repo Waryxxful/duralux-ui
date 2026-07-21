@@ -1,11 +1,59 @@
-import { useState } from 'react'
-import { NavLink, useMatch } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { matchPath, NavLink, useLocation } from 'react-router-dom'
+
+function navItemIdentifier(item) {
+  return String(item.key ?? item.id ?? item.to ?? item.href ?? item.label ?? item.type ?? 'item')
+}
+
+function assignInternalKeys(items, parentKey = '') {
+  const occurrences = new Map()
+
+  return items.map((item) => {
+    const base = navItemIdentifier(item)
+    const occurrence = (occurrences.get(base) || 0) + 1
+    occurrences.set(base, occurrence)
+
+    const suffix = occurrence > 1 ? `#${occurrence}` : ''
+    const segment = `${base.length}:${base}${suffix}`
+    const internalKey = parentKey ? `${parentKey}/${segment}` : segment
+
+    return {
+      ...item,
+      _key: internalKey,
+      children: item.children ? assignInternalKeys(item.children, internalKey) : item.children,
+    }
+  })
+}
+
+function routeEnds(item) {
+  return item.end ?? (item.to === '/')
+}
+
+function routeMatches(item, pathname) {
+  return Boolean(
+    item.to && matchPath({ path: item.to, end: routeEnds(item) }, pathname),
+  )
+}
+
+function activeRouteSpecificity(item, pathname) {
+  let specificity = routeMatches(item, pathname) ? item.to.length : -1
+
+  for (const child of item.children || []) {
+    specificity = Math.max(specificity, activeRouteSpecificity(child, pathname))
+  }
+
+  return specificity
+}
+
+function hasActiveItem(item, pathname) {
+  return activeRouteSpecificity(item, pathname) >= 0
+}
 
 // Duralux pinta el fondo "pill" del item activo vía `.nxl-item.active > .nxl-link`
 // (ver theme.min.css) — la clase `active` tiene que ir en el <li>, no solo en el <a>.
-function NavItem({ item, openKey, setOpenKey }) {
+function NavItem({ item, pathname, openKey, setOpenKey, onNavigate }) {
+  const active = hasActiveItem(item, pathname)
   const isOpen = openKey === item._key
-  const match = useMatch({ path: item.to || '', end: item.end !== false })
 
   if (item.type === 'caption') {
     return (
@@ -15,9 +63,9 @@ function NavItem({ item, openKey, setOpenKey }) {
     )
   }
 
-  if (item.children) {
+  if (item.children?.length) {
     return (
-      <li className={`nxl-item nxl-hasmenu${isOpen ? ' nxl-trigger' : ''}`}>
+      <li className={`nxl-item nxl-hasmenu${active ? ' active' : ''}${isOpen ? ' nxl-trigger' : ''}`}>
         <a
           href="#"
           className="nxl-link"
@@ -32,8 +80,13 @@ function NavItem({ item, openKey, setOpenKey }) {
         </a>
         {isOpen && (
           <ul className="nxl-submenu">
-            {item.children.map((child, i) => (
-              <SubNavItem key={i} item={child} />
+            {item.children.map((child) => (
+              <SubNavItem
+                key={child._key}
+                item={child}
+                pathname={pathname}
+                onNavigate={onNavigate}
+              />
             ))}
           </ul>
         )}
@@ -43,11 +96,12 @@ function NavItem({ item, openKey, setOpenKey }) {
 
   if (item.to) {
     return (
-      <li className={`nxl-item${match ? ' active' : ''}`}>
+      <li className={`nxl-item${active ? ' active' : ''}`}>
         <NavLink
           to={item.to}
-          className={({ isActive }) => `nxl-link${isActive ? ' active' : ''}`}
-          end={item.end}
+          className={`nxl-link${active ? ' active' : ''}`}
+          end={routeEnds(item)}
+          onClick={onNavigate}
         >
           {item.icon && <span className="nxl-micon"><i className={item.icon}></i></span>}
           <span className="nxl-mtext">{item.label}</span>
@@ -58,7 +112,7 @@ function NavItem({ item, openKey, setOpenKey }) {
 
   return (
     <li className="nxl-item">
-      <a className="nxl-link" href={item.href || '#'}>
+      <a className="nxl-link" href={item.href || '#'} onClick={onNavigate}>
         {item.icon && <span className="nxl-micon"><i className={item.icon}></i></span>}
         <span className="nxl-mtext">{item.label}</span>
       </a>
@@ -66,20 +120,31 @@ function NavItem({ item, openKey, setOpenKey }) {
   )
 }
 
-function SubNavItem({ item }) {
-  const [open, setOpen] = useState(false)
-  const match = useMatch({ path: item.to || '', end: item.end !== false })
+function SubNavItem({ item, pathname, onNavigate }) {
+  const active = hasActiveItem(item, pathname)
+  const [open, setOpen] = useState(active)
 
-  if (item.children) {
+  useEffect(() => {
+    if (active) setOpen(true)
+  }, [active])
+
+  if (item.children?.length) {
     return (
-      <li className={`nxl-item nxl-hasmenu${open ? ' nxl-trigger' : ''}`}>
+      <li className={`nxl-item nxl-hasmenu${active ? ' active' : ''}${open ? ' nxl-trigger' : ''}`}>
         <a href="#" className="nxl-link" onClick={(e) => { e.preventDefault(); setOpen((o) => !o) }}>
           <span className="nxl-mtext">{item.label}</span>
           <span className="nxl-arrow"><i className="feather-chevron-right"></i></span>
         </a>
         {open && (
           <ul className="nxl-submenu">
-            {item.children.map((c, i) => <SubNavItem key={i} item={c} />)}
+            {item.children.map((child) => (
+              <SubNavItem
+                key={child._key}
+                item={child}
+                pathname={pathname}
+                onNavigate={onNavigate}
+              />
+            ))}
           </ul>
         )}
       </li>
@@ -88,10 +153,12 @@ function SubNavItem({ item }) {
 
   if (item.to) {
     return (
-      <li className={`nxl-item${match ? ' active' : ''}`}>
+      <li className={`nxl-item${active ? ' active' : ''}`}>
         <NavLink
           to={item.to}
-          className={({ isActive }) => `nxl-link${isActive ? ' active' : ''}`}
+          className={`nxl-link${active ? ' active' : ''}`}
+          end={routeEnds(item)}
+          onClick={onNavigate}
         >
           {item.label}
         </NavLink>
@@ -101,27 +168,36 @@ function SubNavItem({ item }) {
 
   return (
     <li className="nxl-item">
-      <a className="nxl-link" href={item.href || '#'}>
+      <a className="nxl-link" href={item.href || '#'} onClick={onNavigate}>
         {item.label}
       </a>
     </li>
   )
 }
 
-function assignKeys(items, prefix = '') {
-  return items.map((item, i) => ({
-    ...item,
-    _key: `${prefix}${i}`,
-    children: item.children ? assignKeys(item.children, `${prefix}${i}-`) : undefined,
-  }))
-}
+export function Sidebar({ navItems = [], logo, logoAbbr, promoCard, mobileOpen = false, onNavigate }) {
+  const { pathname } = useLocation()
+  const keyedItems = assignInternalKeys(navItems)
+  let activeItem = null
+  let activeSpecificity = -1
 
-export function Sidebar({ navItems = [], logo, logoAbbr, promoCard }) {
-  const [openKey, setOpenKey] = useState(null)
-  const keyed = assignKeys(navItems)
+  for (const item of keyedItems) {
+    const specificity = activeRouteSpecificity(item, pathname)
+    if (specificity > activeSpecificity) {
+      activeItem = item
+      activeSpecificity = specificity
+    }
+  }
+
+  const activeKey = activeItem?._key ?? null
+  const [openKey, setOpenKey] = useState(activeKey)
+
+  useEffect(() => {
+    if (activeKey) setOpenKey(activeKey)
+  }, [activeKey])
 
   return (
-    <nav className="nxl-navigation">
+    <nav className={`nxl-navigation${mobileOpen ? ' mob-navigation-active' : ''}`}>
       <div className="navbar-wrapper">
         <div className="m-header">
           <a href="/" className="b-brand">
@@ -131,12 +207,14 @@ export function Sidebar({ navItems = [], logo, logoAbbr, promoCard }) {
         </div>
         <div className="navbar-content">
           <ul className="nxl-navbar">
-            {keyed.map((item, i) => (
+            {keyedItems.map((item) => (
               <NavItem
-                key={i}
+                key={item._key}
                 item={item}
+                pathname={pathname}
                 openKey={openKey}
                 setOpenKey={setOpenKey}
+                onNavigate={onNavigate}
               />
             ))}
           </ul>

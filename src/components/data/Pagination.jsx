@@ -6,6 +6,22 @@ function range(start, end) {
   return result;
 }
 
+function Item({ p, page, onPageChange }) {
+  return (
+    <li className={`page-item${page === p ? ' active' : ''}`}>
+      <button
+        type="button"
+        className="page-link"
+        onClick={() => onPageChange(p)}
+        aria-current={page === p ? 'page' : undefined}
+        aria-label={`Página ${p}`}
+      >
+        {p}
+      </button>
+    </li>
+  );
+}
+
 export function Pagination({
   page,
   totalPages,
@@ -22,22 +38,6 @@ export function Pagination({
   const showLeftDots = left > 2;
   const showRightDots = right < totalPages - 1;
 
-  function Item({ p }) {
-    return (
-      <li className={`page-item${page === p ? ' active' : ''}`}>
-        <button
-          type="button"
-          className="page-link"
-          onClick={() => onPageChange(p)}
-          aria-current={page === p ? 'page' : undefined}
-          aria-label={`Página ${p}`}
-        >
-          {p}
-        </button>
-      </li>
-    );
-  }
-
   return (
     <nav aria-label={label}>
       <ul className={['pagination', className].filter(Boolean).join(' ')}>
@@ -53,19 +53,19 @@ export function Pagination({
           </button>
         </li>
 
-        {left > 1 && <Item p={1} />}
+        {left > 1 && <Item p={1} page={page} onPageChange={onPageChange} />}
         {showLeftDots && (
           <li className="page-item disabled">
             <span className="page-link">…</span>
           </li>
         )}
-        {pages.map(p => <Item key={p} p={p} />)}
+        {pages.map(p => <Item key={p} p={p} page={page} onPageChange={onPageChange} />)}
         {showRightDots && (
           <li className="page-item disabled">
             <span className="page-link">…</span>
           </li>
         )}
-        {right < totalPages && <Item p={totalPages} />}
+        {right < totalPages && <Item p={totalPages} page={page} onPageChange={onPageChange} />}
 
         <li className={`page-item${page === totalPages ? ' disabled' : ''}`}>
           <button

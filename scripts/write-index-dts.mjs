@@ -26,8 +26,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 export declare function Button(props: ButtonProps): React.ReactElement;
 
 export interface LinkButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  href: string;
   variant?: SemanticVariant; size?: 'sm' | 'md' | 'lg'; outline?: boolean;
-  startIcon?: string; endIcon?: string;
+  loading?: boolean; disabled?: boolean;
+  icon?: string; startIcon?: string; endIcon?: string;
 }
 export declare function LinkButton(props: LinkButtonProps): React.ReactElement;
 
@@ -79,6 +81,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'fullscreen';
 export interface ModalProps {
   open?: boolean; onClose?: () => void; title?: React.ReactNode; children?: React.ReactNode;
   footer?: React.ReactNode; size?: ModalSize; scrollable?: boolean;
+  closeOnEscape?: boolean; closeOnBackdrop?: boolean; showCloseButton?: boolean;
 }
 export declare function Modal(props: ModalProps): React.ReactElement | null;
 
@@ -122,8 +125,9 @@ export interface InputGroupProps {
 export declare function InputGroup(props: InputGroupProps): React.ReactElement;
 
 export interface FormFieldProps {
-  label: string; required?: boolean; error?: string; helpText?: string;
-  className?: string; children: (id: string) => React.ReactNode;
+  label: string; htmlFor?: string; required?: boolean; error?: string;
+  helpText?: string; hint?: string; className?: string;
+  children: React.ReactNode | ((id: string) => React.ReactNode);
 }
 export declare function FormField(props: FormFieldProps): React.ReactElement;
 
@@ -134,7 +138,8 @@ export declare function Input(props: InputProps): React.ReactElement;
 
 export interface SelectOption { value: string | number; label: string; disabled?: boolean; }
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
-  error?: boolean; options?: SelectOption[]; placeholder?: string;
+  error?: boolean; invalid?: boolean;
+  options?: Array<string | SelectOption>; placeholder?: string;
 }
 export declare function Select(props: SelectProps): React.ReactElement;
 
@@ -171,14 +176,45 @@ export interface MessageBubbleProps {
 }
 export declare function MessageBubble(props: MessageBubbleProps): React.ReactElement;
 
+export type TabKey = string | number;
+export interface TabItem<K extends TabKey = TabKey> {
+  key: K; label: React.ReactNode; content?: React.ReactNode; icon?: string;
+}
+export interface TabsProps<K extends TabKey = TabKey> {
+  tabs?: ReadonlyArray<TabItem<K>>; className?: string; tabClassName?: string;
+  activeKey?: K; defaultActiveKey?: K; onChange?: (key: K) => void;
+}
+export declare function Tabs<K extends TabKey = TabKey>(props: TabsProps<K>): React.ReactElement;
+
+export type DataTableKey<T extends object> = Extract<keyof T, string>;
+export type DataTableColumn<
+  T extends object = Record<string, unknown>,
+  K extends DataTableKey<T> = DataTableKey<T>,
+> = K extends DataTableKey<T> ? {
+  key: K; label: React.ReactNode; sortable?: boolean;
+  render?: (row: T, value: T[K], rowIndex: number) => React.ReactNode;
+} : never;
+export interface DataTableAction<T extends object = Record<string, unknown>> {
+  label: string; icon: string; onClick: (row: T) => void;
+}
+export type DataTableIdentityKey<T extends object> = {
+  [K in DataTableKey<T>]-?: [T[K]] extends [React.Key] ? K : never;
+}[DataTableKey<T>];
+export type DataTableProps<T extends object = Record<string, unknown>> = {
+  columns: ReadonlyArray<DataTableColumn<T>>; data: ReadonlyArray<T>;
+  actions?: ReadonlyArray<DataTableAction<T>>; pageSize?: number;
+  selectable?: boolean; onSelectionChange?: (selectedIds: React.Key[]) => void;
+} & ('id' extends DataTableIdentityKey<T>
+  ? { rowKey?: DataTableIdentityKey<T> }
+  : { rowKey: DataTableIdentityKey<T> });
+export declare function DataTable<T extends object = Record<string, unknown>>(props: DataTableProps<T>): React.ReactElement;
+
 // Componentes de charts/chat/layout genéricos (pocos consumidores tipados estrictos)
 export declare function StatsCard(props: any): React.ReactElement;
 export declare function MiniStatCard(props: any): React.ReactElement;
 export declare function ColoredStatCard(props: any): React.ReactElement;
 export declare function Timeline(props: any): React.ReactElement;
 export declare function ProgressRing(props: any): React.ReactElement;
-export declare function Tabs(props: any): React.ReactElement;
-export declare function DataTable(props: any): React.ReactElement;
 export declare function ApexChart(props: any): React.ReactElement;
 export declare function ChartCard(props: any): React.ReactElement;
 export declare function AreaChartWidget(props: any): React.ReactElement;
@@ -207,6 +243,7 @@ export * from './components/shell/GranCrmExtras';
 export * from './components/ui/ConnectionCard';
 export * from './components/ui/ActivityFeed';
 export * from './components/ui/Toast';
+export * from './components/ui/Dropdown';
 export * from './theme/ThemeProvider';
 `;
 

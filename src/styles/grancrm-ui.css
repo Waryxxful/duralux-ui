@@ -22,19 +22,6 @@
 .gcu-theme{font-family:var(--gcu-font);color:var(--gcu-text)}
 .gcu-icon{font-family:gcu-feather!important;font-style:normal;font-weight:400;font-variant:normal;text-transform:none;line-height:1;speak:never;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .gcu-icon--xs{font-size:10px}.gcu-icon--sm{font-size:12px}.gcu-icon--md{font-size:14px}.gcu-icon--lg{font-size:16px}.gcu-icon--xl{font-size:18px}
-.feather-alert-circle:before{content:"\e902"}.feather-alert-octagon:before{content:"\e903"}.feather-arrow-left:before{content:"\e910"}
-.feather-bell:before{content:"\e91e"}.feather-calendar:before{content:"\e927"}.feather-check:before{content:"\e92b"}
-.feather-check-circle:before{content:"\e92c"}.feather-chevron-down:before{content:"\e92e"}.feather-chevron-left:before{content:"\e92f"}
-.feather-chevron-right:before{content:"\e930"}.feather-clipboard:before{content:"\e938"}.feather-clock:before{content:"\e939"}
-.feather-database:before{content:"\e954"}.feather-edit-2:before{content:"\e95c"}.feather-eye:before{content:"\e95f"}
-.feather-globe:before{content:"\e978"}.feather-grid:before{content:"\e979"}.feather-inbox:before{content:"\e982"}
-.feather-log-out:before{content:"\e991"}.feather-message-square:before{content:"\e99a"}.feather-phone:before{content:"\e9b2"}
-.feather-moon:before{content:"\e9a3"}.feather-sun:before{content:"\e9e3"}
-.feather-phone-call:before{content:"\e9b3"}.feather-phone-missed:before{content:"\e9b6"}.feather-refresh-cw:before{content:"\e9c4"}
-.feather-search:before{content:"\e9cc"}.feather-settings:before{content:"\e9cf"}.feather-shield:before{content:"\e9d2"}
-.feather-star:before{content:"\e9e1"}.feather-target:before{content:"\e9e8"}.feather-trash-2:before{content:"\e9f1"}
-.feather-trending-down:before{content:"\e9f3"}.feather-trending-up:before{content:"\e9f4"}.feather-upload:before{content:"\e9fe"}
-.feather-user:before{content:"\ea00"}.feather-user-check:before{content:"\ea01"}.feather-users:before{content:"\ea05"}
 
 .gcu-btn{--gcu-btn-color:var(--gcu-primary);display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:7px 14px;border:1px solid var(--gcu-btn-color);border-radius:5px;background:var(--gcu-btn-color);color:#fff;font:600 13px/1.25 var(--gcu-font);text-decoration:none;cursor:pointer;transition:background-color .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease,filter .3s ease}
 .gcu-btn:hover:not(:disabled){filter:brightness(.94);color:#fff}.gcu-btn:active:not(:disabled){transform:scale(.97)}

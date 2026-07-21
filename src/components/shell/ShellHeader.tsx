@@ -3,6 +3,7 @@ import type { AppManifestEntry, Notificacion } from '../../contract';
 import { Icon } from '../ui/Icon';
 import { Avatar } from '../ui/Avatar';
 import { Badge } from '../ui/Badge';
+import { Dropdown, DropdownMenu } from '../ui/Dropdown';
 
 function tiempoRelativo(iso: string): string {
   const segundos = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
@@ -14,11 +15,6 @@ function tiempoRelativo(iso: string): string {
   return `hace ${Math.floor(horas / 24)} d`;
 }
 
-// El template original abre TODOS los dropdowns del header con hover (además de
-// click), vía un listener en DOMContentLoaded que en el shell nunca dispara sobre
-// nada real (el header recién existe después del fetch de sesión). Se porta el
-// mismo comportamiento como efecto de React. Solo el nivel superior (.nxl-h-item):
-// las categorías anidadas del mega-menu ya manejan su propio hover con estado React.
 const DESKTOP_MEDIA_QUERY = '(hover: hover) and (min-width: 1024.01px)';
 
 function useDesktopHover() {
@@ -35,37 +31,6 @@ function useDesktopHover() {
   }, []);
 
   return enabled;
-}
-
-function useHeaderDropdownHover(enabled: boolean) {
-  useEffect(() => {
-    if (!enabled) return;
-    const items = document.querySelectorAll<HTMLElement>('.nxl-header .header-wrapper .dropdown.nxl-h-item');
-    const cleanups: Array<() => void> = [];
-    items.forEach((item) => {
-      const trigger = item.querySelector<HTMLElement>('[data-bs-toggle]');
-      const menu = trigger?.nextElementSibling as HTMLElement | null;
-      if (!trigger || !menu) return;
-      const onEnter = () => {
-        trigger.classList.add('show');
-        trigger.setAttribute('aria-expanded', 'true');
-        menu.classList.add('show');
-      };
-      const onLeave = () => {
-        trigger.classList.remove('show');
-        trigger.setAttribute('aria-expanded', 'false');
-        menu.classList.remove('show');
-      };
-      item.addEventListener('mouseenter', onEnter);
-      item.addEventListener('mouseleave', onLeave);
-      cleanups.push(() => {
-        item.removeEventListener('mouseenter', onEnter);
-        item.removeEventListener('mouseleave', onLeave);
-        onLeave();
-      });
-    });
-    return () => cleanups.forEach((fn) => fn());
-  }, [enabled]);
 }
 
 // ─── Sub-components (ported from shell/src/Layout.tsx) ───────────────────────
@@ -217,7 +182,6 @@ export function ShellHeader({
   const [modulesOpen, setModulesOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const desktopHover = useDesktopHover();
-  useHeaderDropdownHover(desktopHover);
 
   // Group apps by category
   const appsByCategory = apps.reduce<Map<string, AppManifestEntry[]>>((groups, app) => {
@@ -397,22 +361,24 @@ export function ShellHeader({
 
           {/* SA client selector */}
           {(rol === 'admin_ti' || viewAsSa) && (
-            <div className="dropdown nxl-h-item">
-              <button
-                type="button"
-                className={`btn border px-3 py-2 fw-semibold fs-12 d-flex align-items-center gap-2 ${
-                  viewAsSa ? 'text-warning border-warning bg-warning-subtle' : 'text-dark bg-white'
-                }`}
-                data-bs-toggle="dropdown"
-                data-bs-auto-close="outside"
-                aria-label={viewAsSa ? `Cliente actual: ${cuentaNombre}` : 'Elegir cliente'}
-                aria-expanded="false"
-              >
-                <Icon name="eye" />
-                <span className="gcu-client-selector-label">{viewAsSa ? cuentaNombre : 'Elegir cliente'}</span>
-                <Icon name="chevron-down" />
-              </button>
-              <div className="dropdown-menu nxl-h-dropdown" style={{ minWidth: 220 }}>
+            <Dropdown
+              className="dropdown nxl-h-item"
+              desktopHover={desktopHover}
+              trigger={(triggerProps, { open }) => (
+                <button
+                  {...triggerProps}
+                  className={`btn border px-3 py-2 fw-semibold fs-12 d-flex align-items-center gap-2 ${
+                    viewAsSa ? 'text-warning border-warning bg-warning-subtle' : 'text-dark bg-white'
+                  }${open ? ' show' : ''}`}
+                  aria-label={viewAsSa ? `Cliente actual: ${cuentaNombre}` : 'Elegir cliente'}
+                >
+                  <Icon name="eye" />
+                  <span className="gcu-client-selector-label">{viewAsSa ? cuentaNombre : 'Elegir cliente'}</span>
+                  <Icon name="chevron-down" />
+                </button>
+              )}
+            >
+              <DropdownMenu className="nxl-h-dropdown" style={{ minWidth: 220 }}>
                 {viewAsSa && (
                   <div className="px-3 py-2 border-bottom">
                     <p className="fs-11 text-muted mb-0">Viendo como admin de</p>
@@ -454,8 +420,8 @@ export function ShellHeader({
                     </button>
                   </>
                 )}
-              </div>
-            </div>
+              </DropdownMenu>
+            </Dropdown>
           )}
         </div>
 
@@ -565,21 +531,24 @@ export function ShellHeader({
             </div>
 
             {/* Notifications — no hardcoded badge; empty state when no notifications */}
-            <div className="dropdown nxl-h-item">
-              <button
-                type="button"
-                className="nxl-head-link me-0 gcu-header-icon-button"
-                data-bs-toggle="dropdown"
-                data-bs-auto-close="outside"
-                aria-label={`Notificaciones${noLeidas > 0 ? `, ${noLeidas} sin leer` : ''}`}
-                aria-expanded="false"
-              >
-                <Icon name="bell" />
-                {noLeidas > 0 && (
-                  <Badge variant="danger" className="nxl-h-badge">{noLeidas > 99 ? '99+' : noLeidas}</Badge>
-                )}
-              </button>
-              <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-notifications-menu">
+            <Dropdown
+              align="end"
+              className="dropdown nxl-h-item"
+              desktopHover={desktopHover}
+              trigger={(triggerProps, { open }) => (
+                <button
+                  {...triggerProps}
+                  className={`nxl-head-link me-0 gcu-header-icon-button${open ? ' show' : ''}`}
+                  aria-label={`Notificaciones${noLeidas > 0 ? `, ${noLeidas} sin leer` : ''}`}
+                >
+                  <Icon name="bell" />
+                  {noLeidas > 0 && (
+                    <Badge variant="danger" className="nxl-h-badge">{noLeidas > 99 ? '99+' : noLeidas}</Badge>
+                  )}
+                </button>
+              )}
+            >
+              <DropdownMenu className="nxl-h-dropdown nxl-notifications-menu" closeOnSelect={false}>
                 <div className="d-flex justify-content-between align-items-center notifications-head">
                   <h6 className="fw-bold text-dark mb-0">Notificaciones</h6>
                   {noLeidas > 0 && (
@@ -642,22 +611,25 @@ export function ShellHeader({
                     Ver todas las notificaciones
                   </a>
                 </div>
-              </div>
-            </div>
+              </DropdownMenu>
+            </Dropdown>
 
             {/* User + logout */}
-            <div className="dropdown nxl-h-item ms-2">
-              <button
-                type="button"
-                className="d-flex align-items-center gap-2 nxl-head-link me-0 gcu-header-icon-button gcu-avatar-trigger"
-                data-bs-toggle="dropdown"
-                data-bs-auto-close="outside"
-                aria-label="Menú de usuario"
-                aria-expanded="false"
-              >
-                <Avatar name={nombre} size="md" variant="primary" className="gcu-header-avatar" />
-              </button>
-              <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-user-dropdown">
+            <Dropdown
+              align="end"
+              className="dropdown nxl-h-item ms-2"
+              desktopHover={desktopHover}
+              trigger={(triggerProps, { open }) => (
+                <button
+                  {...triggerProps}
+                  className={`d-flex align-items-center gap-2 nxl-head-link me-0 gcu-header-icon-button gcu-avatar-trigger${open ? ' show' : ''}`}
+                  aria-label="Menú de usuario"
+                >
+                  <Avatar name={nombre} size="md" variant="primary" className="gcu-header-avatar" />
+                </button>
+              )}
+            >
+              <DropdownMenu className="nxl-h-dropdown nxl-user-dropdown" closeOnSelect={false}>
                 <div className="dropdown-header border-bottom pb-3 mb-1">
                   <div className="d-flex align-items-center gap-3">
                     <Avatar name={nombre} size="lg" variant="primary" />
@@ -675,8 +647,8 @@ export function ShellHeader({
                     <span className="fs-13">Cerrar sesión</span>
                   </button>
                 </form>
-              </div>
-            </div>
+              </DropdownMenu>
+            </Dropdown>
 
           </div>
         </div>
