@@ -764,6 +764,7 @@ html {
 				.accordion-header {
 					.accordion-button {
 						color: $white;
+						background-color: $dark-theme-color-dark;
 						border-color: $dark-theme-color-border;
 					}
 					.accordion-button:not(.collapsed) {
