@@ -694,6 +694,19 @@ html {
 			}
 		}
 
+		/* <---------------! Pagination !---------------> */
+		.pagination {
+			--bs-pagination-color: #{$dark-theme-color};
+			--bs-pagination-bg: #{$dark-theme-color-dark};
+			--bs-pagination-border-color: #{$dark-theme-color-border};
+			--bs-pagination-hover-color: #{$white};
+			--bs-pagination-hover-bg: #{$dark-theme-color-hover};
+			--bs-pagination-hover-border-color: #{$dark-theme-color-border};
+			--bs-pagination-disabled-color: #{$dark-theme-color};
+			--bs-pagination-disabled-bg: #{$dark-theme-color-dark};
+			--bs-pagination-disabled-border-color: #{$dark-theme-color-border};
+		}
+
 		/* <---------------! Steps !---------------> */
 		.wizard {
 			.steps.sticky {
@@ -790,6 +803,26 @@ html {
 		/* <---------------! Card !---------------> */
 		.card {
 			box-shadow: 0 0 20px rgb(14 32 56 / 30%);
+		}
+
+		/* <---------------! Breadcrumb !---------------> */
+		.page-header .breadcrumb {
+			color: $dark-theme-color;
+
+			a {
+				color: $white;
+			}
+
+			// misma especificidad que la regla clara de _nxl-common.scss
+			// (.breadcrumb-item:last-child): sin esto, gana la clara por orden.
+			.breadcrumb-item:last-child {
+				color: $dark-theme-color;
+			}
+		}
+
+		/* <---------------! Progress !---------------> */
+		.progress {
+			--bs-progress-bg: rgba(255, 255, 255, 0.1);
 		}
 
 		/* <---------------! Table !---------------> */
