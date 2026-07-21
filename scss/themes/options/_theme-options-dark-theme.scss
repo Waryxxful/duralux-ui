@@ -837,6 +837,12 @@ html {
 			&:not(caption) > * {
 				border-color: $dark-theme-color-border !important;
 			}
+			&.table-light,
+			.table-light {
+				--bs-table-bg: #{$dark-theme-color-dark};
+				--bs-table-color: #{$white};
+				--bs-table-border-color: #{$dark-theme-color-border};
+			}
 		}
 
 		/* <---------------! Form !---------------> */
