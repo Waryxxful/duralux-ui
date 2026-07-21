@@ -15,7 +15,7 @@ const walk = d => readdirSync(d).forEach(n => {
   const p = join(d, n)
   statSync(p).isDirectory() ? walk(p) : /\.(jsx?|tsx?)$/.test(n) && files.push(p)
 })
-walk('src'); walk('demo')
+walk('src'); walk('demo/src')
 
 let errors = 0
 for (const f of files) {
