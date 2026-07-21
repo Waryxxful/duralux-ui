@@ -148,6 +148,12 @@ html {
 				border-color: $primary !important;
 			}
 		}
+		// <option> ignora "transparent" y cae al blanco nativo del OS/navegador
+		// para el listbox — necesita un color de fondo real, no heredado.
+		select option {
+			color: $dark-theme-color;
+			background-color: $dark-theme-color-dark;
+		}
 		.dropdown-item,
 		.nxl-header .nxl-head-link,
 		.daterangepicker .ranges li,
