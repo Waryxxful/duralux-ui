@@ -8,7 +8,8 @@ genérica y reutilizable, se agrega a `@duralux/ui`; no se copia ni se implement
 La app conserva únicamente componentes específicos de su dominio.
 
 ```bash
-npm install github:Waryxxful/duralux-ui   # el README completo queda en node_modules/@duralux/ui/
+npm install github:Waryxxful/duralux-ui#<commit-sha>   # pin obligatorio, no floating
+# el README completo queda en node_modules/@duralux/ui/
 ```
 
 ```jsx
@@ -20,7 +21,7 @@ El catálogo evoluciona. La fuente de verdad es el barrel del paquete, sus tipos
 
 - **Base:** `Button` `LinkButton` `IconButton` `Icon` `Card` `Badge` `Alert` `Modal` `Tabs` `Avatar` `Timeline` `ProgressRing` `Progress` `Dropdown` `DropdownMenu`
 - **Feedback:** `EmptyState` `ErrorState` `LoadingState` `Toast`
-- **Stats:** `StatsCard` `MiniStatCard` `ColoredStatCard`
+- **Stats:** `StatsCard` `MiniStatCard` `ColoredStatCard` (Bootstrap-real) · `StatCard` `StatusBadge` `StatusButton` (GranCRM extras, thin wrappers over `Badge`/`Card`) — no crear un tercer sistema de chips/stat-cards
 - **Forms:** `FormField` `Input` `Select` `Textarea` `Checkbox` `Radio` `FileInput` `InputGroup`
 - **Tablas:** `DataTable` `Table` `ResponsiveTable` `Pagination`
 - **Charts:** `ApexChart` `ChartCard` `AreaChartWidget` `BarChartWidget` `LineChartWidget` `PieChartWidget`

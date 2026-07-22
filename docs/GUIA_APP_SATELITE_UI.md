@@ -15,7 +15,10 @@ Receta estándar para **apps nuevas** y migraciones (call_reviews es la de refer
 }
 ```
 
-- **Siempre** `github:Waryxxful/duralux-ui` (pin opcional: `#semver:^0.1.0` o commit SHA).
+- **Siempre** `github:Waryxxful/duralux-ui#<commit-sha>` — **pin obligatorio**, no opcional.
+  Sin pin (`github:Waryxxful/duralux-ui` a secas) tu app apunta al HEAD de `master` y absorbe
+  cambios sin PR ni review la próxima vez que alguien corra `install`. Bump del pin = commit
+  explícito y revisable, igual que cualquier otra dependencia.
 - **Nunca** `file:` local ni copiar `types.ts` / CSS del theme a mano.
 - No instales Bootstrap ni jQuery: el paquete publica el CSS necesario y sus componentes React no requieren Bootstrap JS ni el runtime vendor/jQuery.
 - Prohibido: otra librería de componentes u otro set de iconos.
@@ -81,6 +84,32 @@ import {
 />
 ```
 
+### Status chips: `Badge` / `StatusBadge` / `StatusButton`
+
+No inventes tu propio chip de estado. `StatusBadge`/`StatusButton` ya son wrappers
+finos sobre `Badge` (mapean `status: StatusVariant` → variante Bootstrap real) — no
+tienen su propio CSS paralelo. Usá `StatusBadge` cuando tu dominio ya piensa en
+`success/danger/warning/info/secondary`; usá `Badge` directo para cualquier otro caso
+(incluida la variante `light`, un chip de alto contraste, no el `bg-light` lavado de
+Bootstrap).
+
+```tsx
+<StatusBadge status="danger" label="Vencido" soft />
+<StatusButton status="info" label="Reintentar" onClick={handleRetry} />
+```
+
+### AuthLayout (login/register/reset)
+
+Porta la variante real `auth-cover-wrapper` de Duralux — tarjeta a la derecha,
+ilustración opcional a la izquierda. Es la única variante portada (`creative`/`minimal`
+quedan para cuando haya demanda real). El contenido del formulario va como `children`.
+
+```tsx
+<AuthLayout image="/tu-ilustracion.svg">
+  <LoginForm />
+</AuthLayout>
+```
+
 ## 5. Theming
 
 El shell envuelve con `ThemeProvider` (dark + mini sidebar). Las satélites **no** implementan dark mode propio: heredan `html.app-skin-dark`.
@@ -127,7 +156,12 @@ docker compose restart web   # o el proceso de deploy de la app
 ### Checklist PR de UI
 
 - [ ] Importa de `@duralux/ui`, no copias
-- [ ] Cero hex literales de diseño
+- [ ] Dependencia pineada a un commit SHA (no `github:Waryxxful/duralux-ui` a secas)
+- [ ] Cero hex literales de diseño (si necesitás un color dark-safe fuera de una clase
+      Bootstrap real, usá `var(--gcu-*, <fallback>)`, no un hex fijo)
+- [ ] Cero referencias a family de fuente que no sea Inter — el theme solo carga Inter;
+      cualquier otra familia (`Poppins`, `Roboto`, etc.) no está disponible y cae a la
+      fuente por defecto del navegador
 - [ ] Dark mode OK (montado en shell)
 - [ ] Probado montado en shell, no solo standalone
 - [ ] Versión de `@duralux/ui` ≤ shell mayor
