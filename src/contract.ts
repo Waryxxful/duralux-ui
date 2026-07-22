@@ -64,6 +64,21 @@ export function appHref(app: AppManifestEntry): string {
   return app.url_publica;
 }
 
+// Apps cuyo route_prefix queda anidado bajo el de otra app del mismo manifest
+// (ej. wsp_demo en "/wsp/demo/" bajo wsp_platform en "/wsp/") no deben listarse
+// como entrada propia en el Hub/menú del shell — ya se navegan desde dentro de
+// la app padre. El shell SÍ necesita el array completo para el routing (más
+// específico gana en react-router aunque el padre exista), así que este
+// filtro es solo para superficies de listado (Hub, menú, buscador), nunca
+// para el array que resuelve rutas.
+export function topLevelApps(apps: AppManifestEntry[]): AppManifestEntry[] {
+  const norm = (p: string) => '/' + p.replace(/^\/+|\/+$/g, '') + '/';
+  return apps.filter(app => {
+    const rp = norm(app.route_prefix);
+    return !apps.some(other => other !== app && rp !== norm(other.route_prefix) && rp.startsWith(norm(other.route_prefix)));
+  });
+}
+
 export interface EventBus {
   emit(event: 'logout' | 'sessionExpired' | 'navigate', payload?: unknown): void;
   on(event: string, cb: (payload: unknown) => void): () => void;

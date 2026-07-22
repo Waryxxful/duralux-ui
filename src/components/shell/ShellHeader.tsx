@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useId, useRef, useState } from 'react';
 import type { AppManifestEntry, Notificacion } from '../../contract';
+import { topLevelApps } from '../../contract';
 import { Icon } from '../ui/Icon';
 import { Avatar } from '../ui/Avatar';
 import { Badge } from '../ui/Badge';
@@ -183,8 +184,14 @@ export function ShellHeader({
   const [searchOpen, setSearchOpen] = useState(false);
   const desktopHover = useDesktopHover();
 
+  // Apps anidadas bajo otra app del mismo manifest (ej. wsp_demo bajo wsp_platform)
+  // no salen en el mega-menú ni en el buscador — ya se navegan desde dentro de la
+  // app padre. `apps` completo se sigue usando más abajo para lookups que no son
+  // de listado (notificationsApp, hasMatchingSpaApp).
+  const visibleApps = topLevelApps(apps);
+
   // Group apps by category
-  const appsByCategory = apps.reduce<Map<string, AppManifestEntry[]>>((groups, app) => {
+  const appsByCategory = visibleApps.reduce<Map<string, AppManifestEntry[]>>((groups, app) => {
     const category = app.categoria?.trim() || 'Otros';
     const categoryApps = groups.get(category) ?? [];
     categoryApps.push(app);
@@ -195,8 +202,8 @@ export function ShellHeader({
   // Controlled search state (fixes the bug where search didn't filter)
   const [search, setSearch] = useState('');
   const filteredApps = search
-    ? apps.filter(app => app.nombre.toLowerCase().includes(search.toLowerCase()))
-    : apps;
+    ? visibleApps.filter(app => app.nombre.toLowerCase().includes(search.toLowerCase()))
+    : visibleApps;
   const notificationsApp = apps.find((app) => app.route_prefix.replace(/\/$/, '') === '/notificaciones');
   const notificationsHref = notificationsApp ? appHref(notificationsApp) : '/notificaciones';
 
