@@ -4,7 +4,7 @@
 
 :root,.gcu-theme,[data-gcu-theme="light"]{
   --gcu-primary:#3454d1;--gcu-secondary:#4b5563;--gcu-success:#17c666;--gcu-danger:#ea4d4d;
-  --gcu-warning:#ffa21d;--gcu-info:#3dc7be;--gcu-dark:#283c50;--gcu-light:#f8f9fa;
+  --gcu-warning:#ffa21d;--gcu-info:#3dc7be;--gcu-dark:#283c50;--gcu-light:#eff0f6;
   --gcu-text:#283c50;--gcu-muted:#4b5563;--gcu-surface:#fff;--gcu-surface-subtle:#f3f4f6;
   --gcu-border:#e5e7eb;--gcu-focus:rgba(52,84,209,.2);--gcu-radius:10px;
   --gcu-shadow:0 1px 3px 0 rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1);--gcu-font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -38,24 +38,15 @@
 @media (prefers-reduced-motion:reduce){.gcu-spinner{animation-duration:1.5s}.gcu-btn{transition:none}.gcu-btn:active:not(:disabled){transform:none}.gcu-control{transition:none}.gcu-progress__bar{transition:none}}
 
 .gcu-badge{--gcu-badge-color:var(--gcu-primary);display:inline-flex;align-items:center;padding:4px 8px;border-radius:4px;background:var(--gcu-badge-color);color:#fff;font:600 11px/1 var(--gcu-font);white-space:nowrap}
-.gcu-badge--secondary{--gcu-badge-color:var(--gcu-secondary)}.gcu-badge--success{--gcu-badge-color:var(--gcu-success)}.gcu-badge--danger{--gcu-badge-color:var(--gcu-danger)}
-.gcu-badge--warning{--gcu-badge-color:var(--gcu-warning);color:#fff}.gcu-badge--info{--gcu-badge-color:var(--gcu-info)}.gcu-badge--dark{--gcu-badge-color:var(--gcu-dark)}
-.gcu-badge--light{--gcu-badge-color:var(--gcu-light);color:var(--gcu-text)}.gcu-badge--soft{background:color-mix(in srgb,var(--gcu-badge-color) 14%,var(--gcu-surface));color:var(--gcu-badge-color)}
-.gcu-status-button{border:0;cursor:pointer}.gcu-status-button:focus-visible{outline:2px solid var(--gcu-badge-color);outline-offset:2px}
+.gcu-badge--light{--gcu-badge-color:var(--gcu-light);color:var(--gcu-text)}
 
 .gcu-avatar{display:inline-flex;align-items:center;justify-content:center;overflow:hidden;flex:none;font-family:var(--gcu-font)}
 .gcu-avatar img{display:block;width:100%;height:100%;object-fit:cover}.gcu-avatar--circle{border-radius:50%}.gcu-avatar--rounded{border-radius:6px}
 .gcu-avatar--text{background:var(--gcu-primary);color:#fff;font-weight:700}.gcu-avatar--secondary{background:var(--gcu-secondary)}.gcu-avatar--success{background:var(--gcu-success)}
 .gcu-avatar--danger{background:var(--gcu-danger)}.gcu-avatar--warning{background:var(--gcu-warning);color:#fff}.gcu-avatar--info{background:var(--gcu-info)}.gcu-avatar--dark{background:var(--gcu-dark)}
 
-.gcu-card{box-sizing:border-box;border:1px solid var(--gcu-border);border-radius:var(--gcu-radius);background:var(--gcu-surface);color:var(--gcu-text);box-shadow:var(--gcu-shadow);font-family:var(--gcu-font)}
 .gcu-card__header{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;padding:25px;border-bottom:1px solid var(--gcu-border)}
 .gcu-card__title{margin:0;color:var(--gcu-text);font-size:16px;font-weight:700}.gcu-card__actions{margin-left:auto}.gcu-card__body{padding:25px}.gcu-card__body--flush{padding:0}.gcu-card__footer{padding:25px;border-top:1px solid var(--gcu-border)}
-.gcu-stat-card__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.gcu-stat-card__label{margin:0;color:var(--gcu-muted);font-size:12px}
-.gcu-stat-card__icon{display:grid;width:30px;height:30px;place-items:center;border-radius:6px;background:color-mix(in srgb,var(--gcu-primary) 13%,transparent);color:var(--gcu-primary)}
-.gcu-stat-card__icon--secondary{background:color-mix(in srgb,var(--gcu-secondary) 13%,transparent);color:var(--gcu-secondary)}.gcu-stat-card__icon--success{background:color-mix(in srgb,var(--gcu-success) 13%,transparent);color:var(--gcu-success)}.gcu-stat-card__icon--danger{background:color-mix(in srgb,var(--gcu-danger) 13%,transparent);color:var(--gcu-danger)}.gcu-stat-card__icon--warning{background:color-mix(in srgb,var(--gcu-warning) 13%,transparent);color:var(--gcu-warning)}.gcu-stat-card__icon--info{background:color-mix(in srgb,var(--gcu-info) 13%,transparent);color:var(--gcu-info)}
-.gcu-stat-card__value{margin:0;font-size:22px;font-weight:700}.gcu-stat-card__change{display:flex;align-items:center;gap:4px;margin:5px 0 0;font-size:12px}.gcu-stat-card__change--positive{color:var(--gcu-success)}.gcu-stat-card__change--negative{color:var(--gcu-danger)}
-.gcu-stat-card__footer{margin-top:10px;padding-top:10px;border-top:1px solid var(--gcu-border)}
 
 .gcu-page-header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:24px;padding:16px 0;color:var(--gcu-text);font-family:var(--gcu-font)}
 .gcu-page-header__main{flex:1;min-width:0}

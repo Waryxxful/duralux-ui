@@ -209,7 +209,7 @@ El tipo se distribuye por las keys string de la fila: permite arrays heterogéne
 - Layout y shell: `AppLayout`, `AuthLayout`, `PageHeader`, `ShellHeader`, `ShellNav`, `ThemeScope`, `ThemeProvider`, `ConfirmDialog` y extras GranCRM.
 - Contratos y utilidades: tipos de sesión/manifest/remotes, tokens y `apiFetch`.
 
-`dist/index.d.ts` combina tipos generados y declaraciones manuales. Aún permanecen como `any` estas superficies legacy: `StatsCard`, `MiniStatCard`, `ColoredStatCard`, `Timeline`, `ProgressRing`; `ApexChart`, `ChartCard`, `AreaChartWidget`, `BarChartWidget`, `LineChartWidget`, `PieChartWidget`; `ChatSidebar`, `ChatBubble`, `ChatTypingIndicator`, `ChatInputBar`, `ChatWindow`; `AppLayout`, `AuthLayout`, `Header` y `Sidebar`.
+`dist/index.d.ts` combina tipos generados (`vite-plugin-dts` desde `.ts`/`.tsx`) y declaraciones manuales para los componentes `.jsx` (`scripts/write-index-dts.mjs`). Toda la API pública tiene props tipadas — sin `any`.
 
 ## Ejemplos
 

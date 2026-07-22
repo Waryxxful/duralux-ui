@@ -1,11 +1,11 @@
-import { StatsCard, MiniStatCard, ColoredStatCard } from '@duralux/ui'
+import { StatsCard, MiniStatCard, ColoredStatCard, StatCard, StatusBadge, StatusButton } from '@duralux/ui'
 import { ShowcaseSection } from '../ShowcaseSection'
 
 export function StatsCardsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Stats Cards</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>StatsCard · MiniStatCard · ColoredStatCard</p>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>StatsCard · MiniStatCard · ColoredStatCard · StatCard · StatusBadge · StatusButton</p>
 
       <ShowcaseSection
         title="StatsCard"
@@ -88,6 +88,35 @@ export function StatsCardsPage() {
   trendUp
   bg="bg-primary"
 />`}
+      />
+
+      <ShowcaseSection
+        title="StatCard / StatusBadge / StatusButton (GranCRM)"
+        description="Props: title, value, icon, variant, change ({value, label}), footer / status, label, soft"
+        preview={
+          <div className="row g-3">
+            <div className="col-md-6">
+              <StatCard
+                title="Tickets abiertos"
+                value="128"
+                icon="alert-circle"
+                variant="warning"
+                change={{ value: 12, label: 'vs. semana pasada' }}
+                footer="Ver todos"
+              />
+            </div>
+            <div className="col-md-6 d-flex align-items-center gap-2 flex-wrap">
+              <StatusBadge status="success" label="Activo" />
+              <StatusBadge status="danger" label="Vencido" soft />
+              <StatusButton status="info" label="Reintentar" onClick={() => {}} />
+            </div>
+          </div>
+        }
+        code={`<StatCard title="Tickets abiertos" value="128" icon="alert-circle" variant="warning"
+  change={{ value: 12, label: 'vs. semana pasada' }} footer="Ver todos" />
+
+<StatusBadge status="success" label="Activo" />
+<StatusButton status="info" label="Reintentar" onClick={handleRetry} />`}
       />
     </div>
   )

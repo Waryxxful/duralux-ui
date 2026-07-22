@@ -31,12 +31,19 @@ export function PieChartWidget({ data = [], donut = true, height = 260, legend =
           ))}
         </Pie>
         <Tooltip
-          contentStyle={{ borderRadius: 8, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', fontSize: 12 }}
+          contentStyle={{
+            background: 'var(--gcu-surface, #fff)',
+            color: 'var(--gcu-text, #283c50)',
+            borderRadius: 8,
+            border: 'none',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+            fontSize: 12,
+          }}
         />
         {legend && (
           <Legend
             wrapperStyle={{ fontSize: 12 }}
-            formatter={(value) => <span style={{ color: '#555' }}>{value}</span>}
+            formatter={(value) => <span style={{ color: 'var(--gcu-muted, #555)' }}>{value}</span>}
           />
         )}
       </PieChart>

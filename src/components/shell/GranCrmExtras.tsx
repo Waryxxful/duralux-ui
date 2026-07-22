@@ -1,9 +1,12 @@
 /**
- * GranCRM-only components not present in @duralux/ui.
- * Kept locally; re-exported from ui/index.ts alongside the @duralux/ui re-exports.
+ * GranCRM-specific components with no Duralux template equivalent
+ * (CardHeader/CardBody/CardFooter as standalone sub-parts).
+ * StatusBadge/StatusButton/StatCard wrap the real Badge/card primitives —
+ * see Badge.jsx and StatsCard.jsx for the Bootstrap-real versions.
  */
 import React from 'react';
 import type { SemanticVariant, StatusVariant } from '../../tokens';
+import { Badge } from '../ui/Badge';
 
 // ── CardHeader / CardBody / CardFooter (sub-components not in @duralux/ui) ────
 
@@ -55,11 +58,11 @@ export interface StatusBadgeProps extends React.HTMLAttributes<HTMLSpanElement> 
 }
 
 export function StatusBadge({ status, label, soft, className, children, ...rest }: StatusBadgeProps) {
-  const text = label ?? children;
-  const cls = ['gcu-badge', `gcu-badge--${status}`, soft ? 'gcu-badge--soft' : '', className]
-    .filter(Boolean)
-    .join(' ');
-  return <span className={cls} {...rest}>{text}</span>;
+  return (
+    <Badge variant={status} soft={soft} className={className} {...rest}>
+      {label ?? children}
+    </Badge>
+  );
 }
 
 export interface StatusButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -69,15 +72,11 @@ export interface StatusButtonProps extends React.ButtonHTMLAttributes<HTMLButton
 }
 
 export function StatusButton({ status, label, soft, className, children, type = 'button', ...rest }: StatusButtonProps) {
-  const text = label ?? children;
-  const cls = [
-    'gcu-badge gcu-status-button',
-    `gcu-badge--${status}`,
-    soft ? 'gcu-badge--soft' : '',
-    className,
-  ].filter(Boolean).join(' ');
-
-  return <button type={type} className={cls} {...rest}>{text}</button>;
+  return (
+    <Badge as="button" type={type} variant={status} soft={soft} className={className} {...rest}>
+      {label ?? children}
+    </Badge>
+  );
 }
 
 // ── StatCard ──────────────────────────────────────────────────────────────────
@@ -102,29 +101,28 @@ export function StatCard({
   ...rest
 }: StatCardProps) {
   const changePositive = change && change.value >= 0;
-  const changeIcon = changePositive ? 'trending-up' : 'trending-down';
-  const changeColor = changePositive ? 'gcu-stat-card__change--positive' : 'gcu-stat-card__change--negative';
+  const changeIcon = changePositive ? 'arrow-up' : 'arrow-down';
 
   return (
-    <div className={['gcu-card gcu-stat-card', className].filter(Boolean).join(' ')} {...rest}>
-      <div className="gcu-card__body">
-        <div className="gcu-stat-card__header">
-          <p className="gcu-stat-card__label">{title}</p>
+    <div className={['card stretch stretch-full', className].filter(Boolean).join(' ')} {...rest}>
+      <div className="card-body">
+        <div className="d-flex align-items-start justify-content-between mb-2">
+          <p className="fs-12 text-muted mb-0">{title}</p>
           {icon && (
-            <div className={`gcu-stat-card__icon gcu-stat-card__icon--${variant}`}>
-              <i className={`gcu-icon feather-${icon}`} aria-hidden="true" />
+            <div className={`avatar-text avatar-sm bg-soft-${variant} text-${variant}`}>
+              <i className={`feather-${icon}`} aria-hidden="true" />
             </div>
           )}
         </div>
-        <h4 className="gcu-stat-card__value">{value}</h4>
+        <h4 className="fs-4 fw-bold text-dark mb-0">{value}</h4>
         {change && (
-          <p className={`gcu-stat-card__change ${changeColor}`}>
-            <i className={`gcu-icon feather-${changeIcon}`} aria-hidden="true" />
+          <Badge variant={changePositive ? 'success' : 'danger'} soft className="mt-2">
+            <i className={`feather-${changeIcon} fs-10 me-1`} aria-hidden="true" />
             {Math.abs(change.value)}%{change.label ? ` ${change.label}` : ''}
-          </p>
+          </Badge>
         )}
-        {footer && <div className="gcu-stat-card__footer">{footer}</div>}
       </div>
+      {footer && <div className="card-footer fs-11 fw-bold text-uppercase text-center">{footer}</div>}
     </div>
   );
 }

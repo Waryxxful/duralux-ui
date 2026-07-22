@@ -1,3 +1,5 @@
+import { PLACEHOLDER_AVATAR } from '../../assets/placeholders'
+
 /**
  * ChatSidebar — lista de contactos/conversaciones.
  *
@@ -37,7 +39,7 @@ export function ChatSidebar({ contacts = [], selectedId, onSelect, onSearch }) {
             >
               <div className="position-relative flex-shrink-0">
                 <div className="avatar-image avatar-md">
-                  <img src={c.avatar || `/assets/images/avatar/1.png`} alt={c.name} className="img-fluid rounded-circle" />
+                  <img src={c.avatar || PLACEHOLDER_AVATAR} alt={c.name} className="img-fluid rounded-circle" />
                 </div>
                 {c.online && (
                   <span className="position-absolute bottom-0 end-0 wd-10 ht-10 bg-success rounded-circle border border-2 border-white"></span>

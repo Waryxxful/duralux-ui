@@ -5,10 +5,10 @@
  *   value   — 0-100
  *   size    — diámetro en px (default 80)
  *   stroke  — grosor del trazo (default 8)
- *   color   — color del progreso (default "#4680FF")
+ *   color   — color del progreso (default $primary)
  *   label   — texto central (default muestra el porcentaje)
  */
-export function ProgressRing({ value = 0, size = 80, stroke = 8, color = '#4680FF', label }) {
+export function ProgressRing({ value = 0, size = 80, stroke = 8, color = '#3454d1', label }) {
   const radius = (size - stroke) / 2
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (value / 100) * circumference
@@ -16,7 +16,7 @@ export function ProgressRing({ value = 0, size = 80, stroke = 8, color = '#4680F
   return (
     <div className="position-relative d-inline-flex align-items-center justify-content-center">
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#f0f0f0" strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="var(--gcu-border, #eff0f6)" strokeWidth={stroke} />
         <circle
           cx={size / 2}
           cy={size / 2}

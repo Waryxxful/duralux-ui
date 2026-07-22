@@ -7,14 +7,14 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
     <div style={{
-      background: '#fff',
-      border: '1px solid #e9ecef',
+      background: 'var(--gcu-surface, #fff)',
+      border: '1px solid var(--gcu-border, #e9ecef)',
       borderRadius: 8,
       padding: '10px 14px',
       boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
       fontSize: 12,
     }}>
-      <p style={{ margin: '0 0 6px', fontWeight: 600, color: '#283c50' }}>{label}</p>
+      <p style={{ margin: '0 0 6px', fontWeight: 600, color: 'var(--gcu-text, #283c50)' }}>{label}</p>
       {payload.map((p) => (
         <p key={p.dataKey} style={{ margin: '2px 0', color: p.fill }}>
           {p.name}: <strong>{p.value}</strong>
@@ -35,12 +35,12 @@ export function BarChartWidget({ data = [], series = [], height = 260, stacked, 
       >
         <XAxis
           dataKey="name"
-          tick={{ fontSize: 10, fill: '#A0ACBB' }}
+          tick={{ fontSize: 10, fill: 'var(--gcu-muted, #A0ACBB)' }}
           axisLine={false}
           tickLine={false}
         />
         <YAxis
-          tick={{ fontSize: 10, fill: '#A0ACBB' }}
+          tick={{ fontSize: 10, fill: 'var(--gcu-muted, #A0ACBB)' }}
           axisLine={false}
           tickLine={false}
           width={40}

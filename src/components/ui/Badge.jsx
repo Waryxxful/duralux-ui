@@ -14,6 +14,7 @@ export function Badge({
   variant = 'primary',
   soft = false,
   pill = false,
+  as: Tag = 'span',
   children,
   className = '',
   ...rest
@@ -31,14 +32,15 @@ export function Badge({
     'badge',
     tone,
     pill ? 'rounded-pill' : '',
+    Tag !== 'span' ? 'border-0' : '',
     className,
   ]
     .filter(Boolean)
     .join(' ')
 
   return (
-    <span className={classes} {...rest}>
+    <Tag className={classes} style={Tag !== 'span' ? { cursor: 'pointer' } : undefined} {...rest}>
       {children}
-    </span>
+    </Tag>
   )
 }

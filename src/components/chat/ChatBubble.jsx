@@ -1,3 +1,5 @@
+import { PLACEHOLDER_AVATAR } from '../../assets/placeholders'
+
 /**
  * ChatBubble — burbuja de mensaje individual.
  *
@@ -13,7 +15,7 @@ export function ChatBubble({ message }) {
       <div className={`d-flex align-items-center gap-2 mb-2${mine ? ' flex-row-reverse' : ''}`}>
         <div className="avatar-image avatar-sm">
           <img
-            src={sender?.avatar || '/assets/images/avatar/1.png'}
+            src={sender?.avatar || PLACEHOLDER_AVATAR}
             alt={sender?.name}
             className="img-fluid rounded-circle"
           />
@@ -39,7 +41,7 @@ export function ChatTypingIndicator({ name }) {
   return (
     <div className="d-flex align-items-center gap-2 mb-4">
       <div className="avatar-image avatar-sm">
-        <img src="/assets/images/avatar/2.png" alt="" className="img-fluid rounded-circle" />
+        <img src={PLACEHOLDER_AVATAR} alt="" className="img-fluid rounded-circle" />
       </div>
       <div className="p-3 rounded-4 bg-gray-100 d-flex align-items-center gap-2">
         <span className="fs-12 text-muted">{name} está escribiendo</span>
@@ -51,7 +53,6 @@ export function ChatTypingIndicator({ name }) {
               style={{
                 width: 6, height: 6,
                 display: 'inline-block',
-                backgroundColor: '#aaa',
                 animation: `bounce 1.2s infinite ${i * 0.2}s`,
               }}
             />

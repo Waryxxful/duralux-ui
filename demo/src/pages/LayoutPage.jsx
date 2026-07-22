@@ -70,13 +70,13 @@ const USER = {
       <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 24 }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>AuthLayout</h3>
         <p style={{ color: '#64748b', fontSize: 13, marginBottom: 16 }}>
-          Layout para páginas sin sidebar (login, register). Setea los atributos <code>data-pc-preset</code>, <code>data-pc-theme</code> en el elemento <code>html</code>.
+          Layout para páginas sin sidebar (login, register). Porta la variante <code>auth-cover-wrapper</code> real de Duralux (tarjeta a la derecha + ilustración opcional a la izquierda).
         </p>
         <div style={{ background: '#0f172a', color: '#e2e8f0', padding: '16px 20px', borderRadius: 8, fontSize: 12, fontFamily: 'monospace', lineHeight: 1.8 }}>
 {`import { AuthLayout } from '@duralux/ui'
 
 // En tu router:
-{ path: '/login', element: <AuthLayout><LoginPage /></AuthLayout> }`}
+{ path: '/login', element: <AuthLayout image="/auth-bg.svg"><LoginForm /></AuthLayout> }`}
         </div>
       </div>
     </div>

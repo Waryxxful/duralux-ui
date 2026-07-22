@@ -18,7 +18,7 @@ export const tokens = {
     dark: '#283c50',      // $brand-dark
     darken: '#001327',
     secondary: '#4b5563', // $gray-600
-    light: '#f8f9fa',
+    light: '#eff0f6',     // $gray-100 / $light
     // _variables.scss brand
     brand: '#283c50',
     brandBody: '#4b5563', // $brand-body
@@ -49,13 +49,19 @@ export const tokens = {
     border: '#1b2436',
     hover: '#1c2438',
   },
-  radius: { sm: 5, md: 10, lg: 15, pill: 30 },
+  // $radius-* (surfaces: cards, panels) — _variables.scss:160-165
+  radius: { sm: 5, md: 10, lg: 15, xl: 20, xxl: 25, pill: 30 },
+  // $border-radius* (form controls/buttons) — _bs-custom-variables.scss:106-108
+  controlRadius: { sm: 2, base: 4, lg: 6 },
   shadow: {
-    sm: '0 1px 3px rgba(0,0,0,.08)',
+    sm: '0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px -1px rgba(0,0,0,.1)', // $card-shadow
     md: '0 2px 8px rgba(0,0,0,.12)',
     lg: '0 4px 20px rgba(0,0,0,.16)',
   },
   spacing: { 1: 4, 2: 8, 3: 12, 4: 16, 5: 20, 6: 24 },
+  // Fixed layout constants (not part of the 4px scale) — $card-spacer-*,
+  // main-content padding. _bs-custom-variables.scss:133-137, nxl-common.scss.
+  layoutGutter: { card: 25, content: 30 },
   /** Motion craft — alineado a scss/themes/components/_motion.scss.
    *  DESIGN.md house signature: `all 0.3s ease` on interactive surfaces
    *  (scoped to paint props here instead of literal `all`). */

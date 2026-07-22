@@ -1,3 +1,5 @@
+import { PLACEHOLDER_AVATAR } from '../../assets/placeholders'
+
 /**
  * ChatWindow — área principal de chat (header + mensajes + input).
  *
@@ -25,7 +27,7 @@ export function ChatWindow({ contact, children }) {
           <div className="position-relative">
             <div className="avatar-image avatar-md">
               <img
-                src={contact.avatar || '/assets/images/avatar/1.png'}
+                src={contact.avatar || PLACEHOLDER_AVATAR}
                 alt={contact.name}
                 className="img-fluid rounded-circle"
               />

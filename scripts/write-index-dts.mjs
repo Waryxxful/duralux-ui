@@ -209,27 +209,134 @@ export type DataTableProps<T extends object = Record<string, unknown>> = {
   : { rowKey: DataTableIdentityKey<T> });
 export declare function DataTable<T extends object = Record<string, unknown>>(props: DataTableProps<T>): React.ReactElement;
 
-// Componentes de charts/chat/layout genéricos (pocos consumidores tipados estrictos)
-export declare function StatsCard(props: any): React.ReactElement;
-export declare function MiniStatCard(props: any): React.ReactElement;
-export declare function ColoredStatCard(props: any): React.ReactElement;
-export declare function Timeline(props: any): React.ReactElement;
-export declare function ProgressRing(props: any): React.ReactElement;
-export declare function ApexChart(props: any): React.ReactElement;
-export declare function ChartCard(props: any): React.ReactElement;
-export declare function AreaChartWidget(props: any): React.ReactElement;
-export declare function BarChartWidget(props: any): React.ReactElement;
-export declare function LineChartWidget(props: any): React.ReactElement;
-export declare function PieChartWidget(props: any): React.ReactElement;
-export declare function ChatSidebar(props: any): React.ReactElement;
-export declare function ChatBubble(props: any): React.ReactElement;
-export declare function ChatTypingIndicator(props: any): React.ReactElement;
-export declare function ChatInputBar(props: any): React.ReactElement;
-export declare function ChatWindow(props: any): React.ReactElement;
-export declare function AppLayout(props: any): React.ReactElement;
-export declare function AuthLayout(props: any): React.ReactElement;
-export declare function Header(props: any): React.ReactElement;
-export declare function Sidebar(props: any): React.ReactElement;
+// ── Componentes de charts/chat/layout genéricos ───────────────────────────────
+
+export interface StatsCardTrend { value: string; up?: boolean; }
+export interface StatsCardProgress { value: number; label?: React.ReactNode; color?: string; }
+export interface StatsCardProps {
+  icon?: string; iconBg?: string; value: React.ReactNode; label: React.ReactNode;
+  trend?: StatsCardTrend; progress?: StatsCardProgress;
+  footer?: React.ReactNode; onFooter?: () => void;
+}
+export declare function StatsCard(props: StatsCardProps): React.ReactElement;
+
+export interface MiniStatCardProps {
+  icon?: string; value: React.ReactNode; label: React.ReactNode;
+  color?: Exclude<SemanticVariant, 'link'>;
+}
+export declare function MiniStatCard(props: MiniStatCardProps): React.ReactElement;
+
+export interface ColoredStatCardProps {
+  icon?: string; value: React.ReactNode; label: React.ReactNode;
+  trend?: string; trendUp?: boolean; bg?: string; chart?: React.ReactNode;
+}
+export declare function ColoredStatCard(props: ColoredStatCardProps): React.ReactElement;
+
+export interface TimelineItem {
+  id?: string | number; title: React.ReactNode; description?: React.ReactNode; time?: React.ReactNode;
+  icon?: string; iconBg?: string; color?: string; user?: { name?: string; avatar?: string };
+}
+export interface TimelineProps { items?: TimelineItem[]; }
+export declare function Timeline(props: TimelineProps): React.ReactElement;
+
+export interface ProgressRingProps {
+  value?: number; size?: number; stroke?: number; color?: string; label?: React.ReactNode;
+}
+export declare function ProgressRing(props: ProgressRingProps): React.ReactElement;
+
+export interface ApexChartProps {
+  type?: string; options?: Record<string, unknown>; series?: unknown[];
+  height?: number | string; width?: number | string;
+}
+export declare function ApexChart(props: ApexChartProps): React.ReactElement;
+
+export interface ChartCardAction { label: string; onClick?: () => void; }
+export interface ChartCardProps {
+  title?: React.ReactNode; subtitle?: React.ReactNode; actions?: ChartCardAction[];
+  noPad?: boolean; children?: React.ReactNode;
+}
+export declare function ChartCard(props: ChartCardProps): React.ReactElement;
+
+export interface ChartSeries { key: string; color?: string; label?: string; dashed?: boolean; }
+export type ChartDatum = Record<string, unknown>;
+
+export interface AreaChartWidgetProps {
+  data?: ChartDatum[]; series?: ChartSeries[]; height?: number; grid?: boolean;
+}
+export declare function AreaChartWidget(props: AreaChartWidgetProps): React.ReactElement;
+
+export interface BarChartWidgetProps {
+  data?: ChartDatum[]; series?: ChartSeries[]; height?: number;
+  stacked?: boolean; rounded?: number; barSize?: number;
+}
+export declare function BarChartWidget(props: BarChartWidgetProps): React.ReactElement;
+
+export interface LineChartWidgetProps { data?: ChartDatum[]; series?: ChartSeries[]; height?: number; }
+export declare function LineChartWidget(props: LineChartWidgetProps): React.ReactElement;
+
+export interface PieChartDatum { name: string; value: number; color?: string; }
+export interface PieChartWidgetProps {
+  data?: PieChartDatum[]; donut?: boolean; height?: number; legend?: boolean;
+}
+export declare function PieChartWidget(props: PieChartWidgetProps): React.ReactElement;
+
+export interface ChatContact {
+  id: string | number; name: string; avatar?: string; preview?: string;
+  time?: string; online?: boolean; unread?: number;
+}
+export interface ChatSidebarProps {
+  contacts?: ChatContact[]; selectedId?: string | number;
+  onSelect?: (contact: ChatContact) => void; onSearch?: (query: string) => void;
+}
+export declare function ChatSidebar(props: ChatSidebarProps): React.ReactElement;
+
+export interface ChatMessage {
+  id?: string | number; text: string; time?: string;
+  sender?: { name?: string; avatar?: string }; mine?: boolean;
+}
+export interface ChatBubbleProps { message: ChatMessage; }
+export declare function ChatBubble(props: ChatBubbleProps): React.ReactElement;
+
+export interface ChatTypingIndicatorProps { name?: string; }
+export declare function ChatTypingIndicator(props: ChatTypingIndicatorProps): React.ReactElement;
+
+export interface ChatInputBarProps { onSend?: (text: string) => void; placeholder?: string; }
+export declare function ChatInputBar(props: ChatInputBarProps): React.ReactElement;
+
+export interface ChatWindowContact { name: string; avatar?: string; online?: boolean; role?: string; }
+export interface ChatWindowProps { contact?: ChatWindowContact | null; children?: React.ReactNode; }
+export declare function ChatWindow(props: ChatWindowProps): React.ReactElement;
+
+export interface SidebarNavItem {
+  key?: string | number; id?: string | number; label: string; icon?: string;
+  to?: string; href?: string; end?: boolean; type?: 'caption' | 'item';
+  children?: SidebarNavItem[];
+}
+
+export interface HeaderUserMenuItem { label: string; icon?: string; href?: string; onClick?: () => void; }
+export interface HeaderUser { avatar?: string; name?: string; email?: string; menuItems?: HeaderUserMenuItem[]; }
+export interface HeaderNotification { href?: string; icon?: string; color?: string; title: string; time?: string; }
+export interface HeaderProps {
+  user?: HeaderUser; notifications?: HeaderNotification[];
+  onToggleMini?: () => void; onToggleMobile?: () => void;
+}
+export declare function Header(props: HeaderProps): React.ReactElement;
+
+export interface SidebarProps {
+  navItems?: SidebarNavItem[]; logo?: string; logoAbbr?: string;
+  promoCard?: React.ReactNode; mobileOpen?: boolean; onNavigate?: () => void;
+}
+export declare function Sidebar(props: SidebarProps): React.ReactElement;
+
+export interface AppLayoutProps {
+  children?: React.ReactNode; navItems?: SidebarNavItem[]; logo?: string; logoAbbr?: string;
+  user?: HeaderUser; notifications?: HeaderNotification[]; theme?: 'light' | 'dark';
+  promoCard?: React.ReactNode;
+}
+export declare function AppLayout(props: AppLayoutProps): React.ReactElement;
+
+export interface AuthLayoutProps { children?: React.ReactNode; image?: string; imageAlt?: string; }
+export declare function AuthLayout(props: AuthLayoutProps): React.ReactElement;
 
 // ── Piezas reales (generadas por vite-plugin-dts desde .ts/.tsx fuente) ───────
 export * from './contract';

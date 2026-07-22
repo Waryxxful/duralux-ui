@@ -1,18 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { useThemeOptional } from '../../theme/ThemeProvider'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
+import { PLACEHOLDER_LOGO, PLACEHOLDER_LOGO_ABBR } from '../../assets/placeholders'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
 
 /**
  * AppLayout — monta el shell Duralux (sidebar + header + footer).
  * Las clases globales del tema se aplican en <html>, como espera Duralux.
+ * logo/logoAbbr caen a un placeholder real (SVG inline) si el consumidor no
+ * pasa su propia marca — nunca a una ruta que no existe.
  */
 export function AppLayout({
   children,
   navItems = [],
-  logo = '/brand/logo-full.png',
-  logoAbbr = '/brand/huella.png',
+  logo = PLACEHOLDER_LOGO,
+  logoAbbr = PLACEHOLDER_LOGO_ABBR,
   user = {},
   notifications = [],
   theme = 'light',
@@ -84,7 +87,9 @@ export function AppLayout({
 
       <main className="nxl-container">
         <div className="nxl-content">
-          {children}
+          <div className="main-content">
+            {children}
+          </div>
           <footer className="footer">
             <p className="fs-11 text-muted fw-medium text-uppercase mb-0">
               Copyright © {new Date().getFullYear()}
