@@ -153,8 +153,11 @@ html {
 		// Bootstrap usa para distinguir on/off (el ícono SVG del knob sigue
 		// encima, pero sin track no hay forma de ver el estado).
 		.form-check-input {
-			background-color: $dark-theme-color-dark !important;
-			border-color: $dark-theme-color-border !important;
+			// $dark-theme-color-dark es el mismo color que .card — usarlo acá
+			// dejaba el track apagado invisible sobre cualquier card. Un tono
+			// más claro para que se note como pastilla.
+			background-color: $dark-theme-color-hover !important;
+			border-color: lighten($dark-theme-color-border, 8) !important;
 			&:checked {
 				background-color: $primary !important;
 				border-color: $primary !important;
