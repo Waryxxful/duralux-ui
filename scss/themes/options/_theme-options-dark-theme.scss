@@ -133,7 +133,7 @@ html {
 		.page-content-right-sidebar-wrapper {
 			border-color: $dark-theme-color-border !important;
 		}
-		input,
+		input:not(.form-check-input),
 		textarea,
 		.custom-file,
 		.custom-select,
@@ -145,6 +145,21 @@ html {
 			&:hover,
 			&:active,
 			&.active {
+				border-color: $primary !important;
+			}
+		}
+		// Excluido de la regla transparent de arriba: un checkbox/switch necesita
+		// su propio track con color, si no, "transparent" borra el fondo que
+		// Bootstrap usa para distinguir on/off (el ícono SVG del knob sigue
+		// encima, pero sin track no hay forma de ver el estado).
+		.form-check-input {
+			background-color: $dark-theme-color-dark !important;
+			border-color: $dark-theme-color-border !important;
+			&:checked {
+				background-color: $primary !important;
+				border-color: $primary !important;
+			}
+			&:focus {
 				border-color: $primary !important;
 			}
 		}
@@ -772,10 +787,17 @@ html {
 						color: $white;
 						background-color: $dark-theme-color-dark;
 						border-color: $dark-theme-color-border;
+						// El ícono base usa fill="var(--bs-body-color)" (Bootstrap
+						// 5.3 lo referencia como custom property para su propio
+						// modo oscuro), pero un var() dentro de un SVG data-URI
+						// no se resuelve en runtime — cae al negro y desaparece
+						// sobre fondo oscuro. Reemplazar con un color literal.
+						--bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 					}
 					.accordion-button:not(.collapsed) {
 						color: $primary;
 						background-color: $dark-theme-color-hover;
+						--bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230d6efd'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 					}
 				}
 			}
