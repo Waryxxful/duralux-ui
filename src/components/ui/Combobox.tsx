@@ -21,6 +21,13 @@ import { Icon } from './Icon';
  * `PopoverTrigger`) porque el trigger de Radix togglea con click/Enter —
  * acá el popover abre con foco/tipeo y cierra con Escape/click afuera/
  * selección, ya manejado por `open`/`onOpenChange` controlados a mano.
+ *
+ * `onFocusOutside` en `PopoverContent` está deliberadamente anulado: el
+ * input que mantiene el foco vive en `PopoverAnchor` (fuera del portal
+ * donde Radix monta el contenido), así que el dismissable layer de Radix
+ * lo trata como "foco afuera" y cierra el popover en el mismo tick en que
+ * abre. Sin este preventDefault, el click-afuera y Escape siguen cerrando
+ * normalmente (esos van por `onPointerDownOutside`/`onEscapeKeyDown`).
  */
 export interface ComboboxOption {
   value: string;
@@ -85,6 +92,7 @@ export function Combobox({
         <PopoverContent
           align="start"
           onOpenAutoFocus={(event) => event.preventDefault()}
+          onFocusOutside={(event) => event.preventDefault()}
           style={{ minWidth: 'var(--radix-popper-anchor-width)' }}
         >
           <CommandList style={{ maxHeight: 260, overflowY: 'auto' }}>
