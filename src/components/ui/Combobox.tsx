@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { ButtonHTMLAttributes } from 'react';
+import { useEffect, useState } from 'react';
+import type { InputHTMLAttributes } from 'react';
 import {
   Command,
   CommandEmpty,
@@ -8,18 +8,19 @@ import {
   CommandItem,
   CommandList,
 } from 'cmdk';
-import { Popover, PopoverContent, PopoverTrigger } from './Popover';
+import { Popover, PopoverAnchor, PopoverContent } from './Popover';
 import { Icon } from './Icon';
 
 /**
- * Combobox = `Popover` (ya en el paquete) + `cmdk` para el filtrado —
- * mismo patrón que el combobox-demo de shadcn/ui, pero cmdk es headless
- * (sin Tailwind) igual que Radix, así que se viste 100% con clases
- * Bootstrap/Duralux ya existentes: `.form-select` para el trigger,
- * `.dropdown-item` para cada opción. El único CSS nuevo
- * (`themes/components/combobox.scss`) resuelve el estado `data-selected`
- * de la navegación por teclado de cmdk, que `.dropdown-item` no cubre
- * (solo tiene `:hover`/`:focus`).
+ * Combobox = `Popover` (ya en el paquete) + `cmdk` para filtrado/navegación
+ * por teclado. A diferencia de la primera versión (botón que abría un
+ * popover con un buscador adentro — el `combobox-demo` viejo de shadcn/ui),
+ * la caja visible ES el input: se puede escribir directo para filtrar,
+ * igual que el Combobox actual de shadcn (ui.shadcn.com/docs/components/
+ * base|radix/combobox). `CommandInput` va dentro de `PopoverAnchor` (no
+ * `PopoverTrigger`) porque el trigger de Radix togglea con click/Enter —
+ * acá el popover abre con foco/tipeo y cierra con Escape/click afuera/
+ * selección, ya manejado por `open`/`onOpenChange` controlados a mano.
  */
 export interface ComboboxOption {
   value: string;
@@ -27,12 +28,11 @@ export interface ComboboxOption {
 }
 
 export interface ComboboxProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange' | 'value'> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
   options: ComboboxOption[];
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  searchPlaceholder?: string;
   emptyText?: string;
 }
 
@@ -40,34 +40,53 @@ export function Combobox({
   options,
   value,
   onChange,
-  placeholder = 'Seleccionar…',
-  searchPlaceholder = 'Buscar…',
+  placeholder = 'Buscar…',
   emptyText = 'Sin resultados.',
   className,
-  ...triggerProps
+  ...inputProps
 }: ComboboxProps) {
   const [open, setOpen] = useState(false);
-  const selected = options.find((option) => option.value === value);
+  const selectedLabel = options.find((option) => option.value === value)?.label ?? '';
+  const [search, setSearch] = useState(selectedLabel);
+
+  // Al cerrar (selección, Escape, click afuera) la caja vuelve a mostrar
+  // la opción elegida, no lo último tipeado — mismo comportamiento que la
+  // demo de shadcn.
+  useEffect(() => {
+    if (!open) setSearch(selectedLabel);
+  }, [open, selectedLabel]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          role="combobox"
-          aria-expanded={open}
-          className={['form-select text-start', className].filter(Boolean).join(' ')}
-          {...triggerProps}
+      <Command>
+        <PopoverAnchor asChild>
+          <div className="position-relative">
+            <CommandInput
+              role="combobox"
+              aria-expanded={open}
+              autoComplete="off"
+              className={['form-control pe-4', className].filter(Boolean).join(' ')}
+              placeholder={placeholder}
+              value={search}
+              onValueChange={(next) => {
+                setSearch(next);
+                if (!open) setOpen(true);
+              }}
+              onFocus={() => setOpen(true)}
+              {...inputProps}
+            />
+            <Icon
+              name="chevron-down"
+              size="sm"
+              className="position-absolute top-50 end-0 translate-middle-y me-2 text-muted pe-none"
+            />
+          </div>
+        </PopoverAnchor>
+        <PopoverContent
+          align="start"
+          onOpenAutoFocus={(event) => event.preventDefault()}
+          style={{ minWidth: 'var(--radix-popper-anchor-width)' }}
         >
-          {selected ? selected.label : placeholder}
-        </button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="start"
-        style={{ minWidth: 'var(--radix-popper-anchor-width)' }}
-      >
-        <Command>
-          <CommandInput className="form-control form-control-sm mb-2" placeholder={searchPlaceholder} />
           <CommandList style={{ maxHeight: 260, overflowY: 'auto' }}>
             <CommandEmpty className="text-muted small px-2 py-1">{emptyText}</CommandEmpty>
             <CommandGroup>
@@ -87,8 +106,8 @@ export function Combobox({
               ))}
             </CommandGroup>
           </CommandList>
-        </Command>
-      </PopoverContent>
+        </PopoverContent>
+      </Command>
     </Popover>
   );
 }
