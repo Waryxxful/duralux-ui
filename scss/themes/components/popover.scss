@@ -1,87 +1,10 @@
-// theme.scss y bootstrap.scss compilan por separado (scripts/build-scss.mjs)
-// así que @extend entre ellos no resuelve: no hay compilación compartida
-// donde localizar `.bs-popover-*`. En cambio, las custom properties
-// `--bs-popover-*` sí llegan (bootstrap.min.css se carga antes en el
-// documento y las variables heredan por cascada normal). Estas reglas son
-// una copia literal de la geometría del arrow en `_popover.scss`
-// (`.bs-popover-top/-end/-bottom/-start`), solo remapeadas de las clases
-// que setea el JS de Bootstrap a `[data-side]`, que es lo que Radix expone.
-.popover[data-side='top'] > .popover-arrow {
-  bottom: calc((var(--bs-popover-arrow-height) * -1) - var(--bs-popover-border-width));
-
-  &::before,
-  &::after {
-    border-width: var(--bs-popover-arrow-height) calc(var(--bs-popover-arrow-width) * .5) 0;
-  }
-
-  &::before {
-    bottom: 0;
-    border-top-color: var(--bs-popover-arrow-border);
-  }
-
-  &::after {
-    bottom: var(--bs-popover-border-width);
-    border-top-color: var(--bs-popover-bg);
-  }
-}
-
-.popover[data-side='right'] > .popover-arrow {
-  left: calc((var(--bs-popover-arrow-height) * -1) - var(--bs-popover-border-width));
-  width: var(--bs-popover-arrow-height);
-  height: var(--bs-popover-arrow-width);
-
-  &::before,
-  &::after {
-    border-width: calc(var(--bs-popover-arrow-width) * .5) var(--bs-popover-arrow-height) calc(var(--bs-popover-arrow-width) * .5) 0;
-  }
-
-  &::before {
-    left: 0;
-    border-right-color: var(--bs-popover-arrow-border);
-  }
-
-  &::after {
-    left: var(--bs-popover-border-width);
-    border-right-color: var(--bs-popover-bg);
-  }
-}
-
-.popover[data-side='bottom'] > .popover-arrow {
-  top: calc((var(--bs-popover-arrow-height) * -1) - var(--bs-popover-border-width));
-
-  &::before,
-  &::after {
-    border-width: 0 calc(var(--bs-popover-arrow-width) * .5) var(--bs-popover-arrow-height);
-  }
-
-  &::before {
-    top: 0;
-    border-bottom-color: var(--bs-popover-arrow-border);
-  }
-
-  &::after {
-    top: var(--bs-popover-border-width);
-    border-bottom-color: var(--bs-popover-bg);
-  }
-}
-
-.popover[data-side='left'] > .popover-arrow {
-  right: calc((var(--bs-popover-arrow-height) * -1) - var(--bs-popover-border-width));
-  width: var(--bs-popover-arrow-height);
-  height: var(--bs-popover-arrow-width);
-
-  &::before,
-  &::after {
-    border-width: calc(var(--bs-popover-arrow-width) * .5) 0 calc(var(--bs-popover-arrow-width) * .5) var(--bs-popover-arrow-height);
-  }
-
-  &::before {
-    right: 0;
-    border-left-color: var(--bs-popover-arrow-border);
-  }
-
-  &::after {
-    right: var(--bs-popover-border-width);
-    border-left-color: var(--bs-popover-bg);
-  }
+// Radix Popover.Arrow renderiza un <svg><polygon>, no el triángulo de
+// bordes CSS que usa el JS de Bootstrap (`.bs-popover-top > .popover-arrow`
+// en _popover.scss) — un intento anterior remapeaba esa geometría de
+// bordes a [data-side], pero nunca aplicaba (el polygon no tiene bordes
+// que colorear) y el SVG sin `fill` se pintaba negro por defecto del
+// navegador. Radix ya posiciona el arrow solo (floating-ui arrow
+// middleware, left/top inline) — lo único que hace falta es el color.
+.popover-arrow {
+  fill: var(--bs-popover-bg);
 }

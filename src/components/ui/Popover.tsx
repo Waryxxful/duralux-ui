@@ -6,12 +6,14 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
  * a diferencia de `Dropdown` (posicionamiento vía clases Bootstrap, sin
  * colisión con los bordes del viewport), este primitivo cubre casos donde
  * el contenido debe anclarse a cualquier elemento y evitar recortes
- * (base de Combobox/DatePicker). Cero CSS nuevo: reusa `.popover`/
- * `.popover-arrow`/`.popover-body` que Bootstrap ya trae en el theme
- * (`scss/bootstrap/_popover.scss`); el único agregado real es
- * `themes/components/popover.scss`, que remapea esas reglas (mismo patrón
- * que Bootstrap usa para `[data-popper-placement]`) al atributo `[data-side]`
- * que Radix expone.
+ * (base de Combobox/DatePicker). Reusa `.popover`/`.popover-body` que
+ * Bootstrap ya trae en el theme (`scss/bootstrap/_popover.scss`) — el
+ * posicionamiento (incluido el arrow) lo resuelve Radix/floating-ui solo,
+ * vía `@radix-ui/react-popper`, sin necesidad de las clases `.bs-popover-*`
+ * ni `[data-popper-placement]` que usa el JS de Bootstrap. Único CSS nuevo:
+ * `themes/components/popover.scss` le da `fill` al arrow (un
+ * `<svg><polygon>`, no el triángulo de bordes de Bootstrap — sin `fill`
+ * se pinta negro por defecto).
  */
 export const Popover = RadixPopover.Root;
 export const PopoverTrigger = RadixPopover.Trigger;
