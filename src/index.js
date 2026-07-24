@@ -17,6 +17,8 @@ export { ConnectionCard } from './components/ui/ConnectionCard'
 export { ActivityFeed } from './components/ui/ActivityFeed'
 export { Toast } from './components/ui/Toast'
 export { Dropdown, DropdownMenu } from './components/ui/Dropdown'
+export { Popover, PopoverTrigger, PopoverAnchor, PopoverContent } from './components/ui/Popover'
+export { Combobox } from './components/ui/Combobox'
 
 // Feedback
 export { EmptyState } from './components/feedback/EmptyState'

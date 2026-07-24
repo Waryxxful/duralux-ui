@@ -351,6 +351,8 @@ export * from './components/ui/ConnectionCard';
 export * from './components/ui/ActivityFeed';
 export * from './components/ui/Toast';
 export * from './components/ui/Dropdown';
+export * from './components/ui/Popover';
+export * from './components/ui/Combobox';
 export * from './theme/ThemeProvider';
 `;
 

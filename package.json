@@ -1,7 +1,7 @@
 {
   "name": "@duralux/ui",
   "version": "1.0.0",
-  "description": "Librer\u00eda de componentes React + Duralux CSS",
+  "description": "Librería de componentes React + Duralux CSS",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -44,7 +44,9 @@
     "react-router-dom": "^6.0.0 || ^7.0.0"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.1.21",
     "apexcharts": "^5.15.2",
+    "cmdk": "^1.1.1",
     "react-apexcharts": "^2.1.1",
     "recharts": "^3.8.1"
   },
