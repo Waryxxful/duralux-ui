@@ -1,7 +1,0 @@
-// cmdk (Combobox) marca el ítem resaltado por teclado con [data-selected],
-// atributo que `.dropdown-item` no conoce (solo define :hover/:focus).
-// Mismas custom properties que Bootstrap ya expone para ese hover.
-.dropdown-item[data-selected='true'] {
-  color: var(--bs-dropdown-link-hover-color);
-  background-color: var(--bs-dropdown-link-hover-bg);
-}
