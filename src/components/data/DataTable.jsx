@@ -6,7 +6,9 @@ import { useEffect, useId, useRef, useState } from 'react'
  * Props:
  *   columns — [{ key, label, sortable, render: (row, value, rowIndex) => JSX }]
  *   data    — array of objects
- *   actions — [{ label, icon, onClick: (row) => void }]
+ *   actions — [{ label, icon, onClick: (row) => void, variant?: 'icon' | 'button', buttonVariant?: string }]
+ *             variant "icon" (default) — botón solo-ícono, label como tooltip (compacto).
+ *             variant "button" — botón con ícono + texto visible (label), clase btn-{buttonVariant || 'light-brand'}.
  *   pageSize — rows per page (default 10)
  *   selectable — show checkboxes
  *   onSelectionChange — (selectedIds) => void
@@ -180,15 +182,27 @@ export function DataTable({
                     <td>
                       <div className="hstack gap-2 justify-content-end">
                         {actions.map((action, i) => (
-                          <button
-                            key={i}
-                            type="button"
-                            className="avatar-text avatar-md btn-link border-0 bg-transparent"
-                            title={action.label}
-                            onClick={() => action.onClick(row)}
-                          >
-                            <i className={action.icon}></i>
-                          </button>
+                          action.variant === 'button' ? (
+                            <button
+                              key={i}
+                              type="button"
+                              className={`btn btn-sm btn-${action.buttonVariant || 'light-brand'}`}
+                              onClick={() => action.onClick(row)}
+                            >
+                              {action.icon && <i className={`${action.icon} me-1`} aria-hidden="true"></i>}
+                              {action.label}
+                            </button>
+                          ) : (
+                            <button
+                              key={i}
+                              type="button"
+                              className="avatar-text avatar-md btn-link border-0 bg-transparent"
+                              title={action.label}
+                              onClick={() => action.onClick(row)}
+                            >
+                              <i className={action.icon}></i>
+                            </button>
+                          )
                         ))}
                       </div>
                     </td>

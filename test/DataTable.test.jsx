@@ -184,6 +184,34 @@ test('sorts from the keyboard and exposes aria-sort', async () => {
   expect(screen.getAllByRole('cell').map((cell) => cell.textContent)).toEqual(['Beta', 'Alpha'])
 })
 
+test('renders variant "button" actions with visible label and default variant as icon-only', async () => {
+  const user = userEvent.setup()
+  const onIconClick = vi.fn()
+  const onButtonClick = vi.fn()
+  const data = [{ id: 1, name: 'Ada' }]
+
+  render(
+    <DataTable
+      columns={columns}
+      data={data}
+      actions={[
+        { label: 'Editar', icon: 'feather-edit', onClick: onIconClick },
+        { label: 'Detalle', icon: 'feather-eye', variant: 'button', onClick: onButtonClick },
+      ]}
+    />,
+  )
+
+  const editar = screen.getByTitle('Editar')
+  expect(editar).toHaveClass('avatar-text')
+  expect(editar).toHaveTextContent('')
+
+  const detalle = screen.getByRole('button', { name: 'Detalle' })
+  expect(detalle).toHaveClass('btn', 'btn-light-brand')
+  await user.click(detalle)
+  expect(onButtonClick).toHaveBeenCalledWith(data[0])
+  expect(onIconClick).not.toHaveBeenCalled()
+})
+
 test('safely normalizes a non-positive pageSize', () => {
   render(
     <DataTable
