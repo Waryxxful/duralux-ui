@@ -196,6 +196,7 @@ export type DataTableColumn<
 } : never;
 export interface DataTableAction<T extends object = Record<string, unknown>> {
   label: string; icon: string; onClick: (row: T) => void;
+  variant?: 'icon' | 'button'; buttonVariant?: string;
 }
 export type DataTableIdentityKey<T extends object> = {
   [K in DataTableKey<T>]-?: [T[K]] extends [React.Key] ? K : never;
