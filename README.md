@@ -68,6 +68,15 @@ reinventar `.filter(Boolean).join(' ')`. Ver `Button`, `Badge`, `Alert`.
 (`bg-soft-*` / `alert-soft-*-message`) en vez del sólido. No inventar una tercera
 convención de "suave" en componentes nuevos — seguir este patrón.
 
+### Animación de submenu (`ShellNav`)
+
+El submenu colapsable del sidebar (`.nxl-submenu`) anima con el par de clases de v2
+`nxl-menu-visible` / `nxl-menu-hidden` (`max-height` + `opacity` + `visibility`, 0.5s
+ease-in-out — `scss/themes/layouts/_nxl-navigation.scss`). El `<ul>` debe quedar
+**siempre montado**, alternando solo la clase; montar/desmontar condicionalmente
+(`{open && <ul>...}`) rompe la transición porque no se puede animar hacia/desde
+`display: none`.
+
 ## Uso rápido
 
 ```jsx
