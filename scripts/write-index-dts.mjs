@@ -233,6 +233,16 @@ export interface ColoredStatCardProps {
 }
 export declare function ColoredStatCard(props: ColoredStatCardProps): React.ReactElement;
 
+export interface ChartMetric { label: string; value: React.ReactNode; color?: string; }
+export interface ChartMetricsFooterProps { metrics: ChartMetric[]; }
+export declare function ChartMetricsFooter(props: ChartMetricsFooterProps): React.ReactElement;
+
+export interface QuickLinkItem {
+  icon: string; label: string; href?: string; onClick?: () => void; color?: string;
+}
+export interface QuickLinkGridProps { items: QuickLinkItem[]; columns?: number; }
+export declare function QuickLinkGrid(props: QuickLinkGridProps): React.ReactElement;
+
 export interface TimelineItem {
   id?: string | number; title: React.ReactNode; description?: React.ReactNode; time?: React.ReactNode;
   icon?: string; iconBg?: string; color?: string; user?: { name?: string; avatar?: string };
