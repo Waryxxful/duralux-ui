@@ -22,8 +22,11 @@
 		}
 
 		.main-content {
-			overflow-x: hidden;
-			padding: 30px 30px 5px;
+			/* overflow-x: clip would still promote y→auto in some engines when mixed.
+			   Use visible so sticky chrome, tooltips, and last-row button hover states
+			   are not clipped. Horizontal scroll is handled by .table-responsive / pages. */
+			overflow: visible;
+			padding: 30px 30px 20px;
 
 			.content-sidebar,
 			.content-area {

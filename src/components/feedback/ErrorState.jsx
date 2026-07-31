@@ -21,7 +21,7 @@ export function ErrorState({
       {title && <p className="fw-semibold fs-5 mb-1">{title}</p>}
       {message && <p className="text-muted mb-3">{message}</p>}
       {onRetry && (
-        <Button variant="outline-primary" size="sm" icon="feather-refresh-cw" onClick={onRetry}>
+        <Button variant="light-brand" size="sm" startIcon="refresh-cw" onClick={onRetry}>
           Reintentar
         </Button>
       )}

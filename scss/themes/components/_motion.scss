@@ -30,6 +30,19 @@
 	&:active:not(:disabled):not(.disabled) {
 		transform: scale(0.97);
 	}
+
+	/* Keyboard focus ring — theme zeros outline on *:focus; restore for :focus-visible */
+	&:focus-visible {
+		outline: 2px solid var(--gcu-primary, #3454d1);
+		outline-offset: 2px;
+		box-shadow: 0 0 0 3px var(--gcu-focus, rgba(52, 84, 209, 0.2));
+	}
+}
+
+.btn-icon:focus-visible {
+	outline: 2px solid var(--gcu-primary, #3454d1);
+	outline-offset: 2px;
+	box-shadow: 0 0 0 3px var(--gcu-focus, rgba(52, 84, 209, 0.2));
 }
 
 /* Icon-only buttons: same press language */

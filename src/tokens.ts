@@ -8,12 +8,14 @@
  */
 export const tokens = {
   colors: {
-    // _bs-custom-variables.scss — DESIGN.md brand semantic colors
+    // Final $theme-colors after SCSS re-assign in _bs-custom-variables.scss
+    // (the intermediate $success:#25b865 etc. are overwritten by $green/$red/…).
+    // Must match compiled utilities (.bg-success) and --gcu-* in grancrm-ui.css.
     primary: '#3454d1',   // $blue / $primary
-    success: '#25b865',   // $green / $success
-    danger: '#d13b4c',    // $red / $danger
-    warning: '#e49e3d',   // $yellow / $warning
-    info: '#02a0e4',      // $cyan
+    success: '#17c666',   // $green → final $success
+    danger: '#ea4d4d',    // $red → final $danger
+    warning: '#ffa21d',   // $yellow → final $warning
+    info: '#3dc7be',      // $cyan → final $info
     dark: '#283c50',      // $brand-dark
     darken: '#001327',
     secondary: '#727981', // $gray-600
@@ -100,6 +102,7 @@ export const tokens = {
 
 export type Tokens = typeof tokens
 
+/** Solid + soft (light-*) button/badge tones that the theme SCSS emits. */
 export type SemanticVariant =
   | 'primary'
   | 'secondary'
@@ -111,5 +114,17 @@ export type SemanticVariant =
   | 'light'
   | 'link'
   | 'light-brand'
+  | 'light-primary'
+  | 'light-secondary'
+  | 'light-success'
+  | 'light-danger'
+  | 'light-warning'
+  | 'light-info'
+  | 'light-dark'
+  | 'light-light'
+  | 'teal'
+  | 'indigo'
+  | 'light-teal'
+  | 'light-indigo'
 
 export type StatusVariant = 'success' | 'danger' | 'warning' | 'info' | 'secondary'

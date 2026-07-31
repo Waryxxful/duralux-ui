@@ -201,9 +201,10 @@ test('renders variant "button" actions with visible label and default variant as
     />,
   )
 
-  const editar = screen.getByTitle('Editar')
-  expect(editar).toHaveClass('avatar-text')
-  expect(editar).toHaveTextContent('')
+  const editar = screen.getByRole('button', { name: 'Editar' })
+  expect(editar).toHaveAttribute('aria-label', 'Editar')
+  expect(editar).toHaveClass('btn', 'btn-icon', 'btn-light-brand')
+  expect(editar.querySelector('i')).toHaveAttribute('aria-hidden', 'true')
 
   const detalle = screen.getByRole('button', { name: 'Detalle' })
   expect(detalle).toHaveClass('btn', 'btn-light-brand')

@@ -30,9 +30,10 @@ const navItems = [
 ]
 
 function renderLayout(props = {}) {
+  const { children = 'Content', ...rest } = props
   return render(
     <MemoryRouter initialEntries={['/']}>
-      <AppLayout navItems={navItems} {...props}>Content</AppLayout>
+      <AppLayout navItems={navItems} {...rest}>{children}</AppLayout>
     </MemoryRouter>,
   )
 }
@@ -41,6 +42,26 @@ function ThemeState() {
   const theme = useThemeOptional()
   return <output>{`${theme.mode}:${theme.mini ? 'mini' : 'expanded'}`}</output>
 }
+
+describe('AppLayout PAGE-STRUCTURE', () => {
+  test('does not force-wrap children in .main-content (PageHeader can be sibling)', () => {
+    const { container } = renderLayout({
+      children: (
+        <>
+          <div className="page-header">Header</div>
+          <div className="main-content">Body</div>
+        </>
+      ),
+    })
+    const content = container.querySelector('.nxl-content')
+    expect(content).toBeTruthy()
+    // Children are direct under nxl-content (not nested: nxl-content > main-content > both)
+    const forced = content.querySelector(':scope > .main-content > .page-header')
+    expect(forced).toBeNull()
+    expect(content.querySelector(':scope > .page-header')).toBeTruthy()
+    expect(content.querySelector(':scope > .main-content')).toBeTruthy()
+  })
+})
 
 describe('AppLayout mobile navigation', () => {
   test('uses the canonical nav class and overlay, then closes through every mobile exit', async () => {
@@ -51,10 +72,12 @@ describe('AppLayout mobile navigation', () => {
 
     await user.click(toggle)
     expect(nav).toHaveClass('mob-navigation-active')
-    expect(container.querySelector('.nxl-menu-overlay')).toBeInTheDocument()
+    const overlay = container.querySelector('.nxl-menu-overlay')
+    expect(overlay).toBeInTheDocument()
+    expect(overlay).toHaveAttribute('aria-label', 'Cerrar menú')
     expect(document.body).not.toHaveClass('mob-sidebar-active')
 
-    await user.click(container.querySelector('.nxl-menu-overlay'))
+    await user.click(overlay)
     expect(nav).not.toHaveClass('mob-navigation-active')
     expect(container.querySelector('.nxl-menu-overlay')).not.toBeInTheDocument()
 

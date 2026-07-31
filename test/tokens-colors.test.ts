@@ -2,11 +2,13 @@ import { describe, expect, test } from 'vitest'
 import { tokens } from '../src/tokens'
 
 describe('tokens sincronizados con duralux-v2', () => {
-  test('colores semanticos coinciden con la paleta v2', () => {
-    expect(tokens.colors.success).toBe('#25b865')
-    expect(tokens.colors.warning).toBe('#e49e3d')
-    expect(tokens.colors.info).toBe('#02a0e4')
-    expect(tokens.colors.danger).toBe('#d13b4c')
+  test('colores semanticos coinciden con $theme-colors final (y --gcu-*)', () => {
+    // Final SCSS re-assign: $success:$green, $danger:$red, etc.
+    expect(tokens.colors.primary).toBe('#3454d1')
+    expect(tokens.colors.success).toBe('#17c666')
+    expect(tokens.colors.warning).toBe('#ffa21d')
+    expect(tokens.colors.info).toBe('#3dc7be')
+    expect(tokens.colors.danger).toBe('#ea4d4d')
     expect(tokens.colors.secondary).toBe('#727981')
     expect(tokens.colors.brandBody).toBe('#6b7885')
     expect(tokens.colors.brandMuted).toBe('#7587a7')

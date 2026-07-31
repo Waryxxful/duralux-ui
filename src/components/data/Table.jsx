@@ -7,12 +7,13 @@ export function Table({
   emptyMessage = 'Sin registros.',
   loading,
   className,
-  striped = false,
+  // striped intentionally ignored: Duralux v2 uses table-hover only (never striped).
+  striped: _striped = false,
   hover = true,
 }) {
+  void _striped
   const tableCls = [
     'table',
-    striped ? 'table-striped' : '',
     hover ? 'table-hover' : '',
     className,
   ]

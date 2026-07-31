@@ -13,3 +13,13 @@ test('prop soft genera la clase alert-soft-{variant}-message', () => {
   expect(el).toHaveClass('alert-soft-warning-message')
   expect(el).not.toHaveClass('alert-warning')
 })
+
+test('dismiss control exposes accessible name Cerrar', async () => {
+  const { default: userEvent } = await import('@testing-library/user-event')
+  const user = userEvent.setup()
+  render(<Alert variant="danger" dismissible>Error</Alert>)
+  const close = screen.getByRole('button', { name: 'Cerrar' })
+  expect(close).toHaveClass('btn-close')
+  await user.click(close)
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+})

@@ -86,10 +86,13 @@ export function AppLayout({
       />
 
       <main className="nxl-container">
+        {/*
+          PAGE-STRUCTURE: children render directly under .nxl-content so
+          PageHeader can sit as a sibling of .main-content (v2 pattern).
+          Pages own their own <div className="main-content"> wrapper.
+        */}
         <div className="nxl-content">
-          <div className="main-content">
-            {children}
-          </div>
+          {children}
           <footer className="footer">
             <p className="fs-11 text-muted fw-medium text-uppercase mb-0">
               Copyright © {new Date().getFullYear()}
@@ -107,7 +110,16 @@ export function AppLayout({
         <div
           ref={mobileLayerRef}
           className="nxl-menu-overlay"
+          role="button"
+          tabIndex={0}
+          aria-label="Cerrar menú"
           onClick={() => setMobileOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              setMobileOpen(false)
+            }
+          }}
         />
       )}
     </>

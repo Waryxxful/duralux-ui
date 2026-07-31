@@ -4,7 +4,7 @@ import { cx } from '../../utils/cx'
  * Button — botón con variantes, tamaños y estado de carga.
  *
  * Props:
- *   variant   — "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark" | "light-brand"
+ *   variant   — solid semantic | "light-brand" | soft "light-{semantic}" (SCSS .btn-light-*)
  *   outline   — DEPRECADO e ignorado: la plantilla Duralux no usa variantes outline; usá variant="light-brand"
  *   size      — "sm" | "md" | "lg"
  *   loading   — muestra spinner y deshabilita
@@ -13,6 +13,40 @@ import { cx } from '../../utils/cx'
  *   endIcon   — bare feather name → trailing icon
  *   as        — element type (default "button")
  */
+// Solid tones + theme soft tones emitted by SCSS `@each $color in $theme-colors` → .btn-light-#{$color}
+const SOLID_VARIANTS = new Set([
+  'primary', 'secondary', 'success', 'danger', 'warning', 'info',
+  'light', 'dark', 'light-brand', 'teal', 'indigo', 'link',
+])
+const SOFT_THEME_COLORS = new Set([
+  'primary', 'secondary', 'success', 'danger', 'warning', 'info',
+  'light', 'dark', 'teal', 'indigo',
+])
+
+/** Map banned outline-* / unknown strings; keep soft light-* that SCSS actually emits. */
+export function resolveVariant(variant) {
+  const raw = String(variant || 'primary')
+  // outline* is banned (fidelity gate); soft light-* is the Duralux equivalent.
+  if (raw === 'outline' || raw.startsWith('outline-')) {
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn(`[duralux/ui] Button variant "${raw}" is non-canonical; use "light-brand" or a solid semantic variant.`)
+    }
+    return 'light-brand'
+  }
+  // .btn-light-brand is a dedicated class (not $theme-colors); keep as-is.
+  if (raw === 'light-brand') return raw
+  // Soft semantic: light-danger → btn-light-danger (template soft buttons).
+  if (raw.startsWith('light-')) {
+    const tone = raw.slice('light-'.length)
+    if (SOFT_THEME_COLORS.has(tone)) return raw
+  }
+  if (SOLID_VARIANTS.has(raw)) return raw
+  if (typeof console !== 'undefined' && console.warn) {
+    console.warn(`[duralux/ui] Button variant "${raw}" is unknown; falling back to "primary".`)
+  }
+  return 'primary'
+}
+
 export function Button({
   variant = 'primary',
   outline = false,
@@ -31,6 +65,8 @@ export function Button({
   ...props
 }) {
   // outline deprecado: la plantilla no usa variantes outline
+  void outline
+  const tone = resolveVariant(variant)
   const isDisabled = disabled || loading
   const isAnchor = Tag === 'a'
   const isDisabledAnchor = isAnchor && isDisabled
@@ -44,7 +80,7 @@ export function Button({
   return (
     <Tag
       {...props}
-      className={cx('btn', `btn-${variant}`, size && `btn-${size}`, className)}
+      className={cx('btn', `btn-${tone}`, size && `btn-${size}`, className)}
       onClick={handleClick}
       disabled={isAnchor ? undefined : isDisabled}
       href={isDisabledAnchor ? undefined : href}
@@ -83,10 +119,12 @@ export function LinkButton({ href, ...props }) {
  *   variant (default "light-brand", canónico del template), size, ...rest (outline deprecado e ignorado)
  */
 export function IconButton({ icon, label, variant, size, outline, className = '', ...rest }) {
+  void outline
+  const tone = resolveVariant(variant || 'light-brand')
   return (
     <button
       type="button"
-      className={cx('btn', 'btn-icon', `btn-${variant || 'light-brand'}`, size && `btn-${size}`, className)}
+      className={cx('btn', 'btn-icon', `btn-${tone}`, size && `btn-${size}`, className)}
       aria-label={label}
       title={label}
       {...rest}

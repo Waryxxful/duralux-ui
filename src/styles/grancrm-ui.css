@@ -95,6 +95,30 @@
    contenedor (evita columnas muy separadas con pocas columnas/texto corto). */
 .table-auto-width{width:auto}
 
+/* ── Table / list action cells: never clip last-row button hover/focus ─────
+   table-responsive still scrolls horizontally; the action stack itself must
+   stay overflow-visible with padding so borders/scale on :hover/:focus-visible
+   are not cut off (audit: "last button clipped until hover"). */
+.gcu-table-actions-cell,
+.table td.gcu-table-actions-cell {
+  overflow: visible;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.gcu-table-actions {
+  overflow: visible;
+  padding: 2px 0;
+}
+.page-header-right-items-wrapper {
+  overflow: visible;
+  padding-block: 2px;
+}
+/* Shell contract: main-content must not clip sticky/tooltips/button chrome.
+   Theme SCSS also sets overflow:visible; reinforce for remotes that only load glue. */
+.main-content {
+  overflow: visible;
+}
+
 /* ── Sangría lateral de .page-header en remotes ────────────────────────────
    Los satélites (remotes de Module Federation) solo importan este CSS, no el
    theme.css completo del shell (que trae `.page-header{padding:0 30px}`) —

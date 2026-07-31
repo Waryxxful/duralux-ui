@@ -183,8 +183,8 @@ export function DataTable({
                     </td>
                   ))}
                   {actions.length > 0 && (
-                    <td>
-                      <div className="hstack gap-2 justify-content-end">
+                    <td className="gcu-table-actions-cell">
+                      <div className="hstack gap-2 justify-content-end gcu-table-actions">
                         {actions.map((action, i) => (
                           action.variant === 'button' ? (
                             <button
@@ -200,11 +200,12 @@ export function DataTable({
                             <button
                               key={i}
                               type="button"
-                              className="avatar-text avatar-md btn-link border-0 bg-transparent"
+                              className="btn btn-icon btn-light-brand btn-sm"
                               title={action.label}
+                              aria-label={action.label}
                               onClick={() => action.onClick(row)}
                             >
-                              <i className={action.icon}></i>
+                              <i className={action.icon} aria-hidden="true"></i>
                             </button>
                           )
                         ))}

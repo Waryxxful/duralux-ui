@@ -16,14 +16,15 @@ export interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElemen
 }
 
 export function CardHeader({ title, actions, className, children, ...rest }: CardHeaderProps) {
+  // Duralux-first: .card-header / .card-title / .card-header-action (not legacy gcu-card__*).
   const content = children ?? (
     <>
-      {typeof title === 'string' ? <h5 className="gcu-card__title">{title}</h5> : title}
-      {actions && <div className="gcu-card__actions">{actions}</div>}
+      {typeof title === 'string' ? <h2 className="h5 card-title mb-0">{title}</h2> : title}
+      {actions && <div className="card-header-action">{actions}</div>}
     </>
   );
   return (
-    <div className={['gcu-card__header', className].filter(Boolean).join(' ')} {...rest}>
+    <div className={['card-header', className].filter(Boolean).join(' ')} {...rest}>
       {content}
     </div>
   );
@@ -33,7 +34,7 @@ export interface CardBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CardBody({ className, children, ...rest }: CardBodyProps) {
   return (
-    <div className={['gcu-card__body', className].filter(Boolean).join(' ')} {...rest}>
+    <div className={['card-body', className].filter(Boolean).join(' ')} {...rest}>
       {children}
     </div>
   );
@@ -43,7 +44,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CardFooter({ className, children, ...rest }: CardFooterProps) {
   return (
-    <div className={['gcu-card__footer', className].filter(Boolean).join(' ')} {...rest}>
+    <div className={['card-footer', className].filter(Boolean).join(' ')} {...rest}>
       {children}
     </div>
   );
