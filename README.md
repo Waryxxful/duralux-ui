@@ -44,7 +44,29 @@ Una satélite montada en el shell no repite estos imports: el shell carga el sta
 
 No se necesita Bootstrap JS, `vendors.min.css` ni jQuery para los componentes del paquete.
 
-El theme es una adaptación deliberada del lenguaje visual Duralux para GranCRM. El SCSS mantenido por este repositorio es la fuente de verdad; los CSS compilados no pretenden ser byte a byte idénticos a los archivos publicados por la plantilla original.
+El theme sigue fielmente la plantilla `duralux-v2` (React + Vite) en paleta, tokens de
+shadow/border/radius y componentes base. Cualquier divergencia de color respecto a
+`duralux-v2` es un bug, no una decisión — reportarla y corregirla en `scss/` y `src/tokens.ts`
+a la vez.
+
+### Tokens (`src/tokens.ts`)
+
+| Escala | Valores |
+|---|---|
+| `shadow` | `none · sm · md · lg · xl · xxl` |
+| `border` | `none · soft · normal · medium · hard · contrast` |
+| `radius` | `none · xs · sm · md · lg · xl · xxl · pill · circle` |
+
+### Convención de clases: `cx()`
+
+Todo componente que compone `className` condicional usa `src/utils/cx.ts` en vez de
+reinventar `.filter(Boolean).join(' ')`. Ver `Button`, `Badge`, `Alert`.
+
+### Variante `soft`
+
+`Badge` y `Alert` soportan `soft` para usar el estilo "soft" ya definido en el SCSS
+(`bg-soft-*` / `alert-soft-*-message`) en vez del sólido. No inventar una tercera
+convención de "suave" en componentes nuevos — seguir este patrón.
 
 ## Uso rápido
 

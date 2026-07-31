@@ -19,7 +19,7 @@ import { Button, Card, DataTable, Dropdown } from '@duralux/ui'
 El catálogo evoluciona. La fuente de verdad es el barrel del paquete, sus tipos y
 `node_modules/@duralux/ui/README.md`. Familias principales:
 
-- **Base:** `Button` `LinkButton` `IconButton` `Icon` `Card` `Badge` `Alert` `Modal` `Tabs` `Avatar` `Timeline` `ProgressRing` `Progress` `Dropdown` `DropdownMenu`
+- **Base:** `Button` `LinkButton` `IconButton` `Icon` `Card` `Badge` `Alert` (soporta `soft`) `Modal` `Tabs` `Avatar` `Timeline` `ProgressRing` `Progress` `Dropdown` `DropdownMenu`
 - **Feedback:** `EmptyState` `ErrorState` `LoadingState` `Toast`
 - **Stats:** `StatsCard` `MiniStatCard` `ColoredStatCard` (Bootstrap-real) · `StatCard` `StatusBadge` `StatusButton` (GranCRM extras, thin wrappers over `Badge`/`Card`) — no crear un tercer sistema de chips/stat-cards
 - **Forms:** `FormField` `Input` `Select` `Textarea` `Checkbox` `Radio` `FileInput` `InputGroup`
