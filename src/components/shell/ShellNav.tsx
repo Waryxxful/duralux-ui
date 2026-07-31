@@ -86,13 +86,13 @@ function NavItemRow({
             <Icon name="chevron-right" />
           </span>
         </button>
-        {open && (
-          <ul id={submenuId} className="nxl-submenu">
-            {item.children.map((child) => (
-              <NavItemRow key={navItemIdentifier(child)} item={child} onNavigate={onNavigate} />
-            ))}
-          </ul>
-        )}
+        {/* Siempre montado: nxl-menu-visible/-hidden animan max-height (v2 Menus.jsx),
+            display:none no se puede animar. */}
+        <ul id={submenuId} className={`nxl-submenu ${open ? 'nxl-menu-visible' : 'nxl-menu-hidden'}`}>
+          {item.children.map((child) => (
+            <NavItemRow key={navItemIdentifier(child)} item={child} onNavigate={onNavigate} />
+          ))}
+        </ul>
       </li>
     );
   }
