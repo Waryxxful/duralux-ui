@@ -91,6 +91,10 @@
 
 @media (max-width:575px){.gcu-page-header{align-items:flex-start;flex-direction:column}.gcu-page-header__actions{width:100%;margin-left:0}.gcu-message-bubble{max-width:88%}.gcu-modal{padding:10px}.gcu-modal__content{max-height:calc(100vh - 20px)}.page-header{padding:0 20px!important}}
 
+/* DataTable autoWidth: encoge la tabla a su contenido en vez del 100% del
+   contenedor (evita columnas muy separadas con pocas columnas/texto corto). */
+.table-auto-width{width:auto}
+
 /* ── Sangría lateral de .page-header en remotes ────────────────────────────
    Los satélites (remotes de Module Federation) solo importan este CSS, no el
    theme.css completo del shell (que trae `.page-header{padding:0 30px}`) —

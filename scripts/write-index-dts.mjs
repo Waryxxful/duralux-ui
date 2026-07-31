@@ -205,6 +205,7 @@ export type DataTableProps<T extends object = Record<string, unknown>> = {
   columns: ReadonlyArray<DataTableColumn<T>>; data: ReadonlyArray<T>;
   actions?: ReadonlyArray<DataTableAction<T>>; pageSize?: number;
   selectable?: boolean; onSelectionChange?: (selectedIds: React.Key[]) => void;
+  autoWidth?: boolean;
 } & ('id' extends DataTableIdentityKey<T>
   ? { rowKey?: DataTableIdentityKey<T> }
   : { rowKey: DataTableIdentityKey<T> });

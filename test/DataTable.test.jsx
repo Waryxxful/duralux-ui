@@ -212,6 +212,14 @@ test('renders variant "button" actions with visible label and default variant as
   expect(onIconClick).not.toHaveBeenCalled()
 })
 
+test('autoWidth adds table-auto-width class; default has no extra class', () => {
+  const { rerender } = render(<DataTable columns={columns} data={[{ id: 1, name: 'Ada' }]} />)
+  expect(document.querySelector('table')).not.toHaveClass('table-auto-width')
+
+  rerender(<DataTable columns={columns} data={[{ id: 1, name: 'Ada' }]} autoWidth />)
+  expect(document.querySelector('table')).toHaveClass('table', 'table-hover', 'table-auto-width')
+})
+
 test('safely normalizes a non-positive pageSize', () => {
   render(
     <DataTable

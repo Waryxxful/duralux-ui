@@ -13,6 +13,9 @@ import { useEffect, useId, useRef, useState } from 'react'
  *   selectable — show checkboxes
  *   onSelectionChange — (selectedIds) => void
  *   rowKey  — field name for row identity (default "id")
+ *   autoWidth — la tabla se encoge a su contenido en vez de estirarse al 100%
+ *               del contenedor (evita columnas muy separadas cuando hay pocas
+ *               columnas con texto corto).
  */
 export function DataTable({
   columns = [],
@@ -22,6 +25,7 @@ export function DataTable({
   selectable,
   onSelectionChange,
   rowKey = 'id',
+  autoWidth = false,
 }) {
   const [sortKey, setSortKey] = useState(null)
   const [sortDir, setSortDir] = useState('asc')
@@ -99,7 +103,7 @@ export function DataTable({
   return (
     <div>
       <div className="table-responsive">
-        <table className="table table-hover">
+        <table className={`table table-hover${autoWidth ? ' table-auto-width' : ''}`}>
           <thead>
             <tr>
               {selectable && (
