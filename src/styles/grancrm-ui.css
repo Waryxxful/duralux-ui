@@ -261,3 +261,68 @@ html.minimenu .nxl-navigation .gcu-nav-group{width:calc(100% - 40px);margin:0 20
 @media (prefers-reduced-motion:reduce){
   .nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow,.gcu-modules-menu{transition:none!important}
 }
+
+/* gcu-widgets-ui */
+/* ColoredStatCard / MiniStatCard / QuickLinkGrid / StatsCard — light + app-skin-dark.
+   Espejo de scss/themes/components/_widgets-ui.scss para la capa grancrm-ui
+   (remotes que importan solo este CSS). El theme.min.css del shell trae la
+   versión SCSS completa. */
+.gcu-colored-stat{color:#fff!important}
+.gcu-colored-stat .fs-4,.gcu-colored-stat .fs-13,.gcu-colored-stat p{color:inherit}
+.gcu-colored-stat__glass,
+.gcu-colored-stat .avatar-text,
+.gcu-colored-stat .badge.bg-white,
+.gcu-colored-stat .badge.bg-opacity-25{
+  background-color:rgba(255,255,255,.22)!important;
+  color:#fff!important;
+  border-color:transparent!important
+}
+.gcu-colored-stat__glass i,
+.gcu-colored-stat .avatar-text i,
+.gcu-colored-stat__glass [class^="feather-"],
+.gcu-colored-stat__glass [class*=" feather-"]{color:#fff!important}
+html.app-skin-dark .gcu-colored-stat,
+.app-skin-dark .gcu-colored-stat{color:#fff!important}
+html.app-skin-dark .gcu-colored-stat__glass,
+html.app-skin-dark .gcu-colored-stat .avatar-text,
+html.app-skin-dark .gcu-colored-stat .badge.bg-white,
+html.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25,
+.app-skin-dark .gcu-colored-stat__glass,
+.app-skin-dark .gcu-colored-stat .avatar-text{
+  background-color:rgba(255,255,255,.22)!important;
+  color:#fff!important;
+  border-color:transparent!important
+}
+html.app-skin-dark .gcu-colored-stat__glass i,
+html.app-skin-dark .gcu-colored-stat .avatar-text i,
+.app-skin-dark .gcu-colored-stat__glass i,
+.app-skin-dark .gcu-colored-stat .avatar-text i{color:#fff!important}
+
+.gcu-mini-stat .avatar-text.bg-soft-primary,.gcu-quick-link .avatar-text.bg-soft-primary,.gcu-stats-card .avatar-text.bg-soft-primary{background-color:rgba(52,84,209,.12)!important;color:#3454d1!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-success,.gcu-quick-link .avatar-text.bg-soft-success,.gcu-stats-card .avatar-text.bg-soft-success{background-color:rgba(23,198,102,.12)!important;color:#17c666!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-danger,.gcu-quick-link .avatar-text.bg-soft-danger,.gcu-stats-card .avatar-text.bg-soft-danger{background-color:rgba(234,77,77,.12)!important;color:#ea4d4d!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-warning,.gcu-quick-link .avatar-text.bg-soft-warning,.gcu-stats-card .avatar-text.bg-soft-warning{background-color:rgba(255,162,29,.12)!important;color:#ffa21d!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-info,.gcu-quick-link .avatar-text.bg-soft-info,.gcu-stats-card .avatar-text.bg-soft-info{background-color:rgba(61,199,190,.12)!important;color:#3dc7be!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-teal,.gcu-quick-link .avatar-text.bg-soft-teal,.gcu-stats-card .avatar-text.bg-soft-teal{background-color:rgba(65,178,196,.12)!important;color:#41b2c4!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-indigo,.gcu-quick-link .avatar-text.bg-soft-indigo,.gcu-stats-card .avatar-text.bg-soft-indigo{background-color:rgba(77,47,176,.12)!important;color:#4d2fb0!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-secondary,.gcu-quick-link .avatar-text.bg-soft-secondary,.gcu-stats-card .avatar-text.bg-soft-secondary{background-color:rgba(114,121,129,.12)!important;color:#727981!important;border-color:transparent!important}
+
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary{background-color:rgba(52,84,209,.18)!important;color:#3454d1!important}
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success{background-color:rgba(23,198,102,.18)!important;color:#17c666!important}
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger{background-color:rgba(234,77,77,.18)!important;color:#ea4d4d!important}
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning{background-color:rgba(255,162,29,.18)!important;color:#ffa21d!important}
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info{background-color:rgba(61,199,190,.18)!important;color:#3dc7be!important}
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-teal,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-teal,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-teal,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-teal{background-color:rgba(65,178,196,.18)!important;color:#41b2c4!important}
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-indigo,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-indigo{background-color:rgba(77,47,176,.18)!important;color:#4d2fb0!important}
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-secondary,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-secondary,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-secondary,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-secondary{background-color:rgba(114,121,129,.18)!important;color:#727981!important}
+html.app-skin-dark .gcu-mini-stat .fs-4,html.app-skin-dark .gcu-mini-stat .text-dark,html.app-skin-dark .gcu-quick-link .text-dark,html.app-skin-dark .gcu-stats-card .text-dark,html.app-skin-dark .gcu-stats-card .fs-4,
+.app-skin-dark .gcu-mini-stat .fs-4,.app-skin-dark .gcu-mini-stat .text-dark,.app-skin-dark .gcu-quick-link .text-dark,.app-skin-dark .gcu-stats-card .text-dark,.app-skin-dark .gcu-stats-card .fs-4{color:#fff!important}
+/* /gcu-widgets-ui */

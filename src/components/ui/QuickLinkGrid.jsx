@@ -2,18 +2,21 @@
  * QuickLinkGrid — grid de tiles ícono+label clicables (patrón
  * ConversionStatusMiscellaneous/TrafficSourceMiscellaneous de Duralux v2).
  *
+ * Estilos: scss/themes/components/_widgets-ui.scss (`.gcu-quick-link`).
+ * Dark: soft-avatar gana a html.app-skin-dark .avatar-text.
+ *
  * Props:
- *   items   — [{ icon, label, href?, onClick?, color? }] (color: variante bg-soft-*, ej. "primary")
+ *   items   — [{ icon, label, href?, onClick?, color? }] (color: variante soft, ej. "primary")
  *   columns — cols por fila en md+ (default 4; usa col-6 col-md-{12/columns})
  */
 export function QuickLinkGrid({ items = [], columns = 4 }) {
   const mdCol = Math.max(1, Math.floor(12 / columns))
   return (
-    <div className="row g-3">
+    <div className="row g-3 gcu-quick-link-grid">
       {items.map((it, i) => {
         const color = it.color || 'primary'
         const body = (
-          <div className="card stretch stretch-full border h-100">
+          <div className="card stretch stretch-full border h-100 gcu-quick-link">
             <div className="card-body text-center py-4">
               <div className={`avatar-text avatar-lg bg-soft-${color} text-${color} mx-auto mb-2`}>
                 <i className={it.icon}></i>

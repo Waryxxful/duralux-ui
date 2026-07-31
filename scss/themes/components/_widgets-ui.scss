@@ -1,0 +1,183 @@
+/*
+<--!----------------------------------------------------------------!-->
+<--! UI Widgets (ColoredStatCard · MiniStatCard · QuickLinkGrid) !-->
+* Componentes React en src/components/ui/* — estilos aquí para:
+* 1) Sobrevivir a .avatar-text / .bg-white sólidos del theme
+* 2) Respetar html.app-skin-dark (mismo mecanismo que ThemeProvider)
+<--!----------------------------------------------------------------!-->
+*/
+
+/* --- ColoredStatCard: card de color sólido + “vidrio” blanco --- */
+.gcu-colored-stat {
+	// El fondo semántico viene de .bg-primary / .bg-success / etc.
+	// Forzamos texto claro legible sobre el color sólido.
+	color: $white !important;
+
+	.fs-4,
+	.fs-13,
+	p {
+		color: inherit;
+	}
+
+	// Badge + avatar: no usar .bg-white (el theme lo pinta sólido #fff
+	// y en dark también lo reescribe). El vidrio es siempre blanco
+	// semitransparente — legible sobre primary/success/warning/danger
+	// en light y dark.
+	&__glass {
+		background-color: rgba($white, 0.22) !important;
+		color: $white !important;
+		border-color: transparent !important;
+
+		i,
+		[class^="feather-"],
+		[class*=" feather-"] {
+			color: $white !important;
+		}
+	}
+
+	// Por si queda un badge legacy con bg-white
+	.badge.bg-white,
+	.badge.bg-opacity-25 {
+		background-color: rgba($white, 0.22) !important;
+		color: $white !important;
+		border: 0;
+	}
+
+	// Avatar con clase genérica (sin __glass) dentro de la card
+	.avatar-text {
+		background-color: rgba($white, 0.22) !important;
+		color: $white !important;
+		border-color: transparent !important;
+	}
+}
+
+// Dark: el theme pinta .avatar-text / .bg-white con !important oscuro.
+// Re-aplicamos el vidrio con la misma o mayor especificidad.
+html.app-skin-dark {
+	.gcu-colored-stat {
+		color: $white !important;
+
+		&__glass,
+		.avatar-text,
+		.badge.bg-white,
+		.badge.bg-opacity-25 {
+			background-color: rgba($white, 0.22) !important;
+			color: $white !important;
+			border-color: transparent !important;
+		}
+
+		&__glass i,
+		.avatar-text i {
+			color: $white !important;
+		}
+	}
+}
+
+/* --- MiniStatCard / QuickLinkGrid: soft avatars deben ganar a .avatar-text --- */
+// En light: .avatar-text { bg: $white } pisa .bg-soft-* si el orden falla.
+// En dark:  html.app-skin-dark .avatar-text { bg: dark !important } gana por
+// especificidad a .bg-soft-primary. Forzamos soft sobre el avatar del widget.
+.gcu-mini-stat,
+.gcu-quick-link {
+	@each $name, $color in (
+		"primary": $primary,
+		"success": $success,
+		"danger": $danger,
+		"warning": $warning,
+		"info": $info,
+		"teal": $teal,
+		"indigo": $indigo,
+		"secondary": $secondary,
+		"dark": $dark
+	) {
+		.avatar-text.bg-soft-#{$name} {
+			background-color: rgba($color, 0.12) !important;
+			color: $color !important;
+			border-color: transparent !important;
+		}
+	}
+}
+
+html.app-skin-dark {
+	.gcu-mini-stat,
+	.gcu-quick-link {
+		// Más opacidad de tinte en dark para que el soft se vea sobre card oscura
+		@each $name, $color in (
+			"primary": $primary,
+			"success": $success,
+			"danger": $danger,
+			"warning": $warning,
+			"info": $info,
+			"teal": $teal,
+			"indigo": $indigo,
+			"secondary": $secondary,
+			"dark": $dark
+		) {
+			.avatar-text.bg-soft-#{$name} {
+				background-color: rgba($color, 0.18) !important;
+				color: $color !important;
+				border-color: transparent !important;
+			}
+		}
+
+		// Valores / labels: .text-dark ya es blanco global en dark;
+		// reforzamos por si hay especificidad de card.
+		.fs-4,
+		.fs-13,
+		.text-dark {
+			color: $white !important;
+		}
+	}
+}
+
+/* --- StatsCard: iconBg soft también debe ganar en dark --- */
+.gcu-stats-card {
+	@each $name, $color in (
+		"primary": $primary,
+		"success": $success,
+		"danger": $danger,
+		"warning": $warning,
+		"info": $info,
+		"teal": $teal,
+		"indigo": $indigo,
+		"secondary": $secondary
+	) {
+		.avatar-text.bg-soft-#{$name},
+		.avatar-text.text-#{$name} {
+			// si iconBg trae "bg-soft-primary text-primary"
+		}
+
+		.avatar-text.bg-soft-#{$name} {
+			background-color: rgba($color, 0.12) !important;
+			color: $color !important;
+			border-color: transparent !important;
+		}
+	}
+}
+
+html.app-skin-dark {
+	.gcu-stats-card {
+		@each $name, $color in (
+			"primary": $primary,
+			"success": $success,
+			"danger": $danger,
+			"warning": $warning,
+			"info": $info,
+			"teal": $teal,
+			"indigo": $indigo,
+			"secondary": $secondary
+		) {
+			.avatar-text.bg-soft-#{$name} {
+				background-color: rgba($color, 0.18) !important;
+				color: $color !important;
+				border-color: transparent !important;
+			}
+		}
+
+		.fs-4,
+		.fs-13,
+		.text-dark {
+			color: $white !important;
+		}
+	}
+}

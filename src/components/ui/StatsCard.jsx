@@ -1,19 +1,22 @@
 /**
  * StatsCard — tarjeta KPI con ícono, número, label y progreso/trend.
  *
+ * Estilos: scss/themes/components/_widgets-ui.scss (`.gcu-stats-card`).
+ * Dark: soft iconBg gana a html.app-skin-dark .avatar-text.
+ *
  * Props:
  *   icon      — feather class string, e.g. "feather-dollar-sign"
- *   iconBg    — background class, e.g. "bg-gray-200" | "bg-soft-primary"
+ *   iconBg    — background class, e.g. "bg-gray-200" | "bg-soft-primary text-primary"
  *   value     — string or number to display big
  *   label     — description text
  *   trend     — { value: "36.85%", up: true } (optional)
- *   progress  — { value: 56, color: "primary" } (optional bar)
+ *   progress  — { value: 56, color: "primary", label? } (optional bar)
  *   footer    — link text shown below the card
  *   onFooter  — click handler for footer link
  */
 export function StatsCard({ icon, iconBg = 'bg-gray-200', value, label, trend, progress, footer, onFooter }) {
   return (
-    <div className="card stretch stretch-full">
+    <div className="card stretch stretch-full gcu-stats-card">
       <div className="card-body">
         <div className="d-flex align-items-start justify-content-between mb-4">
           <div className="d-flex gap-4 align-items-center">

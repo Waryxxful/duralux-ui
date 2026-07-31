@@ -64,6 +64,10 @@
 @import "themes/widgets/widgets-charts";
 @import "themes/widgets/widgets-statistics";
 @import "themes/widgets/widgets-miscellaneous";
+// React UI widgets (ColoredStatCard / MiniStatCard / QuickLinkGrid / StatsCard)
+// — light + app-skin-dark; debe ir después de general (avatar-text / bg-white)
+// y se refuerza otra vez tras theme-options-dark (importado al final).
+@import "themes/components/widgets-ui";
 
 // Pages
 @import "themes/pages/icon-lauouts";
@@ -96,6 +100,10 @@
 <--!----------------------------------------------------------------!-->
 */
 @import "themes/options/theme-options";
+
+// Re-import widgets-ui AFTER dark-theme options so gcu-* glass/soft
+// avatars ganan a html.app-skin-dark .avatar-text / .bg-white.
+@import "themes/components/widgets-ui";
 
 /*!
 <--!----------------------------------------------------------------!-->
