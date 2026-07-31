@@ -31,7 +31,7 @@ export function QuickLinkGrid({ items = [], columns = 4 }) {
             ) : (
               <button
                 type="button"
-                className="btn p-0 border-0 bg-transparent w-100 text-start"
+                className="p-0 border-0 bg-transparent w-100 text-start"
                 onClick={it.onClick}
               >
                 {body}
