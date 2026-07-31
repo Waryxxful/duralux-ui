@@ -1,3 +1,5 @@
+import { cx } from '../../utils/cx'
+
 /**
  * Button — botón con variantes, tamaños y estado de carga.
  *
@@ -28,8 +30,7 @@ export function Button({
   type = 'button',
   ...props
 }) {
-  const sizeClass = size ? ` btn-${size}` : ''
-  const variantClass = `btn-${variant}` // outline deprecado: la plantilla no usa variantes outline
+  // outline deprecado: la plantilla no usa variantes outline
   const isDisabled = disabled || loading
   const isAnchor = Tag === 'a'
   const isDisabledAnchor = isAnchor && isDisabled
@@ -43,7 +44,7 @@ export function Button({
   return (
     <Tag
       {...props}
-      className={`btn ${variantClass}${sizeClass} ${className}`}
+      className={cx('btn', `btn-${variant}`, size && `btn-${size}`, className)}
       onClick={handleClick}
       disabled={isAnchor ? undefined : isDisabled}
       href={isDisabledAnchor ? undefined : href}
@@ -85,7 +86,7 @@ export function IconButton({ icon, label, variant, size, outline, className = ''
   return (
     <button
       type="button"
-      className={['btn', 'btn-icon', `btn-${variant || 'light-brand'}`, size ? `btn-${size}` : '', className].filter(Boolean).join(' ')}
+      className={cx('btn', 'btn-icon', `btn-${variant || 'light-brand'}`, size && `btn-${size}`, className)}
       aria-label={label}
       title={label}
       {...rest}

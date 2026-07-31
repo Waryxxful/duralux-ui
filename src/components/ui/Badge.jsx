@@ -1,3 +1,5 @@
+import { cx } from '../../utils/cx'
+
 /**
  * Badge — badge de estado con variantes de color.
  *
@@ -28,15 +30,7 @@ export function Badge({
     tone = `bg-${variant}`
   }
 
-  const classes = [
-    'badge',
-    tone,
-    pill ? 'rounded-pill' : '',
-    Tag !== 'span' ? 'border-0' : '',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ')
+  const classes = cx('badge', tone, pill && 'rounded-pill', Tag !== 'span' && 'border-0', className)
 
   return (
     <Tag className={classes} style={Tag !== 'span' ? { cursor: 'pointer' } : undefined} {...rest}>

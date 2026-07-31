@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { cx } from '../../utils/cx'
 
 /**
  * Alert — alerta con variantes de color, modo soft y opción dismissible.
@@ -19,9 +20,9 @@ export function Alert({ variant = 'primary', soft = false, icon, dismissible, on
   const closable = dismissible || onDismiss
   const toneClass = soft ? `alert-soft-${variant}-message` : `alert-${variant}`
   return (
-    <div className={`alert ${toneClass} d-flex align-items-center gap-3${closable ? ' alert-dismissible' : ''}`} role="alert">
+    <div className={cx('alert', toneClass, 'd-flex align-items-center gap-3', closable && 'alert-dismissible')} role="alert">
       {icon && (
-        <div className={`avatar-text avatar-sm rounded bg-${variant} text-white flex-shrink-0`}>
+        <div className={cx('avatar-text avatar-sm rounded', `bg-${variant}`, 'text-white flex-shrink-0')}>
           <i className={icon}></i>
         </div>
       )}
