@@ -119,6 +119,20 @@
   overflow: visible;
 }
 
+/* Defense in depth: never strip borders from interactive controls inside tables
+   (theme used to set tr:last-child * { border-bottom: transparent }). */
+.table-responsive .table tbody tr:last-child .btn,
+.table-responsive .table tbody tr:last-child .btn-icon,
+.table tbody tr:last-child .btn,
+.table tbody tr:last-child .btn-icon {
+  border-bottom-style: solid;
+  border-bottom-color: inherit;
+}
+.table-responsive .table tbody tr:last-child .btn-light-brand,
+.table tbody tr:last-child .btn-light-brand {
+  border-bottom-color: var(--bs-border-color-2, #dcdee4);
+}
+
 /* ── Sangría lateral de .page-header en remotes ────────────────────────────
    Los satélites (remotes de Module Federation) solo importan este CSS, no el
    theme.css completo del shell (que trae `.page-header{padding:0 30px}`) —

@@ -37,8 +37,13 @@
 		}
 		tbody {
 			tr {
-				&:last-child * {
-					border-bottom: transparent;
+				/* Solo celdas: el selector `*` también mataba border-bottom de .btn
+				   en la última fila (botón “cortado” hasta :hover con border !important). */
+				&:last-child {
+					> td,
+					> th {
+						border-bottom: transparent;
+					}
 				}
 			}
 		}
