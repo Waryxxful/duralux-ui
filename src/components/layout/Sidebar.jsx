@@ -1,5 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { matchPath, NavLink, useLocation } from 'react-router-dom'
+
+// .nxl-link ya define display/padding/color propios; solo hace falta anular
+// el chrome nativo de <button> (borde, fondo, alineación, ancho) sin tocar
+// utilidades con !important (ej. p-0 rompería el padding de .nxl-link).
+const submenuTriggerStyle = { border: 0, background: 'transparent', textAlign: 'left', width: '100%' }
 
 function navItemIdentifier(item) {
   return String(item.key ?? item.id ?? item.to ?? item.href ?? item.label ?? item.type ?? 'item')
@@ -54,6 +59,7 @@ function hasActiveItem(item, pathname) {
 function NavItem({ item, pathname, openKey, setOpenKey, onNavigate }) {
   const active = hasActiveItem(item, pathname)
   const isOpen = openKey === item._key
+  const submenuId = useId()
 
   if (item.type === 'caption') {
     return (
@@ -66,20 +72,20 @@ function NavItem({ item, pathname, openKey, setOpenKey, onNavigate }) {
   if (item.children?.length) {
     return (
       <li className={`nxl-item nxl-hasmenu${active ? ' active' : ''}${isOpen ? ' nxl-trigger' : ''}`}>
-        <a
-          href="#"
+        <button
+          type="button"
           className="nxl-link"
-          onClick={(e) => {
-            e.preventDefault()
-            setOpenKey(isOpen ? null : item._key)
-          }}
+          style={submenuTriggerStyle}
+          aria-expanded={isOpen}
+          aria-controls={submenuId}
+          onClick={() => setOpenKey(isOpen ? null : item._key)}
         >
           {item.icon && <span className="nxl-micon"><i className={item.icon}></i></span>}
           <span className="nxl-mtext">{item.label}</span>
           <span className="nxl-arrow"><i className="feather-chevron-right"></i></span>
-        </a>
+        </button>
         {isOpen && (
-          <ul className="nxl-submenu">
+          <ul id={submenuId} className="nxl-submenu">
             {item.children.map((child) => (
               <SubNavItem
                 key={child._key}
@@ -123,6 +129,7 @@ function NavItem({ item, pathname, openKey, setOpenKey, onNavigate }) {
 function SubNavItem({ item, pathname, onNavigate }) {
   const active = hasActiveItem(item, pathname)
   const [open, setOpen] = useState(active)
+  const submenuId = useId()
 
   useEffect(() => {
     if (active) setOpen(true)
@@ -131,12 +138,19 @@ function SubNavItem({ item, pathname, onNavigate }) {
   if (item.children?.length) {
     return (
       <li className={`nxl-item nxl-hasmenu${active ? ' active' : ''}${open ? ' nxl-trigger' : ''}`}>
-        <a href="#" className="nxl-link" onClick={(e) => { e.preventDefault(); setOpen((o) => !o) }}>
+        <button
+          type="button"
+          className="nxl-link"
+          style={submenuTriggerStyle}
+          aria-expanded={open}
+          aria-controls={submenuId}
+          onClick={() => setOpen((o) => !o)}
+        >
           <span className="nxl-mtext">{item.label}</span>
           <span className="nxl-arrow"><i className="feather-chevron-right"></i></span>
-        </a>
+        </button>
         {open && (
-          <ul className="nxl-submenu">
+          <ul id={submenuId} className="nxl-submenu">
             {item.children.map((child) => (
               <SubNavItem
                 key={child._key}

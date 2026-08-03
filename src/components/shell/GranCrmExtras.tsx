@@ -7,6 +7,7 @@
 import React from 'react';
 import type { SemanticVariant, StatusVariant } from '../../tokens';
 import { Badge } from '../ui/Badge';
+import { cx } from '../../utils/cx';
 
 // ── CardHeader / CardBody / CardFooter (sub-components not in @duralux/ui) ────
 
@@ -24,7 +25,7 @@ export function CardHeader({ title, actions, className, children, ...rest }: Car
     </>
   );
   return (
-    <div className={['card-header', className].filter(Boolean).join(' ')} {...rest}>
+    <div className={cx('card-header', className)} {...rest}>
       {content}
     </div>
   );
@@ -34,7 +35,7 @@ export interface CardBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CardBody({ className, children, ...rest }: CardBodyProps) {
   return (
-    <div className={['card-body', className].filter(Boolean).join(' ')} {...rest}>
+    <div className={cx('card-body', className)} {...rest}>
       {children}
     </div>
   );
@@ -44,7 +45,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CardFooter({ className, children, ...rest }: CardFooterProps) {
   return (
-    <div className={['card-footer', className].filter(Boolean).join(' ')} {...rest}>
+    <div className={cx('card-footer', className)} {...rest}>
       {children}
     </div>
   );
@@ -105,7 +106,7 @@ export function StatCard({
   const changeIcon = changePositive ? 'arrow-up' : 'arrow-down';
 
   return (
-    <div className={['card stretch stretch-full', className].filter(Boolean).join(' ')} {...rest}>
+    <div className={cx('card stretch stretch-full', className)} {...rest}>
       <div className="card-body">
         <div className="d-flex align-items-start justify-content-between mb-2">
           <p className="fs-12 text-muted mb-0">{title}</p>

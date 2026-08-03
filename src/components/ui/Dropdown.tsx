@@ -16,6 +16,7 @@ import type {
   RefCallback,
 } from 'react';
 import { registerDismissableLayer } from '../../utils/dismissableLayer';
+import { cx } from '../../utils/cx';
 
 export type DropdownAlignment = 'start' | 'end';
 
@@ -205,12 +206,12 @@ export function DropdownMenu({
     <Component
       {...menuProps}
       id={menuId}
-      className={[
+      className={cx(
         'dropdown-menu',
         align === 'end' ? 'dropdown-menu-end' : '',
         className,
         open ? 'show' : '',
-      ].filter(Boolean).join(' ')}
+      )}
       aria-hidden={open ? undefined : true}
       aria-labelledby={triggerId}
       onClick={handleClick}

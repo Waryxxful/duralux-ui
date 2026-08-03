@@ -8,6 +8,7 @@
  *   className  — clases adicionales
  *   style      — estilos adicionales (se fusionan con font-size del size)
  */
+import { cx } from '../../utils/cx'
 
 const sizeMap = {
   xs: '0.625rem',
@@ -20,7 +21,7 @@ const sizeMap = {
 export function Icon({ name, size = undefined, 'aria-label': label = undefined, className = '', style = undefined, ...rest }) {
   const resolvedSize = typeof size === 'number' ? size : sizeMap[size]
   const inlineSize = resolvedSize ? { fontSize: resolvedSize, ...style } : style
-  const cls = ['gcu-icon', 'feather-' + name, className].filter(Boolean).join(' ')
+  const cls = cx('gcu-icon', 'feather-' + name, className)
 
   if (label) {
     return <i className={cls} role="img" aria-label={label} style={inlineSize} {...rest} />

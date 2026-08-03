@@ -1,4 +1,5 @@
 import React from 'react';
+import { cx } from '../../utils/cx';
 
 function range(start, end) {
   const result = [];
@@ -40,7 +41,7 @@ export function Pagination({
 
   return (
     <nav aria-label={label}>
-      <ul className={['pagination', className].filter(Boolean).join(' ')}>
+      <ul className={cx('pagination', className)}>
         <li className={`page-item${page === 1 ? ' disabled' : ''}`}>
           <button
             type="button"

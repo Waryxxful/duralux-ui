@@ -8,6 +8,8 @@
  *   action    — ReactNode (ej. un Button)
  *   className — clases adicionales
  */
+import { cx } from '../../utils/cx'
+
 export function EmptyState({
   icon = 'inbox',
   title = 'Sin resultados',
@@ -16,7 +18,7 @@ export function EmptyState({
   className,
 }) {
   return (
-    <div className={['d-flex flex-column align-items-center justify-content-center text-center py-5', className].filter(Boolean).join(' ')}>
+    <div className={cx('d-flex flex-column align-items-center justify-content-center text-center py-5', className)}>
       {icon && (
         <i className={`feather-${icon} mb-3`} style={{ fontSize: '3rem', opacity: 0.4 }} aria-hidden="true" />
       )}

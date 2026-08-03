@@ -8,6 +8,7 @@
  *   className — clases adicionales
  */
 import { Button } from '../ui/Button'
+import { cx } from '../../utils/cx'
 
 export function ErrorState({
   title = 'Ocurrió un error',
@@ -16,7 +17,7 @@ export function ErrorState({
   className,
 }) {
   return (
-    <div className={['d-flex flex-column align-items-center justify-content-center text-center py-5', className].filter(Boolean).join(' ')}>
+    <div className={cx('d-flex flex-column align-items-center justify-content-center text-center py-5', className)}>
       <i className="feather-alert-circle mb-3 text-danger" style={{ fontSize: '3rem' }} aria-hidden="true" />
       {title && <p className="fw-semibold fs-5 mb-1">{title}</p>}
       {message && <p className="text-muted mb-3">{message}</p>}

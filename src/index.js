@@ -82,7 +82,7 @@ export {
 } from './theme/ThemeProvider'
 
 // Cliente API (fetch con CSRF + credenciales same-origin)
-export { apiFetch } from './api/client'
+export { apiFetch, SESSION_EXPIRED_EVENT } from './api/client'
 export { Header } from './components/layout/Header'
 export { Sidebar } from './components/layout/Sidebar'
 export { PageHeader } from './components/layout/PageHeader'

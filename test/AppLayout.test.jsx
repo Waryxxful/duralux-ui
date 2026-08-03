@@ -249,7 +249,7 @@ test('leaves dark and mini ownership with ThemeProvider', async () => {
   expect(screen.getByText('dark:mini')).toBeInTheDocument()
   expect(html).toHaveClass('app-skin-dark', 'minimenu')
 
-  await user.click(container.querySelector('.nxl-navigation-toggle a'))
+  await user.click(container.querySelector('.nxl-navigation-toggle button'))
   expect(screen.getByText('dark:expanded')).toBeInTheDocument()
   expect(html).toHaveClass('app-skin-dark')
   expect(html).not.toHaveClass('minimenu')

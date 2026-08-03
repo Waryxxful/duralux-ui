@@ -1,14 +1,14 @@
-import { useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { useClickOutside } from '../../hooks/useClickOutside'
 
-function NotifDropdown({ notifications, onClose }) {
+function NotifDropdown({ id, notifications, onClose }) {
   return (
-    <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown show" style={{ display: 'block' }}>
+    <div id={id} className="dropdown-menu dropdown-menu-end nxl-h-dropdown show" style={{ display: 'block' }}>
       <div className="d-flex align-items-center justify-content-between px-4 ht-60 border-bottom">
         <h6 className="mb-0">Notifications</h6>
-        <a href="#" className="fs-12 text-muted" onClick={(e) => { e.preventDefault(); onClose() }}>
+        <button type="button" className="btn btn-link p-0 fs-12 text-muted" onClick={onClose}>
           Mark all as read
-        </a>
+        </button>
       </div>
       <div style={{ maxHeight: 300, overflowY: 'auto' }}>
         {notifications.length === 0 && (
@@ -32,9 +32,9 @@ function NotifDropdown({ notifications, onClose }) {
   )
 }
 
-function UserDropdown({ user, onClose }) {
+function UserDropdown({ id, user, onClose }) {
   return (
-    <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown show" style={{ display: 'block', minWidth: 200 }}>
+    <div id={id} className="dropdown-menu dropdown-menu-end nxl-h-dropdown show" style={{ display: 'block', minWidth: 200 }}>
       <div className="d-flex align-items-center gap-3 px-3 py-3 border-bottom">
         {user.avatar
           ? <img src={user.avatar} alt="" className="rounded-circle" style={{ width: 40, height: 40, objectFit: 'cover' }} />
@@ -65,6 +65,9 @@ export function Header({ user = {}, notifications = [], onToggleMini, onToggleMo
   const [searchOpen, setSearchOpen] = useState(false)
   const notifRef = useRef(null)
   const userRef = useRef(null)
+  const searchMenuId = useId()
+  const notifMenuId = useId()
+  const userMenuId = useId()
 
   useClickOutside(notifRef, () => setNotifOpen(false))
   useClickOutside(userRef, () => setUserOpen(false))
@@ -73,32 +76,45 @@ export function Header({ user = {}, notifications = [], onToggleMini, onToggleMo
     <header className="nxl-header">
       <div className="header-wrapper">
         <div className="header-left d-flex align-items-center gap-4">
-          <a href="#" className="nxl-head-mobile-toggler" onClick={(e) => { e.preventDefault(); onToggleMobile?.() }}>
+          <button
+            type="button"
+            className="nxl-head-mobile-toggler border-0 bg-transparent p-0"
+            onClick={() => onToggleMobile?.()}
+            aria-label="Abrir menú"
+          >
             <div className="hamburger hamburger--arrowturn">
               <div className="hamburger-box">
                 <div className="hamburger-inner"></div>
               </div>
             </div>
-          </a>
+          </button>
           <div className="nxl-navigation-toggle">
-            <a href="#" onClick={(e) => { e.preventDefault(); onToggleMini?.() }}>
+            <button
+              type="button"
+              className="border-0 bg-transparent p-0"
+              onClick={() => onToggleMini?.()}
+              aria-label="Colapsar menú"
+            >
               <i className="feather-align-left"></i>
-            </a>
+            </button>
           </div>
         </div>
 
         <div className="header-right ms-auto d-flex align-items-center">
           {/* Search */}
           <div className="nxl-h-item">
-            <a
-              href="#"
-              className="nxl-head-link me-0"
-              onClick={(e) => { e.preventDefault(); setSearchOpen((o) => !o) }}
+            <button
+              type="button"
+              className="nxl-head-link me-0 border-0 bg-transparent"
+              aria-label="Buscar"
+              aria-expanded={searchOpen}
+              aria-controls={searchMenuId}
+              onClick={() => setSearchOpen((o) => !o)}
             >
               <i className="feather-search"></i>
-            </a>
+            </button>
             {searchOpen && (
-              <div className="dropdown-menu dropdown-menu-end nxl-h-dropdown show" style={{ display: 'block', width: 300 }}>
+              <div id={searchMenuId} className="dropdown-menu dropdown-menu-end nxl-h-dropdown show" style={{ display: 'block', width: 300 }}>
                 <div className="input-group search-form px-3 py-2">
                   <span className="input-group-text border-0 bg-transparent">
                     <i className="feather-search"></i>
@@ -121,27 +137,32 @@ export function Header({ user = {}, notifications = [], onToggleMini, onToggleMo
 
           {/* Notifications */}
           <div className="dropdown nxl-h-item" ref={notifRef}>
-            <a
-              href="#"
-              className="nxl-head-link me-0"
-              onClick={(e) => { e.preventDefault(); setNotifOpen((o) => !o) }}
+            <button
+              type="button"
+              className="nxl-head-link me-0 border-0 bg-transparent"
+              aria-label="Notificaciones"
+              aria-expanded={notifOpen}
+              aria-controls={notifMenuId}
+              onClick={() => setNotifOpen((o) => !o)}
             >
               <i className="feather-bell"></i>
               {notifications.length > 0 && (
                 <span className="badge bg-danger nxl-h-badge">{notifications.length}</span>
               )}
-            </a>
+            </button>
             {notifOpen && (
-              <NotifDropdown notifications={notifications} onClose={() => setNotifOpen(false)} />
+              <NotifDropdown id={notifMenuId} notifications={notifications} onClose={() => setNotifOpen(false)} />
             )}
           </div>
 
           {/* User menu */}
           <div className="dropdown nxl-h-item" ref={userRef}>
-            <a
-              href="#"
-              className="d-flex align-items-center gap-2"
-              onClick={(e) => { e.preventDefault(); setUserOpen((o) => !o) }}
+            <button
+              type="button"
+              className="d-flex align-items-center gap-2 border-0 bg-transparent"
+              aria-expanded={userOpen}
+              aria-controls={userMenuId}
+              onClick={() => setUserOpen((o) => !o)}
             >
               {user.avatar
                 ? <img src={user.avatar} alt="" className="rounded-circle" style={{ width: 36, height: 36, objectFit: 'cover' }} />
@@ -149,9 +170,9 @@ export function Header({ user = {}, notifications = [], onToggleMini, onToggleMo
               }
               <span className="d-none d-md-block fs-13 fw-semibold">{user.name}</span>
               <i className="feather-chevron-down d-none d-md-block fs-12"></i>
-            </a>
+            </button>
             {userOpen && (
-              <UserDropdown user={user} onClose={() => setUserOpen(false)} />
+              <UserDropdown id={userMenuId} user={user} onClose={() => setUserOpen(false)} />
             )}
           </div>
         </div>

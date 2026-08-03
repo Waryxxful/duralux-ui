@@ -13,6 +13,8 @@
  *   height    — altura en px de la barra contenedora
  *   className — clases adicionales al contenedor
  */
+import { cx } from '../../utils/cx'
+
 export function Progress({
   value,
   max = 100,
@@ -29,16 +31,16 @@ export function Progress({
     (label && String(label).trim()) ||
     `${Math.round(Number(value))} de ${max}`
 
-  const barClasses = [
+  const barClasses = cx(
     'progress-bar',
     `bg-${variant}`,
     striped ? 'progress-bar-striped' : '',
     animated ? 'progress-bar-animated' : '',
-  ].filter(Boolean).join(' ')
+  )
 
   return (
     <div
-      className={['progress', className].filter(Boolean).join(' ')}
+      className={cx('progress', className)}
       style={height ? { height } : undefined}
     >
       <div

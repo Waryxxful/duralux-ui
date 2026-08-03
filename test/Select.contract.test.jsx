@@ -26,3 +26,11 @@ test('renders a disabled placeholder and honors disabled object options', () => 
   expect(pending).not.toBeDisabled()
   expect(archived).toBeDisabled()
 })
+
+test('sets aria-invalid when invalid/error is truthy', () => {
+  const { rerender } = render(<Select aria-label="Status" invalid options={['a']} />)
+  expect(screen.getByRole('combobox', { name: 'Status' })).toHaveAttribute('aria-invalid', 'true')
+
+  rerender(<Select aria-label="Status" options={['a']} />)
+  expect(screen.getByRole('combobox', { name: 'Status' })).not.toHaveAttribute('aria-invalid')
+})

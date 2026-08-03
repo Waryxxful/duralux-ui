@@ -1,10 +1,19 @@
 import { useId, useRef, useEffect } from 'react'
+import { cx } from '../../utils/cx'
 
 /**
  * Checkbox — form-check Bootstrap con label asociado.
  * Respeta `id` del caller; si no hay, genera uno estable con useId.
  */
-export function Checkbox({ label, error, indeterminate, className, id: idProp, ...rest }) {
+export function Checkbox({
+  label,
+  error,
+  indeterminate,
+  className,
+  id: idProp,
+  'aria-invalid': providedInvalid,
+  ...rest
+}) {
   const autoId = useId()
   const id = idProp ?? autoId
   const inputRef = useRef(null)
@@ -16,12 +25,13 @@ export function Checkbox({ label, error, indeterminate, className, id: idProp, .
   }, [indeterminate])
 
   return (
-    <div className={['form-check', className].filter(Boolean).join(' ')}>
+    <div className={cx('form-check', className)}>
       <input
         ref={inputRef}
         id={id}
         type="checkbox"
-        className={['form-check-input', error ? 'is-invalid' : ''].filter(Boolean).join(' ')}
+        className={cx('form-check-input', error ? 'is-invalid' : '')}
+        aria-invalid={error ? true : providedInvalid}
         {...rest}
       />
       <label htmlFor={id} className="form-check-label">{label}</label>

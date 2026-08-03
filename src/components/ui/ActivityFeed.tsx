@@ -1,4 +1,5 @@
 import React from 'react';
+import { cx } from '../../utils/cx';
 
 /**
  * ActivityFeed — feed de log/eventos con riel de color por tipo de evento.
@@ -28,7 +29,7 @@ export interface ActivityFeedProps {
 
 export function ActivityFeed({ items, className }: ActivityFeedProps) {
   return (
-    <ul className={['list-unstyled mb-0 activity-feed-1', className].filter(Boolean).join(' ')}>
+    <ul className={cx('list-unstyled mb-0 activity-feed-1', className)}>
       {items.map((item) => (
         <li key={item.key} className={`feed-item feed-item-${item.variant}`}>
           <div className="d-flex gap-4 justify-content-between">

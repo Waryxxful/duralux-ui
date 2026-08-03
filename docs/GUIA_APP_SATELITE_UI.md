@@ -59,6 +59,10 @@ export default function App({ contractVersion, basename, apiBase, session, bus }
 
 - Sin `BrowserRouter` propio (el shell ya tiene el router).
 - Validar `contractVersion`, emitir `sessionExpired` / `logout` por el bus.
+- `apiFetch` **no** llama `bus.emit` por sí mismo (no tiene acceso a esa instancia): ante un 401
+  dispara `SESSION_EXPIRED_EVENT` (`'grancrm:sessionExpired'`) en `window`, pensado para apps
+  standalone sin shell. Montada en el shell, la satélite sigue siendo responsable de llamar
+  `bus.emit('sessionExpired')` explícitamente tras un 401.
 
 ## 4. Componentes
 

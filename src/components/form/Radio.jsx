@@ -1,4 +1,5 @@
 import { useId } from 'react'
+import { cx } from '../../utils/cx'
 
 /**
  * Radio — form-check Bootstrap con label asociado.
@@ -10,11 +11,11 @@ export function Radio({ label, error, className, id: idProp, ...rest }) {
   const id = idProp ?? autoId
 
   return (
-    <div className={['form-check', className].filter(Boolean).join(' ')}>
+    <div className={cx('form-check', className)}>
       <input
         id={id}
         type="radio"
-        className={['form-check-input', error ? 'is-invalid' : ''].filter(Boolean).join(' ')}
+        className={cx('form-check-input', error ? 'is-invalid' : '')}
         {...rest}
       />
       <label htmlFor={id} className="form-check-label">{label}</label>

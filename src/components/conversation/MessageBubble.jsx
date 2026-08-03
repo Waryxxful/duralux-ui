@@ -1,4 +1,5 @@
 import React from 'react'
+import { cx } from '../../utils/cx'
 
 /**
  * MessageBubble — portable chat/transcript bubble.
@@ -20,7 +21,7 @@ export function MessageBubble({
 }) {
   if (variant === 'system') {
     return (
-      <div className={['gcu-message-row', className].filter(Boolean).join(' ')}>
+      <div className={cx('gcu-message-row', className)}>
         <div className="gcu-message-system">{children}</div>
       </div>
     )

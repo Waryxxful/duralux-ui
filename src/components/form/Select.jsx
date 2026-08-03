@@ -6,11 +6,21 @@
  *   error    — estado de error → is-invalid (alias legacy: invalid)
  *   Todos los props nativos de <select> son válidos.
  */
-export function Select({ options = [], invalid, error, className = '', children, placeholder, ...props }) {
+export function Select({
+  options = [],
+  invalid,
+  error,
+  className = '',
+  children,
+  placeholder,
+  'aria-invalid': providedInvalid,
+  ...props
+}) {
   const isInvalid = invalid || error
   return (
     <select
       className={`form-control form-select${isInvalid ? ' is-invalid' : ''} ${className}`}
+      aria-invalid={isInvalid ? true : providedInvalid}
       {...props}
     >
       {placeholder != null && <option value="" disabled>{placeholder}</option>}

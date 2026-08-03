@@ -76,7 +76,9 @@ npm run build
 
 - Tipos reales (`contract`, `tokens`, shell components, `Dropdown`, `apiFetch`) se generan con `vite-plugin-dts` desde el `.ts`/`.tsx` fuente.
 - `scripts/write-index-dts.mjs` completa los contratos públicos de los componentes `.jsx`; las APIs con callbacks de consumo estricto deben mantenerse tipadas allí.
+- `scripts/check-manual-dts.mjs` corre después y falla el build si un componente `.jsx` exportado desde `src/index.js` no tiene su declaración manual correspondiente en `write-index-dts.mjs` (o avisa si sobra una declaración obsoleta). Al agregar un componente `.jsx` nuevo, sumá su tipo ahí o el build se rompe con el nombre exacto que falta.
 - `prepare` corre el build al instalar desde git, así los consumidores reciben `dist/` listo.
+- CI (`.github/workflows/ci.yml`) corre `npm test` + `npm run build` en cada push/PR a `master`.
 
 ## Propagar un cambio a consumidores
 
@@ -87,3 +89,7 @@ npm run build
 ## Permisos (máquina compartida)
 
 `dist/` puede quedar con archivos de otro usuario del grupo `admincrm` sin permiso de escritura de grupo. Si `npm run build` falla con `EACCES`: `sudo chmod -R g+w dist/`.
+
+## Deuda técnica conocida
+
+- **`apexcharts`+`react-apexcharts` y `recharts` conviven como dependencies directas** para necesidades solapadas: `ApexChart.jsx` usa apexcharts; `AreaChartWidget`/`BarChartWidget`/`LineChartWidget`/`PieChartWidget` usan recharts. El build es un único bundle sin `manualChunks` (`vite.config.js`), así que cualquier consumidor que importe un solo componente arrastra ambas librerías de charts en el mismo chunk. Migrar a una sola requiere reescribir los componentes del lado perdedor y es un cambio breaking para quien ya usa esos componentes — **decisión pendiente, no tocar sin coordinar con los consumidores** (call_reviews y demás satélites que ya importan `ApexChart` o los `*ChartWidget`).

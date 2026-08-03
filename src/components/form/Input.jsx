@@ -9,11 +9,25 @@
  *   error     — estado de error → is-invalid (alias legacy: invalid)
  *   Todos los props nativos de <input> son válidos.
  */
-export function Input({ icon, prefix, startAddon, endAddon, invalid, error, className = '', ...props }) {
+export function Input({
+  icon,
+  prefix,
+  startAddon,
+  endAddon,
+  invalid,
+  error,
+  className = '',
+  'aria-invalid': providedInvalid,
+  ...props
+}) {
   const isInvalid = invalid || error
   const lead = startAddon ?? (icon ? <i className={icon}></i> : prefix != null ? prefix : null)
   const input = (
-    <input className={`form-control${isInvalid ? ' is-invalid' : ''} ${className}`} {...props} />
+    <input
+      className={`form-control${isInvalid ? ' is-invalid' : ''} ${className}`}
+      aria-invalid={isInvalid ? true : providedInvalid}
+      {...props}
+    />
   )
   if (lead == null && endAddon == null) return input
   return (
