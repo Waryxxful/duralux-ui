@@ -17,24 +17,26 @@ export function ChatSidebar({ contacts = [], selectedId, onSelect, onSearch }) {
           <span className="input-group-text border-0 bg-transparent ps-0">
             <i className="feather-search text-muted"></i>
           </span>
+          <label htmlFor="chat-search" className="visually-hidden">Buscar conversación</label>
           <input
+            id="chat-search"
             type="text"
             className="form-control border-0 bg-transparent"
             placeholder="Buscar conversación..."
             onChange={(e) => onSearch?.(e.target.value)}
           />
         </div>
-        <button className="avatar-text avatar-sm bg-primary text-white border-0 flex-shrink-0">
+        <button type="button" className="avatar-text avatar-sm bg-primary text-white border-0 flex-shrink-0" aria-label="Nueva conversación">
           <i className="feather-edit"></i>
         </button>
       </div>
       <div className="content-sidebar-body" style={{ overflowY: 'auto', flex: 1 }}>
         <div className="content-sidebar-items">
           {contacts.map((c) => (
-            <div
+            <button
               key={c.id}
-              className={`p-4 d-flex position-relative border-bottom c-pointer single-item${selectedId === c.id ? ' active bg-primary-50' : ''}`}
-              style={{ cursor: 'pointer' }}
+              type="button"
+              className={`p-4 w-100 border-0 bg-transparent text-start d-flex position-relative border-bottom c-pointer single-item${selectedId === c.id ? ' active bg-primary-50' : ''}`}
               onClick={() => onSelect?.(c)}
             >
               <div className="position-relative flex-shrink-0">
@@ -57,7 +59,7 @@ export function ChatSidebar({ contacts = [], selectedId, onSelect, onSearch }) {
                   )}
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

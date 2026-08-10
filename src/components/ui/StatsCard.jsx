@@ -52,13 +52,13 @@ export function StatsCard({ icon, iconBg = 'bg-gray-200', value, label, trend, p
         )}
       </div>
       {footer && (
-        <a
-          href="#"
-          className="card-footer fs-11 fw-bold text-uppercase text-center py-4"
-          onClick={(e) => { e.preventDefault(); onFooter?.() }}
+        <button
+          type="button"
+          className="card-footer fs-11 fw-bold text-uppercase text-center py-4 w-100 border-0"
+          onClick={() => onFooter?.()}
         >
           {footer}
-        </a>
+        </button>
       )}
     </div>
   )

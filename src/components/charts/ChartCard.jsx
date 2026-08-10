@@ -32,8 +32,8 @@ export function ChartCard({ title, subtitle, actions = [], noPad, children }) {
             )}
           >
             <DropdownMenu as="ul">
-              {actions.map((a, i) => (
-                <li key={i}>
+              {actions.map((a) => (
+                <li key={a.label}>
                   <button type="button" className="dropdown-item" onClick={a.onClick}>
                     {a.label}
                   </button>

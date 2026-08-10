@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import { Button, IconButton, resolveVariant } from '../src/components/ui/Button.jsx'
+import { Button, IconButton } from '../src/components/ui/Button.jsx'
+import { resolveVariant } from '../src/components/ui/buttonVariants.js'
 
 test('renders and handles clicks through the public export', async () => {
   const user = userEvent.setup()

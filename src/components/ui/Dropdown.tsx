@@ -1,8 +1,10 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useId,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -120,16 +122,19 @@ export function Dropdown({
     });
   }, [open]);
 
-  const context: DropdownContextValue = {
+  const close = useCallback((restoreFocus = false) => {
+    if (controlledOpenRef.current === undefined) setUncontrolledOpen(false);
+    onOpenChangeRef.current?.(false);
+    if (restoreFocus) triggerRef.current?.focus();
+  }, []);
+
+  const context: DropdownContextValue = useMemo(() => ({
     align,
-    close: (restoreFocus = false) => {
-      setOpen(false);
-      if (restoreFocus) triggerRef.current?.focus();
-    },
+    close,
     menuId: resolvedMenuId,
     open,
     triggerId,
-  };
+  }), [align, close, resolvedMenuId, open, triggerId]);
   const triggerProps: DropdownTriggerProps = {
     ref: (node) => {
       triggerRef.current = node;

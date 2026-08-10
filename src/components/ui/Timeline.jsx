@@ -12,7 +12,7 @@ export function Timeline({ items = [] }) {
   return (
     <ul className="list-unstyled mb-0">
       {items.map((item, i) => (
-        <li key={item.id || i} className={`d-flex gap-3${i < items.length - 1 ? ' mb-4' : ''}`}>
+        <li key={item.id} className={`d-flex gap-3${i < items.length - 1 ? ' mb-4' : ''}`}>
           {/* Icon */}
           <div className="flex-shrink-0">
             <div className={`avatar-text avatar-sm rounded-circle ${item.iconBg || 'bg-soft-primary'} text-${item.color || 'primary'}`}>

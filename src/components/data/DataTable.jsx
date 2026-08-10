@@ -1,6 +1,27 @@
 import { useEffect, useId, useRef, useState } from 'react'
 
 /**
+ * Ventana de números de página con elipsis (siempre primera, última, actual ±1).
+ * Sin esto, un dataset real (decenas de páginas) desborda el `.pagination` del card.
+ */
+function pageWindow(current, total, delta = 1) {
+  const pages = []
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+      pages.push(i)
+    }
+  }
+  const withDots = []
+  let last
+  for (const p of pages) {
+    if (last != null && p - last > 1) withDots.push('…')
+    withDots.push(p)
+    last = p
+  }
+  return withDots
+}
+
+/**
  * DataTable — tabla con checkboxes, ordenamiento, paginación y acciones.
  *
  * Props:
@@ -17,10 +38,14 @@ import { useEffect, useId, useRef, useState } from 'react'
  *               del contenedor (evita columnas muy separadas cuando hay pocas
  *               columnas con texto corto).
  */
+const EMPTY_COLUMNS = []
+const EMPTY_DATA = []
+const EMPTY_ACTIONS = []
+
 export function DataTable({
-  columns = [],
-  data = [],
-  actions = [],
+  columns = EMPTY_COLUMNS,
+  data = EMPTY_DATA,
+  actions = EMPTY_ACTIONS,
   pageSize = 10,
   selectable,
   onSelectionChange,
@@ -54,10 +79,6 @@ export function DataTable({
   )
   const allSelected = pageData.length > 0 && pageData.every((row) => selected.has(row[rowKey]))
   const someSelected = pageData.some((row) => selected.has(row[rowKey]))
-
-  useEffect(() => {
-    setPage((current) => Math.min(Math.max(current, 1), Math.max(totalPages, 1)))
-  }, [totalPages])
 
   useEffect(() => {
     const dataIds = new Set(data.map((row) => row[rowKey]))
@@ -117,7 +138,9 @@ export function DataTable({
                       onChange={toggleAll}
                       id={`${checkboxId}-all`}
                     />
-                    <label className="custom-control-label" htmlFor={`${checkboxId}-all`}></label>
+                    <label className="custom-control-label" htmlFor={`${checkboxId}-all`}>
+                      <span className="visually-hidden">Seleccionar todo</span>
+                    </label>
                   </div>
                 </th>
               )}
@@ -173,7 +196,9 @@ export function DataTable({
                           onChange={() => toggleRow(id)}
                           id={rowCheckboxId}
                         />
-                        <label className="custom-control-label" htmlFor={rowCheckboxId}></label>
+                        <label className="custom-control-label" htmlFor={rowCheckboxId}>
+                          <span className="visually-hidden">Seleccionar fila</span>
+                        </label>
                       </div>
                     </td>
                   )}
@@ -185,10 +210,10 @@ export function DataTable({
                   {actions.length > 0 && (
                     <td className="gcu-table-actions-cell">
                       <div className="hstack gap-2 justify-content-end gcu-table-actions">
-                        {actions.map((action, i) => (
+                        {actions.map((action) => (
                           action.variant === 'button' ? (
                             <button
-                              key={i}
+                              key={action.key || action.label}
                               type="button"
                               className={`btn btn-sm btn-${action.buttonVariant || 'light-brand'}`}
                               onClick={() => action.onClick(row)}
@@ -198,7 +223,7 @@ export function DataTable({
                             </button>
                           ) : (
                             <button
-                              key={i}
+                              key={action.key || action.label}
                               type="button"
                               className="btn btn-icon btn-light-brand btn-sm"
                               title={action.label}
@@ -229,23 +254,29 @@ export function DataTable({
               <button
                 type="button"
                 className="page-link"
-                onClick={() => setPage((current) => Math.max(1, current - 1))}
+                onClick={() => setPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
                 aria-label="Página anterior"
               >
                 &laquo;
               </button>
             </li>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-              <li key={p} className={`page-item${p === currentPage ? ' active' : ''}`}>
-                <button type="button" className="page-link" onClick={() => setPage(p)}>{p}</button>
-              </li>
-            ))}
+            {pageWindow(currentPage, totalPages).map((p, i) =>
+              p === '…' ? (
+                <li key={`dots-${i}`} className="page-item disabled">
+                  <span className="page-link">…</span>
+                </li>
+              ) : (
+                <li key={p} className={`page-item${p === currentPage ? ' active' : ''}`}>
+                  <button type="button" className="page-link" onClick={() => setPage(p)}>{p}</button>
+                </li>
+              )
+            )}
             <li className={`page-item${currentPage === totalPages ? ' disabled' : ''}`}>
               <button
                 type="button"
                 className="page-link"
-                onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+                onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
                 aria-label="Página siguiente"
               >

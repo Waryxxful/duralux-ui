@@ -158,7 +158,7 @@ export function ShellNav({ brand, sections, onNavigate, mobileOpen = false }: Sh
               <React.Fragment key={navSectionIdentifier(section)}>
                 {section.caption && (
                   <li className="nxl-item nxl-caption">
-                    <label>{section.caption}</label>
+                    <span>{section.caption}</span>
                   </li>
                 )}
                 {section.items.map((item) => (

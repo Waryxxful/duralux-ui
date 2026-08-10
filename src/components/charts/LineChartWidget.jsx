@@ -11,7 +11,10 @@ import {
  *   series  — [{ key, color, label, dashed }]
  *   height  — número de px (default 260)
  */
-export function LineChartWidget({ data = [], series = [], height = 260 }) {
+const EMPTY_DATA = []
+const EMPTY_SERIES = []
+
+export function LineChartWidget({ data = EMPTY_DATA, series = EMPTY_SERIES, height = 260 }) {
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>

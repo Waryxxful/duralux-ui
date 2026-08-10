@@ -64,7 +64,7 @@ function NavItem({ item, pathname, openKey, setOpenKey, onNavigate }) {
   if (item.type === 'caption') {
     return (
       <li className="nxl-item nxl-caption">
-        <label>{item.label}</label>
+        <span>{item.label}</span>
       </li>
     )
   }

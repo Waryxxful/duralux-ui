@@ -82,10 +82,7 @@ function AppCategoryMenu({
 }) {
   const menuId = useId();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!desktopHover) setOpen(false);
-  }, [desktopHover]);
+  const visibleOpen = desktopHover ? open : false;
 
   return (
     <div
@@ -99,9 +96,9 @@ function AppCategoryMenu({
     >
       <button
         type="button"
-        className={`dropdown-item d-flex align-items-center ${open ? 'show' : ''}`}
+        className={`dropdown-item d-flex align-items-center ${visibleOpen ? 'show' : ''}`}
         aria-controls={menuId}
-        aria-expanded={open}
+        aria-expanded={visibleOpen}
         onClick={(e) => {
           e.stopPropagation();
           setOpen(value => !value);
@@ -113,7 +110,7 @@ function AppCategoryMenu({
         </span>
         <Icon name="chevron-right" className="ms-auto me-0" />
       </button>
-      <div id={menuId} className={`dropdown-menu nxl-h-dropdown ${open ? 'show' : ''}`}>
+      <div id={menuId} className={`dropdown-menu nxl-h-dropdown ${visibleOpen ? 'show' : ''}`}>
         {apps.map(app => (
           <AppMenuItem key={app.id} app={app} appHref={appHref} onSelect={onSelect} />
         ))}

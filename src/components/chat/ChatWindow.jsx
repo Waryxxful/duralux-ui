@@ -48,13 +48,13 @@ export function ChatWindow({ contact, children }) {
           </div>
         </div>
         <div className="d-flex align-items-center gap-2">
-          <button className="avatar-text avatar-sm bg-transparent border-0 text-muted">
+          <button type="button" className="avatar-text avatar-sm bg-transparent border-0 text-muted" aria-label="Llamar">
             <i className="feather-phone"></i>
           </button>
-          <button className="avatar-text avatar-sm bg-transparent border-0 text-muted">
+          <button type="button" className="avatar-text avatar-sm bg-transparent border-0 text-muted" aria-label="Videollamada">
             <i className="feather-video"></i>
           </button>
-          <button className="avatar-text avatar-sm bg-transparent border-0 text-muted">
+          <button type="button" className="avatar-text avatar-sm bg-transparent border-0 text-muted" aria-label="Más opciones">
             <i className="feather-more-vertical"></i>
           </button>
         </div>

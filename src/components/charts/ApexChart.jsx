@@ -1,6 +1,9 @@
 import ReactApexChart from 'react-apexcharts'
 
-export function ApexChart({ type = 'line', options = {}, series = [], height = 350, width = '100%' }) {
+const EMPTY_OPTIONS = {}
+const EMPTY_SERIES = []
+
+export function ApexChart({ type = 'line', options = EMPTY_OPTIONS, series = EMPTY_SERIES, height = 350, width = '100%' }) {
   return (
     <ReactApexChart
       type={type}

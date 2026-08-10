@@ -10,7 +10,7 @@ export function ChartMetricsFooter({ metrics = [] }) {
     <div className="d-flex flex-wrap border-top pt-3 mt-1">
       {metrics.map((m, i) => (
         <div
-          key={i}
+          key={m.label}
           className={`flex-fill text-center px-2${i > 0 ? ' border-start' : ''}`}
         >
           <div className={`fs-5 fw-bolder ${m.color || 'text-dark'}`}>{m.value}</div>

@@ -11,7 +11,9 @@ import {
  *   height   — número de px (default 260)
  *   legend   — mostrar leyenda (default true)
  */
-export function PieChartWidget({ data = [], donut = true, height = 260, legend = true }) {
+const EMPTY_DATA = []
+
+export function PieChartWidget({ data = EMPTY_DATA, donut = true, height = 260, legend = true }) {
   const innerRadius = donut ? '55%' : '0%'
 
   return (
@@ -26,8 +28,8 @@ export function PieChartWidget({ data = [], donut = true, height = 260, legend =
           paddingAngle={3}
           dataKey="value"
         >
-          {data.map((entry, i) => (
-            <Cell key={i} fill={entry.color} />
+          {data.map((entry) => (
+            <Cell key={entry.name} fill={entry.color} />
           ))}
         </Pie>
         <Tooltip

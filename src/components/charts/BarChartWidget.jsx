@@ -24,7 +24,10 @@ const CustomTooltip = ({ active, payload, label }) => {
   )
 }
 
-export function BarChartWidget({ data = [], series = [], height = 260, stacked, rounded = 6, barSize }) {
+const EMPTY_DATA = []
+const EMPTY_SERIES = []
+
+export function BarChartWidget({ data = EMPTY_DATA, series = EMPTY_SERIES, height = 260, stacked, rounded = 6, barSize }) {
   return (
     <ResponsiveContainer width="100%" height={height}>
       <BarChart

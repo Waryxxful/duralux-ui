@@ -28,14 +28,14 @@ export function PageHeader({ title, subtitle, breadcrumbs = [], actions, classNa
                   const isLast = i === breadcrumbs.length - 1
                   if (crumb.href && !isLast) {
                     return (
-                      <li key={i} className="breadcrumb-item">
+                      <li key={crumb.label} className="breadcrumb-item">
                         <a href={crumb.href} onClick={crumb.onClick}>{crumb.label}</a>
                       </li>
                     )
                   }
                   return (
                     <li
-                      key={i}
+                      key={crumb.label}
                       className="breadcrumb-item"
                       aria-current={isLast ? 'page' : undefined}
                     >

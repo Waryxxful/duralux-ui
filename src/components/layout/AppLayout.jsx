@@ -11,13 +11,17 @@ import { Header } from './Header'
  * logo/logoAbbr caen a un placeholder real (SVG inline) si el consumidor no
  * pasa su propia marca — nunca a una ruta que no existe.
  */
+const EMPTY_NAV_ITEMS = []
+const EMPTY_USER = {}
+const EMPTY_NOTIFICATIONS = []
+
 export function AppLayout({
   children,
-  navItems = [],
+  navItems = EMPTY_NAV_ITEMS,
   logo = PLACEHOLDER_LOGO,
   logoAbbr = PLACEHOLDER_LOGO_ABBR,
-  user = {},
-  notifications = [],
+  user = EMPTY_USER,
+  notifications = EMPTY_NOTIFICATIONS,
   theme = 'light',
   promoCard,
 }) {
@@ -107,19 +111,12 @@ export function AppLayout({
       </main>
 
       {mobileOpen && (
-        <div
+        <button
+          type="button"
           ref={mobileLayerRef}
-          className="nxl-menu-overlay"
-          role="button"
-          tabIndex={0}
+          className="nxl-menu-overlay border-0 p-0"
           aria-label="Cerrar menú"
           onClick={() => setMobileOpen(false)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault()
-              setMobileOpen(false)
-            }
-          }}
         />
       )}
     </>

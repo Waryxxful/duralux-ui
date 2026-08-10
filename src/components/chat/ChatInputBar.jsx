@@ -27,10 +27,10 @@ export function ChatInputBar({ onSend, placeholder = 'Escribe un mensaje...' }) 
   return (
     <div className="border-top p-3 d-flex align-items-center gap-3">
       <div className="d-flex align-items-center gap-2">
-        <button type="button" className="avatar-text avatar-sm bg-transparent border-0 text-muted">
+        <button type="button" className="avatar-text avatar-sm bg-transparent border-0 text-muted" aria-label="Adjuntar archivo">
           <i className="feather-paperclip"></i>
         </button>
-        <button type="button" className="avatar-text avatar-sm bg-transparent border-0 text-muted">
+        <button type="button" className="avatar-text avatar-sm bg-transparent border-0 text-muted" aria-label="Insertar emoji">
           <i className="feather-smile"></i>
         </button>
       </div>
@@ -47,6 +47,7 @@ export function ChatInputBar({ onSend, placeholder = 'Escribe un mensaje...' }) 
       <button
         type="button"
         className="avatar-text avatar-md bg-primary text-white border-0 rounded-circle flex-shrink-0"
+        aria-label="Enviar mensaje"
         onClick={handleSend}
         disabled={!text.trim()}
       >

@@ -13,7 +13,7 @@ export function QuickLinkGrid({ items = [], columns = 4 }) {
   const mdCol = Math.max(1, Math.floor(12 / columns))
   return (
     <div className="row g-3 gcu-quick-link-grid">
-      {items.map((it, i) => {
+      {items.map((it) => {
         const color = it.color || 'primary'
         const body = (
           <div className="card stretch stretch-full border h-100 gcu-quick-link">

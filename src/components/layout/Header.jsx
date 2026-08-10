@@ -14,8 +14,8 @@ function NotifDropdown({ id, notifications, onClose }) {
         {notifications.length === 0 && (
           <p className="text-center text-muted py-4 mb-0 fs-12">No notifications</p>
         )}
-        {notifications.map((n, i) => (
-          <a key={i} href={n.href || '#'} className="dropdown-item py-3">
+        {notifications.map((n) => (
+          <a key={n.id ?? `${n.title}-${n.time}`} href={n.href || '#'} className="dropdown-item py-3">
             <div className="d-flex align-items-center gap-3">
               <div className={`avatar-text avatar-md bg-soft-${n.color || 'primary'} text-${n.color || 'primary'}`}>
                 <i className={n.icon || 'feather-bell'}></i>
@@ -47,9 +47,9 @@ function UserDropdown({ id, user, onClose }) {
       </div>
       {(user.menuItems || []).map((item, i) =>
         item.divider
-          ? <div key={i} className="dropdown-divider"></div>
+          ? <div key={`divider-${i}`} className="dropdown-divider"></div>
           : (
-            <a key={i} href={item.href || '#'} className="dropdown-item" onClick={item.onClick}>
+            <a key={item.id ?? item.label} href={item.href || '#'} className="dropdown-item" onClick={item.onClick}>
               {item.icon && <i className={`${item.icon} me-2`}></i>}
               {item.label}
             </a>
@@ -119,7 +119,9 @@ export function Header({ user = {}, notifications = [], onToggleMini, onToggleMo
                   <span className="input-group-text border-0 bg-transparent">
                     <i className="feather-search"></i>
                   </span>
+                  <label htmlFor="header-search" className="visually-hidden">Buscar</label>
                   <input
+                    id="header-search"
                     type="text"
                     className="form-control border-0 bg-transparent"
                     placeholder="Buscar..."
@@ -128,6 +130,7 @@ export function Header({ user = {}, notifications = [], onToggleMini, onToggleMo
                   <button
                     type="button"
                     className="btn-close"
+                    aria-label="Cerrar búsqueda"
                     onClick={() => setSearchOpen(false)}
                   ></button>
                 </div>

@@ -37,10 +37,10 @@ export function ShowcaseLayout() {
         <div style={{ padding: '0 20px 24px', fontWeight: 800, fontSize: 16, color: '#3454d1' }}>
           @duralux/ui
         </div>
-        {NAV.map((item, i) =>
+        {NAV.map((item) =>
           item.type === 'caption'
-            ? <div key={i} style={{ padding: '12px 20px 4px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: '#94a3b8' }}>{item.label}</div>
-            : <NavLink key={i} to={item.to} end={item.to === '/'}
+            ? <div key={item.label} style={{ padding: '12px 20px 4px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: '#94a3b8' }}>{item.label}</div>
+            : <NavLink key={item.to} to={item.to} end={item.to === '/'}
                 style={({ isActive }) => ({
                   display: 'block', padding: '6px 20px', fontSize: 13, fontWeight: 500,
                   color: isActive ? '#3454d1' : '#475569',

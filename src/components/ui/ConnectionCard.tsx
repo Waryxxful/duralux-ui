@@ -57,7 +57,9 @@ export function ConnectionCard({
         </div>
       </div>
       <div className="form-check form-switch form-switch-sm flex-shrink-0">
-        <label className="form-check-label c-pointer" htmlFor={switchId} />
+        <label className="form-check-label c-pointer" htmlFor={switchId}>
+          <span className="visually-hidden">{title}</span>
+        </label>
         <input
           className="form-check-input c-pointer"
           type="checkbox"

@@ -144,15 +144,24 @@ export function FormsPage() {
         description="Props: prepend, append, className, children"
         preview={
           <div style={{ maxWidth: 400 }} className="d-flex flex-column gap-3">
-            <InputGroup prepend="@">
-              <input className="form-control" placeholder="usuario" />
-            </InputGroup>
-            <InputGroup append=".cl">
-              <input className="form-control" placeholder="dominio" />
-            </InputGroup>
-            <InputGroup prepend="$" append="CLP">
-              <input className="form-control" type="number" placeholder="0" />
-            </InputGroup>
+            <div>
+              <label htmlFor="ig-usuario" className="form-label">Usuario</label>
+              <InputGroup prepend="@">
+                <input id="ig-usuario" className="form-control" placeholder="usuario" />
+              </InputGroup>
+            </div>
+            <div>
+              <label htmlFor="ig-dominio" className="form-label">Dominio</label>
+              <InputGroup append=".cl">
+                <input id="ig-dominio" className="form-control" placeholder="dominio" />
+              </InputGroup>
+            </div>
+            <div>
+              <label htmlFor="ig-monto" className="form-label">Monto</label>
+              <InputGroup prepend="$" append="CLP">
+                <input id="ig-monto" className="form-control" type="number" placeholder="0" />
+              </InputGroup>
+            </div>
           </div>
         }
         code={`<InputGroup prepend="@">

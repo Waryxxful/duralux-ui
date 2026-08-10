@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 
 export function Tabs({
   tabs = [],
@@ -18,12 +18,6 @@ export function Tabs({
     : tabs[0]?.key
   const idPrefix = useId()
   const tabRefs = useRef(new Map())
-
-  useEffect(() => {
-    if (!isControlled && tabs.length > 0 && uncontrolledActiveKey !== active) {
-      setUncontrolledActiveKey(active)
-    }
-  }, [active, isControlled, tabs.length, uncontrolledActiveKey])
 
   const selectTab = (key) => {
     if (key === active) return

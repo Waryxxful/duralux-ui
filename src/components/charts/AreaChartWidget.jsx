@@ -8,6 +8,9 @@ function sanitizeIdPart(value) {
   return String(value).replace(/[^A-Za-z0-9_-]+/g, '-')
 }
 
+const EMPTY_DATA = []
+const EMPTY_SERIES = []
+
 /**
  * AreaChartWidget — gráfico de área con gradiente estilo Duralux.
  *
@@ -17,7 +20,7 @@ function sanitizeIdPart(value) {
  *   height   — número de px (default 260)
  *   grid     — mostrar grilla (default true)
  */
-export function AreaChartWidget({ data = [], series = [], height = 260, grid = true }) {
+export function AreaChartWidget({ data = EMPTY_DATA, series = EMPTY_SERIES, height = 260, grid = true }) {
   const gradientIdPrefix = `area-gradient-${sanitizeIdPart(useId())}`
   const gradientId = (key, index) => `${gradientIdPrefix}-${sanitizeIdPart(key)}-${index}`
 
