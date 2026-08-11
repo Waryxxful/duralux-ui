@@ -402,6 +402,93 @@ html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-
 /* Keep the remote page-header padding after the desktop rule in this file. */
 @media (max-width:575.98px){.page-header{padding:0 20px!important}}
 
+/* ── Tabs (gcu-tabs): underline active, Duralux primary hierarchy ─────────
+   Scoped class so PAGE-STRUCTURE native Bootstrap tabs stay untouched. */
+.gcu-tabs.nav-tabs{
+  flex-wrap:nowrap;
+  gap:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  border-bottom:1px solid var(--gcu-border,#e5e7eb);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+}
+.gcu-tabs.nav-tabs .nav-item{margin-bottom:0}
+.gcu-tabs.nav-tabs .nav-link{
+  margin-bottom:-1px;
+  padding:.65rem 1rem;
+  border:0;
+  border-bottom:2px solid transparent;
+  border-radius:0;
+  background:transparent;
+  color:var(--gcu-muted,#64748b);
+  font-weight:500;
+  white-space:nowrap;
+  transition:color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1)),border-color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1)),background-color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1))
+}
+.gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
+.gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active){
+  color:var(--gcu-primary,#3454d1);
+  background:transparent;
+  border-bottom-color:color-mix(in srgb,var(--gcu-primary,#3454d1) 35%,transparent)
+}
+.gcu-tabs.nav-tabs .nav-link:focus-visible{
+  outline:2px solid var(--gcu-primary,#3454d1);
+  outline-offset:2px
+}
+.gcu-tabs.nav-tabs .nav-link.active{
+  color:var(--gcu-primary,#3454d1);
+  font-weight:600;
+  background:transparent;
+  border-color:transparent transparent var(--gcu-primary,#3454d1)
+}
+.gcu-tabs.nav-tabs .nav-link:disabled,
+.gcu-tabs.nav-tabs .nav-link[aria-disabled="true"]{
+  color:var(--gcu-muted,#64748b);
+  opacity:.45;
+  cursor:not-allowed;
+  border-bottom-color:transparent
+}
+/* Dark: lift primary for ≥4.5:1 on surface; kill raised-tab fill/white notch */
+html.app-skin-dark .gcu-tabs.nav-tabs,
+.app-skin-dark .gcu-tabs.nav-tabs,
+[data-gcu-theme="dark"] .gcu-tabs.nav-tabs{
+  border-bottom-color:var(--gcu-border,#1b2436)
+}
+html.app-skin-dark .gcu-tabs.nav-tabs .nav-link,
+.app-skin-dark .gcu-tabs.nav-tabs .nav-link,
+[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link{
+  color:var(--gcu-muted,#9aa4b2);
+  background:transparent!important;
+  border-color:transparent!important
+}
+html.app-skin-dark .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
+.app-skin-dark .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
+[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active){
+  color:#b9c5ff;
+  border-bottom-color:rgba(185,197,255,.35)!important
+}
+html.app-skin-dark .gcu-tabs.nav-tabs .nav-link.active,
+.app-skin-dark .gcu-tabs.nav-tabs .nav-link.active,
+[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link.active{
+  color:#b9c5ff!important;
+  font-weight:600;
+  background:transparent!important;
+  border-color:transparent transparent #b9c5ff!important
+}
+html.app-skin-dark .gcu-tabs.nav-tabs .nav-link:disabled,
+html.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
+.app-skin-dark .gcu-tabs.nav-tabs .nav-link:disabled,
+.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
+[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link:disabled,
+[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"]{
+  color:var(--gcu-muted,#9aa4b2)!important;
+  opacity:.4
+}
+@media (prefers-reduced-motion:reduce){
+  .gcu-tabs.nav-tabs .nav-link{transition:none}
+}
+
 /* Final reduced-motion contract for remotes that load only this glue file. */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}

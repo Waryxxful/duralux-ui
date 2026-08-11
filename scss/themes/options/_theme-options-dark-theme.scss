@@ -889,13 +889,66 @@ html {
 		}
 
 		/* <---------------! Navs & Tabs !---------------> */
+		/* Baseline uses dark border (not white) so raised tabs don't notch harshly. */
+		.nav-tabs {
+			border-bottom-color: $dark-theme-color-border;
+
+			.nav-link {
+				color: $dark-theme-color;
+
+				&:hover:not(:disabled):not(.disabled) {
+					color: #b9c5ff;
+					border-color: $dark-theme-color-border $dark-theme-color-border $dark-theme-color-border;
+				}
+
+				/* Lighter primary for ≥4.5:1 on dark surfaces (#3454d1 fails AA). */
+				&.active {
+					color: #b9c5ff;
+					background-color: $dark-theme-color-darker;
+					border-color: $dark-theme-color-border $dark-theme-color-border $dark-theme-color-darker;
+				}
+
+				&:disabled,
+				&.disabled {
+					color: $dark-theme-color;
+					opacity: 0.4;
+				}
+			}
+		}
+		.nav-pills {
+			.nav-link {
+				color: $dark-theme-color;
+
+				&:hover:not(:disabled):not(.disabled) {
+					color: #b9c5ff;
+				}
+
+				&.active {
+					color: #b9c5ff;
+					background-color: rgba(130, 151, 255, 0.18);
+				}
+
+				&:disabled,
+				&.disabled {
+					color: $dark-theme-color;
+					opacity: 0.4;
+				}
+			}
+		}
 		.nav-item {
 			.nav-link {
-				color: $white;
+				color: $dark-theme-color;
+
 				&.active,
 				&:hover {
-					color: $primary;
+					color: #b9c5ff;
 					background-color: $dark-theme-color-hover !important;
+				}
+
+				&:disabled,
+				&.disabled {
+					color: $dark-theme-color;
+					opacity: 0.4;
 				}
 			}
 		}
@@ -905,14 +958,20 @@ html {
 			.nav-item {
 				.nav-link {
 					border-radius: 0 0;
-					color: $white !important;
+					color: $dark-theme-color !important;
 					border-color: transparent !important;
 					&.hover,
 					&.active {
-						color: $primary !important;
-						border-bottom-color: $primary !important;
+						/* #b9c5ff keeps AA contrast on dark hover fill */
+						color: #b9c5ff !important;
+						border-bottom-color: #b9c5ff !important;
 						border-color: $dark-theme-color-border;
 						background-color: $dark-theme-color-hover;
+					}
+					&:disabled,
+					&.disabled {
+						color: $dark-theme-color !important;
+						opacity: 0.4;
 					}
 				}
 			}

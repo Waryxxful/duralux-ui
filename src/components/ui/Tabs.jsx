@@ -166,7 +166,7 @@ export function Tabs({
 
   return (
     <>
-      <ul className={`nav nav-tabs ${className}`} role="tablist" aria-orientation="horizontal">
+      <ul className={`nav nav-tabs gcu-tabs ${className}`.trim()} role="tablist" aria-orientation="horizontal">
         {entries.map((entry) => (
           <li key={entry.reactKey} className={`nav-item ${tabClassName}`} role="presentation">
             <button
