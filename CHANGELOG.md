@@ -27,6 +27,7 @@ Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe 
 - Modal, toast, formularios, tablas, paginación, shell, chat, dropdown, botones y API `apiFetch`.
 - `apiFetch` conserva `Response`, `credentials: 'same-origin'`, todas las formas de `HeadersInit` y sólo serializa JSON cuando corresponde; también reexporta `SESSION_EXPIRED_EVENT` como alias de compatibilidad para el evento 401.
 - Empaquetado, declaraciones TypeScript, tree-shaking y gates de contrato/tamaño.
+- El lifecycle `prepare` evita la recursión de empaquetado de npm 10 en Node 20/22; `deploy.sh` detecta Docker Compose v2 y el binario legacy.
 
 ### Migración rápida
 

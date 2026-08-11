@@ -41,6 +41,12 @@ describe('public package contract', () => {
     expect(manifest.dependencies).toEqual({})
   })
 
+  test('keeps the install lifecycle outside the package smoke gate', () => {
+    expect(manifest.scripts.prepare).toBe('npm run build:prepare')
+    expect(manifest.scripts['build:prepare']).not.toContain('gate:package')
+    expect(manifest.scripts.build).toContain('npm run gate:package')
+  })
+
   test('keeps every export target and packaged asset explicit', () => {
     const targets = requiredPackagePaths(manifest)
 
