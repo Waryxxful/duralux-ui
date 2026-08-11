@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { describe, expect, test } from 'vitest'
 
 import {
+  parsePackResult,
   requiredPackagePaths,
   validatePackageManifest,
 } from '../scripts/check-package.mjs'
@@ -45,6 +46,12 @@ describe('public package contract', () => {
     expect(manifest.scripts.prepare).toBe('npm run build:prepare')
     expect(manifest.scripts['build:prepare']).not.toContain('gate:package')
     expect(manifest.scripts.build).toContain('npm run gate:package')
+  })
+
+  test('parses npm 10 pack JSON after prepare lifecycle output', () => {
+    expect(parsePackResult('audit-contract: OK\n[\n  { "files": [] }\n]\n')).toEqual([
+      { files: [] },
+    ])
   })
 
   test('keeps every export target and packaged asset explicit', () => {

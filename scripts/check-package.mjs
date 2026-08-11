@@ -118,6 +118,17 @@ export function requiredPackagePaths(manifest) {
   ])].sort()
 }
 
+/** npm 10 prints prepare lifecycle output before the --json payload for npm pack. */
+export function parsePackResult(output) {
+  try {
+    return JSON.parse(output)
+  } catch (error) {
+    const start = output.lastIndexOf('\n[')
+    if (start === -1) throw error
+    return JSON.parse(output.slice(start + 1))
+  }
+}
+
 function archiveFilesFromPackResult(packResult) {
   if (!Array.isArray(packResult) || !packResult[0]?.files) {
     throw new Error('npm pack did not return a JSON file list.')
@@ -157,7 +168,7 @@ export function runPackSmokeGate({ cwd = ROOT } = {}) {
         },
       },
     )
-    const result = JSON.parse(output)
+    const result = parsePackResult(output)
     const files = result[0]?.files
       ? archiveFilesFromPackResult(result)
       : archiveFilesFromArchive(destination)
