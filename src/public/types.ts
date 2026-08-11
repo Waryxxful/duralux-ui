@@ -836,11 +836,14 @@ export interface AuthLayoutProps {
   imageAlt?: string
 }
 
-export interface PageHeaderBreadcrumb {
+/** A page-header navigation item. `Breadcrumb` is retained as the concise public alias. */
+export interface Breadcrumb {
   label: React.ReactNode
   href?: string
   onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void
 }
+
+export type PageHeaderBreadcrumb = Breadcrumb
 
 export interface PageHeaderProps {
   title: React.ReactNode

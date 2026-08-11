@@ -29,6 +29,7 @@ Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe 
 - Empaquetado, declaraciones TypeScript, tree-shaking y gates de contrato/tamaño.
 - El lifecycle `prepare` evita la recursión de empaquetado de npm 10 en Node 20/22; `deploy.sh` detecta Docker Compose v2 y el binario legacy.
 - El peer opcional `apexcharts` acepta las ramas 5 y 6, compatibles con `react-apexcharts` 2.1.1.
+- Se restauran los tipos públicos `Breadcrumb`/`PageHeaderBreadcrumb` y `ModalSize` para que los builds desde dependencias Git conserven el contrato de `PageHeader` y `Modal`.
 
 ### Migración rápida
 

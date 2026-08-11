@@ -15,6 +15,8 @@ import {
   type DataTableProps,
   type ChatContact,
   type ChatWindowContact,
+  type Breadcrumb,
+  type ModalSize,
   type MultiSelectProps,
   type SearchableSelectOption,
   type SearchableSelectProps,
@@ -160,6 +162,8 @@ const typedMultiProps: MultiSelectProps<AccountOption> = {
   onChange: (_values, options) => options.map((option) => option.name),
 };
 const sessionExpiredEvent: string = SESSION_EXPIRED_EVENT;
+const breadcrumbs: Breadcrumb[] = [{ label: 'Inicio', href: '/' }];
+const modalSize: ModalSize = 'lg';
 const badCustomOptions: SearchableSelectProps<AccountOption> = {
   // @ts-expect-error A custom option domain cannot silently receive primitives.
   options: [1],
@@ -296,4 +300,4 @@ export function PublicApiFixture() {
   );
 }
 
-void [badColumns, missingRowKeyProps, objectRowKeyProps, badCustomOptions, typedMultiProps, sessionExpiredEvent];
+void [badColumns, missingRowKeyProps, objectRowKeyProps, badCustomOptions, typedMultiProps, sessionExpiredEvent, breadcrumbs, modalSize];
