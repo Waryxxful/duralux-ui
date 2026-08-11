@@ -193,8 +193,8 @@ export function PublicApiFixture() {
       <DataTable<ExternalRow> {...stringRowKeyProps} />
       <DataTable<ExternalRow> {...numberRowKeyProps} />
 
-      <Tabs tabs={tabs} defaultActiveKey="summary" />
-      <Tabs tabs={tabs} activeKey={activeTab} onChange={setActiveTab} />
+      <Tabs tabs={tabs} defaultActiveKey="summary" ariaLabel="Secciones de resumen" />
+      <Tabs tabs={tabs} activeKey={activeTab} onChange={setActiveTab} aria-label="Pestañas de cuenta" aria-labelledby="account-tabs-heading" />
 
       <ChatSidebar
         contacts={contacts}

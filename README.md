@@ -242,13 +242,21 @@ const tabs = [
 ]
 
 // No controlado: defaultActiveKey solo define la selección inicial.
-<Tabs tabs={tabs} defaultActiveKey="profile" onChange={trackTab} />
+<Tabs
+  tabs={tabs}
+  ariaLabel="Secciones del perfil"
+  defaultActiveKey="profile"
+  onChange={trackTab}
+/>
 
-// Controlado: el consumidor actualiza activeKey.
-<Tabs tabs={tabs} activeKey={activeKey} onChange={setActiveKey} />
+// Controlado: el consumidor actualiza activeKey y reutiliza el heading visible.
+<h2 id="profile-tabs-heading">Perfil</h2>
+<Tabs tabs={tabs} aria-labelledby="profile-tabs-heading" activeKey={activeKey} onChange={setActiveKey} />
 ```
 
-También admite `className` y `tabClassName`. Implementa asociación tab/panel y navegación por teclado sin Bootstrap JS.
+Nombrá cada tablist con `ariaLabel`/`aria-label`, o asociándolo a un heading visible mediante `aria-labelledby` (esta última opción tiene prioridad). Sin un nombre explícito, el componente anuncia `Pestañas`.
+
+También admite `className` y `tabClassName`. Implementa asociación tab/panel y navegación por teclado sin Bootstrap JS. Los tracks se ajustan a varias filas en contenedores estrechos para que ningún tab quede recortado; en contenedores amplios conservan el desplazamiento horizontal.
 
 ### DataTable
 

@@ -500,6 +500,10 @@ export interface TabsProps<K extends TabKey = TabKey> {
   activeKey?: K
   defaultActiveKey?: K
   onChange?: (key: K) => void
+  /** Accessible tablist name when no visible heading is referenced. */
+  ariaLabel?: string
+  'aria-label'?: string
+  'aria-labelledby'?: string
 }
 
 export type BubbleVariant = 'incoming' | 'outgoing' | 'system'

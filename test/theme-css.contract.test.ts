@@ -317,6 +317,16 @@ describe('CSS theme contract', () => {
     expect(readFileSync(resolve(repoRoot, 'scss/themes/applications/_chat.scss'), 'utf8')).not.toContain('transition: all')
   })
 
+  test('keeps Tabs focus-visible, named-track, and narrow-container safeguards in the public CSS', () => {
+    expect(runtimeCss).toContain('.gcu-tabs-viewport')
+    expect(runtimeCss).toContain('padding:4px')
+    expect(runtimeCss).toContain('@container (max-width:40rem)')
+    expect(runtimeCss).toContain('outline:2px solid currentColor')
+    expect(runtimeCss).toContain('@media (forced-colors:active)')
+    expect(runtimeCss).toContain('outline-color:Highlight')
+    expect(contrastRatio('#b9c5ff', '#0f172a')).toBeGreaterThanOrEqual(3)
+  })
+
   test('ships a reduced-motion contract for the public progress ring indicator', () => {
     const indicator = ruleWithDeclarations(css, '.gcu-progress-ring__indicator', ['transition'])
     expect(indicator.transition).toMatch(/stroke-dashoffset/)

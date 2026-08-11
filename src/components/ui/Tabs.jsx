@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { safeRead, toSafeDomSegment } from './internal/safeDom.js'
 
 const EMPTY_TABS = []
+const DEFAULT_TABLIST_LABEL = 'Pestañas'
 
 function isDevelopment() {
   const nodeEnvironment = typeof process !== 'undefined' ? process.env?.NODE_ENV : undefined
@@ -66,6 +67,9 @@ export function Tabs({
   activeKey,
   defaultActiveKey,
   onChange,
+  ariaLabel,
+  'aria-label': ariaLabelProp,
+  'aria-labelledby': ariaLabelledBy,
 }) {
   const normalizedTabs = Array.isArray(tabs) ? tabs : EMPTY_TABS
   const isControlled = activeKey !== undefined
@@ -86,6 +90,7 @@ export function Tabs({
   const active = activeEntry?.key
   const idPrefix = useId()
   const safeIdPrefix = useMemo(() => `duralux-tabs-${toSafeDomSegment(idPrefix)}`, [idPrefix])
+  const tablistLabel = ariaLabelledBy ? undefined : ariaLabelProp ?? ariaLabel ?? DEFAULT_TABLIST_LABEL
   const tabRefs = useRef(new Map())
   const reconciliationRef = useRef(null)
   const warnedRef = useRef(new Set())
@@ -166,32 +171,40 @@ export function Tabs({
 
   return (
     <>
-      <ul className={`nav nav-tabs gcu-tabs ${className}`.trim()} role="tablist" aria-orientation="horizontal">
-        {entries.map((entry) => (
-          <li key={entry.reactKey} className={`nav-item ${tabClassName}`} role="presentation">
-            <button
-              ref={(node) => {
-                if (node) tabRefs.current.set(entry.reactKey, node)
-                else tabRefs.current.delete(entry.reactKey)
-              }}
-              id={getTabId(entry)}
-              className={`nav-link${isActiveEntry(entry) ? ' active' : ''}`}
-              onClick={() => selectTab(entry)}
-              onKeyDown={(event) => handleKeyDown(event, entry)}
-              type="button"
-              role="tab"
-              disabled={entry.disabled}
-              aria-controls={getPanelId(entry)}
-              aria-selected={isActiveEntry(entry)}
-              aria-disabled={entry.disabled ? 'true' : undefined}
-              tabIndex={entry.disabled ? -1 : isActiveEntry(entry) ? 0 : -1}
-            >
-              {entry.icon && <i className={`${entry.icon} me-2`} aria-hidden></i>}
-              {entry.label}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className="gcu-tabs-viewport">
+        <ul
+          className={`nav nav-tabs gcu-tabs ${className}`.trim()}
+          role="tablist"
+          aria-label={tablistLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-orientation="horizontal"
+        >
+          {entries.map((entry) => (
+            <li key={entry.reactKey} className={`nav-item ${tabClassName}`} role="presentation">
+              <button
+                ref={(node) => {
+                  if (node) tabRefs.current.set(entry.reactKey, node)
+                  else tabRefs.current.delete(entry.reactKey)
+                }}
+                id={getTabId(entry)}
+                className={`nav-link${isActiveEntry(entry) ? ' active' : ''}`}
+                onClick={() => selectTab(entry)}
+                onKeyDown={(event) => handleKeyDown(event, entry)}
+                type="button"
+                role="tab"
+                disabled={entry.disabled}
+                aria-controls={getPanelId(entry)}
+                aria-selected={isActiveEntry(entry)}
+                aria-disabled={entry.disabled ? 'true' : undefined}
+                tabIndex={entry.disabled ? -1 : isActiveEntry(entry) ? 0 : -1}
+              >
+                {entry.icon && <i className={`${entry.icon} me-2`} aria-hidden></i>}
+                {entry.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="tab-content">
         {entries.map((entry) => (
           <div

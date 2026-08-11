@@ -32,6 +32,36 @@ test('links tabs and panels with stable ARIA state', () => {
   expect(screen.getByRole('tab', { name: 'Security' })).toHaveAttribute('id', securityTabId)
 })
 
+test('gives each tablist an accessible name and prioritizes a visible heading', () => {
+  const { rerender } = render(<Tabs tabs={tabs} ariaLabel="Secciones de la cuenta" />)
+  const labelled = screen.getByRole('tablist', { name: 'Secciones de la cuenta' })
+
+  expect(labelled).toHaveAttribute('aria-label', 'Secciones de la cuenta')
+  expect(labelled.parentElement).toHaveClass('gcu-tabs-viewport')
+
+  rerender(<Tabs tabs={tabs} aria-label="Métodos de facturación" />)
+  expect(screen.getByRole('tablist', { name: 'Métodos de facturación' })).toHaveAttribute(
+    'aria-label',
+    'Métodos de facturación',
+  )
+
+  rerender(
+    <>
+      <h2 id="billing-tabs-heading">Facturación</h2>
+      <Tabs tabs={tabs} aria-label="Nombre alternativo" aria-labelledby="billing-tabs-heading" />
+    </>,
+  )
+
+  const labelledByHeading = screen.getByRole('tablist', { name: 'Facturación' })
+  expect(labelledByHeading).toHaveAttribute('aria-labelledby', 'billing-tabs-heading')
+  expect(labelledByHeading).not.toHaveAttribute('aria-label')
+})
+
+test('uses a localized fallback name when consumers provide no label', () => {
+  render(<Tabs tabs={tabs} />)
+  expect(screen.getByRole('tablist', { name: 'Pestañas' })).toBeInTheDocument()
+})
+
 test('supports controlled selection without mutating it internally', async () => {
   const user = userEvent.setup()
   const onChange = vi.fn()

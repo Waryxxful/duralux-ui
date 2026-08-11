@@ -404,17 +404,27 @@ html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-
 
 /* ── Tabs (gcu-tabs): underline active, Duralux primary hierarchy ─────────
    Scoped class so PAGE-STRUCTURE native Bootstrap tabs stay untouched. */
-.gcu-tabs.nav-tabs{
-  flex-wrap:nowrap;
-  gap:0;
+.gcu-tabs-viewport{
+  container-type:inline-size;
+  max-inline-size:100%;
+  margin:-4px;
+  padding:4px;
   overflow-x:auto;
   overflow-y:hidden;
-  border-bottom:1px solid var(--gcu-border,#e5e7eb);
   -webkit-overflow-scrolling:touch;
   scrollbar-width:thin;
 }
-.gcu-tabs.nav-tabs .nav-item{margin-bottom:0}
+/* The wrapping baseline keeps every control reachable where container units are unavailable. */
+.gcu-tabs.nav-tabs{
+  flex-wrap:wrap;
+  gap:0;
+  inline-size:100%;
+  overflow:visible;
+  border-bottom:1px solid var(--gcu-border,#e5e7eb);
+}
+.gcu-tabs.nav-tabs .nav-item{max-inline-size:100%;margin-bottom:0}
 .gcu-tabs.nav-tabs .nav-link{
+  max-inline-size:100%;
   margin-bottom:-1px;
   padding:.65rem 1rem;
   border:0;
@@ -423,9 +433,21 @@ html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-
   background:transparent;
   color:var(--gcu-muted,#64748b);
   font-weight:500;
-  white-space:nowrap;
+  overflow-wrap:break-word;
+  text-align:start;
+  white-space:normal;
   transition:color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1)),border-color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1)),background-color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1))
 }
+/* Modern browsers preserve a compact horizontal track while guaranteeing a next-tab peek. */
+@supports (width:1cqi){
+  .gcu-tabs.nav-tabs{flex-wrap:nowrap;inline-size:max-content;min-inline-size:100%}
+  .gcu-tabs.nav-tabs .nav-item{flex:0 0 auto;max-inline-size:calc(100cqi - 2rem)}
+  @container (max-width:40rem){
+    .gcu-tabs.nav-tabs{flex-wrap:wrap;inline-size:100%}
+    .gcu-tabs.nav-tabs .nav-item{flex:0 1 auto;max-inline-size:100%}
+  }
+}
+
 .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
 .gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active){
   color:var(--gcu-primary,#3454d1);
@@ -433,8 +455,8 @@ html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-
   border-bottom-color:color-mix(in srgb,var(--gcu-primary,#3454d1) 35%,transparent)
 }
 .gcu-tabs.nav-tabs .nav-link:focus-visible{
-  outline:2px solid var(--gcu-primary,#3454d1);
-  outline-offset:2px
+  outline:2px solid currentColor;
+  outline-offset:1px
 }
 .gcu-tabs.nav-tabs .nav-link.active{
   color:var(--gcu-primary,#3454d1);
@@ -463,8 +485,11 @@ html.app-skin-dark .gcu-tabs.nav-tabs .nav-link,
   border-color:transparent!important
 }
 html.app-skin-dark .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
+html.app-skin-dark .gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active),
 .app-skin-dark .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
-[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active){
+.app-skin-dark .gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active),
+[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
+[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active){
   color:#b9c5ff;
   border-bottom-color:rgba(185,197,255,.35)!important
 }
@@ -484,6 +509,9 @@ html.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
 [data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"]{
   color:var(--gcu-muted,#9aa4b2)!important;
   opacity:.4
+}
+@media (forced-colors:active){
+  .gcu-tabs.nav-tabs .nav-link:focus-visible{outline-color:Highlight}
 }
 @media (prefers-reduced-motion:reduce){
   .gcu-tabs.nav-tabs .nav-link{transition:none}
