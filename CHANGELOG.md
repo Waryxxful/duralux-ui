@@ -28,6 +28,7 @@ Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe 
 - `apiFetch` conserva `Response`, `credentials: 'same-origin'`, todas las formas de `HeadersInit` y sólo serializa JSON cuando corresponde; también reexporta `SESSION_EXPIRED_EVENT` como alias de compatibilidad para el evento 401.
 - Empaquetado, declaraciones TypeScript, tree-shaking y gates de contrato/tamaño.
 - El lifecycle `prepare` evita la recursión de empaquetado de npm 10 en Node 20/22; `deploy.sh` detecta Docker Compose v2 y el binario legacy.
+- El peer opcional `apexcharts` acepta las ramas 5 y 6, compatibles con `react-apexcharts` 2.1.1.
 
 ### Migración rápida
 

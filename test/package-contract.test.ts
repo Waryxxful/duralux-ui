@@ -34,6 +34,7 @@ describe('public package contract', () => {
       import: './dist/charts/recharts.js',
       require: './dist/charts/recharts.cjs',
     })
+    expect(manifest.peerDependencies.apexcharts).toBe('^5.15.2 || ^6.0.0')
     expect(manifest.peerDependenciesMeta).toMatchObject({
       apexcharts: { optional: true },
       'react-apexcharts': { optional: true },
