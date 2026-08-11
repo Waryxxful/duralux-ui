@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import type { SemanticVariant } from '../../tokens';
@@ -26,27 +26,37 @@ export function ConfirmDialog({
   variant = 'primary',
   loading,
 }: ConfirmDialogProps) {
+  const messageId = useId();
+  const isLoading = Boolean(loading);
+  const canConfirm = typeof onConfirm === 'function';
+  const canCancel = typeof onCancel === 'function';
+
   return (
     <Modal
       open={open}
-      onClose={onCancel}
-      closeOnEscape={!loading}
-      closeOnBackdrop={!loading}
-      showCloseButton={!loading}
+      onClose={!isLoading && canCancel ? onCancel : undefined}
+      closeOnEscape={!isLoading && canCancel}
+      closeOnBackdrop={!isLoading && canCancel}
+      showCloseButton={!isLoading && canCancel}
       title={title}
+      aria-describedby={messageId}
       size="sm"
       footer={
         <>
-          <Button variant="light-brand" onClick={onCancel} disabled={loading}>
-            {cancelLabel}
-          </Button>
-          <Button variant={variant} onClick={onConfirm} loading={loading}>
-            {confirmLabel}
-          </Button>
+          {canCancel && (
+            <Button variant="light-brand" onClick={onCancel} disabled={isLoading}>
+              {cancelLabel}
+            </Button>
+          )}
+          {canConfirm && (
+            <Button variant={variant} onClick={onConfirm} loading={isLoading}>
+              {confirmLabel}
+            </Button>
+          )}
         </>
       }
     >
-      <p className="gcu-confirm-dialog__message">{message}</p>
+      <p id={messageId} className="gcu-confirm-dialog__message">{message}</p>
     </Modal>
   );
 }

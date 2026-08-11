@@ -67,7 +67,8 @@ test('reschedules auto-hide without leaving an earlier timer active', () => {
   expect(onClose).toHaveBeenCalledOnce()
 })
 
-test('closes immediately and only once with reduced motion', () => {
+test('uses the same close timer when CSS handles reduced motion', () => {
+  vi.useFakeTimers()
   mockReducedMotion(true)
   const onClose = vi.fn()
   render(<Toast variant="info" title="Updated" show onClose={onClose} autoHideMs={0} />)
@@ -76,6 +77,8 @@ test('closes immediately and only once with reduced motion', () => {
   fireEvent.click(closeButton)
   fireEvent.click(closeButton)
 
+  expect(onClose).not.toHaveBeenCalled()
+  expect(screen.getByRole('status')).toHaveClass('gcu-toast--closing')
+  act(() => vi.advanceTimersByTime(300))
   expect(onClose).toHaveBeenCalledOnce()
-  expect(screen.getByRole('status')).not.toHaveClass('gcu-toast--closing')
 })

@@ -18,12 +18,12 @@ import type {
   RefCallback,
 } from 'react';
 import { registerDismissableLayer } from '../../utils/dismissableLayer';
-import { cx } from '../../utils/cx';
 
 export type DropdownAlignment = 'start' | 'end';
 
 export type DropdownTriggerProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   ref: RefCallback<HTMLButtonElement>;
+  id: string;
   'aria-controls': string;
   'aria-expanded': boolean;
 };
@@ -43,9 +43,11 @@ export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   menuId?: string;
 }
 
-export interface DropdownMenuProps extends Omit<HTMLAttributes<HTMLElement>, 'id'> {
+export interface DropdownMenuProps extends Omit<HTMLAttributes<HTMLElement>, 'id' | 'inert'> {
   as?: ElementType;
   closeOnSelect?: boolean;
+  /** Forward the native inert state for portals/host shells that manage focus. */
+  inert?: boolean | string;
 }
 
 interface DropdownContextValue {
@@ -83,11 +85,11 @@ export function Dropdown({
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen);
   const open = controlledOpen ?? uncontrolledOpen;
 
-  function setOpen(nextOpen: boolean) {
+  const setOpen = useCallback((nextOpen: boolean) => {
     if (nextOpen === open) return;
     if (controlledOpen === undefined) setUncontrolledOpen(nextOpen);
     onOpenChange?.(nextOpen);
-  }
+  }, [controlledOpen, onOpenChange, open]);
 
   useEffect(() => {
     controlledOpenRef.current = controlledOpen;
@@ -122,19 +124,16 @@ export function Dropdown({
     });
   }, [open]);
 
-  const close = useCallback((restoreFocus = false) => {
-    if (controlledOpenRef.current === undefined) setUncontrolledOpen(false);
-    onOpenChangeRef.current?.(false);
-    if (restoreFocus) triggerRef.current?.focus();
-  }, []);
-
-  const context: DropdownContextValue = useMemo(() => ({
+  const context = useMemo<DropdownContextValue>(() => ({
     align,
-    close,
+    close: (restoreFocus = false) => {
+      setOpen(false);
+      if (restoreFocus) triggerRef.current?.focus();
+    },
     menuId: resolvedMenuId,
     open,
     triggerId,
-  }), [align, close, resolvedMenuId, open, triggerId]);
+  }), [align, open, resolvedMenuId, setOpen, triggerId]);
   const triggerProps: DropdownTriggerProps = {
     ref: (node) => {
       triggerRef.current = node;
@@ -197,7 +196,7 @@ export function DropdownMenu({
 
   function handleClick(event: ReactMouseEvent<HTMLElement>) {
     onClick?.(event);
-    if (!closeOnSelect) return;
+    if (event.defaultPrevented || !closeOnSelect) return;
 
     const target = event.target;
     if (!(target instanceof Element) || target.closest('[data-dropdown-keep-open]')) return;
@@ -211,12 +210,13 @@ export function DropdownMenu({
     <Component
       {...menuProps}
       id={menuId}
-      className={cx(
+      inert={menuProps.inert ?? (!open ? '' : undefined)}
+      className={[
         'dropdown-menu',
         align === 'end' ? 'dropdown-menu-end' : '',
         className,
         open ? 'show' : '',
-      )}
+      ].filter(Boolean).join(' ')}
       aria-hidden={open ? undefined : true}
       aria-labelledby={triggerId}
       onClick={handleClick}

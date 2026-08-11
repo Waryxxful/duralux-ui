@@ -7,7 +7,7 @@
 import React from 'react';
 import type { SemanticVariant, StatusVariant } from '../../tokens';
 import { Badge } from '../ui/Badge';
-import { cx } from '../../utils/cx';
+import { StatsCard as RuntimeStatsCard } from '../ui/StatsCard';
 
 // ── CardHeader / CardBody / CardFooter (sub-components not in @duralux/ui) ────
 
@@ -25,7 +25,7 @@ export function CardHeader({ title, actions, className, children, ...rest }: Car
     </>
   );
   return (
-    <div className={cx('card-header', className)} {...rest}>
+    <div className={['card-header', className].filter(Boolean).join(' ')} {...rest}>
       {content}
     </div>
   );
@@ -35,7 +35,7 @@ export interface CardBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CardBody({ className, children, ...rest }: CardBodyProps) {
   return (
-    <div className={cx('card-body', className)} {...rest}>
+    <div className={['card-body', className].filter(Boolean).join(' ')} {...rest}>
       {children}
     </div>
   );
@@ -45,7 +45,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CardFooter({ className, children, ...rest }: CardFooterProps) {
   return (
-    <div className={cx('card-footer', className)} {...rest}>
+    <div className={['card-footer', className].filter(Boolean).join(' ')} {...rest}>
       {children}
     </div>
   );
@@ -92,6 +92,19 @@ export interface StatCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   footer?: React.ReactNode;
 }
 
+function featherIcon(icon: string | undefined): string | undefined {
+  if (!icon) return undefined;
+  return icon.startsWith('feather-') ? icon : `feather-${icon}`;
+}
+
+/**
+ * Compatibility adapter for the older GranCRM signature.
+ *
+ * StatsCard.jsx is the runtime source of truth. Its current signature does
+ * not accept the legacy `className`/HTML passthrough or GranCRM's `change`,
+ * so this adapter maps those props and clones only the runtime root to retain
+ * the old attributes without reimplementing a second card DOM.
+ */
 export function StatCard({
   title,
   value,
@@ -102,29 +115,23 @@ export function StatCard({
   className,
   ...rest
 }: StatCardProps) {
-  const changePositive = change && change.value >= 0;
-  const changeIcon = changePositive ? 'arrow-up' : 'arrow-down';
+  const trend = change
+    ? {
+      value: `${Math.abs(change.value)}%${change.label ? ` ${change.label}` : ''}`,
+      up: change.value >= 0,
+    }
+    : undefined;
+  const runtimeCard = RuntimeStatsCard({
+    icon: featherIcon(icon),
+    iconBg: `bg-soft-${variant} text-${variant}`,
+    value,
+    label: title,
+    trend,
+    footer,
+  });
 
-  return (
-    <div className={cx('card stretch stretch-full', className)} {...rest}>
-      <div className="card-body">
-        <div className="d-flex align-items-start justify-content-between mb-2">
-          <p className="fs-12 text-muted mb-0">{title}</p>
-          {icon && (
-            <div className={`avatar-text avatar-sm bg-soft-${variant} text-${variant}`}>
-              <i className={`feather-${icon}`} aria-hidden="true" />
-            </div>
-          )}
-        </div>
-        <h4 className="fs-4 fw-bold text-dark mb-0">{value}</h4>
-        {change && (
-          <Badge variant={changePositive ? 'success' : 'danger'} soft className="mt-2">
-            <i className={`feather-${changeIcon} fs-10 me-1`} aria-hidden="true" />
-            {Math.abs(change.value)}%{change.label ? ` ${change.label}` : ''}
-          </Badge>
-        )}
-      </div>
-      {footer && <div className="card-footer fs-11 fw-bold text-uppercase text-center">{footer}</div>}
-    </div>
-  );
+  return React.cloneElement(runtimeCard, {
+    className: [runtimeCard.props.className, className].filter(Boolean).join(' '),
+    ...rest,
+  });
 }

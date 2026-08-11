@@ -1,6 +1,11 @@
 import { cx } from '../../utils/cx'
 import { resolveVariant } from './buttonVariants'
 
+function blockDisabledEvent(event) {
+  event.preventDefault()
+  event.stopPropagation()
+}
+
 /**
  * Button — botón con variantes, tamaños y estado de carga.
  *
@@ -30,37 +35,66 @@ export function Button({
   className = '',
   children,
   type = 'button',
+  onKeyDown = undefined,
+  onKeyUp = undefined,
+  'aria-disabled': ariaDisabled = undefined,
+  'aria-busy': ariaBusy = undefined,
+  tabIndex = undefined,
   ...props
 }) {
   // outline deprecado: la plantilla no usa variantes outline
   void outline
   const tone = resolveVariant(variant)
   const isDisabled = disabled || loading
-  const isAnchor = Tag === 'a'
-  const isDisabledAnchor = isAnchor && isDisabled
-  const handleClick = isDisabledAnchor
-    ? (event) => {
-        event.preventDefault()
-        event.stopPropagation()
-      }
-    : onClick
+  const isNativeTag = typeof Tag === 'string'
+  const isNativeButton = Tag === 'button'
+  const isNativeAnchor = Tag === 'a'
+  const isDisabledNonButton = !isNativeButton && isDisabled
+  const handleClick = isDisabledNonButton ? blockDisabledEvent : onClick
+  const handleKeyDown = isDisabledNonButton ? blockDisabledEvent : onKeyDown
+  const handleKeyUp = isDisabledNonButton ? blockDisabledEvent : onKeyUp
+
+  const elementProps = {
+    ...props,
+    className: cx('btn', `btn-${tone}`, size && `btn-${size}`, className),
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    onKeyUp: handleKeyUp,
+  }
+
+  if (isNativeButton) {
+    elementProps.disabled = isDisabled
+    elementProps.type = type
+    if (ariaDisabled !== undefined) elementProps['aria-disabled'] = ariaDisabled
+    if (tabIndex !== undefined) elementProps.tabIndex = tabIndex
+  } else {
+    if (isDisabledNonButton) {
+      elementProps['aria-disabled'] = true
+      elementProps.tabIndex = -1
+    } else {
+      if (ariaDisabled !== undefined) elementProps['aria-disabled'] = ariaDisabled
+      if (tabIndex !== undefined) elementProps.tabIndex = tabIndex
+    }
+    if ((isNativeAnchor && !isDisabled || !isNativeTag) && href !== undefined) {
+      elementProps.href = href
+    }
+    if (!isNativeTag) {
+      elementProps.disabled = isDisabled
+      elementProps.type = type
+    }
+  }
+
+  if (loading || ariaBusy !== undefined) {
+    elementProps['aria-busy'] = loading ? true : ariaBusy
+  }
 
   return (
-    <Tag
-      {...props}
-      className={cx('btn', `btn-${tone}`, size && `btn-${size}`, className)}
-      onClick={handleClick}
-      disabled={isAnchor ? undefined : isDisabled}
-      href={isDisabledAnchor ? undefined : href}
-      type={Tag === 'button' ? type : undefined}
-      aria-disabled={isDisabledAnchor ? true : props['aria-disabled']}
-      tabIndex={isDisabledAnchor ? -1 : props.tabIndex}
-    >
+    <Tag {...elementProps}>
       {loading
-        ? <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+        ? <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
         : (startIcon
             ? <i className={`feather-${startIcon} me-2`} aria-hidden />
-            : icon && <i className={`${icon} me-2`}></i>
+            : icon && <i className={`${icon} me-2`} aria-hidden="true"></i>
           )
       }
       {children}
@@ -86,16 +120,17 @@ export function LinkButton({ href, ...props }) {
  *   label   — REQUIRED; used as aria-label and title
  *   variant (default "light-brand", canónico del template), size, ...rest (outline deprecado e ignorado)
  */
-export function IconButton({ icon, label, variant, size, outline, className = '', ...rest }) {
+export function IconButton({ icon, label, variant, size, outline, className = '', type = 'button', ...rest }) {
   void outline
+  const { 'aria-label': _restAriaLabel, title: _restTitle, ...forwardedProps } = rest
   const tone = resolveVariant(variant || 'light-brand')
   return (
     <button
-      type="button"
+      {...forwardedProps}
+      type={type}
       className={cx('btn', 'btn-icon', `btn-${tone}`, size && `btn-${size}`, className)}
       aria-label={label}
       title={label}
-      {...rest}
     >
       <i className={`feather-${icon}`} aria-hidden />
     </button>

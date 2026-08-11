@@ -2,48 +2,78 @@
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 
+/* BEGIN GENERATED SEMANTIC TOKENS */
 :root,.gcu-theme,[data-gcu-theme="light"]{
-  --gcu-primary:#3454d1;--gcu-secondary:#4b5563;--gcu-success:#17c666;--gcu-danger:#ea4d4d;
-  --gcu-warning:#ffa21d;--gcu-info:#3dc7be;--gcu-dark:#283c50;--gcu-light:#eff0f6;
-  --gcu-text:#283c50;--gcu-muted:#4b5563;--gcu-surface:#fff;--gcu-surface-subtle:#f3f4f6;
-  --gcu-border:#e5e7eb;--gcu-focus:rgba(52,84,209,.2);--gcu-radius:10px;
+  --gcu-primary:#3454d1;
+  --gcu-secondary:#64748b;
+  --gcu-success:#17c666;
+  --gcu-danger:#ea4d4d;
+  --gcu-warning:#ffa21d;
+  --gcu-info:#3dc7be;
+  --gcu-indigo:#6610f2;
+  --gcu-bg:#f0f2f8;
+  --gcu-body:#4b5563;
+  --gcu-canvas:#f3f4f6;
+  --gcu-teal:#41b2c4;
+  --gcu-dark:#283c50;
+  --gcu-darken:#001327;
+  --gcu-light:#eff0f6;
+  --gcu-primary-rgb:52, 84, 209;
+  --gcu-secondary-rgb:100, 116, 139;
+  --gcu-success-rgb:23, 198, 102;
+  --gcu-danger-rgb:234, 77, 77;
+  --gcu-warning-rgb:255, 162, 29;
+  --gcu-info-rgb:61, 199, 190;
+  --gcu-indigo-rgb:102, 16, 242;
+  --gcu-bg-rgb:240, 242, 248;
+  --gcu-body-rgb:75, 85, 99;
+  --gcu-canvas-rgb:243, 244, 246;
+  --gcu-teal-rgb:65, 178, 196;
+  --gcu-dark-rgb:40, 60, 80;
+  --gcu-darken-rgb:0, 19, 39;
+  --gcu-light-rgb:239, 240, 246;
+  --gcu-text:var(--gcu-dark);--gcu-muted:var(--gcu-secondary);--gcu-surface:#fff;--gcu-surface-subtle:var(--gcu-canvas);
+  --gcu-border:#e5e7eb;--gcu-focus:rgba(var(--gcu-primary-rgb),.2);--gcu-radius:10px;
   --gcu-shadow:0 1px 3px 0 rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1);--gcu-font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 [data-gcu-theme="dark"],.app-skin-dark{
   --gcu-text:#b1b4c0;--gcu-muted:#9aa4b2;--gcu-surface:#121a2d;--gcu-surface-subtle:#0f172a;
   --gcu-border:#1b2436;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
-/* ponytail: .gcu-theme re-declares light vars; this overrides them when the shell is in dark mode */
+/* Dark theme override: .gcu-theme may re-declare light vars in its own scope. */
 .app-skin-dark .gcu-theme:not([data-gcu-theme="light"]){
   --gcu-text:#b1b4c0;--gcu-muted:#9aa4b2;--gcu-surface:#121a2d;--gcu-surface-subtle:#0f172a;
   --gcu-border:#1b2436;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
-
+/* END GENERATED SEMANTIC TOKENS */
+body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 .gcu-theme{font-family:var(--gcu-font);color:var(--gcu-text)}
 .gcu-icon{font-family:gcu-feather!important;font-style:normal;font-weight:400;font-variant:normal;text-transform:none;line-height:1;speak:never;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .gcu-icon--xs{font-size:10px}.gcu-icon--sm{font-size:12px}.gcu-icon--md{font-size:14px}.gcu-icon--lg{font-size:16px}.gcu-icon--xl{font-size:18px}
 
-.gcu-btn{--gcu-btn-color:var(--gcu-primary);display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:7px 14px;border:1px solid var(--gcu-btn-color);border-radius:5px;background:var(--gcu-btn-color);color:#fff;font:600 13px/1.25 var(--gcu-font);text-decoration:none;cursor:pointer;transition:background-color .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease,filter .3s ease}
-.gcu-btn:hover:not(:disabled){filter:brightness(.94);color:#fff}.gcu-btn:active:not(:disabled){transform:scale(.97)}
+.gcu-btn{--gcu-btn-color:var(--gcu-primary);--gcu-btn-text:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:7px 14px;border:1px solid var(--gcu-btn-color);border-radius:5px;background:var(--gcu-btn-color);color:var(--gcu-btn-text);font:600 13px/1.25 var(--gcu-font);text-decoration:none;cursor:pointer;transition:background-color .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease,filter .3s ease}
+.gcu-btn:hover:not(:disabled){filter:brightness(.94);color:var(--gcu-btn-text)}.gcu-btn:active:not(:disabled){transform:scale(.97)}
 .gcu-btn:focus-visible,.gcu-control:focus-visible,.gcu-check__input:focus-visible,.gcu-pagination__button:focus-visible,.gcu-close:focus-visible{outline:0;box-shadow:0 0 0 3px var(--gcu-focus)}
 .gcu-btn:disabled,.gcu-btn[aria-disabled="true"]{opacity:.6;cursor:not-allowed}
-.gcu-btn--secondary{--gcu-btn-color:var(--gcu-secondary)}.gcu-btn--success{--gcu-btn-color:var(--gcu-success)}.gcu-btn--danger{--gcu-btn-color:var(--gcu-danger)}
-.gcu-btn--warning{--gcu-btn-color:var(--gcu-warning);color:#fff}.gcu-btn--info{--gcu-btn-color:var(--gcu-info)}.gcu-btn--dark{--gcu-btn-color:var(--gcu-dark)}
-.gcu-btn--light{--gcu-btn-color:var(--gcu-border);color:var(--gcu-text);background:var(--gcu-surface)}.gcu-btn--link{border-color:transparent;background:transparent;color:var(--gcu-primary)}
-.gcu-btn--outline{background:transparent;color:var(--gcu-btn-color)}.gcu-btn--outline:hover:not(:disabled){background:var(--gcu-btn-color);color:#fff;filter:none}
+.gcu-btn--secondary{--gcu-btn-color:var(--gcu-secondary);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--success{--gcu-btn-color:var(--gcu-success);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--danger{--gcu-btn-color:var(--gcu-danger);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}
+.gcu-btn--warning{--gcu-btn-color:var(--gcu-warning);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--info{--gcu-btn-color:var(--gcu-info);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--teal{--gcu-btn-color:var(--gcu-teal);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--indigo{--gcu-btn-color:var(--gcu-indigo);--gcu-btn-outline-text:var(--gcu-indigo)}.gcu-btn--dark{--gcu-btn-color:var(--gcu-dark);--gcu-btn-outline-text:var(--gcu-dark)}
+.gcu-btn--light{--gcu-btn-color:var(--gcu-border);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken);color:var(--gcu-btn-text);background:var(--gcu-surface)}.gcu-btn--link{border-color:transparent;background:transparent;color:var(--gcu-primary)}
+.gcu-btn--outline{background:transparent;color:var(--gcu-btn-outline-text,var(--gcu-btn-color))}.gcu-btn--outline:hover:not(:disabled){background:var(--gcu-btn-color);color:var(--gcu-btn-text);filter:none}
+.gcu-theme[data-gcu-theme="dark"] .gcu-btn--outline,.app-skin-dark .gcu-btn--outline{--gcu-btn-outline-text:#fff}
 .gcu-btn--sm{min-height:30px;padding:5px 10px;font-size:12px}.gcu-btn--lg{min-height:44px;padding:10px 18px;font-size:14px}
 .gcu-btn--icon{width:36px;padding:0}.gcu-btn--icon.gcu-btn--sm{width:30px}.gcu-btn--icon.gcu-btn--lg{width:44px}.gcu-btn__icon{flex:none}
 .gcu-spinner{display:inline-block;width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:gcu-spin .65s linear infinite;vertical-align:-.125em}.gcu-spinner--lg{width:36px;height:36px;border-width:3px;color:var(--gcu-primary)}
 @keyframes gcu-spin{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.gcu-spinner{animation-duration:1.5s}.gcu-btn{transition:none}.gcu-btn:active:not(:disabled){transform:none}.gcu-control{transition:none}.gcu-progress__bar{transition:none}}
+@media (prefers-reduced-motion:reduce){.gcu-spinner{animation:none}.gcu-btn{transition:none}.gcu-btn:active:not(:disabled){transform:none}.gcu-control,.gcu-progress__bar,.gcu-toast__close{transition:none}.gcu-progress__bar--animated{animation:none}}
 
-.gcu-badge{--gcu-badge-color:var(--gcu-primary);display:inline-flex;align-items:center;padding:4px 8px;border-radius:4px;background:var(--gcu-badge-color);color:#fff;font:600 11px/1 var(--gcu-font);white-space:nowrap}
-.gcu-badge--light{--gcu-badge-color:var(--gcu-light);color:var(--gcu-text)}
+.gcu-badge{--gcu-badge-color:var(--gcu-primary);--gcu-badge-text:#fff;display:inline-flex;align-items:center;padding:4px 8px;border-radius:4px;background:var(--gcu-badge-color);color:var(--gcu-badge-text);font:600 11px/1 var(--gcu-font);white-space:nowrap}
+.gcu-badge--secondary{--gcu-badge-color:var(--gcu-secondary)}.gcu-badge--success{--gcu-badge-color:var(--gcu-success);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--danger{--gcu-badge-color:var(--gcu-danger);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--warning{--gcu-badge-color:var(--gcu-warning);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--info{--gcu-badge-color:var(--gcu-info);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--teal{--gcu-badge-color:var(--gcu-teal);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--indigo{--gcu-badge-color:var(--gcu-indigo)}.gcu-badge--dark{--gcu-badge-color:var(--gcu-dark)}
+.gcu-badge--light{--gcu-badge-color:var(--gcu-light);--gcu-badge-text:var(--gcu-darken);color:var(--gcu-badge-text)}
 
 .gcu-avatar{display:inline-flex;align-items:center;justify-content:center;overflow:hidden;flex:none;font-family:var(--gcu-font)}
 .gcu-avatar img{display:block;width:100%;height:100%;object-fit:cover}.gcu-avatar--circle{border-radius:50%}.gcu-avatar--rounded{border-radius:6px}
-.gcu-avatar--text{background:var(--gcu-primary);color:#fff;font-weight:700}.gcu-avatar--secondary{background:var(--gcu-secondary)}.gcu-avatar--success{background:var(--gcu-success)}
-.gcu-avatar--danger{background:var(--gcu-danger)}.gcu-avatar--warning{background:var(--gcu-warning);color:#fff}.gcu-avatar--info{background:var(--gcu-info)}.gcu-avatar--dark{background:var(--gcu-dark)}
+.gcu-avatar--text{background:var(--gcu-primary);color:#fff;font-weight:700}.gcu-avatar--secondary{background:var(--gcu-secondary);color:#fff}.gcu-avatar--success{background:var(--gcu-success);color:var(--gcu-darken)}
+.gcu-avatar--danger{background:var(--gcu-danger);color:var(--gcu-darken)}.gcu-avatar--warning{background:var(--gcu-warning);color:var(--gcu-darken)}.gcu-avatar--info{background:var(--gcu-info);color:var(--gcu-darken)}.gcu-avatar--teal{background:var(--gcu-teal);color:var(--gcu-darken)}.gcu-avatar--indigo{background:var(--gcu-indigo);color:#fff}.gcu-avatar--dark{background:var(--gcu-dark);color:#fff}.gcu-avatar--light{background:var(--gcu-light);color:var(--gcu-darken)}
 
 .gcu-card__header{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;padding:25px;border-bottom:1px solid var(--gcu-border)}
 .gcu-card__title{margin:0;color:var(--gcu-text);font-size:16px;font-weight:700}.gcu-card__actions{margin-left:auto}.gcu-card__body{padding:25px}.gcu-card__body--flush{padding:0}.gcu-card__footer{padding:25px;border-top:1px solid var(--gcu-border)}
@@ -62,11 +92,16 @@
 .gcu-input-group__addon{display:flex;align-items:center;padding:8px 11px;border:1px solid var(--gcu-border);background:var(--gcu-surface-subtle);color:var(--gcu-muted);font:400 13px var(--gcu-font)}
 .gcu-check{display:flex;align-items:center;gap:7px;font-family:var(--gcu-font)}.gcu-check__input{width:16px;height:16px;margin:0;accent-color:var(--gcu-primary)}.gcu-check__label{color:var(--gcu-text);font-size:13px;cursor:pointer}
 
-.gcu-alert{--gcu-alert-color:var(--gcu-info);position:relative;display:flex;align-items:flex-start;gap:8px;padding:11px 14px;border:1px solid color-mix(in srgb,var(--gcu-alert-color) 30%,transparent);border-radius:5px;background:color-mix(in srgb,var(--gcu-alert-color) 10%,var(--gcu-surface));color:var(--gcu-text);font:400 13px/1.45 var(--gcu-font)}
-.gcu-alert--primary{--gcu-alert-color:var(--gcu-primary)}.gcu-alert--secondary{--gcu-alert-color:var(--gcu-secondary)}.gcu-alert--success{--gcu-alert-color:var(--gcu-success)}.gcu-alert--danger{--gcu-alert-color:var(--gcu-danger)}.gcu-alert--warning{--gcu-alert-color:var(--gcu-warning)}.gcu-alert__icon{color:var(--gcu-alert-color);margin-top:2px}.gcu-alert--dismissible{padding-right:38px}.gcu-alert .gcu-close{position:absolute;top:6px;right:6px}
+.gcu-alert{--gcu-alert-color:var(--gcu-info);--gcu-alert-text:var(--gcu-darken);--gcu-alert-icon-text:var(--gcu-darken);position:relative;display:flex;align-items:flex-start;gap:8px;padding:11px 14px;border:1px solid color-mix(in srgb,var(--gcu-alert-color) 30%,transparent);border-radius:5px;background:color-mix(in srgb,var(--gcu-alert-color) 10%,var(--gcu-surface));color:var(--gcu-alert-text);font:400 13px/1.45 var(--gcu-font)}
+.gcu-alert--primary{--gcu-alert-color:var(--gcu-primary);--gcu-alert-icon-text:#fff}.gcu-alert--secondary{--gcu-alert-color:var(--gcu-secondary);--gcu-alert-icon-text:#fff}.gcu-alert--success{--gcu-alert-color:var(--gcu-success)}.gcu-alert--danger{--gcu-alert-color:var(--gcu-danger)}.gcu-alert--warning{--gcu-alert-color:var(--gcu-warning)}.gcu-alert--info{--gcu-alert-color:var(--gcu-info)}.gcu-alert--teal{--gcu-alert-color:var(--gcu-teal)}.gcu-alert--indigo{--gcu-alert-color:var(--gcu-indigo);--gcu-alert-icon-text:#fff}.gcu-alert--light{--gcu-alert-color:var(--gcu-light)}.gcu-alert--dark{--gcu-alert-color:var(--gcu-dark);--gcu-alert-icon-text:#fff}.gcu-alert__icon{display:grid;place-items:center;background:var(--gcu-alert-color);color:var(--gcu-alert-icon-text);margin-top:2px}.gcu-alert--dismissible{padding-right:38px}.gcu-alert .gcu-close{position:absolute;top:6px;right:6px}
+.alert.alert-soft-primary-message,.alert.alert-soft-secondary-message,.alert.alert-soft-success-message,.alert.alert-soft-danger-message,.alert.alert-soft-warning-message,.alert.alert-soft-info-message,.alert.alert-soft-light-message,.alert.alert-soft-dark-message,.alert.alert-soft-teal-message,.alert.alert-soft-indigo-message{border-style:dashed}
+.alert.alert-soft-primary-message{color:var(--gcu-primary);background-color:color-mix(in srgb,var(--gcu-primary) 10%,#fff);border-color:var(--gcu-primary)}.alert.alert-soft-secondary-message{color:var(--gcu-darken);background-color:color-mix(in srgb,var(--gcu-secondary) 10%,#fff);border-color:var(--gcu-secondary)}.alert.alert-soft-success-message{color:var(--gcu-darken);background-color:color-mix(in srgb,var(--gcu-success) 10%,#fff);border-color:var(--gcu-success)}.alert.alert-soft-danger-message{color:var(--gcu-darken);background-color:color-mix(in srgb,var(--gcu-danger) 10%,#fff);border-color:var(--gcu-danger)}.alert.alert-soft-warning-message{color:var(--gcu-darken);background-color:color-mix(in srgb,var(--gcu-warning) 10%,#fff);border-color:var(--gcu-warning)}.alert.alert-soft-info-message{color:var(--gcu-darken);background-color:color-mix(in srgb,var(--gcu-info) 10%,#fff);border-color:var(--gcu-info)}.alert.alert-soft-light-message{color:var(--gcu-darken);background-color:color-mix(in srgb,var(--gcu-light) 10%,#fff);border-color:var(--gcu-darken)}.alert.alert-soft-dark-message{color:var(--gcu-darken);background-color:color-mix(in srgb,var(--gcu-dark) 10%,#fff);border-color:var(--gcu-dark)}.alert.alert-soft-teal-message{color:var(--gcu-darken);background-color:color-mix(in srgb,var(--gcu-teal) 10%,#fff);border-color:var(--gcu-teal)}.alert.alert-soft-indigo-message{color:var(--gcu-indigo);background-color:color-mix(in srgb,var(--gcu-indigo) 10%,#fff);border-color:var(--gcu-indigo)}
+.alert.alert-soft-primary-message a,.alert.alert-soft-secondary-message a,.alert.alert-soft-success-message a,.alert.alert-soft-danger-message a,.alert.alert-soft-warning-message a,.alert.alert-soft-info-message a,.alert.alert-soft-light-message a,.alert.alert-soft-dark-message a,.alert.alert-soft-teal-message a,.alert.alert-soft-indigo-message a{color:inherit}
+.app-skin-dark .gcu-alert,[data-gcu-theme="dark"] .gcu-alert{--gcu-alert-text:#fff}
+.app-skin-dark .alert.alert-soft-primary-message,.app-skin-dark .alert.alert-soft-secondary-message,.app-skin-dark .alert.alert-soft-success-message,.app-skin-dark .alert.alert-soft-danger-message,.app-skin-dark .alert.alert-soft-warning-message,.app-skin-dark .alert.alert-soft-info-message,.app-skin-dark .alert.alert-soft-light-message,.app-skin-dark .alert.alert-soft-dark-message,.app-skin-dark .alert.alert-soft-teal-message,.app-skin-dark .alert.alert-soft-indigo-message,[data-gcu-theme="dark"] .alert.alert-soft-primary-message,[data-gcu-theme="dark"] .alert.alert-soft-secondary-message,[data-gcu-theme="dark"] .alert.alert-soft-success-message,[data-gcu-theme="dark"] .alert.alert-soft-danger-message,[data-gcu-theme="dark"] .alert.alert-soft-warning-message,[data-gcu-theme="dark"] .alert.alert-soft-info-message,[data-gcu-theme="dark"] .alert.alert-soft-light-message,[data-gcu-theme="dark"] .alert.alert-soft-dark-message,[data-gcu-theme="dark"] .alert.alert-soft-teal-message,[data-gcu-theme="dark"] .alert.alert-soft-indigo-message{color:#fff;background-color:#182235;border-color:#475569}
 .gcu-close{display:grid;width:28px;height:28px;padding:0;place-items:center;border:0;border-radius:4px;background:transparent;color:var(--gcu-muted);font:400 22px/1 sans-serif;cursor:pointer}.gcu-close:hover{background:var(--gcu-surface-subtle);color:var(--gcu-text)}
 .gcu-state{display:flex;min-height:180px;padding:32px 20px;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--gcu-muted);font-family:var(--gcu-font)}.gcu-state__icon{margin-bottom:12px;font-size:40px;opacity:.35}.gcu-state__title{margin:0 0 4px;color:var(--gcu-text);font-size:14px;font-weight:700}.gcu-state__message{margin:0 0 14px;font-size:12px}.gcu-state--error .gcu-state__icon{color:var(--gcu-danger);opacity:1}.gcu-state--loading{gap:12px}.gcu-state--loading .gcu-state__message{margin:0}
-.gcu-progress{height:7px;overflow:hidden;border-radius:99px;background:var(--gcu-surface-subtle)}.gcu-progress__bar{height:100%;background:var(--gcu-primary);color:#fff;font-size:9px;text-align:center;transition:width .2s cubic-bezier(.23,1,.32,1)}.gcu-progress__bar--success{background:var(--gcu-success)}.gcu-progress__bar--danger{background:var(--gcu-danger)}.gcu-progress__bar--warning{background:var(--gcu-warning)}.gcu-progress__bar--info{background:var(--gcu-info)}.gcu-progress__bar--secondary{background:var(--gcu-secondary)}.gcu-progress__bar--striped{background-image:linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%);background-size:16px 16px}.gcu-progress__bar--animated{animation:gcu-stripes 1s linear infinite}@keyframes gcu-stripes{to{background-position:16px 0}}
+.gcu-progress{height:7px;overflow:hidden;border-radius:99px;background:var(--gcu-surface-subtle)}.gcu-progress__bar{--gcu-progress-text:#fff;height:100%;background:var(--gcu-primary);color:var(--gcu-progress-text);font-size:9px;text-align:center;transition:width .2s cubic-bezier(.23,1,.32,1)}.gcu-progress__bar--success{background:var(--gcu-success);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--danger{background:var(--gcu-danger);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--warning{background:var(--gcu-warning);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--info{background:var(--gcu-info);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--secondary{background:var(--gcu-secondary)}.gcu-progress__bar--teal{background:var(--gcu-teal);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--indigo{background:var(--gcu-indigo)}.gcu-progress__bar--striped{background-image:linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%);background-size:16px 16px}.gcu-progress__bar--animated{animation:gcu-stripes 1s linear infinite}@keyframes gcu-stripes{to{background-position:16px 0}}
 
 .gcu-table-responsive{width:100%;overflow-x:auto}.gcu-table{width:100%;border-collapse:collapse;color:var(--gcu-text);font-family:var(--gcu-font)}.gcu-table th,.gcu-table td{padding:10px 12px;border-bottom:1px solid var(--gcu-border);vertical-align:middle}.gcu-table__heading{color:var(--gcu-muted);font-size:11px;font-weight:700;letter-spacing:.03em;text-align:left;text-transform:uppercase}.gcu-table__cell{font-size:13px}.gcu-table--striped tbody tr:nth-child(even){background:color-mix(in srgb,var(--gcu-surface-subtle) 65%,transparent)}.gcu-table--hover tbody tr:hover{background:var(--gcu-surface-subtle)}.gcu-table__state{padding:28px!important;color:var(--gcu-muted);font-size:13px;text-align:center}.gcu-table__state .gcu-spinner{margin-right:8px}
 .gcu-pagination{display:flex;margin:0;padding:0;list-style:none;font-family:var(--gcu-font)}.gcu-pagination__button{display:grid;min-width:31px;height:31px;padding:0 8px;place-items:center;border:1px solid var(--gcu-border);border-left:0;background:var(--gcu-surface);color:var(--gcu-muted);font:500 12px var(--gcu-font);cursor:pointer}.gcu-pagination__item:first-child .gcu-pagination__button{border-left:1px solid var(--gcu-border);border-radius:5px 0 0 5px}.gcu-pagination__item:last-child .gcu-pagination__button{border-radius:0 5px 5px 0}.gcu-pagination__item--active .gcu-pagination__button{border-color:var(--gcu-primary);background:var(--gcu-primary);color:#fff}.gcu-pagination__item--disabled .gcu-pagination__button{opacity:.5;cursor:not-allowed}
@@ -80,7 +115,7 @@
 .gcu-toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;min-width:280px;max-width:360px;padding:14px 16px;border:1px solid var(--gcu-border);border-radius:8px;background:var(--gcu-surface);color:var(--gcu-text);box-shadow:var(--gcu-shadow);font-family:var(--gcu-font);animation:gcu-toast-in .3s ease}
 .gcu-toast--closing{animation:gcu-toast-out .3s ease forwards}
 .gcu-toast__icon{flex-shrink:0;margin-top:1px;font-size:18px}
-.gcu-toast--success .gcu-toast__icon{color:var(--gcu-success)}.gcu-toast--danger .gcu-toast__icon{color:var(--gcu-danger)}.gcu-toast--warning .gcu-toast__icon{color:var(--gcu-warning)}.gcu-toast--info .gcu-toast__icon{color:var(--gcu-info)}
+.gcu-toast--success .gcu-toast__icon,.gcu-toast--danger .gcu-toast__icon,.gcu-toast--warning .gcu-toast__icon,.gcu-toast--info .gcu-toast__icon{color:var(--gcu-darken)}
 .gcu-toast__title{flex:1;min-width:0;font-size:13px;font-weight:600;line-height:1.4}
 .gcu-toast__close{flex-shrink:0;display:grid;width:22px;height:22px;padding:0;place-items:center;border:0;border-radius:4px;background:transparent;color:var(--gcu-muted);cursor:pointer;transition:background-color .3s ease,color .3s ease}
 .gcu-toast__close:hover{background:var(--gcu-surface-subtle);color:var(--gcu-text)}
@@ -267,22 +302,19 @@ html.minimenu .nxl-navigation .gcu-nav-group{width:calc(100% - 40px);margin:0 20
    Espejo de scss/themes/components/_widgets-ui.scss para la capa grancrm-ui
    (remotes que importan solo este CSS). El theme.min.css del shell trae la
    versión SCSS completa. */
-.gcu-colored-stat{color:#fff!important}
-.gcu-colored-stat .fs-4,.gcu-colored-stat .fs-13,.gcu-colored-stat p{color:inherit}
+.gcu-colored-stat .fs-4,.gcu-colored-stat .fs-13,.gcu-colored-stat p{color:inherit}.gcu-colored-stat p{opacity:1!important}
 .gcu-colored-stat__glass,
 .gcu-colored-stat .avatar-text,
 .gcu-colored-stat .badge.bg-white,
 .gcu-colored-stat .badge.bg-opacity-25{
   background-color:rgba(255,255,255,.22)!important;
-  color:#fff!important;
+  color:inherit!important;
   border-color:transparent!important
 }
 .gcu-colored-stat__glass i,
 .gcu-colored-stat .avatar-text i,
 .gcu-colored-stat__glass [class^="feather-"],
-.gcu-colored-stat__glass [class*=" feather-"]{color:#fff!important}
-html.app-skin-dark .gcu-colored-stat,
-.app-skin-dark .gcu-colored-stat{color:#fff!important}
+.gcu-colored-stat__glass [class*=" feather-"]{color:inherit!important}
 html.app-skin-dark .gcu-colored-stat__glass,
 html.app-skin-dark .gcu-colored-stat .avatar-text,
 html.app-skin-dark .gcu-colored-stat .badge.bg-white,
@@ -290,39 +322,89 @@ html.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25,
 .app-skin-dark .gcu-colored-stat__glass,
 .app-skin-dark .gcu-colored-stat .avatar-text{
   background-color:rgba(255,255,255,.22)!important;
-  color:#fff!important;
+  color:inherit!important;
   border-color:transparent!important
 }
 html.app-skin-dark .gcu-colored-stat__glass i,
 html.app-skin-dark .gcu-colored-stat .avatar-text i,
 .app-skin-dark .gcu-colored-stat__glass i,
-.app-skin-dark .gcu-colored-stat .avatar-text i{color:#fff!important}
+.app-skin-dark .gcu-colored-stat .avatar-text i{color:inherit!important}
 
-.gcu-mini-stat .avatar-text.bg-soft-primary,.gcu-quick-link .avatar-text.bg-soft-primary,.gcu-stats-card .avatar-text.bg-soft-primary{background-color:rgba(52,84,209,.12)!important;color:#3454d1!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-success,.gcu-quick-link .avatar-text.bg-soft-success,.gcu-stats-card .avatar-text.bg-soft-success{background-color:rgba(23,198,102,.12)!important;color:#17c666!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-danger,.gcu-quick-link .avatar-text.bg-soft-danger,.gcu-stats-card .avatar-text.bg-soft-danger{background-color:rgba(234,77,77,.12)!important;color:#ea4d4d!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-warning,.gcu-quick-link .avatar-text.bg-soft-warning,.gcu-stats-card .avatar-text.bg-soft-warning{background-color:rgba(255,162,29,.12)!important;color:#ffa21d!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-info,.gcu-quick-link .avatar-text.bg-soft-info,.gcu-stats-card .avatar-text.bg-soft-info{background-color:rgba(61,199,190,.12)!important;color:#3dc7be!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-teal,.gcu-quick-link .avatar-text.bg-soft-teal,.gcu-stats-card .avatar-text.bg-soft-teal{background-color:rgba(65,178,196,.12)!important;color:#41b2c4!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-indigo,.gcu-quick-link .avatar-text.bg-soft-indigo,.gcu-stats-card .avatar-text.bg-soft-indigo{background-color:rgba(77,47,176,.12)!important;color:#4d2fb0!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-secondary,.gcu-quick-link .avatar-text.bg-soft-secondary,.gcu-stats-card .avatar-text.bg-soft-secondary{background-color:rgba(114,121,129,.12)!important;color:#727981!important;border-color:transparent!important}
+.gcu-colored-stat.bg-primary,.gcu-colored-stat.bg-secondary,.gcu-colored-stat.bg-indigo,.gcu-colored-stat.bg-dark{color:#fff!important}
+.gcu-colored-stat.bg-success,.gcu-colored-stat.bg-danger,.gcu-colored-stat.bg-warning,.gcu-colored-stat.bg-info,.gcu-colored-stat.bg-teal,.gcu-colored-stat.bg-light{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-darken{color:#fff!important}
+.gcu-colored-stat.bg-primary .gcu-colored-stat__glass,.gcu-colored-stat.bg-primary .badge.bg-white,.gcu-colored-stat.bg-primary .badge.bg-opacity-25,.gcu-colored-stat.bg-primary .avatar-text{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-secondary .gcu-colored-stat__glass,.gcu-colored-stat.bg-secondary .badge.bg-white,.gcu-colored-stat.bg-secondary .badge.bg-opacity-25,.gcu-colored-stat.bg-secondary .avatar-text{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-success .gcu-colored-stat__glass,.gcu-colored-stat.bg-success .badge.bg-white,.gcu-colored-stat.bg-success .badge.bg-opacity-25,.gcu-colored-stat.bg-success .avatar-text{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-danger .gcu-colored-stat__glass,.gcu-colored-stat.bg-danger .badge.bg-white,.gcu-colored-stat.bg-danger .badge.bg-opacity-25,.gcu-colored-stat.bg-danger .avatar-text{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-warning .gcu-colored-stat__glass,.gcu-colored-stat.bg-warning .badge.bg-white,.gcu-colored-stat.bg-warning .badge.bg-opacity-25,.gcu-colored-stat.bg-warning .avatar-text{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-info .gcu-colored-stat__glass,.gcu-colored-stat.bg-info .badge.bg-white,.gcu-colored-stat.bg-info .badge.bg-opacity-25,.gcu-colored-stat.bg-info .avatar-text{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-teal .gcu-colored-stat__glass,.gcu-colored-stat.bg-teal .badge.bg-white,.gcu-colored-stat.bg-teal .badge.bg-opacity-25,.gcu-colored-stat.bg-teal .avatar-text{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-indigo .gcu-colored-stat__glass,.gcu-colored-stat.bg-indigo .badge.bg-white,.gcu-colored-stat.bg-indigo .badge.bg-opacity-25,.gcu-colored-stat.bg-indigo .avatar-text{color:#fff!important}
+.gcu-colored-stat.bg-dark .gcu-colored-stat__glass,.gcu-colored-stat.bg-dark .badge.bg-white,.gcu-colored-stat.bg-dark .badge.bg-opacity-25,.gcu-colored-stat.bg-dark .avatar-text{color:#fff!important}
+.gcu-colored-stat.bg-light .gcu-colored-stat__glass,.gcu-colored-stat.bg-light .badge.bg-white,.gcu-colored-stat.bg-light .badge.bg-opacity-25,.gcu-colored-stat.bg-light .avatar-text{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-darken .gcu-colored-stat__glass,.gcu-colored-stat.bg-darken .badge.bg-white,.gcu-colored-stat.bg-darken .badge.bg-opacity-25,.gcu-colored-stat.bg-darken .avatar-text{color:#fff!important}
+.gcu-colored-stat.bg-primary .gcu-colored-stat__glass i,.gcu-colored-stat.bg-primary .avatar-text i,.gcu-colored-stat.bg-secondary .gcu-colored-stat__glass i,.gcu-colored-stat.bg-secondary .avatar-text i,.gcu-colored-stat.bg-success .gcu-colored-stat__glass i,.gcu-colored-stat.bg-success .avatar-text i,.gcu-colored-stat.bg-danger .gcu-colored-stat__glass i,.gcu-colored-stat.bg-danger .avatar-text i,.gcu-colored-stat.bg-warning .gcu-colored-stat__glass i,.gcu-colored-stat.bg-warning .avatar-text i,.gcu-colored-stat.bg-info .gcu-colored-stat__glass i,.gcu-colored-stat.bg-info .avatar-text i,.gcu-colored-stat.bg-teal .gcu-colored-stat__glass i,.gcu-colored-stat.bg-teal .avatar-text i,.gcu-colored-stat.bg-light .gcu-colored-stat__glass i,.gcu-colored-stat.bg-light .avatar-text i{color:var(--gcu-darken)!important}
+.gcu-colored-stat.bg-indigo .gcu-colored-stat__glass i,.gcu-colored-stat.bg-indigo .avatar-text i,.gcu-colored-stat.bg-dark .gcu-colored-stat__glass i,.gcu-colored-stat.bg-dark .avatar-text i,.gcu-colored-stat.bg-darken .gcu-colored-stat__glass i,.gcu-colored-stat.bg-darken .avatar-text i{color:#fff!important}
+.gcu-colored-stat.bg-primary,.gcu-colored-stat.bg-secondary,.gcu-colored-stat.bg-success,.gcu-colored-stat.bg-danger,.gcu-colored-stat.bg-warning,.gcu-colored-stat.bg-info,.gcu-colored-stat.bg-teal,.gcu-colored-stat.bg-light{--gcu-widget-glass-text:var(--gcu-darken)}.gcu-colored-stat.bg-indigo,.gcu-colored-stat.bg-dark,.gcu-colored-stat.bg-darken{--gcu-widget-glass-text:#fff}
 
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary{background-color:rgba(52,84,209,.18)!important;color:#3454d1!important}
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success{background-color:rgba(23,198,102,.18)!important;color:#17c666!important}
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger{background-color:rgba(234,77,77,.18)!important;color:#ea4d4d!important}
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning{background-color:rgba(255,162,29,.18)!important;color:#ffa21d!important}
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info{background-color:rgba(61,199,190,.18)!important;color:#3dc7be!important}
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-teal,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-teal,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-teal,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-teal{background-color:rgba(65,178,196,.18)!important;color:#41b2c4!important}
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-indigo,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-indigo{background-color:rgba(77,47,176,.18)!important;color:#4d2fb0!important}
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-secondary,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-secondary,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-secondary,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-secondary{background-color:rgba(114,121,129,.18)!important;color:#727981!important}
+.gcu-mini-stat .avatar-text.bg-soft-primary,.gcu-quick-link .avatar-text.bg-soft-primary,.gcu-stats-card .avatar-text.bg-soft-primary{--gcu-widget-soft-rgb:var(--gcu-primary-rgb);background-color:rgba(var(--gcu-primary-rgb),.12)!important;color:var(--gcu-primary)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-secondary,.gcu-quick-link .avatar-text.bg-soft-secondary,.gcu-stats-card .avatar-text.bg-soft-secondary,.gcu-mini-stat .avatar-text.bg-soft-success,.gcu-quick-link .avatar-text.bg-soft-success,.gcu-stats-card .avatar-text.bg-soft-success,.gcu-mini-stat .avatar-text.bg-soft-danger,.gcu-quick-link .avatar-text.bg-soft-danger,.gcu-stats-card .avatar-text.bg-soft-danger,.gcu-mini-stat .avatar-text.bg-soft-warning,.gcu-quick-link .avatar-text.bg-soft-warning,.gcu-stats-card .avatar-text.bg-soft-warning,.gcu-mini-stat .avatar-text.bg-soft-info,.gcu-quick-link .avatar-text.bg-soft-info,.gcu-stats-card .avatar-text.bg-soft-info,.gcu-mini-stat .avatar-text.bg-soft-teal,.gcu-quick-link .avatar-text.bg-soft-teal,.gcu-stats-card .avatar-text.bg-soft-teal,.gcu-mini-stat .avatar-text.bg-soft-light,.gcu-quick-link .avatar-text.bg-soft-light,.gcu-stats-card .avatar-text.bg-soft-light{color:var(--gcu-dark)!important}
+.gcu-mini-stat .avatar-text.bg-soft-secondary,.gcu-quick-link .avatar-text.bg-soft-secondary,.gcu-stats-card .avatar-text.bg-soft-secondary{--gcu-widget-soft-rgb:var(--gcu-secondary-rgb);background-color:rgba(var(--gcu-secondary-rgb),.12)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-success,.gcu-quick-link .avatar-text.bg-soft-success,.gcu-stats-card .avatar-text.bg-soft-success{--gcu-widget-soft-rgb:var(--gcu-success-rgb);background-color:rgba(var(--gcu-success-rgb),.12)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-danger,.gcu-quick-link .avatar-text.bg-soft-danger,.gcu-stats-card .avatar-text.bg-soft-danger{--gcu-widget-soft-rgb:var(--gcu-danger-rgb);background-color:rgba(var(--gcu-danger-rgb),.12)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-warning,.gcu-quick-link .avatar-text.bg-soft-warning,.gcu-stats-card .avatar-text.bg-soft-warning{--gcu-widget-soft-rgb:var(--gcu-warning-rgb);background-color:rgba(var(--gcu-warning-rgb),.12)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-info,.gcu-quick-link .avatar-text.bg-soft-info,.gcu-stats-card .avatar-text.bg-soft-info{--gcu-widget-soft-rgb:var(--gcu-info-rgb);background-color:rgba(var(--gcu-info-rgb),.12)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-teal,.gcu-quick-link .avatar-text.bg-soft-teal,.gcu-stats-card .avatar-text.bg-soft-teal{--gcu-widget-soft-rgb:var(--gcu-teal-rgb);background-color:rgba(var(--gcu-teal-rgb),.12)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-indigo,.gcu-quick-link .avatar-text.bg-soft-indigo,.gcu-stats-card .avatar-text.bg-soft-indigo{--gcu-widget-soft-rgb:var(--gcu-indigo-rgb);background-color:rgba(var(--gcu-indigo-rgb),.12)!important;color:var(--gcu-indigo)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-dark,.gcu-quick-link .avatar-text.bg-soft-dark,.gcu-stats-card .avatar-text.bg-soft-dark{--gcu-widget-soft-rgb:var(--gcu-dark-rgb);background-color:rgba(var(--gcu-dark-rgb),.12)!important;color:var(--gcu-dark)!important;border-color:transparent!important}
+.gcu-mini-stat .avatar-text.bg-soft-light,.gcu-quick-link .avatar-text.bg-soft-light,.gcu-stats-card .avatar-text.bg-soft-light{--gcu-widget-soft-rgb:var(--gcu-light-rgb);background-color:rgba(var(--gcu-light-rgb),.12)!important;border-color:transparent!important}
+
+html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-dark,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-dark,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-dark,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-light,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-light,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-light,
+.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-secondary,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-teal,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-teal,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-teal,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-dark,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-dark,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-dark,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-light,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-light,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-light{background-color:var(--gcu-surface-subtle)!important;color:#fff!important;border-color:transparent!important}
 html.app-skin-dark .gcu-mini-stat .fs-4,html.app-skin-dark .gcu-mini-stat .text-dark,html.app-skin-dark .gcu-quick-link .text-dark,html.app-skin-dark .gcu-stats-card .text-dark,html.app-skin-dark .gcu-stats-card .fs-4,
 .app-skin-dark .gcu-mini-stat .fs-4,.app-skin-dark .gcu-mini-stat .text-dark,.app-skin-dark .gcu-quick-link .text-dark,.app-skin-dark .gcu-stats-card .text-dark,.app-skin-dark .gcu-stats-card .fs-4{color:#fff!important}
+html.app-skin-dark .gcu-colored-stat .gcu-colored-stat__glass,html.app-skin-dark .gcu-colored-stat .badge.bg-white,html.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25,html.app-skin-dark .gcu-colored-stat .avatar-text,.app-skin-dark .gcu-colored-stat .gcu-colored-stat__glass,.app-skin-dark .gcu-colored-stat .badge.bg-white,.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25,.app-skin-dark .gcu-colored-stat .avatar-text{color:var(--gcu-widget-glass-text,inherit)!important}
+html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"]{background-color:rgba(var(--gcu-widget-soft-rgb),.18)!important;color:#fff!important}
 /* /gcu-widgets-ui */
+
+/* Searchable select + DataTable toolbar primitives. */
+.gcu-select{position:relative;width:100%}
+.gcu-select__control{position:relative;display:flex;align-items:center}
+.gcu-select--open .gcu-select__toggle i{transform:rotate(180deg)}
+.gcu-multiselect{width:100%}
+.gcu-select__input{padding-right:64px!important}
+.gcu-select__toggle,.gcu-select__clear{position:absolute;top:50%;translate:0 -50%;display:inline-grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:4px;background:transparent;color:var(--gcu-text);font:inherit}
+.gcu-select__toggle{right:2px}
+.gcu-select__clear{right:36px;font-size:20px;line-height:1}
+.gcu-select__toggle:focus-visible,.gcu-select__clear:focus-visible,.gcu-multiselect__chip button:focus-visible{outline:2px solid var(--gcu-primary);outline-offset:1px}
+.gcu-select__listbox{position:absolute;inset:calc(100% + 4px) 0 auto;z-index:1050;max-height:280px;overflow:auto;padding:4px;border:1px solid var(--gcu-control-border,#7f8999);border-radius:6px;background:var(--gcu-surface);box-shadow:var(--gcu-shadow)}
+.gcu-select__option{display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 10px;border-radius:4px;color:var(--gcu-text);cursor:pointer}
+.gcu-select__option.is-active{outline:2px solid var(--gcu-primary);outline-offset:-2px;background:var(--gcu-surface-subtle)}
+.gcu-select__option.is-selected{font-weight:600;background:color-mix(in srgb,var(--gcu-primary) 12%,var(--gcu-surface))}
+.gcu-select__option.is-disabled{cursor:not-allowed;opacity:.55}
+.gcu-select__color{width:10px;height:10px;flex:0 0 10px;border:1px solid currentColor;border-radius:50%}
+.gcu-select__avatar{width:28px;height:28px;flex:0 0 28px;object-fit:cover;border-radius:50%}
+.gcu-select__label{min-width:0;overflow-wrap:anywhere}
+.gcu-select__empty{padding:12px;color:var(--gcu-muted);text-align:center}
+.gcu-select.is-disabled{opacity:.72}
+.gcu-multiselect__values{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.gcu-multiselect__chip{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:3px 4px 3px 10px;border:1px solid var(--gcu-border);border-radius:999px;background:var(--gcu-surface-subtle);color:var(--gcu-text)}
+.gcu-multiselect__chip button{display:inline-grid;place-items:center;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;font:inherit;font-size:18px}
+.data-table-toolbar{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--gcu-border);background:var(--gcu-surface)}
+.data-table-toolbar__search,.data-table-toolbar__page-size{display:grid;gap:4px}
+.data-table-toolbar__search{flex:1 1 240px;max-width:420px}
+.data-table-toolbar__page-size{flex:0 0 auto}
+.data-table-toolbar label{color:var(--gcu-text);font-size:12px;font-weight:600}
+[data-gcu-theme="dark"] .gcu-select__listbox,.app-skin-dark .gcu-select__listbox{--gcu-control-border:#68799c}
+@media (max-width:575.98px){.data-table-toolbar__search{max-width:none}.data-table-toolbar>*{width:100%}}
+
+/* Keep the remote page-header padding after the desktop rule in this file. */
+@media (max-width:575.98px){.page-header{padding:0 20px!important}}
+
+/* Final reduced-motion contract for remotes that load only this glue file. */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .gcu-btn,.gcu-control,.gcu-progress__bar,.gcu-toast__close,.gcu-link-button,.gcu-modules-menu,.nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow{transition:none!important}
+  .gcu-spinner,.gcu-progress__bar--animated,.gcu-toast,.gcu-toast--closing{animation:none!important}
+}

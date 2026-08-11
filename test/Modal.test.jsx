@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, expect, test, vi } from 'vitest'
 import { Modal } from '../src/components/ui/Modal'
@@ -181,7 +181,7 @@ test('focuses the remaining modal when a stacked modal opener becomes disabled',
   await user.keyboard('{Escape}')
 
   const remainingDialog = screen.getByRole('dialog', { name: 'First modal' })
-  expect(within(remainingDialog).getByRole('button', { name: 'Cerrar' })).toHaveFocus()
+  expect(remainingDialog).toHaveFocus()
 })
 
 test('focuses the remaining modal when restoring the stacked modal opener fails', async () => {
@@ -210,7 +210,7 @@ test('focuses the remaining modal when restoring the stacked modal opener fails'
   await user.keyboard('{Escape}')
 
   const remainingDialog = screen.getByRole('dialog', { name: 'First modal' })
-  expect(within(remainingDialog).getByRole('button', { name: 'Cerrar' })).toHaveFocus()
+  expect(remainingDialog).toHaveFocus()
   focus.mockRestore()
 })
 

@@ -1,22 +1,28 @@
+import { useRef } from 'react'
 import {
   ResponsiveContainer, BarChart, Bar,
   XAxis, YAxis, Tooltip, Legend,
 } from 'recharts'
+import { ChartFrame, normalizeCartesianData, RechartsDataTable, resolveChartAlternative } from './chartA11y'
+import { usePrefersReducedMotion } from './chartMotion'
+import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalette'
+import { useChartTheme } from './chartTheme'
 
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label, theme }) => {
   if (!active || !payload?.length) return null
   return (
     <div style={{
-      background: 'var(--gcu-surface, #fff)',
-      border: '1px solid var(--gcu-border, #e9ecef)',
+      background: theme.surface,
+      border: `1px solid ${theme.border}`,
       borderRadius: 8,
       padding: '10px 14px',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+      boxShadow: theme.shadow,
       fontSize: 12,
+      color: theme.text,
     }}>
-      <p style={{ margin: '0 0 6px', fontWeight: 600, color: 'var(--gcu-text, #283c50)' }}>{label}</p>
+      <p style={{ margin: '0 0 6px', fontWeight: 600, color: theme.text }}>{label}</p>
       {payload.map((p) => (
-        <p key={p.dataKey} style={{ margin: '2px 0', color: p.fill }}>
+        <p key={String(p.dataKey ?? p.name ?? p.fill ?? 'series')} style={{ margin: '2px 0', color: p.fill || theme.text }}>
           {p.name}: <strong>{p.value}</strong>
         </p>
       ))}
@@ -24,50 +30,109 @@ const CustomTooltip = ({ active, payload, label }) => {
   )
 }
 
-const EMPTY_DATA = []
-const EMPTY_SERIES = []
+export function BarChartWidget({
+  data,
+  series = [],
+  height = 260,
+  theme,
+  stacked,
+  rounded = 6,
+  barSize,
+  ariaLabel,
+  title,
+  description,
+  accessibleTable,
+  fallback,
+  loading = false,
+  empty,
+  error,
+  onRetry,
+  loadingMessage,
+  emptyTitle,
+  emptyMessage,
+  errorTitle,
+  errorMessage,
+  className,
+  style,
+}) {
+  const normalizedData = normalizeCartesianData(data)
+  const normalizedSeries = Array.isArray(series) ? series.filter(Boolean) : []
+  const reducedMotion = usePrefersReducedMotion()
+  const themeScopeRef = useRef(null)
+  const resolvedTheme = getChartTheme(useChartTheme(theme, themeScopeRef))
+  const hasData = normalizedData.length > 0 && normalizedSeries.length > 0
+  const shouldRenderEmpty = empty === undefined ? data !== undefined && !hasData : empty
+  const alternative = resolveChartAlternative(
+    accessibleTable,
+    <RechartsDataTable data={normalizedData} series={normalizedSeries} title={title ?? ariaLabel} />,
+  )
 
-export function BarChartWidget({ data = EMPTY_DATA, series = EMPTY_SERIES, height = 260, stacked, rounded = 6, barSize }) {
   return (
-    <ResponsiveContainer width="100%" height={height}>
-      <BarChart
-        data={data}
-        margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-        barGap={3}
-        barCategoryGap="35%"
-      >
-        <XAxis
-          dataKey="name"
-          tick={{ fontSize: 10, fill: 'var(--gcu-muted, #A0ACBB)' }}
-          axisLine={false}
-          tickLine={false}
-        />
-        <YAxis
-          tick={{ fontSize: 10, fill: 'var(--gcu-muted, #A0ACBB)' }}
-          axisLine={false}
-          tickLine={false}
-          width={40}
-        />
-        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(70,128,255,0.04)' }} />
-        {series.length > 1 && (
-          <Legend
-            iconType="circle"
-            iconSize={8}
-            wrapperStyle={{ fontSize: 11, paddingTop: 12 }}
+    <ChartFrame
+      ariaLabel={ariaLabel}
+      title={title}
+      description={description}
+      alternative={alternative}
+      fallback={fallback}
+      loading={loading}
+      empty={shouldRenderEmpty}
+      error={error}
+      onRetry={onRetry}
+      loadingMessage={loadingMessage}
+      emptyTitle={emptyTitle}
+      emptyMessage={emptyMessage}
+      errorTitle={errorTitle}
+      errorMessage={errorMessage}
+      className={className}
+      style={style}
+      themeScopeRef={themeScopeRef}
+    >
+      <ResponsiveContainer width="100%" height={height}>
+        <BarChart
+          data={normalizedData}
+          margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+          barGap={3}
+          barCategoryGap="35%"
+        >
+          <XAxis
+            dataKey="name"
+            tick={{ fontSize: 10, fill: resolvedTheme.muted }}
+            axisLine={false}
+            tickLine={false}
           />
-        )}
-        {series.map((s) => (
-          <Bar
-            key={s.key}
-            dataKey={s.key}
-            name={s.label || s.key}
-            fill={s.color}
-            stackId={stacked ? 'stack' : undefined}
-            radius={rounded ? [rounded, rounded, 0, 0] : undefined}
-            maxBarSize={barSize || 40}
+          <YAxis
+            tick={{ fontSize: 10, fill: resolvedTheme.muted }}
+            axisLine={false}
+            tickLine={false}
+            width={40}
           />
-        ))}
-      </BarChart>
-    </ResponsiveContainer>
+          <Tooltip
+            content={<CustomTooltip theme={resolvedTheme} />}
+            contentStyle={{ ...getChartTooltipStyle(resolvedTheme) }}
+            cursor={{ fill: resolvedTheme.surfaceSubtle }}
+            isAnimationActive={!reducedMotion}
+          />
+          {normalizedSeries.length > 1 && (
+            <Legend
+              iconType="circle"
+              iconSize={8}
+              wrapperStyle={{ fontSize: 11, paddingTop: 12, color: resolvedTheme.text }}
+            />
+          )}
+          {normalizedSeries.map((s, index) => (
+            <Bar
+              key={s.key}
+              dataKey={s.key}
+              name={s.label || s.key}
+              fill={getChartColor(s.color, index, resolvedTheme)}
+              stackId={stacked ? 'stack' : undefined}
+              radius={rounded ? [rounded, rounded, 0, 0] : undefined}
+              maxBarSize={barSize || 40}
+              isAnimationActive={!reducedMotion}
+            />
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
+    </ChartFrame>
   )
 }

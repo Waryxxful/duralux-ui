@@ -1,5 +1,4 @@
 import { useId, useRef, useEffect } from 'react'
-import { cx } from '../../utils/cx'
 
 /**
  * Checkbox — form-check Bootstrap con label asociado.
@@ -7,16 +6,19 @@ import { cx } from '../../utils/cx'
  */
 export function Checkbox({
   label,
+  invalid,
   error,
   indeterminate,
   className,
   id: idProp,
-  'aria-invalid': providedInvalid,
+  'aria-invalid': ariaInvalid,
+  'aria-checked': ariaChecked,
   ...rest
 }) {
   const autoId = useId()
   const id = idProp ?? autoId
   const inputRef = useRef(null)
+  const isInvalid = Boolean(invalid || error)
 
   useEffect(() => {
     if (inputRef.current) {
@@ -25,14 +27,15 @@ export function Checkbox({
   }, [indeterminate])
 
   return (
-    <div className={cx('form-check', className)}>
+    <div className={['form-check', className].filter(Boolean).join(' ')}>
       <input
+        {...rest}
         ref={inputRef}
         id={id}
         type="checkbox"
-        className={cx('form-check-input', error ? 'is-invalid' : '')}
-        aria-invalid={error ? true : providedInvalid}
-        {...rest}
+        className={['form-check-input', isInvalid ? 'is-invalid' : ''].filter(Boolean).join(' ')}
+        aria-invalid={ariaInvalid !== undefined ? ariaInvalid : isInvalid ? true : undefined}
+        aria-checked={ariaChecked !== undefined ? ariaChecked : indeterminate ? 'mixed' : undefined}
       />
       <label htmlFor={id} className="form-check-label">{label}</label>
     </div>

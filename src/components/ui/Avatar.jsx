@@ -1,3 +1,5 @@
+import { cx } from '../../utils/cx'
+
 /**
  * Avatar — imagen o iniciales con tamaños Duralux.
  *
@@ -7,29 +9,87 @@
  *   size     — "sm" | "md" | "lg" | "xl" (default "md")
  *   rounded  — "circle" | "3" (default "circle") | boolean
  *   variant  — color de fondo semántico para las iniciales (alias legacy: bg="bg-...")
- *   alt      — texto alternativo de la imagen (default: name)
+ *   alt      — texto alternativo explícito (default: "", avatar decorativo)
  */
-export function Avatar({ src = null, name = '', size = 'md', rounded = 'circle', variant = 'primary', bg = null, alt = '', className = '', style = undefined, ...rest }) {
+function safeString(value, fallback = '') {
+  try {
+    return String(value)
+  } catch {
+    return fallback
+  }
+}
+
+function getInitials(name) {
+  const words = safeString(name ?? '').trim().split(/\s+/).filter(Boolean)
+  if (words.length === 0) return '?'
+  if (words.length === 1) return Array.from(words[0]).slice(0, 2).join('').toUpperCase()
+  return words.slice(0, 2).map((word) => Array.from(word)[0]).join('').toUpperCase()
+}
+
+export function Avatar({
+  src = null,
+  name = '',
+  size = 'md',
+  rounded = 'circle',
+  variant = 'primary',
+  bg = null,
+  alt = '',
+  className = '',
+  style = undefined,
+  role: roleProp = undefined,
+  'aria-label': ariaLabel = undefined,
+  'aria-labelledby': ariaLabelledBy = undefined,
+  'aria-describedby': ariaDescribedBy = undefined,
+  'aria-hidden': ariaHidden = undefined,
+  ...rest
+}) {
   const bgClass = bg ?? (variant ? `bg-${variant}` : 'bg-primary')
-  const roundedClass = rounded === true ? 'circle' : rounded
-  const initials = name
-    .split(' ')
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
+  const roundedClass = rounded === true ? 'circle' : rounded === false ? null : rounded
+  const imageAlt = alt == null ? '' : safeString(alt)
+  const initials = getInitials(name)
+  const meaningfulAlt = imageAlt.trim() !== ''
+  const meaningfulLabel = typeof ariaLabel === 'string'
+    ? ariaLabel.trim() !== ''
+    : ariaLabel !== undefined && ariaLabel !== null
+  const hasLabelReference = ariaLabelledBy !== undefined && ariaLabelledBy !== null && ariaLabelledBy !== ''
+  const explicitHidden = ariaHidden === true || ariaHidden === 'true'
+  const explicitVisible = ariaHidden === false || ariaHidden === 'false'
+  const informative = !explicitHidden && (meaningfulAlt || meaningfulLabel || hasLabelReference || explicitVisible)
 
   if (src) {
     return (
-      <div className={`avatar-image avatar-${size} ${className}`} style={style} {...rest}>
-        <img src={src} alt={alt ?? name} className="img-fluid" style={{ borderRadius: roundedClass === 'circle' ? '50%' : undefined }} />
+      <div
+        {...rest}
+        className={cx('avatar-image', `avatar-${size}`, className)}
+        style={style}
+      >
+        <img
+          src={src}
+          alt={imageAlt}
+          className="img-fluid"
+          role={roleProp ?? (informative ? 'img' : undefined)}
+          aria-label={meaningfulLabel ? ariaLabel : undefined}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+          aria-hidden={ariaHidden !== undefined ? ariaHidden : informative ? undefined : true}
+          style={{ borderRadius: roundedClass === 'circle' ? '50%' : undefined }}
+        />
       </div>
     )
   }
 
   return (
-    <div className={`avatar-text avatar-${size} rounded-${roundedClass} ${bgClass} text-white ${className}`} style={style} {...rest}>
-      {initials || '?'}
+    <div
+      {...rest}
+      className={cx('avatar-text', `avatar-${size}`, roundedClass && `rounded-${roundedClass}`, bgClass, 'text-white', className)}
+      style={style}
+      role={roleProp ?? (informative ? 'img' : undefined)}
+      aria-label={meaningfulLabel ? ariaLabel : meaningfulAlt ? imageAlt : undefined}
+      aria-labelledby={ariaLabelledBy}
+      aria-describedby={ariaDescribedBy}
+      aria-hidden={ariaHidden !== undefined ? ariaHidden : informative ? undefined : true}
+    >
+      {initials}
     </div>
   )
 }

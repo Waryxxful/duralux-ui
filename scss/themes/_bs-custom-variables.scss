@@ -9,15 +9,17 @@
 *
 */
 
+@import "./semantic-tokens.generated";
+
 // Gray Color
-// $gray-600 / $text-muted darkened for WCAG AA on $body-bg (#f0f2f8) and white.
+// $gray-600 / $text-muted are the canonical secondary tone for WCAG AA.
 $white: #ffffff;
-$gray-100: #eff0f6;
+$gray-100: $semantic-light;
 $gray-200: #e9ecef;
 $gray-300: #e5e7eb;
 $gray-400: #ced4da;
 $gray-500: #91a1b6;
-$gray-600: #64748b;
+$gray-600: $semantic-secondary;
 $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
@@ -34,44 +36,46 @@ $black: #000000;
 //      - .text-{variant} on white / body-bg ≥ 4.5:1
 //      - white text on .bg-{variant} / solid badges ≥ 4.5:1
 //    Bootstrap button-variant() picks black or white via color-contrast()."
-$blue: #3454d1;
-$indigo: #6610f2;
+$blue: $semantic-primary;
+$indigo: $semantic-indigo;
 $purple: #6f42c1;
 $pink: #e83e8c;
-$red: #ea4d4d;
+$red: $semantic-danger;
 $orange: #fd7e14;
-$yellow: #ffa21d;
-$green: #17c666;
-$teal: #41b2c4;
-$cyan: #3dc7be;
+$yellow: $semantic-warning;
+$green: $semantic-success;
+$teal: $semantic-teal;
+$cyan: $semantic-info;
 $white: #ffffff;
-$secondary: #727981;
-$success: #25b865;
-$warning: #e49e3d;
-$info: #02a0e4;
-$danger: #d13b4c;
-$dark: #283c50; // new added
-$darken: #001327; // new added
+$secondary: $semantic-secondary;
+$success: $semantic-success;
+$warning: $semantic-warning;
+$info: $semantic-info;
+$danger: $semantic-danger;
+$dark: $semantic-dark;
+$darken: $semantic-darken;
 
-// Body
-$body-bg: #f0f2f8;
-$body-color: #4b5563;
+// Body: Bootstrap's page variables intentionally differ from the visual
+// canvas used by the theme's body selector. Both values still come from the
+// generated semantic source above.
+$body-bg: $semantic-bg;
+$body-color: $semantic-body;
 // Solid muted (no rgba/opacity) so form-text / .text-muted pass WCAG AA on white and $body-bg.
 // Re-assign $form-text-color after $text-muted: Bootstrap sets it from the default rgba muted
 // earlier in variables.scss and would keep the low-contrast value otherwise.
-$text-muted: #64748b;
+$text-muted: $semantic-secondary;
 $form-text-color: $text-muted;
 
 // Colors Map
 $primary: $blue;
-$secondary: $gray-600;
+$secondary: $semantic-secondary;
 $success: $green;
 $info: $cyan;
 $warning: $yellow;
 $danger: $red;
-$light: $gray-100;
-$dark: $dark;
-$darken: $darken; // new added
+$light: $semantic-light;
+$dark: $semantic-dark;
+$darken: $semantic-darken;
 
 // Theme Colors Map
 $theme-colors: (

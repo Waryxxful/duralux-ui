@@ -7,31 +7,47 @@
 <--!----------------------------------------------------------------!-->
 */
 
-/* --- ColoredStatCard: card de color sólido + “vidrio” blanco --- */
+/* --- ColoredStatCard: card de color sólido + “vidrio” contrastado --- */
+$gcu-widget-glass-foregrounds: (
+	"primary": $darken,
+	"secondary": $darken,
+	"success": $darken,
+	"danger": $darken,
+	"warning": $darken,
+	"info": $darken,
+	"teal": $darken,
+	"indigo": $white,
+	"dark": $white,
+	"light": $darken,
+	"darken": $white,
+);
+
 .gcu-colored-stat {
 	// El fondo semántico viene de .bg-primary / .bg-success / etc.
-	// Forzamos texto claro legible sobre el color sólido.
-	color: $white !important;
+	// El foreground se elige por variante más abajo; no imponemos blanco a
+	// los tonos claros (success/warning/info/etc.).
 
 	.fs-4,
 	.fs-13,
 	p {
 		color: inherit;
 	}
+	p {
+		opacity: 1 !important;
+	}
 
 	// Badge + avatar: no usar .bg-white (el theme lo pinta sólido #fff
-	// y en dark también lo reescribe). El vidrio es siempre blanco
-	// semitransparente — legible sobre primary/success/warning/danger
-	// en light y dark.
+	// y en dark también lo reescribe). El vidrio conserva el tinte blanco,
+	// pero su foreground se resuelve por variante.
 	&__glass {
 		background-color: rgba($white, 0.22) !important;
-		color: $white !important;
+		color: inherit !important;
 		border-color: transparent !important;
 
 		i,
 		[class^="feather-"],
 		[class*=" feather-"] {
-			color: $white !important;
+			color: inherit !important;
 		}
 	}
 
@@ -39,14 +55,14 @@
 	.badge.bg-white,
 	.badge.bg-opacity-25 {
 		background-color: rgba($white, 0.22) !important;
-		color: $white !important;
+		color: inherit !important;
 		border: 0;
 	}
 
 	// Avatar con clase genérica (sin __glass) dentro de la card
 	.avatar-text {
 		background-color: rgba($white, 0.22) !important;
-		color: $white !important;
+		color: inherit !important;
 		border-color: transparent !important;
 	}
 }
@@ -55,21 +71,37 @@
 // Re-aplicamos el vidrio con la misma o mayor especificidad.
 html.app-skin-dark {
 	.gcu-colored-stat {
-		color: $white !important;
-
 		&__glass,
 		.avatar-text,
 		.badge.bg-white,
 		.badge.bg-opacity-25 {
 			background-color: rgba($white, 0.22) !important;
-			color: $white !important;
+			color: inherit !important;
 			border-color: transparent !important;
 		}
 
 		&__glass i,
 		.avatar-text i {
-			color: $white !important;
+			color: inherit !important;
 		}
+	}
+}
+
+@each $name, $foreground in $gcu-solid-foregrounds {
+	$glass-foreground: map-get($gcu-widget-glass-foregrounds, $name);
+
+	.gcu-colored-stat.bg-#{$name} {
+		color: $foreground !important;
+	}
+	.gcu-colored-stat.bg-#{$name} .gcu-colored-stat__glass,
+	.gcu-colored-stat.bg-#{$name} .badge.bg-white,
+	.gcu-colored-stat.bg-#{$name} .badge.bg-opacity-25,
+	.gcu-colored-stat.bg-#{$name} .avatar-text {
+		color: $glass-foreground !important;
+	}
+	.gcu-colored-stat.bg-#{$name} .gcu-colored-stat__glass i,
+	.gcu-colored-stat.bg-#{$name} .avatar-text i {
+		color: $glass-foreground !important;
 	}
 }
 
@@ -79,20 +111,10 @@ html.app-skin-dark {
 // especificidad a .bg-soft-primary. Forzamos soft sobre el avatar del widget.
 .gcu-mini-stat,
 .gcu-quick-link {
-	@each $name, $color in (
-		"primary": $primary,
-		"success": $success,
-		"danger": $danger,
-		"warning": $warning,
-		"info": $info,
-		"teal": $teal,
-		"indigo": $indigo,
-		"secondary": $secondary,
-		"dark": $dark
-	) {
+	@each $name, $color in $semantic-widget-colors {
 		.avatar-text.bg-soft-#{$name} {
 			background-color: rgba($color, 0.12) !important;
-			color: $color !important;
+			color: map-get($gcu-soft-foregrounds, $name) !important;
 			border-color: transparent !important;
 		}
 	}
@@ -102,20 +124,10 @@ html.app-skin-dark {
 	.gcu-mini-stat,
 	.gcu-quick-link {
 		// Más opacidad de tinte en dark para que el soft se vea sobre card oscura
-		@each $name, $color in (
-			"primary": $primary,
-			"success": $success,
-			"danger": $danger,
-			"warning": $warning,
-			"info": $info,
-			"teal": $teal,
-			"indigo": $indigo,
-			"secondary": $secondary,
-			"dark": $dark
-		) {
+		@each $name, $color in $semantic-widget-colors {
 			.avatar-text.bg-soft-#{$name} {
 				background-color: rgba($color, 0.18) !important;
-				color: $color !important;
+				color: $white !important;
 				border-color: transparent !important;
 			}
 		}
@@ -132,16 +144,7 @@ html.app-skin-dark {
 
 /* --- StatsCard: iconBg soft también debe ganar en dark --- */
 .gcu-stats-card {
-	@each $name, $color in (
-		"primary": $primary,
-		"success": $success,
-		"danger": $danger,
-		"warning": $warning,
-		"info": $info,
-		"teal": $teal,
-		"indigo": $indigo,
-		"secondary": $secondary
-	) {
+	@each $name, $color in $semantic-stat-colors {
 		.avatar-text.bg-soft-#{$name},
 		.avatar-text.text-#{$name} {
 			// si iconBg trae "bg-soft-primary text-primary"
@@ -149,7 +152,7 @@ html.app-skin-dark {
 
 		.avatar-text.bg-soft-#{$name} {
 			background-color: rgba($color, 0.12) !important;
-			color: $color !important;
+			color: map-get($gcu-soft-foregrounds, $name) !important;
 			border-color: transparent !important;
 		}
 	}
@@ -157,19 +160,10 @@ html.app-skin-dark {
 
 html.app-skin-dark {
 	.gcu-stats-card {
-		@each $name, $color in (
-			"primary": $primary,
-			"success": $success,
-			"danger": $danger,
-			"warning": $warning,
-			"info": $info,
-			"teal": $teal,
-			"indigo": $indigo,
-			"secondary": $secondary
-		) {
+		@each $name, $color in $semantic-stat-colors {
 			.avatar-text.bg-soft-#{$name} {
 				background-color: rgba($color, 0.18) !important;
-				color: $color !important;
+				color: $white !important;
 				border-color: transparent !important;
 			}
 		}

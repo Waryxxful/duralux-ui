@@ -11,5 +11,5 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["public-api.tsx"]
+  "include": ["public-api.tsx", "no-root-charts.ts"]
 }

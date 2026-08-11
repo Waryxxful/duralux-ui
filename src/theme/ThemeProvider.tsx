@@ -45,6 +45,11 @@ function readStoredMiniPreference(): boolean | null {
   }
 }
 
+/** Responsive menu contract: only the narrow desktop band is mini. */
+export function isResponsiveMiniWidth(width: number): boolean {
+  return Number.isFinite(width) && width > 1024 && width <= 1400;
+}
+
 /** Snippet anti-FOUC para <head> — exportado como string para apps. */
 export const THEME_HEAD_SNIPPET = `try{var t=localStorage.getItem('${STORAGE_KEY}');if(t==='dark')document.documentElement.classList.add('app-skin-dark');var p=localStorage.getItem('${MINI_PIN_KEY}'),m=localStorage.getItem('${MINI_KEY}')||localStorage.getItem('${LEGACY_MINI_KEY}');if(p==='${MINI_PIN_VERSION}'&&(m==='1'||m==='true'||m==='menu-mini-theme'))document.documentElement.classList.add('minimenu')}catch(e){}`;
 
@@ -53,9 +58,13 @@ interface MiniState {
   userPinnedMini: boolean;
 }
 
-function readInitialMiniState(): MiniState {
+function readInitialMiniState(enableResponsiveMini = true): MiniState {
   const preference = readStoredMiniPreference();
   if (preference !== null) return { mini: preference, userPinnedMini: true };
+
+  if (enableResponsiveMini && typeof window !== 'undefined') {
+    return { mini: isResponsiveMiniWidth(window.innerWidth), userPinnedMini: false };
+  }
 
   return {
     mini: typeof document !== 'undefined' && document.documentElement.classList.contains('minimenu'),
@@ -67,8 +76,8 @@ function readInitialMiniState(): MiniState {
  * Un solo mecanismo de theming (plan D4):
  * - dark: clase `app-skin-dark` en <html> + localStorage grancrm-theme
  * - mini sidebar: clase `minimenu` en <html>; solo elecciones explícitas se persisten
- * Comportamiento de resize alineado al common-init de la plantilla Duralux:
- *   width ∈ [1024, 1600] → mini; width > 1600 → expandido (salvo preferencia usuario).
+ * Responsive v2: width <= 1024 → expandido; 1024.01..1400 → mini;
+ * width > 1400 → expandido (salvo preferencia explícitamente fijada).
  */
 export function ThemeProvider({
   children,
@@ -82,7 +91,7 @@ export function ThemeProvider({
       ? 'dark'
       : readStoredMode(),
   );
-  const [miniState, setMiniState] = useState<MiniState>(readInitialMiniState);
+  const [miniState, setMiniState] = useState<MiniState>(() => readInitialMiniState(enableResponsiveMini));
   const { mini, userPinnedMini } = miniState;
 
   const setMode = useCallback((next: ThemeMode) => {
@@ -123,15 +132,13 @@ export function ThemeProvider({
     } catch { /* ignore */ }
   }, [mini, userPinnedMini]);
 
-  // Mirror plantilla common-init resize: auto mini between 1024 and 1600
+  // Responsive v2: mobile/tablet and wide desktop stay expanded; only the
+  // 1024.01..1400 desktop band collapses automatically.
   useEffect(() => {
     if (!enableResponsiveMini || userPinnedMini) return;
     const apply = () => {
       const w = window.innerWidth;
-      let next: boolean;
-      if (w >= 1024 && w <= 1600) next = true;
-      else if (w > 1600) next = false;
-      else return;
+      const next = isResponsiveMiniWidth(w);
 
       setMiniState(current => {
         if (current.userPinnedMini || current.mini === next) return current;

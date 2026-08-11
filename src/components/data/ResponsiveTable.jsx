@@ -1,11 +1,9 @@
-import React from 'react';
 import { Table } from './Table';
-import { cx } from '../../utils/cx';
 
-export function ResponsiveTable({ wrapperClassName, ...props }) {
-  return (
-    <div className={cx('table-responsive', wrapperClassName)}>
-      <Table {...props} />
-    </div>
-  );
+/**
+ * @deprecated Use `Table`. It now owns the responsive wrapper; this alias is
+ * kept so existing consumers do not gain a second nested `.table-responsive`.
+ */
+export function ResponsiveTable(props) {
+  return <Table {...props} />;
 }

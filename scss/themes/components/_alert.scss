@@ -3,37 +3,37 @@
 <--! Alert !-->
 <--!----------------------------------------------------------------!-->
 */
-.alert {
-	&.alert-soft-success-message {
-		color: $success;
-		background-color: lighten($success, 52);
-		border: 1px dashed lighten($success, 25);
+
+// Keep the soft alert API aligned with Alert.jsx. The foreground map is
+// shared with buttons and badges so light backgrounds never inherit a brand
+// color that falls below AA.
+$gcu-alert-soft-colors: (
+	"primary": $primary,
+	"secondary": $secondary,
+	"success": $success,
+	"danger": $danger,
+	"warning": $warning,
+	"info": $info,
+	"light": $light,
+	"dark": $dark,
+	"teal": $teal,
+	"indigo": $indigo,
+);
+
+@each $color, $value in $gcu-alert-soft-colors {
+	$foreground: map-get($gcu-soft-foregrounds, $color);
+	$background: shift-color($value, -90%);
+	$border: shade-color($value, 20%);
+
+	.alert.alert-soft-#{$color}-message {
+		color: $foreground;
+		background-color: $background;
+		border: 1px dashed $border;
+
 		a {
-			color: $success;
-		}
-	}
-	&.alert-soft-warning-message {
-		color: $warning;
-		background-color: lighten($warning, 40);
-		border: 1px dashed lighten($warning, 25);
-		a {
-			color: $warning;
-		}
-	}
-	&.alert-soft-danger-message {
-		color: $danger;
-		background-color: lighten($danger, 35);
-		border: 1px dashed lighten($danger, 28);
-		a {
-			color: $danger;
-		}
-	}
-	&.alert-soft-teal-message {
-		color: $teal;
-		background-color: lighten($teal, 45);
-		border: 1px dashed lighten($teal, 20);
-		a {
-			color: $teal;
+			color: $foreground;
+			text-decoration: underline;
+			text-underline-offset: 0.15em;
 		}
 	}
 }

@@ -3,16 +3,82 @@
 <--! Badge SCSS Start !-->
 <--!----------------------------------------------------------------!-->
 */
+
 .badge {
 	font-size: $font-11;
 	font-weight: $font-600;
 	padding: 5px 6px;
 	border-radius: 3px;
-	@each $color, $value in $theme-colors {
-		&.bg-light-#{$color} {
-			color: $value;
-			background: shift-color($value, $soft-bg-level);
-			border-color: shift-color($value, $soft-bg-level);
-		}
+}
+
+@each $color, $value in $gcu-theme-colors {
+	$solid-foreground: map-get($gcu-solid-foregrounds, $color);
+	$soft-foreground: map-get($gcu-soft-foregrounds, $color);
+	$soft-background: shift-color($value, $soft-bg-level);
+	$solid-hover-background: shade-color($value, 8%);
+	$solid-active-background: shade-color($value, 20%);
+	$solid-state-foreground: $solid-foreground;
+	@if $color == "danger" {
+		$solid-hover-background: shade-color($value, 30%);
+		$solid-active-background: shade-color($value, 35%);
+		$solid-state-foreground: $white;
 	}
+
+	// Badge backgrounds are explicit here instead of relying on Bootstrap's
+	// inherited white foreground. This keeps both the Bootstrap bg-* API and
+	// the React Badge component's soft bg-soft-* API AA-compliant.
+	.badge.bg-#{$color} {
+		color: $solid-foreground !important;
+		background-color: $value !important;
+		border-color: $value !important;
+	}
+	.badge.bg-#{$color}:hover,
+	.badge.bg-#{$color}:focus,
+	.badge.bg-#{$color}:focus-visible {
+		color: $solid-state-foreground !important;
+		background-color: $solid-hover-background !important;
+		border-color: $solid-hover-background !important;
+	}
+	.badge.bg-#{$color}:active,
+	.badge.bg-#{$color}.active {
+		color: $solid-state-foreground !important;
+		background-color: $solid-active-background !important;
+		border-color: $solid-active-background !important;
+	}
+
+	.badge.bg-soft-#{$color},
+	.badge.bg-light-#{$color} {
+		color: $soft-foreground !important;
+		background-color: $soft-background !important;
+		border: 1px solid $value !important;
+	}
+	.badge.bg-soft-#{$color}:hover,
+	.badge.bg-soft-#{$color}:focus,
+	.badge.bg-soft-#{$color}:focus-visible,
+	.badge.bg-soft-#{$color}:active,
+	.badge.bg-soft-#{$color}.active,
+	.badge.bg-light-#{$color}:hover,
+	.badge.bg-light-#{$color}:focus,
+	.badge.bg-light-#{$color}:focus-visible,
+	.badge.bg-light-#{$color}:active,
+	.badge.bg-light-#{$color}.active {
+		color: $soft-foreground !important;
+		background-color: $soft-background !important;
+		border-color: $value !important;
+	}
+}
+
+// Badge variant="light" uses these stable classes from the React runtime.
+.badge.gcu-badge--light {
+	color: $dark !important;
+	background-color: $gray-200 !important;
+	border: 1px solid $gray-500 !important;
+}
+.badge.gcu-badge--light:hover,
+.badge.gcu-badge--light:focus,
+.badge.gcu-badge--light:focus-visible,
+.badge.gcu-badge--light:active {
+	color: $dark !important;
+	background-color: $gray-300 !important;
+	border-color: $gray-600 !important;
 }

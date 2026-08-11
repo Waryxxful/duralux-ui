@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
 
@@ -15,14 +15,196 @@ const FOCUSABLE_SELECTOR = [
 const MODAL_STATE_KEY = Symbol.for('@duralux/ui/modal-state')
 
 function getModalState() {
-  if (globalThis[MODAL_STATE_KEY]) return globalThis[MODAL_STATE_KEY]
+  const existingState = globalThis[MODAL_STATE_KEY]
+  if (existingState) {
+    if (!existingState.backgroundState) {
+      Object.defineProperty(existingState, 'backgroundState', {
+        value: { records: new Map() },
+        enumerable: false,
+        writable: true,
+      })
+    }
+    return existingState
+  }
 
   const state = { modalStack: [], bodyLockState: null }
+  Object.defineProperty(state, 'backgroundState', {
+    value: { records: new Map() },
+    enumerable: false,
+    writable: true,
+  })
   globalThis[MODAL_STATE_KEY] = state
   return state
 }
 
 const modalState = getModalState()
+
+function isModalLayer(element) {
+  return Boolean(
+    element?.matches?.('[data-gcu-modal-layer], .modal, .modal-backdrop'),
+  )
+}
+
+function readInertProperty(element) {
+  try {
+    return 'inert' in element ? element.inert : undefined
+  } catch {
+    return undefined
+  }
+}
+
+function captureBackgroundRecord(element) {
+  const existing = modalState.backgroundState.records.get(element)
+  if (existing) return existing
+
+  const record = {
+    element,
+    hadInertProperty: 'inert' in element,
+    previousInert: readInertProperty(element),
+    previousInertAttribute: element.getAttribute('inert'),
+    previousAriaHidden: element.getAttribute('aria-hidden'),
+    appliedInert: true,
+    appliedInertAttribute: '',
+    appliedAriaHidden: 'true',
+    externalInert: null,
+    externalAriaHidden: null,
+    owners: new Set(),
+  }
+  modalState.backgroundState.records.set(element, record)
+  return record
+}
+
+function setBackgroundInert(element) {
+  if (readInertProperty(element) !== true) {
+    try {
+      element.inert = true
+    } catch {
+      // The attribute fallback still makes the contract work in older DOMs.
+    }
+  }
+  if (element.getAttribute('inert') !== '') element.setAttribute('inert', '')
+  if (element.getAttribute('aria-hidden') !== 'true') element.setAttribute('aria-hidden', 'true')
+}
+
+function restoreBackgroundRecord(record) {
+  const { element } = record
+  if (!element) return
+
+  const currentInert = readInertProperty(element)
+  const currentInertAttribute = element.getAttribute('inert')
+  const currentAriaHidden = element.getAttribute('aria-hidden')
+  const managerStillOwnsInert = (
+    currentInert === record.appliedInert
+    && currentInertAttribute === record.appliedInertAttribute
+  )
+  const managerStillOwnsAriaHidden = currentAriaHidden === record.appliedAriaHidden
+
+  if (managerStillOwnsInert) {
+    const inertAttribute = record.externalInert
+      ? record.externalInert.attribute
+      : record.previousInertAttribute
+    const inertProperty = record.externalInert ? record.externalInert.property : record.previousInert
+    if (inertAttribute === null) element.removeAttribute('inert')
+    else element.setAttribute('inert', inertAttribute)
+
+    if (record.hadInertProperty) {
+      try {
+        element.inert = inertProperty
+      } catch {
+        // Keep the restored inert attribute when the property is read-only.
+      }
+    } else {
+      try {
+        delete element.inert
+      } catch {
+        // The attribute restoration above is the safe fallback.
+      }
+    }
+
+  }
+  if (managerStillOwnsAriaHidden) {
+    const ariaHidden = record.externalAriaHidden
+      ? record.externalAriaHidden.value
+      : record.previousAriaHidden
+    if (ariaHidden === null) element.removeAttribute('aria-hidden')
+    else element.setAttribute('aria-hidden', ariaHidden)
+  }
+}
+
+function rememberExternalBackgroundValues(record) {
+  const { element } = record
+  const currentInert = readInertProperty(element)
+  const currentInertAttribute = element.getAttribute('inert')
+  const currentAriaHidden = element.getAttribute('aria-hidden')
+  if (
+    currentInert !== record.appliedInert
+    || currentInertAttribute !== record.appliedInertAttribute
+  ) {
+    record.externalInert = { property: currentInert, attribute: currentInertAttribute }
+  }
+  if (currentAriaHidden !== record.appliedAriaHidden) {
+    record.externalAriaHidden = { value: currentAriaHidden }
+  }
+}
+
+/**
+ * Keep background ownership per modal entry. Direct body children are the
+ * smallest safe boundary here: the modal and backdrop are marked layers and
+ * remain interactive, while app roots and unrelated portal hosts become
+ * inert. Each record restores only values still owned by this manager.
+ */
+function syncModalBackground() {
+  if (typeof document === 'undefined' || !document.body) return
+
+  const activeEntries = new Set(modalState.modalStack)
+  const bodyChildren = Array.from(document.body.children)
+  const records = modalState.backgroundState.records
+
+  records.forEach((record, element) => {
+    if (!element.isConnected || element.parentElement !== document.body) {
+      record.owners.forEach((owner) => {
+        if (!activeEntries.has(owner)) record.owners.delete(owner)
+      })
+      if (activeEntries.size === 0) {
+        rememberExternalBackgroundValues(record)
+        restoreBackgroundRecord(record)
+        records.delete(element)
+      }
+      return
+    }
+    record.owners.forEach((owner) => {
+      if (!activeEntries.has(owner)) record.owners.delete(owner)
+    })
+  })
+
+  bodyChildren.forEach((element) => {
+    if (isModalLayer(element)) {
+      const record = records.get(element)
+      if (record) {
+        record.owners.clear()
+        rememberExternalBackgroundValues(record)
+        restoreBackgroundRecord(record)
+        records.delete(element)
+      }
+      return
+    }
+
+    if (activeEntries.size === 0) return
+    const record = captureBackgroundRecord(element)
+    activeEntries.forEach((entry) => record.owners.add(entry))
+    rememberExternalBackgroundValues(record)
+    setBackgroundInert(element)
+  })
+
+  if (activeEntries.size === 0) {
+    records.forEach((record, element) => {
+      record.owners.clear()
+      rememberExternalBackgroundValues(record)
+      restoreBackgroundRecord(record)
+      records.delete(element)
+    })
+  }
+}
 
 function getFocusableElements(dialog) {
   return Array.from(dialog.querySelectorAll(FOCUSABLE_SELECTOR)).filter((element) => (
@@ -33,7 +215,12 @@ function getFocusableElements(dialog) {
 function focusDialog(dialog, last = false) {
   const focusableElements = getFocusableElements(dialog)
   const target = (last ? focusableElements[focusableElements.length - 1] : focusableElements[0]) || dialog
-  target.focus()
+  try {
+    target.focus()
+  } catch {
+    // Fall through to the dialog when a consumer-controlled focus target fails.
+  }
+  if (target !== dialog && dialog.ownerDocument.activeElement !== target) dialog.focus()
 }
 
 function restoreFocus(element) {
@@ -99,7 +286,8 @@ function unlockBody() {
 
 function registerModal(entry) {
   if (modalState.modalStack.length === 0) lockBody()
-  modalState.modalStack.push(entry)
+  if (!modalState.modalStack.includes(entry)) modalState.modalStack.push(entry)
+  syncModalBackground()
 }
 
 function unregisterModal(entry) {
@@ -116,6 +304,7 @@ function unregisterModal(entry) {
   }
 
   if (modalStack.length === 0) unlockBody()
+  syncModalBackground()
   return { wasTopmost, topmost: modalStack[modalStack.length - 1] }
 }
 
@@ -149,12 +338,31 @@ export function Modal({
   scrollable = false,
   footer = null,
   children,
+  className = '',
+  style: dialogStyle = undefined,
+  id = undefined,
+  role = undefined,
+  'aria-label': ariaLabel = undefined,
+  'aria-labelledby': ariaLabelledBy = undefined,
+  'aria-describedby': ariaDescribedBy = undefined,
+  onClick: onDialogClick = undefined,
+  ...rest
 }) {
   const titleId = useId()
+  const hasTitle = typeof title === 'string'
+    ? title.trim() !== ''
+    : title !== undefined && title !== null && title !== false
+  const canClose = typeof onClose === 'function'
+  const [mounted, setMounted] = useState(false)
   const dialogRef = useRef(null)
-  const modalEntryRef = useRef({ dialog: null, previousFocus: null })
+  const backdropRef = useRef(null)
+  const modalEntryRef = useRef({ dialog: null, backdrop: null, previousFocus: null })
   const closeOnEscapeRef = useRef(closeOnEscape)
   const onCloseRef = useRef(onClose)
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') setMounted(true)
+  }, [])
 
   useEffect(() => {
     closeOnEscapeRef.current = closeOnEscape
@@ -162,22 +370,38 @@ export function Modal({
   }, [closeOnEscape, onClose])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || !mounted || typeof document === 'undefined' || !document.body) return
 
     const entry = modalEntryRef.current
     entry.dialog = dialogRef.current
+    entry.backdrop = backdropRef.current
     entry.previousFocus = document.activeElement
     registerModal(entry)
     const unregisterLayer = registerDismissableLayer({
       element: entry.dialog,
       onEscape: () => {
         if (!closeOnEscapeRef.current) return
-        onCloseRef.current?.()
+        if (typeof onCloseRef.current === 'function') onCloseRef.current()
       },
     })
-    focusDialog(entry.dialog)
+    const backgroundObserver = typeof MutationObserver === 'function'
+      ? new MutationObserver(() => syncModalBackground())
+      : null
+    backgroundObserver?.observe(document.body, {
+      childList: true,
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['aria-hidden', 'inert'],
+    })
+    const focusableElements = getFocusableElements(entry.dialog)
+    const onlyFocusableControlIsCloseButton = !hasTitle
+      && focusableElements.length === 1
+      && focusableElements[0].classList.contains('btn-close')
+    if (onlyFocusableControlIsCloseButton) entry.dialog.focus()
+    else focusDialog(entry.dialog)
 
     return () => {
+      backgroundObserver?.disconnect()
       unregisterLayer()
       const { wasTopmost, topmost } = unregisterModal(entry)
       if (wasTopmost) {
@@ -186,11 +410,12 @@ export function Modal({
         }
       }
       entry.dialog = null
+      entry.backdrop = null
     }
-  }, [open])
+  }, [hasTitle, open, mounted])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || !mounted || typeof document === 'undefined' || !document.body) return
 
     const handleKeyDown = (e) => {
       if (e.key !== 'Tab') return
@@ -221,44 +446,61 @@ export function Modal({
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [open])
+  }, [open, mounted])
 
-  if (!open) return null
+  if (!open || !mounted || typeof document === 'undefined' || !document.body) return null
 
-  return createPortal(
+  const effectiveLabelledBy = ariaLabelledBy
+    ?? (hasTitle && ariaLabel === undefined ? titleId : undefined)
+  const fallbackLabel = ariaLabel === undefined && effectiveLabelledBy === undefined && !hasTitle
+    ? 'Modal'
+    : undefined
+  const handleBackdropClick = (event) => {
+    if (
+      event.target === event.currentTarget
+      && closeOnBackdrop
+      && canClose
+      && isTopmostModal(modalEntryRef.current)
+    ) {
+      onClose()
+    }
+  }
+  const handleDialogClick = (event) => {
+    onDialogClick?.(event)
+    if (!event.defaultPrevented) handleBackdropClick(event)
+  }
+
+  const modalMarkup = (
     <>
       <div
-        className="modal fade show"
-        style={{ display: 'block' }}
+        {...rest}
+        id={id}
+        data-gcu-modal-layer="dialog"
+        className={['modal fade show', className].filter(Boolean).join(' ')}
+        style={{ ...(dialogStyle || {}), display: 'block' }}
         tabIndex="-1"
-        role="dialog"
+        role={role ?? 'dialog'}
         aria-modal="true"
-        aria-labelledby={title ? titleId : undefined}
+        aria-labelledby={effectiveLabelledBy}
+        aria-label={ariaLabel !== undefined ? ariaLabel : fallbackLabel}
+        aria-describedby={ariaDescribedBy}
         ref={dialogRef}
-        onClick={(e) => {
-          if (
-            e.target === e.currentTarget
-            && closeOnBackdrop
-            && isTopmostModal(modalEntryRef.current)
-          ) {
-            onClose?.()
-          }
-        }}
+        onClick={handleDialogClick}
       >
         <div className={`modal-dialog${size ? ` modal-${size}` : ''} modal-dialog-centered${scrollable ? ' modal-dialog-scrollable' : ''}`}>
           <div className="modal-content">
-            {title && (
+            {(hasTitle || (showCloseButton && canClose)) && (
               <div className="modal-header">
-                <h5 className="modal-title" id={titleId}>{title}</h5>
-                {showCloseButton && (
-                  <button type="button" className="btn-close" aria-label="Cerrar" onClick={onClose}></button>
+                {hasTitle && <h5 className="modal-title" id={titleId}>{title}</h5>}
+                {showCloseButton && canClose && (
+                  <button type="button" className="btn-close" aria-label="Cerrar" onClick={() => onClose()}></button>
                 )}
               </div>
             )}
             <div className="modal-body">
               {children}
             </div>
-            {footer && (
+            {footer !== undefined && footer !== null && footer !== false && (
               <div className="modal-footer">
                 {footer}
               </div>
@@ -266,8 +508,28 @@ export function Modal({
           </div>
         </div>
       </div>
-      <div className="modal-backdrop fade show"></div>
-    </>,
-    document.body,
+      {closeOnBackdrop && canClose ? (
+        <button
+          type="button"
+          data-gcu-modal-layer="backdrop"
+          className="modal-backdrop fade show"
+          ref={backdropRef}
+          aria-label="Cerrar modal"
+          tabIndex={-1}
+          style={{ border: 0, padding: 0 }}
+          onClick={handleBackdropClick}
+        />
+      ) : (
+        <div
+          data-gcu-modal-layer="backdrop"
+          className="modal-backdrop fade show"
+          ref={backdropRef}
+          aria-hidden="true"
+        />
+      )}
+    </>
   )
+
+  const portalTarget = typeof document === 'undefined' ? null : document.body
+  return portalTarget ? createPortal(modalMarkup, portalTarget) : null
 }

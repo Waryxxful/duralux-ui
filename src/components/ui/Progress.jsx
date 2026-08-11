@@ -1,3 +1,15 @@
+import { normalizeProgress } from './internal/progress.js'
+
+const CSS_LENGTH_PATTERN = /^(?:0|(?:\d+|\d*\.\d+)(?:px|rem|em|ex|ch|vw|vh|vmin|vmax|cm|mm|in|pt|pc|%))$/i
+
+function normalizeHeight(height) {
+  if (height === undefined || height === null || height === '') return undefined
+  if (typeof height === 'number') return Number.isFinite(height) && height >= 0 ? height : undefined
+  if (typeof height !== 'string') return undefined
+  const value = height.trim()
+  return CSS_LENGTH_PATTERN.test(value) ? value : undefined
+}
+
 /**
  * Progress — barra de progreso Bootstrap.
  *
@@ -13,8 +25,6 @@
  *   height    — altura en px de la barra contenedora
  *   className — clases adicionales al contenedor
  */
-import { cx } from '../../utils/cx'
-
 export function Progress({
   value,
   max = 100,
@@ -25,34 +35,47 @@ export function Progress({
   showValue,
   height,
   className,
+  style,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  ...rest
 }) {
-  const pct = Math.min(100, Math.max(0, (value / max) * 100))
-  const accessibleName =
-    (label && String(label).trim()) ||
-    `${Math.round(Number(value))} de ${max}`
+  const normalized = normalizeProgress(value, max)
+  const safeHeight = normalizeHeight(height)
+  const labelText = typeof label === 'string' || typeof label === 'number'
+    ? String(label).trim()
+    : ''
+  const accessibleName = labelText || `${Math.round(normalized.value)} de ${normalized.max}`
+  const computedAriaLabel = ariaLabel !== undefined
+    ? ariaLabel
+    : ariaLabelledBy !== undefined
+      ? undefined
+      : accessibleName
 
-  const barClasses = cx(
+  const barClasses = [
     'progress-bar',
     `bg-${variant}`,
     striped ? 'progress-bar-striped' : '',
     animated ? 'progress-bar-animated' : '',
-  )
+  ].filter(Boolean).join(' ')
 
   return (
     <div
-      className={cx('progress', className)}
-      style={height ? { height } : undefined}
+      {...rest}
+      className={['progress', className].filter(Boolean).join(' ')}
+      style={safeHeight !== undefined ? { ...(style || {}), height: safeHeight } : style}
     >
       <div
         className={barClasses}
         role="progressbar"
-        style={{ width: `${pct}%` }}
-        aria-valuenow={value}
+        style={{ width: `${normalized.percentage}%` }}
+        aria-valuenow={normalized.value}
         aria-valuemin={0}
-        aria-valuemax={max}
-        aria-label={accessibleName}
+        aria-valuemax={normalized.max}
+        aria-label={computedAriaLabel}
+        aria-labelledby={ariaLabelledBy}
       >
-        {showValue ? `${Math.round(pct)}%` : null}
+        {showValue ? `${Math.round(normalized.percentage)}%` : null}
       </div>
     </div>
   )

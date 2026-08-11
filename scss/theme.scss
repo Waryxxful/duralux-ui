@@ -17,8 +17,52 @@
 // anywhere in this SCSS and were pure dead weight.
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
+// Bootstrap's color helpers are used by the theme components. Keep this
+// import before the theme variables so shift-color() is evaluated by Sass
+// instead of leaking as an unknown CSS function into the package artifact.
+@import "bootstrap/functions";
+
 // Variables
 @import "themes/variables";
+
+// The React runtime also exposes teal and indigo soft variants even though
+// Bootstrap's default theme-colors map does not. These maps centralize the
+// foreground policy without changing the public brand hex values.
+$gcu-theme-colors: map-merge(
+	$theme-colors,
+	(
+		"teal": $teal,
+		"indigo": $indigo,
+	)
+);
+
+$gcu-solid-foregrounds: (
+	"primary": $white,
+	"secondary": $white,
+	"success": $black,
+	"info": $black,
+	"warning": $black,
+	"danger": $black,
+	"light": $dark,
+	"dark": $white,
+	"darken": $white,
+	"teal": $black,
+	"indigo": $white,
+);
+
+$gcu-soft-foregrounds: (
+	"primary": $primary,
+	"secondary": $dark,
+	"success": $dark,
+	"info": $dark,
+	"warning": $dark,
+	"danger": $dark,
+	"light": $dark,
+	"dark": $dark,
+	"darken": $dark,
+	"teal": $dark,
+	"indigo": $indigo,
+);
 
 // General
 @import "themes/components/general";
@@ -111,3 +155,6 @@
 <--!----------------------------------------------------------------!-->
 */
 @import "themes/layouts/nxl-responsive";
+
+// Keep the reduced-motion safety net last so legacy layers cannot override it.
+@import "themes/components/motion-reduced";

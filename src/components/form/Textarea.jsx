@@ -1,3 +1,5 @@
+import { cx } from '../../utils/cx'
+
 /**
  * Textarea — textarea con ícono opcional.
  *
@@ -7,26 +9,30 @@
  *   rows    — número de filas (default 4)
  *   Todos los props nativos de <textarea> son válidos.
  */
-export function Textarea({ icon, invalid, error, rows = 4, className = '', ...props }) {
-  const isInvalid = invalid || error
+export function Textarea({
+  icon,
+  invalid,
+  error,
+  rows = 4,
+  className = '',
+  'aria-invalid': ariaInvalid,
+  ...props
+}) {
+  const isInvalid = Boolean(invalid || error)
+  const inputProps = {
+    ...props,
+    className: cx('form-control', isInvalid && 'is-invalid', className),
+    rows,
+    'aria-invalid': ariaInvalid !== undefined ? ariaInvalid : isInvalid ? true : undefined,
+  }
   if (!icon) {
-    return (
-      <textarea
-        className={`form-control${isInvalid ? ' is-invalid' : ''} ${className}`}
-        rows={rows}
-        {...props}
-      />
-    )
+    return <textarea {...inputProps} />
   }
 
   return (
     <div className="input-group align-items-start">
-      <div className="input-group-text"><i className={icon}></i></div>
-      <textarea
-        className={`form-control${isInvalid ? ' is-invalid' : ''} ${className}`}
-        rows={rows}
-        {...props}
-      />
+      <div className="input-group-text"><i className={icon} aria-hidden="true"></i></div>
+      <textarea {...inputProps} />
     </div>
   )
 }

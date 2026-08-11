@@ -1,3 +1,5 @@
+import { cx } from '../../utils/cx'
+
 /**
  * Input — input con addon/ícono opcional.
  *
@@ -17,16 +19,16 @@ export function Input({
   invalid,
   error,
   className = '',
-  'aria-invalid': providedInvalid,
+  'aria-invalid': ariaInvalid,
   ...props
 }) {
-  const isInvalid = invalid || error
-  const lead = startAddon ?? (icon ? <i className={icon}></i> : prefix != null ? prefix : null)
+  const isInvalid = Boolean(invalid || error)
+  const lead = startAddon ?? (icon ? <i className={icon} aria-hidden="true"></i> : prefix != null ? prefix : null)
   const input = (
     <input
-      className={`form-control${isInvalid ? ' is-invalid' : ''} ${className}`}
-      aria-invalid={isInvalid ? true : providedInvalid}
       {...props}
+      className={cx('form-control', isInvalid && 'is-invalid', className)}
+      aria-invalid={ariaInvalid !== undefined ? ariaInvalid : isInvalid ? true : undefined}
     />
   )
   if (lead == null && endAddon == null) return input

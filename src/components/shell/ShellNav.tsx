@@ -1,5 +1,5 @@
-import React, { useEffect, useId, useState } from 'react';
-import { Icon } from '../ui/Icon';
+import type { MouseEvent } from 'react';
+import { NavCore, navigationPathScore } from './navigationCore';
 
 // ─── ShellNav Props ───────────────────────────────────────────────────────────
 
@@ -10,18 +10,24 @@ export interface ShellNavBrand {
   alt: string;
 }
 
-// Item de nav. `href`/`active` son para items hoja; `children` lo convierte en
-// un submenú colapsable (patrón Duralux nxl-hasmenu/nxl-submenu). `active` en
-// un item con `children` marca el grupo como activo (algún hijo es la ruta actual).
+// `href`/`active` remain the gateway API. `pathname` on ShellNav is optional:
+// when supplied, route matching is the source of truth; without it, the
+// legacy `active` flags remain supported for consumers that already resolve
+// routes outside this package.
 export interface ShellNavItem {
+  key?: string;
+  id?: string;
   label: string;
   icon: string;
   href?: string;
   active?: boolean;
+  disabled?: boolean;
+  action?: (event: MouseEvent<HTMLButtonElement>) => void;
   children?: ShellNavItem[];
 }
 
 export interface ShellNavSection {
+  key?: string;
   caption?: string;
   items: ShellNavItem[];
 }
@@ -29,146 +35,88 @@ export interface ShellNavSection {
 export interface ShellNavProps {
   brand: ShellNavBrand;
   sections: ShellNavSection[];
-  onNavigate: (href: string, e: React.MouseEvent) => void;
+  onNavigate: (href: string, e: MouseEvent) => void;
+  /** Current gateway pathname; ShellNav intentionally does not import Router. */
+  pathname?: string;
   /** En móvil desliza el sidebar: clase Duralux .mob-navigation-active sobre el <nav>. */
   mobileOpen?: boolean;
+  /** ID shared with ShellHeader's `aria-controls`. */
+  navigationId?: string;
 }
 
-// ─── ShellNav Component ───────────────────────────────────────────────────────
-
-// Item de nav: hoja (href) o grupo colapsable (children). Mismo patrón que
-// @duralux/ui Sidebar (nxl-hasmenu/nxl-submenu/nxl-arrow, clase nxl-trigger
-// mientras está abierto, active en el <li> para el fondo "pill" de Duralux).
-function hasActiveItem(item: ShellNavItem): boolean {
-  return Boolean(item.active || item.children?.some(hasActiveItem));
+function gatewayNavItem(item: ShellNavItem, pathname: string | undefined) {
+  const href = item.href && item.href !== '#' ? item.href : undefined;
+  return {
+    key: item.key ?? item.id ?? item.href ?? item.label ?? 'item',
+    label: item.label,
+    icon: item.icon,
+    href,
+    linkKind: 'anchor' as const,
+    routeScore: href ? navigationPathScore(href, pathname) : -1,
+    active: item.active,
+    disabled: item.disabled,
+    action: item.action,
+    children: item.children?.length
+      ? item.children.map(child => gatewayNavItem(child, pathname))
+      : item.children,
+  };
 }
 
-function navItemIdentifier(item: ShellNavItem): string {
-  return `${item.href ?? 'group'}:${item.label}`;
-}
-
-function navSectionIdentifier(section: ShellNavSection): string {
-  if (section.caption) return `caption:${section.caption}`;
-  return `section:${section.items.map(navItemIdentifier).sort().join('|')}`;
-}
-
-function NavItemRow({
-  item,
-  onNavigate,
-}: {
-  item: ShellNavItem;
-  onNavigate: (href: string, e: React.MouseEvent) => void;
+/**
+ * GatewayAdapter owns only gateway semantics: anchors, pathname prefix
+ * matching, and the public `(href, event)` callback. React Router is kept out
+ * of this module and therefore out of gateway bundles.
+ */
+export function GatewayAdapter({ sections, pathname, onNavigate }: {
+  sections: ShellNavSection[];
+  pathname?: string;
+  onNavigate: ShellNavProps['onNavigate'];
 }) {
-  const submenuId = useId();
-  const active = hasActiveItem(item);
-  const [open, setOpen] = useState(active);
-
-  useEffect(() => {
-    if (active) setOpen(true);
-  }, [active]);
-
-  if (item.children && item.children.length > 0) {
-    return (
-      <li className={`nxl-item nxl-hasmenu${active ? ' active' : ''}${open ? ' nxl-trigger' : ''}`}>
-        <button
-          type="button"
-          className="nxl-link gcu-nav-group"
-          aria-label={item.label}
-          aria-expanded={open}
-          aria-controls={submenuId}
-          onClick={() => setOpen((value) => !value)}
+  return {
+    sections: sections.map(section => ({
+      key: section.key,
+      caption: section.caption,
+      items: section.items.map(item => gatewayNavItem(item, pathname)),
+    })),
+    adapter: {
+      routeMode: typeof pathname === 'string',
+      brandLinkKind: 'anchor' as const,
+      renderLink: ({ item, href, className, ariaLabel, ariaCurrent, tabIndex, onClick, children }) => (
+        <a
+          href={href}
+          className={className}
+          aria-label={ariaLabel}
+          aria-current={ariaCurrent}
+          tabIndex={tabIndex}
+          onClick={onClick}
         >
-          <span className="nxl-micon">
-            <Icon name={item.icon} />
-          </span>
-          <span className="nxl-mtext">{item.label}</span>
-          <span className="nxl-arrow">
-            <Icon name="chevron-right" />
-          </span>
-        </button>
-        {/* Siempre montado: nxl-menu-visible/-hidden animan max-height (v2 Menus.jsx),
-            display:none no se puede animar. */}
-        <ul id={submenuId} className={`nxl-submenu ${open ? 'nxl-menu-visible' : 'nxl-menu-hidden'}`}>
-          {item.children.map((child) => (
-            <NavItemRow key={navItemIdentifier(child)} item={child} onNavigate={onNavigate} />
-          ))}
-        </ul>
-      </li>
-    );
-  }
-
-  if (!item.href) {
-    return (
-      <li className="nxl-item disabled">
-        <span className="nxl-link" aria-disabled="true">
-          <span className="nxl-micon">
-            <Icon name={item.icon} />
-          </span>
-          <span className="nxl-mtext">{item.label}</span>
-        </span>
-      </li>
-    );
-  }
-
-  return (
-    <li className={`nxl-item${item.active ? ' active' : ''}`}>
-      <a
-        href={item.href}
-        onClick={(e) => onNavigate(item.href!, e)}
-        className={`nxl-link${item.active ? ' active' : ''}`}
-        aria-label={item.label}
-        aria-current={item.active ? 'page' : undefined}
-      >
-        <span className="nxl-micon">
-          <Icon name={item.icon} />
-        </span>
-        <span className="nxl-mtext">{item.label}</span>
-      </a>
-    </li>
-  );
+          {children}
+        </a>
+      ),
+      onNavigate: (event, item) => {
+        if (item.href) onNavigate(item.href, event);
+      },
+    },
+  };
 }
 
-export function ShellNav({ brand, sections, onNavigate, mobileOpen = false }: ShellNavProps) {
+export function ShellNav({
+  brand,
+  sections,
+  onNavigate,
+  pathname,
+  mobileOpen = false,
+  navigationId = 'shell-navigation',
+}: ShellNavProps) {
+  const gateway = GatewayAdapter({ sections, pathname, onNavigate });
+
   return (
-    <nav className={`nxl-navigation${mobileOpen ? ' mob-navigation-active' : ''}`}>
-      <div className="navbar-wrapper">
-        <div className="m-header">
-          <a
-            href={brand.href}
-            className="b-brand"
-            onClick={(e) => onNavigate(brand.href, e)}
-          >
-            <img
-              src={brand.logoLg}
-              alt={brand.alt}
-              className="logo logo-lg"
-              style={{ height: 40, width: 'auto', objectFit: 'contain' }}
-            />
-            <img
-              src={brand.logoSm}
-              alt={brand.alt}
-              className="logo logo-sm"
-              style={{ height: 36, width: 'auto', objectFit: 'contain' }}
-            />
-          </a>
-        </div>
-        <div className="navbar-content">
-          <ul className="nxl-navbar">
-            {sections.map((section) => (
-              <React.Fragment key={navSectionIdentifier(section)}>
-                {section.caption && (
-                  <li className="nxl-item nxl-caption">
-                    <span>{section.caption}</span>
-                  </li>
-                )}
-                {section.items.map((item) => (
-                  <NavItemRow key={navItemIdentifier(item)} item={item} onNavigate={onNavigate} />
-                ))}
-              </React.Fragment>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <NavCore
+      brand={brand}
+      sections={gateway.sections}
+      adapter={gateway.adapter}
+      mobileOpen={mobileOpen}
+      navigationId={navigationId}
+    />
   );
 }

@@ -29,8 +29,8 @@ describe('apiFetch', () => {
     await apiFetch('/api/thing')
 
     const [, init] = fetchSpy.mock.calls[0]
-    const headers = init?.headers as Record<string, string>
-    expect(headers['X-CSRFToken']).toBe('abc123')
+    const headers = new Headers(init?.headers)
+    expect(headers.get('X-CSRFToken')).toBe('abc123')
   })
 
   test('decodifica la cookie CSRF si viene URL-encodeada', async () => {
@@ -39,8 +39,8 @@ describe('apiFetch', () => {
     await apiFetch('/api/thing')
 
     const [, init] = fetchSpy.mock.calls[0]
-    const headers = init?.headers as Record<string, string>
-    expect(headers['X-CSRFToken']).toBe('abc/123')
+    const headers = new Headers(init?.headers)
+    expect(headers.get('X-CSRFToken')).toBe('abc/123')
   })
 
   test('usa string vacio si no hay cookie csrftoken', async () => {
@@ -49,8 +49,8 @@ describe('apiFetch', () => {
     await apiFetch('/api/thing')
 
     const [, init] = fetchSpy.mock.calls[0]
-    const headers = init?.headers as Record<string, string>
-    expect(headers['X-CSRFToken']).toBe('')
+    const headers = new Headers(init?.headers)
+    expect(headers.get('X-CSRFToken')).toBe('')
   })
 
   test('credentials es same-origin por defecto', async () => {
@@ -66,8 +66,8 @@ describe('apiFetch', () => {
     await apiFetch('/api/thing', { json: { a: 1 } })
 
     const [, init] = fetchSpy.mock.calls[0]
-    const headers = init?.headers as Record<string, string>
-    expect(headers['Content-Type']).toBe('application/json')
+    const headers = new Headers(init?.headers)
+    expect(headers.get('Content-Type')).toBe('application/json')
     expect(init?.body).toBe(JSON.stringify({ a: 1 }))
   })
 
@@ -76,8 +76,8 @@ describe('apiFetch', () => {
     await apiFetch('/api/thing')
 
     const [, init] = fetchSpy.mock.calls[0]
-    const headers = init?.headers as Record<string, string>
-    expect(headers['Content-Type']).toBeUndefined()
+    const headers = new Headers(init?.headers)
+    expect(headers.get('Content-Type')).toBeNull()
   })
 
   test('headers custom del caller pisan los defaults', async () => {
@@ -85,8 +85,8 @@ describe('apiFetch', () => {
     await apiFetch('/api/thing', { headers: { 'Content-Type': 'text/plain' } })
 
     const [, init] = fetchSpy.mock.calls[0]
-    const headers = init?.headers as Record<string, string>
-    expect(headers['Content-Type']).toBe('text/plain')
+    const headers = new Headers(init?.headers)
+    expect(headers.get('Content-Type')).toBe('text/plain')
   })
 
   test('dispara SESSION_EXPIRED_EVENT en window cuando la respuesta es 401', async () => {

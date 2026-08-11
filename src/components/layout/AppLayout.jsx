@@ -1,9 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useThemeOptional } from '../../theme/ThemeProvider'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
 import { PLACEHOLDER_LOGO, PLACEHOLDER_LOGO_ABBR } from '../../assets/placeholders'
 import { Sidebar } from './Sidebar'
 import { Header } from './Header'
+import { Footer } from './Footer'
+
+const EMPTY_NAV_ITEMS = Object.freeze([])
+const EMPTY_USER = Object.freeze({})
+const EMPTY_NOTIFICATIONS = Object.freeze([])
 
 /**
  * AppLayout — monta el shell Duralux (sidebar + header + footer).
@@ -11,10 +17,6 @@ import { Header } from './Header'
  * logo/logoAbbr caen a un placeholder real (SVG inline) si el consumidor no
  * pasa su propia marca — nunca a una ruta que no existe.
  */
-const EMPTY_NAV_ITEMS = []
-const EMPTY_USER = {}
-const EMPTY_NOTIFICATIONS = []
-
 export function AppLayout({
   children,
   navItems = EMPTY_NAV_ITEMS,
@@ -27,9 +29,18 @@ export function AppLayout({
 }) {
   const themeContext = useThemeOptional()
   const hasThemeProvider = themeContext !== null
+  const { pathname } = useLocation()
+  const navigationId = `app-layout-navigation-${useId().replace(/:/g, '')}`
   const [mini, setMini] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileCloseReason, setMobileCloseReason] = useState('dismiss')
   const mobileLayerRef = useRef(null)
+  const previousPathnameRef = useRef(pathname)
+
+  const closeMobile = useCallback((reason) => {
+    setMobileCloseReason(reason)
+    setMobileOpen(false)
+  }, [])
 
   useEffect(() => {
     if (hasThemeProvider) return
@@ -67,9 +78,18 @@ export function AppLayout({
 
     return registerDismissableLayer({
       element: mobileLayerRef.current,
-      onEscape: () => setMobileOpen(false),
+      onEscape: () => closeMobile('escape'),
     })
-  }, [mobileOpen])
+  }, [closeMobile, mobileOpen])
+
+  // Route changes can happen without clicking a Sidebar link (navigate(),
+  // browser back/forward, redirects). The mobile drawer must follow the
+  // pathname, not only the local click handler.
+  useEffect(() => {
+    if (previousPathnameRef.current === pathname) return
+    previousPathnameRef.current = pathname
+    if (mobileOpen) closeMobile('programmatic')
+  }, [closeMobile, mobileOpen, pathname])
 
   return (
     <>
@@ -79,14 +99,25 @@ export function AppLayout({
         logoAbbr={logoAbbr}
         promoCard={promoCard}
         mobileOpen={mobileOpen}
-        onNavigate={() => setMobileOpen(false)}
+        navigationId={navigationId}
+        onNavigate={() => closeMobile('navigation')}
       />
 
       <Header
         user={user}
         notifications={notifications}
+        mini={themeContext?.mini ?? mini}
         onToggleMini={themeContext?.toggleMini ?? (() => setMini((m) => !m))}
-        onToggleMobile={() => setMobileOpen((m) => !m)}
+        onToggleMobile={() => {
+          if (mobileOpen) closeMobile('toggle')
+          else {
+            setMobileCloseReason('open')
+            setMobileOpen(true)
+          }
+        }}
+        mobileOpen={mobileOpen}
+        mobileNavId={navigationId}
+        mobileCloseReason={mobileCloseReason}
       />
 
       <main className="nxl-container">
@@ -97,26 +128,18 @@ export function AppLayout({
         */}
         <div className="nxl-content">
           {children}
-          <footer className="footer">
-            <p className="fs-11 text-muted fw-medium text-uppercase mb-0">
-              Copyright © {new Date().getFullYear()}
-            </p>
-            <div className="d-flex align-items-center gap-4">
-              <a href="#" className="fs-11 fw-semibold text-uppercase">Ayuda</a>
-              <a href="#" className="fs-11 fw-semibold text-uppercase">Términos</a>
-              <a href="#" className="fs-11 fw-semibold text-uppercase">Privacidad</a>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </main>
 
       {mobileOpen && (
         <button
-          type="button"
           ref={mobileLayerRef}
-          className="nxl-menu-overlay border-0 p-0"
+          type="button"
+          className="nxl-menu-overlay"
           aria-label="Cerrar menú"
-          onClick={() => setMobileOpen(false)}
+          style={{ border: 0, padding: 0 }}
+          onClick={() => closeMobile('overlay')}
         />
       )}
     </>

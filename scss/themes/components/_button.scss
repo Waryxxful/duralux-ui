@@ -4,38 +4,55 @@
 <--!----------------------------------------------------------------!-->
 */
 
-@each $color, $value in $theme-colors {
-	.btn-light-#{$color} {
-		color: $value;
-		background: shift-color($value, $soft-bg-level);
-		border-color: shift-color($value, $soft-bg-level);
-		&:hover {
-			color: #fff;
-			background: $value;
-			border-color: $value;
-		}
-		&.focus,
-		&:focus {
-			color: #fff;
-			background: $value;
-			border-color: $value;
-		}
-		&:not(:disabled):not(.disabled).active,
-		&:not(:disabled):not(.disabled):active,
-		.show > &.dropdown-toggle {
-			color: #fff;
-			background: $value;
-			border-color: $value;
-		}
+@each $color, $value in $gcu-theme-colors {
+	$solid-foreground: map-get($gcu-solid-foregrounds, $color);
+	$soft-foreground: map-get($gcu-soft-foregrounds, $color);
+	$soft-background: shift-color($value, $soft-bg-level);
+	$hover-background: shade-color($value, 8%);
+	$active-background: shade-color($value, 20%);
+	$state-foreground: $solid-foreground;
+	@if $color == "danger" {
+		// The preserved red brand hex needs dark text at rest. Once the
+		// interaction shade is applied, white becomes the accessible choice.
+		$hover-background: shade-color($value, 30%);
+		$active-background: shade-color($value, 35%);
+		$state-foreground: $white;
 	}
 
-	.btn-check:active,
-	.btn-check:checked {
-		+ .btn-light-#{$color} {
-			background: $value;
-			color: #fff;
-			border-color: $value;
-		}
+	// Soft buttons keep their tint at rest and use the solid brand color for
+	// interaction states. Each state gets the foreground that passes AA on its
+	// actual background; no state falls back to a blanket white override.
+	.btn-light-#{$color},
+	.btn.bg-soft-#{$color} {
+		color: $soft-foreground !important;
+		background-color: $soft-background !important;
+		border-color: $soft-background !important;
+	}
+	.btn-light-#{$color}:hover,
+	.btn-light-#{$color}:focus,
+	.btn-light-#{$color}:focus-visible,
+	.btn.bg-soft-#{$color}:hover,
+	.btn.bg-soft-#{$color}:focus,
+	.btn.bg-soft-#{$color}:focus-visible {
+		color: $state-foreground !important;
+		background-color: $hover-background !important;
+		border-color: $hover-background !important;
+	}
+	.btn-light-#{$color}:active,
+	.btn-light-#{$color}.active,
+	.show > .btn-light-#{$color}.dropdown-toggle,
+	.btn.bg-soft-#{$color}:active,
+	.btn.bg-soft-#{$color}.active,
+	.show > .btn.bg-soft-#{$color}.dropdown-toggle {
+		color: $state-foreground !important;
+		background-color: $active-background !important;
+		border-color: $active-background !important;
+	}
+	.btn-check:active + .btn-light-#{$color},
+	.btn-check:checked + .btn-light-#{$color} {
+		color: $state-foreground !important;
+		background-color: $active-background !important;
+		border-color: $active-background !important;
 	}
 }
 
@@ -75,50 +92,30 @@ button,
 	text-transform: $font-uppercase;
 	letter-spacing: $text-spacing-md;
 	border-radius: 3px;
-	/* House motion signature (DESIGN.md): all 0.3s ease — scoped props here
-	   instead of literal `all`; see components/_motion.scss for the .btn
-	   override that actually wins the cascade. */
+	/* House motion signature: paint and press properties only. */
 	transition:
 		color 0.3s ease,
 		background-color 0.3s ease,
 		border-color 0.3s ease,
 		box-shadow 0.3s ease,
 		transform 0.3s ease;
-	&:hover,
-	&:focus,
-	&:active,
-	&:focus,
-	&.active,
-	&.show,
-	.btn-check:focus + &,
-	.btn-check:checked + &,
-	.btn-check:active + & {
-		&:hover,
-		&:focus,
-		&:active,
-		&:focus {
-			color: $white;
-			outline: none;
-			box-shadow: none;
-			transition: all 0.3s ease;
-		}
-	}
 }
 .btn-light,
 .btn-light-brand {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: $brand-dark;
-	border: 1px solid $border-color-2;
+	color: $dark !important;
+	background-color: $light !important;
+	border: 1px solid $border-color-2 !important;
 	&:hover,
 	&:focus,
+	&:focus-visible,
 	&:active,
-	&:focus,
 	&.show {
-		color: $brand-dark !important;
-		border: 1px solid $gray-400 !important;
-		transition: all 0.3s ease;
+		color: $dark !important;
+		background-color: $gray-200 !important;
+		border-color: $gray-400 !important;
 	}
 }
 .btn-icon {
@@ -129,15 +126,18 @@ button,
 	justify-content: center;
 	border: 1px solid $border-color-2;
 	border-radius: 3px;
-	transition: all 0.3s ease;
+	transition:
+		color 0.3s ease,
+		background-color 0.3s ease,
+		border-color 0.3s ease,
+		box-shadow 0.3s ease,
+		transform 0.3s ease;
 	&:hover,
 	&:focus,
 	&:active,
-	&:focus,
 	&.show {
 		color: $brand-dark !important;
-		border: 1px solid $gray-400 !important;
-		transition: all 0.3s ease;
+		border-color: $gray-400 !important;
 	}
 }
 .btn-close {
@@ -150,7 +150,6 @@ button,
 button:focus:not(:focus-visible) {
 	outline: none;
 	box-shadow: none;
-	transition: all 0.3s ease;
 }
 .btn-sm,
 .btn-group-sm > .btn {
@@ -177,67 +176,38 @@ button:focus:not(:focus-visible) {
 	padding: 25px 35px;
 	font-size: $font-15;
 }
-.btn-primary,
-.btn-primary:hover,
-.btn.bg-soft-primary:focus,
-.btn.bg-soft-primary:hover {
-	color: $white !important;
-	border-color: $primary !important;
-	background-color: $primary !important;
-}
-.btn-secondary,
-.btn-secondary:hover,
-.btn.bg-soft-secondary:focus,
-.btn.bg-soft-secondary:hover {
-	color: $white !important;
-	border-color: $secondary !important;
-	background-color: $secondary !important;
-}
-.btn-success,
-.btn-success:hover,
-.btn.bg-soft-success:focus,
-.btn.bg-soft-success:hover {
-	color: $white !important;
-	border-color: $success !important;
-	background-color: $success !important;
-}
-.btn-danger,
-.btn-danger:hover,
-.btn.bg-soft-danger:focus,
-.btn.bg-soft-danger:hover {
-	color: $white !important;
-	border-color: $danger !important;
-	background-color: $danger !important;
-}
-.btn-info,
-.btn-info:hover,
-.btn.bg-soft-info:focus,
-.btn.bg-soft-info:hover {
-	color: $white !important;
-	border-color: $info !important;
-	background-color: $info !important;
-}
-.btn-warning,
-.btn-warning:hover,
-.btn.bg-soft-warning:focus,
-.btn.bg-soft-warning:hover {
-	color: $white !important;
-	border-color: $warning !important;
-	background-color: $warning !important;
-}
-.btn-teal,
-.btn-teal:hover,
-.btn.bg-soft-teal:focus,
-.btn.bg-soft-teal:hover {
-	color: $white !important;
-	border-color: $teal !important;
-	background-color: $teal !important;
-}
-.btn-indigo,
-.btn-indigo:hover,
-.btn.bg-soft-indigo:focus,
-.btn.bg-soft-indigo:hover {
-	color: $white !important;
-	border-color: $indigo !important;
-	background-color: $indigo !important;
+@each $color, $value in $gcu-theme-colors {
+	@if $color != "light" and $color != "darken" {
+		$foreground: map-get($gcu-solid-foregrounds, $color);
+		$hover-background: shade-color($value, 8%);
+		$active-background: shade-color($value, 20%);
+		$state-foreground: $foreground;
+		@if $color == "danger" {
+			$hover-background: shade-color($value, 30%);
+			$active-background: shade-color($value, 35%);
+			$state-foreground: $white;
+		}
+
+		.btn-#{$color} {
+			color: $foreground !important;
+			background-color: $value !important;
+			border-color: $value !important;
+		}
+		.btn-#{$color}:hover,
+		.btn-#{$color}:focus,
+		.btn-#{$color}:focus-visible {
+			color: $state-foreground !important;
+			background-color: $hover-background !important;
+			border-color: $hover-background !important;
+		}
+		.btn-#{$color}:active,
+		.btn-#{$color}.active,
+		.show > .btn-#{$color}.dropdown-toggle,
+		.btn-check:active + .btn-#{$color},
+		.btn-check:checked + .btn-#{$color} {
+			color: $state-foreground !important;
+			background-color: $active-background !important;
+			border-color: $active-background !important;
+		}
+	}
 }

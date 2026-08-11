@@ -5,18 +5,18 @@
 */
 body {
 	line-height: 1.6;
-	color: $brand-body;
+	color: $body-color;
 	overflow-x: hidden;
 	font-size: $font-body;
 	scroll-behavior: smooth;
 	font-family: $font-inter;
-	/* House motion signature (DESIGN.md): all 0.3s ease — scoped to paint
-	   props here instead of literal `all` to avoid transitioning layout. */
+	/* House motion signature (DESIGN.md): scoped paint response at 0.3s ease. */
 	transition:
 		background-color 0.3s ease,
 		color 0.3s ease;
 	-webkit-font-smoothing: antialiased;
-	background-color: $body-bg;
+	// The selector canvas is deliberately distinct from Bootstrap's $body-bg.
+	background-color: $semantic-canvas;
 }
 
 * {
@@ -472,6 +472,16 @@ img {
 }
 .bg-gray-900 {
 	background-color: $gray-900 !important;
+}
+
+// Progress labels are text on the bar, so the light brand fills use the
+// accessible dark foreground instead of Bootstrap's blanket white default.
+.progress-bar.bg-success,
+.progress-bar.bg-danger,
+.progress-bar.bg-warning,
+.progress-bar.bg-info,
+.progress-bar.bg-teal {
+	color: $darken !important;
 }
 
 /*

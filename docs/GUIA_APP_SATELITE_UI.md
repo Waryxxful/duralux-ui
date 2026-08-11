@@ -59,10 +59,7 @@ export default function App({ contractVersion, basename, apiBase, session, bus }
 
 - Sin `BrowserRouter` propio (el shell ya tiene el router).
 - Validar `contractVersion`, emitir `sessionExpired` / `logout` por el bus.
-- `apiFetch` **no** llama `bus.emit` por sí mismo (no tiene acceso a esa instancia): ante un 401
-  dispara `SESSION_EXPIRED_EVENT` (`'grancrm:sessionExpired'`) en `window`, pensado para apps
-  standalone sin shell. Montada en el shell, la satélite sigue siendo responsable de llamar
-  `bus.emit('sessionExpired')` explícitamente tras un 401.
+- `apiFetch` no llama `bus.emit` por sí mismo: ante un 401 emite `SESSION_EXPIRED_EVENT` (`'grancrm:sessionExpired'`) en `window` para apps standalone. Una satélite montada en el shell sigue siendo responsable de emitir `bus.emit('sessionExpired')` explícitamente tras un 401.
 
 ## 4. Componentes
 
@@ -76,6 +73,28 @@ import {
 1. ¿Existe en el paquete? → usalo.
 2. ¿Es genérico y lo necesitarán otras apps? → PR a `duralux-ui` + página en `demo/`.
 3. ¿Es de dominio? → solo en la app.
+
+### Forms y charts v2
+
+Los controles `SearchableSelect`, `MultiSelect` e `InputGroup` se importan desde el root. Usá `name` en los selects avanzados cuando el formulario deba hacer submit nativo: la librería publica inputs ocultos seguros, uno por valor seleccionado en el multiselect.
+
+```tsx
+import { FormField, InputGroup, MultiSelect, SearchableSelect } from '@duralux/ui';
+
+<FormField label="Etiquetas">
+  <MultiSelect name="tags" options={tags} max={3} onChange={setTags} />
+</FormField>
+```
+
+Charts no se importan desde el root. Elegí el subpath y los peers necesarios:
+
+```tsx
+import { ApexChart, ChartCard } from '@duralux/ui/charts/apex';
+// npm install apexcharts react-apexcharts
+
+import { AreaChartWidget } from '@duralux/ui/charts/recharts';
+// npm install recharts
+```
 
 ### PageHeader canónico GranCRM/Duralux
 

@@ -1,3 +1,5 @@
+import { normalizeProgress } from './internal/progress.js'
+
 /**
  * StatsCard — tarjeta KPI con ícono, número, label y progreso/trend.
  *
@@ -14,14 +16,32 @@
  *   footer    — link text shown below the card
  *   onFooter  — click handler for footer link
  */
-export function StatsCard({ icon, iconBg = 'bg-gray-200', value, label, trend, progress, footer, onFooter }) {
+export function StatsCard({
+  icon,
+  iconBg = 'bg-gray-200',
+  value,
+  label,
+  trend = undefined,
+  progress = undefined,
+  footer = undefined,
+  onFooter = undefined,
+}) {
+  const hasFooterAction = typeof onFooter === 'function'
+  const hasFooter = footer !== undefined && footer !== null && footer !== false
+  const normalizedProgress = progress
+    ? normalizeProgress(progress.value, progress.max)
+    : null
+  const progressLabel = progress && (typeof progress.label === 'string' || typeof progress.label === 'number')
+    ? String(progress.label).trim()
+    : ''
+
   return (
     <div className="card stretch stretch-full gcu-stats-card">
       <div className="card-body">
         <div className="d-flex align-items-start justify-content-between mb-4">
           <div className="d-flex gap-4 align-items-center">
             <div className={`avatar-text avatar-lg ${iconBg}`}>
-              <i className={icon}></i>
+              <i className={icon} aria-hidden="true"></i>
             </div>
             <div>
               <div className="fs-4 fw-bold text-dark">{value}</div>
@@ -30,35 +50,48 @@ export function StatsCard({ icon, iconBg = 'bg-gray-200', value, label, trend, p
           </div>
           {trend && (
             <div className={`badge bg-soft-${trend.up ? 'success' : 'danger'} text-${trend.up ? 'success' : 'danger'}`}>
-              <i className={`feather-arrow-${trend.up ? 'up' : 'down'} fs-10 me-1`}></i>
+              <i className={`feather-arrow-${trend.up ? 'up' : 'down'} fs-10 me-1`} aria-hidden="true"></i>
               {trend.value}
             </div>
           )}
         </div>
 
-        {progress && (
+        {progress && normalizedProgress && (
           <div className="pt-2">
             <div className="d-flex align-items-center justify-content-between mb-1">
               <span className="fs-12 text-muted">{progress.label}</span>
-              <span className="fs-12 text-dark">{progress.value}%</span>
+              <span className="fs-12 text-dark">{Math.round(normalizedProgress.percentage)}%</span>
             </div>
             <div className="progress ht-3">
               <div
                 className={`progress-bar bg-${progress.color || 'primary'}`}
-                style={{ width: `${progress.value}%` }}
+                style={{ width: `${normalizedProgress.percentage}%` }}
+                role="progressbar"
+                aria-valuenow={normalizedProgress.value}
+                aria-valuemin={0}
+                aria-valuemax={normalizedProgress.max}
+                aria-label={progressLabel || `${Math.round(normalizedProgress.value)} de ${normalizedProgress.max}`}
               ></div>
             </div>
           </div>
         )}
       </div>
-      {footer && (
-        <button
-          type="button"
-          className="card-footer fs-11 fw-bold text-uppercase text-center py-4 w-100 border-0"
-          onClick={() => onFooter?.()}
-        >
-          {footer}
-        </button>
+      {hasFooter && (
+        hasFooterAction
+          ? (
+            <button
+              type="button"
+              className="card-footer btn border-0 fs-11 fw-bold text-uppercase text-center py-4"
+              onClick={onFooter}
+            >
+              {footer}
+            </button>
+          )
+          : (
+            <div className="card-footer fs-11 fw-bold text-uppercase text-center py-4">
+              {footer}
+            </div>
+          )
       )}
     </div>
   )

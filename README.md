@@ -4,13 +4,17 @@ Paquete compartido del frontend GranCRM: componentes React, shell UI, contrato s
 
 La UI genérica compartida vive acá. Las aplicaciones satélite consumen estos exports y conservan únicamente componentes específicos de su dominio.
 
+## v2.0.0
+
+La versión 2 separa los charts del entrypoint raíz, publica contratos TypeScript completos y agrega controles de selección accesibles. Es un release mayor: actualizá imports de charts a sus subpaths y revisá los peers opcionales antes de actualizar. Consultá [CHANGELOG.md](./CHANGELOG.md) para los cambios de migración y [docs/RELEASE_V2.md](./docs/RELEASE_V2.md) para el estado de validación y las aceptaciones explícitas.
+
 ## Instalación
 
 ```bash
 npm install github:Waryxxful/duralux-ui
 ```
 
-El host debe proveer los tres peer dependencies del paquete:
+El host debe proveer los peer dependencies base:
 
 ```json
 {
@@ -21,6 +25,26 @@ El host debe proveer los tres peer dependencies del paquete:
 ```
 
 `react-router-dom` es un peer requerido, no una dependencia opcional de `AppLayout`. El script `prepare` construye `dist/` automáticamente al instalar desde git.
+
+### Charts opcionales
+
+El entrypoint raíz no exporta motores ni componentes de charts. Instalá sólo el peer del subpath que uses:
+
+```bash
+# ApexChart / ApexDataTable
+npm install apexcharts react-apexcharts
+
+# Widgets Recharts
+npm install recharts
+```
+
+| Subpath | Exports | Peer opcional necesario |
+|---|---|---|
+| `@duralux/ui/charts/apex` | `ApexChart`, `ApexDataTable`, `ChartCard` | `apexcharts`, `react-apexcharts` |
+| `@duralux/ui/charts/recharts` | `AreaChartWidget`, `BarChartWidget`, `LineChartWidget`, `PieChartWidget`, `ChartCard` | `recharts` |
+| `@duralux/ui/charts` | API común de charts | ambos conjuntos según los exports usados |
+
+Esto conserva el bundle core libre de engines de gráficos y permite tree-shaking por subpath.
 
 ## Estilos
 
@@ -131,15 +155,13 @@ export function ClientesPage({ clientes }) {
 
 `open` controla la visibilidad y `onClose` recibe las solicitudes de cierre. `closeOnEscape`, `closeOnBackdrop` y `showCloseButton` valen `true` por defecto. También admite `size`, `scrollable`, `title`, `footer` y `children`; el componente gestiona portal, bloqueo de body, foco y modales apilados sin Bootstrap JS.
 
-### FormField y Select
+### FormField, Select y controles avanzados
 
-`FormField` acepta `label`, `htmlFor`, `required`, `error`, `helpText`, el alias `hint` y `className`. `children` puede ser un nodo React o una función `(id) => ReactNode`:
+`FormField` acepta `label`, `htmlFor`, `required`, `error`, `helpText`, el alias `hint` y `className`. `children` puede ser un nodo React o una función `(id) => ReactNode`. Con un único control conocido —incluidos `InputGroup`, `SearchableSelect` y `MultiSelect`— asocia automáticamente label, requerido, error y descripciones accesibles. En grupos con varios controles, usá el render prop o asociaciones explícitas.
+
+Un wrapper propio que reenvía props al control puede optar al mismo contrato declarando `MyControl.duraluxFormControl = true`. Si su cantidad de controles depende de props, el marker puede ser una función que devuelva si esa instancia tiene un único destino; `InputGroup` usa esa variante. Wrappers visuales no se clonan implícitamente.
 
 ```jsx
-<FormField label="Nombre" required helpText="Usá el nombre legal">
-  <Input />
-</FormField>
-
 <FormField label="Estado" error={error}>
   {(id) => (
     <Select
@@ -156,9 +178,58 @@ export function ClientesPage({ clientes }) {
 </FormField>
 ```
 
-Con un único control, `FormField` lo asocia automáticamente con el label y los mensajes accesibles. El render prop recibe el id generado o el `htmlFor` explícito.
+`Select` conserva el `<select>` nativo y acepta todos sus props más `options`, `placeholder`, `invalid` y `error`. `options` admite strings y `{ value, label, disabled? }`; `placeholder` agrega una opción vacía deshabilitada.
 
-`Select` acepta todos los props nativos de `<select>`, incluido `disabled`, además de `options`, `placeholder`, `invalid` y `error`. `options` puede mezclar strings y objetos `{ value, label, disabled? }`; `placeholder` crea una opción vacía deshabilitada.
+#### `InputGroup`
+
+`InputGroup` mantiene el markup Bootstrap. Si contiene exactamente un control no-`Fragment`, reenvía `id`, `required`, `disabled` y ARIA a ese control; composiciones más complejas son responsabilidad explícita del caller.
+
+```jsx
+<FormField label="Monto" required helpText="En pesos chilenos">
+  <InputGroup prepend="$" append="CLP">
+    <input name="amount" type="number" className="form-control" min="0" />
+  </InputGroup>
+</FormField>
+```
+
+#### `SearchableSelect`
+
+`SearchableSelect` es un combobox de selección única sin dependencias. `value` lo controla; `defaultValue` inicia el estado no controlado. `onChange(value, option)` recibe el valor primitivo (`string | number`) y la opción original. Si recibe `name`, agrega un input oculto para el submit nativo.
+
+```jsx
+const countries = [
+  { value: 'cl', label: 'Chile', icon: 'feather-flag' },
+  { value: 'ar', label: 'Argentina' },
+]
+
+<FormField label="País" required>
+  <SearchableSelect
+    name="country"
+    options={countries}
+    placeholder="Buscar país"
+    clearable
+    onChange={(value, country) => setCountry(value)}
+  />
+</FormField>
+```
+
+Soporta filtrado sin acentos, flechas, Home/End, Enter, Escape, IME, opciones deshabilitadas y `getOptionValue`, `getOptionLabel`, `renderOption` y `renderValue` para modelos propios. `getOptionLabel` y `renderValue` de `SearchableSelect` deben devolver texto: el valor seleccionado vive en un `<input>` nativo. `renderOption` puede devolver contenido React.
+
+#### `MultiSelect`
+
+`MultiSelect` comparte el contrato de opciones, mantiene el menú abierto para seleccionar varias opciones y emite `onChange(values, options)`. `max` limita las selecciones; cada valor seleccionado se publica como un input oculto con el mismo `name`.
+
+```jsx
+<FormField label="Etiquetas" helpText="Hasta tres etiquetas">
+  <MultiSelect
+    name="tags"
+    options={tags}
+    defaultValue={['urgent']}
+    max={3}
+    onChange={(values, selectedTags) => setTags(values)}
+  />
+</FormField>
+```
 
 ### Tabs
 
@@ -234,29 +305,30 @@ El tipo se distribuye por las keys string de la fila: permite arrays heterogéne
 ## Otros exports
 
 - UI y feedback: `Card`, `Badge`, `Alert`, `Avatar`, `Timeline`, `Progress`, `ProgressRing`, `Toast`, estados vacíos/error/carga.
-- Formularios y datos: `Input`, `Textarea`, `Checkbox`, `Radio`, `FileInput`, `InputGroup`, `Table`, `ResponsiveTable`, `Pagination`.
-- Visualización: stats cards, `ApexChart`, `ChartCard` y widgets Recharts.
+- Formularios y datos: `Input`, `Textarea`, `Checkbox`, `Radio`, `FileInput`, `InputGroup`, `SearchableSelect`, `MultiSelect`, `Table`, `ResponsiveTable`, `Pagination` y `DataTableToolbar`.
+- Visualización core: stats cards, métricas y links rápidos. Los charts se importan desde `@duralux/ui/charts/*`.
 - Chat y conversación: sidebar, ventana, input, typing indicator y message bubbles.
-- Layout y shell: `AppLayout`, `AuthLayout`, `PageHeader`, `ShellHeader`, `ShellNav`, `ThemeScope`, `ThemeProvider`, `ConfirmDialog` y extras GranCRM.
+- Layout y shell: `AppLayout`, `AuthLayout`, `PageHeader`, `Footer`, `ShellHeader`, `ShellNav`, `ThemeScope`, `ThemeProvider`, `ConfirmDialog` y extras GranCRM.
 - Contratos y utilidades: tipos de sesión/manifest/remotes, tokens y `apiFetch`.
 
-`dist/index.d.ts` combina tipos generados (`vite-plugin-dts` desde `.ts`/`.tsx`) y declaraciones manuales para los componentes `.jsx` (`scripts/write-index-dts.mjs`). Toda la API pública tiene props tipadas — sin `any`.
+`dist/index.d.ts` se genera desde `src/index.ts`, `src/public/` y las fuentes TypeScript/TSX mediante `vite-plugin-dts`. Toda la API pública tiene props tipadas; `npm run typecheck:public` verifica la experiencia de consumo contra el paquete construido.
 
 ## Ejemplos
 
-### Chart con Card
+### Charts por subpath
 
 ```jsx
-import { ApexChart, ChartCard } from '@duralux/ui'
+import { ApexChart, ChartCard } from '@duralux/ui/charts/apex'
 
 <ChartCard
   title="Ventas"
   subtitle="Últimos 6 meses"
-  actions={[{ label: 'Mensual', onClick: () => setRange('month') }]}
+  actions={[{ id: 'monthly', label: 'Mensual', onClick: () => setRange('month') }]}
 >
   <ApexChart
     type="area"
     height={250}
+    ariaLabel="Ventas de los últimos seis meses"
     options={{
       colors: ['#3454d1'],
       stroke: { curve: 'smooth', width: 2 },
@@ -268,6 +340,20 @@ import { ApexChart, ChartCard } from '@duralux/ui'
   />
 </ChartCard>
 ```
+
+```jsx
+import { AreaChartWidget, ChartCard } from '@duralux/ui/charts/recharts'
+
+<ChartCard title="Conversión">
+  <AreaChartWidget
+    ariaLabel="Conversión semanal"
+    data={[{ name: 'Lun', value: 18 }, { name: 'Mar', value: 24 }]}
+    series={[{ key: 'value', label: 'Conversión' }]}
+  />
+</ChartCard>
+```
+
+Los adaptadores entregan fallback SSR, reduced motion, tema, estados de carga/error/vacío y una tabla alternativa accesible por defecto. Para no incluir una tabla, usá `accessibleTable={false}` de manera deliberada.
 
 ### AppLayout con router
 
@@ -319,11 +405,11 @@ npm run typecheck:public
 npm run dev:demo
 ```
 
-`npm run build` genera los bundles ESM/CJS, declaraciones, estilos copiados y CSS compilado en `dist/`, y luego valida las declaraciones con el fixture estricto de `test-types/`. `npm run typecheck:public` permite repetir esa validación contra un `dist/` ya generado.
+`npm run build` ejecuta el contrato de imports, verifica tokens, genera bundles ESM/CJS y declaraciones, copia/compila estilos y aplica los gates de paquete y tamaño. `npm run typecheck:public` permite repetir la validación de consumo contra un `dist/` ya generado.
 
 ```text
 src/
-  index.js                 exports públicos
+  index.ts                 exports públicos y subpaths tipados
   contract.ts              contrato shell-satélite
   tokens.ts                tokens compartidos
   components/              UI, forms, data, charts, chat, layout y shell

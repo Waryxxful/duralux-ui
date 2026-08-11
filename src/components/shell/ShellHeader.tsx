@@ -7,7 +7,9 @@ import { Badge } from '../ui/Badge';
 import { Dropdown, DropdownMenu } from '../ui/Dropdown';
 
 function tiempoRelativo(iso: string): string {
-  const segundos = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  const timestamp = new Date(iso).getTime();
+  if (!Number.isFinite(timestamp)) return 'fecha desconocida';
+  const segundos = Math.max(0, (Date.now() - timestamp) / 1000);
   if (segundos < 60) return 'hace un momento';
   const minutos = Math.floor(segundos / 60);
   if (minutos < 60) return `hace ${minutos} min`;
@@ -19,16 +21,21 @@ function tiempoRelativo(iso: string): string {
 const DESKTOP_MEDIA_QUERY = '(hover: hover) and (min-width: 1024.01px)';
 
 function useDesktopHover() {
-  const [enabled, setEnabled] = useState(() => (
-    typeof window !== 'undefined' && window.matchMedia(DESKTOP_MEDIA_QUERY).matches
-  ));
+  // Keep the first render identical on the server and client. The media query
+  // is an enhancement, never an input to the initial HTML shape.
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return undefined;
     const mediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
     const onChange = () => setEnabled(mediaQuery.matches);
     onChange();
-    mediaQuery.addEventListener('change', onChange);
-    return () => mediaQuery.removeEventListener('change', onChange);
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', onChange);
+      return () => mediaQuery.removeEventListener('change', onChange);
+    }
+    mediaQuery.addListener?.(onChange);
+    return () => mediaQuery.removeListener?.(onChange);
   }, []);
 
   return enabled;
@@ -46,16 +53,19 @@ function AppMenuItem({
   app,
   appHref,
   onSelect,
+  focusable = true,
 }: {
   app: AppManifestEntry;
   appHref: (app: AppManifestEntry) => string;
   onSelect: (e: React.MouseEvent, app: AppManifestEntry) => void;
+  focusable?: boolean;
 }) {
   const external = app.modo === 'external_link';
   return (
     <a
       href={appHref(app)}
       className="dropdown-item"
+      tabIndex={focusable ? undefined : -1}
       onClick={(e) => onSelect(e, app)}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
@@ -73,16 +83,40 @@ function AppCategoryMenu({
   appHref,
   onSelect,
   desktopHover,
+  parentOpen,
 }: {
   category: string;
   apps: AppManifestEntry[];
   appHref: (app: AppManifestEntry) => string;
   onSelect: (e: React.MouseEvent, app: AppManifestEntry) => void;
   desktopHover: boolean;
+  parentOpen: boolean;
 }) {
   const menuId = useId();
   const [open, setOpen] = useState(false);
-  const visibleOpen = desktopHover ? open : false;
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const wasVisible = useRef(false);
+
+  useEffect(() => {
+    if (!parentOpen) setOpen(false);
+  }, [parentOpen]);
+
+  const visible = parentOpen && open;
+  const menuInertProps = visible ? {} : { inert: '' };
+  const closeCategory = (event?: React.KeyboardEvent) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
+
+  useEffect(() => {
+    if (wasVisible.current && !visible && parentOpen && menuRef.current?.contains(document.activeElement)) {
+      triggerRef.current?.focus();
+    }
+    wasVisible.current = visible;
+  }, [parentOpen, visible]);
 
   return (
     <div
@@ -95,13 +129,24 @@ function AppCategoryMenu({
       }}
     >
       <button
+        ref={triggerRef}
         type="button"
-        className={`dropdown-item d-flex align-items-center ${visibleOpen ? 'show' : ''}`}
+        className={`dropdown-item d-flex align-items-center ${open ? 'show' : ''}`}
         aria-controls={menuId}
-        aria-expanded={visibleOpen}
+        aria-expanded={visible}
+        tabIndex={parentOpen ? undefined : -1}
         onClick={(e) => {
           e.stopPropagation();
           setOpen(value => !value);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            event.stopPropagation();
+            if (!open) setOpen(true);
+          } else if ((event.key === 'ArrowLeft' || event.key === 'Escape') && open) {
+            closeCategory(event);
+          }
         }}
       >
         <span className="hstack">
@@ -110,9 +155,26 @@ function AppCategoryMenu({
         </span>
         <Icon name="chevron-right" className="ms-auto me-0" />
       </button>
-      <div id={menuId} className={`dropdown-menu nxl-h-dropdown ${visibleOpen ? 'show' : ''}`}>
+      <div
+        ref={menuRef}
+        id={menuId}
+        className={`dropdown-menu nxl-h-dropdown ${visible ? 'show' : ''}`}
+        aria-hidden={!visible}
+        {...menuInertProps}
+        onKeyDown={(event) => {
+          if ((event.key === 'ArrowLeft' || event.key === 'Escape') && visible) {
+            closeCategory(event);
+          }
+        }}
+      >
         {apps.map(app => (
-          <AppMenuItem key={app.id} app={app} appHref={appHref} onSelect={onSelect} />
+          <AppMenuItem
+            key={app.id}
+            app={app}
+            appHref={appHref}
+            onSelect={onSelect}
+            focusable={visible}
+          />
         ))}
       </div>
     </div>
@@ -134,6 +196,12 @@ export interface ShellHeaderProps {
   onToggleDark: () => void;
   onToggleMini: () => void;
   onToggleMobileNav: () => void;
+  /** Controlled mobile state shared with ShellNav for accessible labels. */
+  mobileOpen?: boolean;
+  /** ID of ShellNav, used by the mobile trigger's `aria-controls`. */
+  mobileNavId?: string;
+  /** Internal close reason; only dismissive closures restore trigger focus. */
+  mobileCloseReason?: 'dismiss' | 'escape' | 'overlay' | 'toggle' | 'navigation' | 'programmatic' | 'open';
   onOpenApp: (e: React.MouseEvent, app: AppManifestEntry) => void;
   onSelectCuenta: (slug: string) => void;
   onVolverSa: () => void;
@@ -159,6 +227,9 @@ export function ShellHeader({
   onToggleDark,
   onToggleMini,
   onToggleMobileNav,
+  mobileOpen = false,
+  mobileNavId = 'shell-navigation',
+  mobileCloseReason = 'dismiss',
   onOpenApp,
   onSelectCuenta,
   onVolverSa,
@@ -177,8 +248,13 @@ export function ShellHeader({
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
   const searchMenuRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const mobileTriggerRef = useRef<HTMLButtonElement>(null);
+  const wasMobileOpen = useRef(mobileOpen);
   const [modulesOpen, setModulesOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [clientOpen, setClientOpen] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
   const desktopHover = useDesktopHover();
 
   // Apps anidadas bajo otra app del mismo manifest (ej. wsp_demo bajo wsp_platform)
@@ -203,6 +279,20 @@ export function ShellHeader({
     : visibleApps;
   const notificationsApp = apps.find((app) => app.route_prefix.replace(/\/$/, '') === '/notificaciones');
   const notificationsHref = notificationsApp ? appHref(notificationsApp) : '/notificaciones';
+  const modulesInertProps = modulesOpen ? {} : { inert: '' };
+  const searchInertProps = searchOpen ? {} : { inert: '' };
+  const clientInertProps = clientOpen ? {} : { inert: '' };
+  const notificationsInertProps = notificationsOpen ? {} : { inert: '' };
+  const userInertProps = userOpen ? {} : { inert: '' };
+
+  useEffect(() => {
+    const dismissive = mobileCloseReason === 'dismiss'
+      || mobileCloseReason === 'escape'
+      || mobileCloseReason === 'overlay'
+      || mobileCloseReason === 'toggle';
+    if (wasMobileOpen.current && !mobileOpen && dismissive) mobileTriggerRef.current?.focus();
+    wasMobileOpen.current = mobileOpen;
+  }, [mobileCloseReason, mobileOpen]);
 
   useEffect(() => {
     if (searchOpen) searchInputRef.current?.focus();
@@ -210,6 +300,7 @@ export function ShellHeader({
 
   useEffect(() => {
     if (!modulesOpen) return;
+    if (typeof window.matchMedia !== 'function') return undefined;
     const mediaQuery = window.matchMedia('(max-width: 1024px)');
     const moveFocusForLayout = () => {
       if (mediaQuery.matches) {
@@ -220,8 +311,12 @@ export function ShellHeader({
     };
 
     moveFocusForLayout();
-    mediaQuery.addEventListener('change', moveFocusForLayout);
-    return () => mediaQuery.removeEventListener('change', moveFocusForLayout);
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', moveFocusForLayout);
+      return () => mediaQuery.removeEventListener('change', moveFocusForLayout);
+    }
+    mediaQuery.addListener?.(moveFocusForLayout);
+    return () => mediaQuery.removeListener?.(moveFocusForLayout);
   }, [modulesOpen]);
 
   useEffect(() => {
@@ -268,13 +363,16 @@ export function ShellHeader({
 
           {/* Mobile hamburger (Duralux nxl-head-mobile-toggler) */}
           <button
+            ref={mobileTriggerRef}
             type="button"
-            className="nxl-head-mobile-toggler gcu-header-icon-button"
+            className={`nxl-head-mobile-toggler gcu-header-icon-button${mobileOpen ? ' is-active' : ''}`}
             id="mobile-collapse"
             onClick={onToggleMobileNav}
-            aria-label="Abrir navegación móvil"
+            aria-label={mobileOpen ? 'Cerrar navegación móvil' : 'Abrir navegación móvil'}
+            aria-expanded={mobileOpen}
+            aria-controls={mobileNavId}
           >
-            <div className="hamburger hamburger--arrowturn">
+            <div className={`hamburger hamburger--arrowturn${mobileOpen ? ' is-active' : ''}`}>
               <div className="hamburger-box">
                 <div className="hamburger-inner"></div>
               </div>
@@ -290,6 +388,11 @@ export function ShellHeader({
               className="gcu-header-icon-button"
               onClick={onToggleMini}
               aria-label="Colapsar menú"
+              aria-pressed={!mini}
+              aria-expanded={!mini}
+              aria-controls={mobileNavId}
+              aria-hidden={mini}
+              tabIndex={mini ? -1 : undefined}
               style={{ display: mini ? 'none' : undefined }}
             >
               <Icon name="align-left" />
@@ -300,6 +403,11 @@ export function ShellHeader({
               className="gcu-header-icon-button"
               onClick={onToggleMini}
               aria-label="Expandir menú"
+              aria-pressed={mini}
+              aria-expanded={mini}
+              aria-controls={mobileNavId}
+              aria-hidden={!mini}
+              tabIndex={mini ? undefined : -1}
               style={{ display: mini ? undefined : 'none' }}
             >
               <Icon name="arrow-right" />
@@ -311,7 +419,8 @@ export function ShellHeader({
             <button
               ref={modulesTriggerRef}
               type="button"
-              className="btn bg-white border px-3 py-2 fw-semibold fs-12 text-dark d-flex align-items-center gap-2 gcu-modules-trigger"
+              className={`btn bg-white border px-3 py-2 fw-semibold fs-12 text-dark d-flex align-items-center gap-2 gcu-modules-trigger${modulesOpen ? ' is-active' : ''}`}
+              aria-label="Módulos"
               aria-expanded={modulesOpen}
               aria-controls={modulesMenuId}
               onClick={() => {
@@ -327,11 +436,14 @@ export function ShellHeader({
               ref={modulesMenuRef}
               id={modulesMenuId}
               className={`dropdown-menu nxl-h-dropdown gcu-modules-menu${modulesOpen ? ' show' : ''}`}
+              aria-hidden={!modulesOpen}
+              {...modulesInertProps}
             >
               <button
                 ref={modulesBackRef}
                 type="button"
                 className="gcu-modules-back"
+                tabIndex={modulesOpen ? undefined : -1}
                 onClick={() => {
                   setModulesOpen(false);
                   modulesTriggerRef.current?.focus();
@@ -348,6 +460,7 @@ export function ShellHeader({
                       apps={categoryApps}
                       appHref={appHref}
                       desktopHover={desktopHover}
+                      parentOpen={modulesOpen}
                       onSelect={(e, app) => {
                         setModulesOpen(false);
                         onOpenApp(e, app);
@@ -368,6 +481,8 @@ export function ShellHeader({
             <Dropdown
               className="dropdown nxl-h-item"
               desktopHover={desktopHover}
+              open={clientOpen}
+              onOpenChange={setClientOpen}
               trigger={(triggerProps, { open }) => (
                 <button
                   {...triggerProps}
@@ -382,7 +497,7 @@ export function ShellHeader({
                 </button>
               )}
             >
-              <DropdownMenu className="nxl-h-dropdown" style={{ minWidth: 220 }}>
+              <DropdownMenu className="nxl-h-dropdown" style={{ minWidth: 220 }} {...clientInertProps}>
                 {viewAsSa && (
                   <div className="px-3 py-2 border-bottom">
                     <p className="fs-11 text-muted mb-0">Viendo como admin de</p>
@@ -399,6 +514,7 @@ export function ShellHeader({
                   <button
                     key={c.slug}
                     type="button"
+                    tabIndex={clientOpen ? undefined : -1}
                     onClick={() => onSelectCuenta(c.slug)}
                     className={`dropdown-item d-flex align-items-center gap-2 py-2 ${
                       cuentaNombre === c.nombre ? 'fw-bold text-warning' : ''
@@ -416,6 +532,7 @@ export function ShellHeader({
                     <div className="dropdown-divider my-1"></div>
                     <button
                       type="button"
+                      tabIndex={clientOpen ? undefined : -1}
                       onClick={onVolverSa}
                       className="dropdown-item d-flex align-items-center gap-2 py-2 text-secondary"
                     >
@@ -442,7 +559,7 @@ export function ShellHeader({
                   setModulesOpen(false);
                   setSearchOpen((value) => !value);
                 }}
-                className="nxl-head-link me-0 gcu-header-icon-button"
+                className={`nxl-head-link me-0 gcu-header-icon-button${searchOpen ? ' is-active' : ''}`}
                 aria-label="Buscar módulo"
                 aria-expanded={searchOpen}
                 aria-controls={searchMenuId}
@@ -453,6 +570,8 @@ export function ShellHeader({
                 ref={searchMenuRef}
                 id={searchMenuId}
                 className={`dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-search-dropdown${searchOpen ? ' show' : ''}`}
+                aria-hidden={!searchOpen}
+                {...searchInertProps}
               >
                 <div className="input-group search-form">
                   <span className="input-group-text">
@@ -466,6 +585,7 @@ export function ShellHeader({
                     className="form-control search-input-field"
                     placeholder="Buscar módulo…"
                     aria-label="Buscar módulo"
+                    tabIndex={searchOpen ? undefined : -1}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
@@ -474,6 +594,7 @@ export function ShellHeader({
                       type="button"
                       className="gcu-search-close"
                       aria-label="Cerrar búsqueda"
+                      tabIndex={searchOpen ? undefined : -1}
                       onClick={() => {
                         setSearchOpen(false);
                         searchTriggerRef.current?.focus();
@@ -496,6 +617,7 @@ export function ShellHeader({
                           onOpenApp(e, app);
                         }}
                         className="flex-fill border rounded py-1 px-2 text-center fs-11 fw-semibold"
+                        tabIndex={searchOpen ? undefined : -1}
                       >
                         {app.nombre}
                       </a>
@@ -539,10 +661,12 @@ export function ShellHeader({
               align="end"
               className="dropdown nxl-h-item"
               desktopHover={desktopHover}
+              open={notificationsOpen}
+              onOpenChange={setNotificationsOpen}
               trigger={(triggerProps, { open }) => (
                 <button
                   {...triggerProps}
-                  className={`nxl-head-link me-0 gcu-header-icon-button${open ? ' show' : ''}`}
+                  className={`nxl-head-link me-0 gcu-header-icon-button${open ? ' show is-active' : ''}`}
                   aria-label={`Notificaciones${noLeidas > 0 ? `, ${noLeidas} sin leer` : ''}`}
                 >
                   <Icon name="bell" />
@@ -552,12 +676,13 @@ export function ShellHeader({
                 </button>
               )}
             >
-              <DropdownMenu className="nxl-h-dropdown nxl-notifications-menu" closeOnSelect={false}>
+              <DropdownMenu className="nxl-h-dropdown nxl-notifications-menu" closeOnSelect={false} {...notificationsInertProps}>
                 <div className="d-flex justify-content-between align-items-center notifications-head">
                   <h6 className="fw-bold text-dark mb-0">Notificaciones</h6>
-                  {noLeidas > 0 && (
+                  {noLeidas > 0 && onMarkAllRead && (
                     <button
                       type="button"
+                      tabIndex={notificationsOpen ? undefined : -1}
                       onClick={onMarkAllRead}
                       className="fs-11 text-success text-end ms-auto gcu-link-button"
                     >
@@ -581,6 +706,7 @@ export function ShellHeader({
                       const hasMatchingSpaApp = apps.some(
                         app => app.modo !== 'external_link' && app.nombre === n.aplicacion_nombre,
                       );
+                      const notificationHref = n.url && n.url !== '#' ? n.url : notificationsHref;
 
                       return (
                         <div key={n.id} className={`notifications-item ${n.leida ? '' : 'fw-semibold'}`}>
@@ -593,7 +719,8 @@ export function ShellHeader({
                           />
                           <div className="notifications-desc">
                             <a
-                              href={n.url || notificationsHref}
+                              href={notificationHref}
+                              tabIndex={notificationsOpen ? undefined : -1}
                               onClick={onNotificationClick && hasMatchingSpaApp ? (e) => {
                                 if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
                                 e.preventDefault();
@@ -611,7 +738,7 @@ export function ShellHeader({
                   )}
                 </div>
                 <div className="notifications-footer text-center">
-                  <a href={notificationsHref} className="fs-12 fw-semibold">
+                  <a href={notificationsHref} className="fs-12 fw-semibold" tabIndex={notificationsOpen ? undefined : -1}>
                     Ver todas las notificaciones
                   </a>
                 </div>
@@ -623,17 +750,19 @@ export function ShellHeader({
               align="end"
               className="dropdown nxl-h-item ms-2"
               desktopHover={desktopHover}
+              open={userOpen}
+              onOpenChange={setUserOpen}
               trigger={(triggerProps, { open }) => (
                 <button
                   {...triggerProps}
-                  className={`d-flex align-items-center gap-2 nxl-head-link me-0 gcu-header-icon-button gcu-avatar-trigger${open ? ' show' : ''}`}
+                  className={`d-flex align-items-center gap-2 nxl-head-link me-0 gcu-header-icon-button gcu-avatar-trigger${open ? ' show is-active' : ''}`}
                   aria-label="Menú de usuario"
                 >
                   <Avatar name={nombre} size="md" variant="primary" className="gcu-header-avatar" />
                 </button>
               )}
             >
-              <DropdownMenu className="nxl-h-dropdown nxl-user-dropdown" closeOnSelect={false}>
+              <DropdownMenu className="nxl-h-dropdown nxl-user-dropdown" closeOnSelect={false} {...userInertProps}>
                 <div className="dropdown-header border-bottom pb-3 mb-1">
                   <div className="d-flex align-items-center gap-3">
                     <Avatar name={nombre} size="lg" variant="primary" />
@@ -646,7 +775,7 @@ export function ShellHeader({
                 <div className="dropdown-divider my-1"></div>
                 <form method="post" action="/logout/">
                   <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-                  <button type="submit" className="dropdown-item d-flex align-items-center gap-2 py-2 text-danger">
+                  <button type="submit" tabIndex={userOpen ? undefined : -1} className="dropdown-item d-flex align-items-center gap-2 py-2 text-danger">
                     <Icon name="log-out" size={14} />
                     <span className="fs-13">Cerrar sesión</span>
                   </button>

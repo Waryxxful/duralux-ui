@@ -100,3 +100,15 @@ export interface Notificacion {
   creada_en: string;
   aplicacion_nombre: string | null;
 }
+
+// Adapter oficial para convertir el nav declarado por una app en destinos
+// consumibles por el Router standalone o por el gateway. El filtrado por rol
+// solo controla qué se presenta; no reemplaza la autorización del backend.
+export {
+  adaptAppNavItems,
+  appNavHref,
+} from './components/shell/appNavAdapter';
+export type {
+  AdaptedAppNavItem,
+  AppNavAdapterOptions,
+} from './components/shell/appNavAdapter';

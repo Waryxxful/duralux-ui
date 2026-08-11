@@ -1,3 +1,44 @@
+function hasContent(value) {
+  if (value === null || value === undefined || value === false || value === true) return false
+  if (typeof value === 'string') return value.trim() !== ''
+  if (Array.isArray(value)) return value.some(hasContent)
+  return true
+}
+
+function hasActionContent(value) {
+  // Numeric zero is a valid React child in general, but it is not an action
+  // and should not create an empty action toolbar.
+  return typeof value !== 'number' && hasContent(value)
+}
+
+function hasHref(value) {
+  return typeof value === 'string' && value.trim() !== ''
+}
+
+function safeKey(value, fallback) {
+  let token
+  try {
+    token = String(value ?? '')
+  } catch {
+    token = ''
+  }
+  token = token.replace(/[^a-zA-Z0-9_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48)
+  return token || fallback
+}
+
+function breadcrumbKeys(items) {
+  const seen = new Map()
+  return items.map((crumb, index) => {
+    const identity = crumb?.id ?? crumb?.key ?? crumb?.href ?? crumb?.label
+    const base = identity === undefined || identity === null || identity === ''
+      ? `index-${index}`
+      : safeKey(identity, `index-${index}`)
+    const occurrence = seen.get(base) ?? 0
+    seen.set(base, occurrence + 1)
+    return `breadcrumb-${base}-${occurrence}`
+  })
+}
+
 /**
  * PageHeader — estructura React adaptada al patrón Duralux (`page-header`).
  *
@@ -13,35 +54,37 @@
  */
 export function PageHeader({ title, subtitle, breadcrumbs = [], actions, className = '', children }) {
   const right = actions ?? children
+  const items = Array.isArray(breadcrumbs) ? breadcrumbs : []
+  const keys = breadcrumbKeys(items)
   return (
     <>
       <div className={`page-header${className ? ` ${className}` : ''}`}>
         <div className="page-header-left d-flex align-items-center">
           <div className="page-header-title">
             {/* h1 semántico + clase .h5 para conservar tipografía del theme */}
-            <h1 className="h5 m-b-10 mb-0">{title}</h1>
+            {hasContent(title) && <h1 className="h5 m-b-10 mb-0">{title}</h1>}
           </div>
-          {breadcrumbs.length > 0 && (
+          {items.length > 0 && (
             <nav aria-label="Miga de pan">
               <ul className="breadcrumb">
-                {breadcrumbs.map((crumb, i) => {
-                  const isLast = i === breadcrumbs.length - 1
-                  if (crumb.href && !isLast) {
+                {items.map((crumb, i) => {
+                  const isLast = i === items.length - 1
+                  if (hasHref(crumb?.href) && !isLast) {
                     return (
-                      <li key={crumb.label} className="breadcrumb-item">
-                        <a href={crumb.href} onClick={crumb.onClick}>{crumb.label}</a>
+                      <li key={keys[i]} className="breadcrumb-item">
+                        <a href={crumb.href} onClick={typeof crumb.onClick === 'function' ? crumb.onClick : undefined}>{crumb.label}</a>
                       </li>
                     )
                   }
                   return (
                     <li
-                      key={crumb.label}
+                      key={keys[i]}
                       className="breadcrumb-item"
                       aria-current={isLast ? 'page' : undefined}
                     >
-                      {crumb.href && isLast
-                        ? <a href={crumb.href} onClick={crumb.onClick} aria-current="page">{crumb.label}</a>
-                        : crumb.label}
+                      {hasHref(crumb?.href) && isLast
+                        ? <a href={crumb.href} onClick={typeof crumb.onClick === 'function' ? crumb.onClick : undefined} aria-current="page">{crumb.label}</a>
+                        : crumb?.label}
                     </li>
                   )
                 })}
@@ -49,7 +92,7 @@ export function PageHeader({ title, subtitle, breadcrumbs = [], actions, classNa
             </nav>
           )}
         </div>
-        {right && (
+        {hasActionContent(right) && (
           <div className="page-header-right ms-auto">
             <div className="page-header-right-items page-header-right-open">
               <div className="d-flex align-items-center gap-2 page-header-right-items-wrapper">
@@ -59,7 +102,7 @@ export function PageHeader({ title, subtitle, breadcrumbs = [], actions, classNa
           </div>
         )}
       </div>
-      {subtitle != null && subtitle !== false && (
+      {hasContent(subtitle) && (
         <div className="px-4 pt-2">
           <p className="text-muted fs-13 mb-0">{subtitle}</p>
         </div>

@@ -1,6 +1,8 @@
 export interface DismissableLayer {
   element: Element | null;
   onEscape?: (event: KeyboardEvent) => void;
+  /** Called only for the topmost layer when a pointer starts outside it. */
+  onPointerDownOutside?: (event: PointerEvent) => void;
 }
 
 interface RegisteredLayer extends DismissableLayer {
@@ -10,6 +12,7 @@ interface RegisteredLayer extends DismissableLayer {
 interface DocumentLayerState {
   layers: RegisteredLayer[];
   handleKeyDown: (event: KeyboardEvent) => void;
+  handlePointerDown: (event: PointerEvent) => void;
 }
 
 interface DismissableLayerState {
@@ -73,9 +76,17 @@ export function registerDismissableLayer(layer: DismissableLayer) {
       event.preventDefault();
       topmost.onEscape?.(event);
     };
-    documentState = { layers, handleKeyDown };
+    const handlePointerDown = (event: PointerEvent) => {
+      const topmost = topmostLayer(layers);
+      if (!topmost?.element) return;
+      const target = event.target;
+      if (target instanceof Node && topmost.element.contains(target)) return;
+      topmost.onPointerDownOutside?.(event);
+    };
+    documentState = { layers, handleKeyDown, handlePointerDown };
     state.documents.set(ownerDocument, documentState);
     ownerDocument.addEventListener('keydown', handleKeyDown);
+    ownerDocument.addEventListener('pointerdown', handlePointerDown, true);
   }
 
   const entry: RegisteredLayer = {
@@ -94,6 +105,7 @@ export function registerDismissableLayer(layer: DismissableLayer) {
     if (documentState.layers.length > 0) return;
 
     ownerDocument.removeEventListener('keydown', documentState.handleKeyDown);
+    ownerDocument.removeEventListener('pointerdown', documentState.handlePointerDown, true);
     if (state.documents.get(ownerDocument) === documentState) {
       state.documents.delete(ownerDocument);
     }

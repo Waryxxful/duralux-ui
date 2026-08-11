@@ -145,35 +145,38 @@ export function FormsPage() {
         preview={
           <div style={{ maxWidth: 400 }} className="d-flex flex-column gap-3">
             <div>
-              <label htmlFor="ig-usuario" className="form-label">Usuario</label>
+              <label className="form-label" htmlFor="input-group-user">Usuario</label>
               <InputGroup prepend="@">
-                <input id="ig-usuario" className="form-control" placeholder="usuario" />
+                <input id="input-group-user" className="form-control" placeholder="usuario" />
               </InputGroup>
             </div>
             <div>
-              <label htmlFor="ig-dominio" className="form-label">Dominio</label>
+              <label className="form-label" htmlFor="input-group-domain">Dominio</label>
               <InputGroup append=".cl">
-                <input id="ig-dominio" className="form-control" placeholder="dominio" />
+                <input id="input-group-domain" className="form-control" placeholder="dominio" />
               </InputGroup>
             </div>
             <div>
-              <label htmlFor="ig-monto" className="form-label">Monto</label>
+              <label className="form-label" htmlFor="input-group-amount">Monto</label>
               <InputGroup prepend="$" append="CLP">
-                <input id="ig-monto" className="form-control" type="number" placeholder="0" />
+                <input id="input-group-amount" className="form-control" type="number" placeholder="0" />
               </InputGroup>
             </div>
           </div>
         }
-        code={`<InputGroup prepend="@">
-  <input className="form-control" placeholder="usuario" />
+        code={`<label htmlFor="usuario">Usuario</label>
+<InputGroup prepend="@">
+  <input id="usuario" className="form-control" placeholder="usuario" />
 </InputGroup>
 
+<label htmlFor="dominio">Dominio</label>
 <InputGroup append=".cl">
-  <input className="form-control" placeholder="dominio" />
+  <input id="dominio" className="form-control" placeholder="dominio" />
 </InputGroup>
 
+<label htmlFor="monto">Monto</label>
 <InputGroup prepend="$" append="CLP">
-  <input className="form-control" type="number" placeholder="0" />
+  <input id="monto" className="form-control" type="number" placeholder="0" />
 </InputGroup>`}
       />
 

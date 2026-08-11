@@ -1,0 +1,43 @@
+/* Final reduced-motion safety net. This file is imported after every public
+ * theme layer so legacy page, widget, chat and calling animations cannot
+ * re-enable motion by winning the cascade later in the bundle. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
+	.btn,
+	.btn-icon,
+	.progress-bar,
+	.gcu-progress-ring__indicator,
+	.gcu-control,
+	.gcu-progress__bar,
+	.gcu-toast__close,
+	.gcu-link-button,
+	.gcu-modules-menu,
+	.chat-sidebar__contact,
+	.calling-modal-screen .chat-calling-text-message-sidebar,
+	.chat-calling-info .timetracker,
+	.chat-calling-info .ringing {
+		transition: none !important;
+	}
+
+	.progress-bar-animated,
+	.spinner-border,
+	.spinner-grow,
+	.gcu-spinner,
+	.gcu-progress__bar--animated,
+	.gcu-toast,
+	.gcu-toast--closing,
+	.chat-typing-dot,
+	.text.typing .wave .dot,
+	.animation-infinite,
+	.calling-modal-screen .chat-calling-text-message-sidebar {
+		animation: none !important;
+	}
+}

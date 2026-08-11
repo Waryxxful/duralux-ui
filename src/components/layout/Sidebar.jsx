@@ -1,244 +1,96 @@
-import { useEffect, useId, useState } from 'react'
-import { matchPath, NavLink, useLocation } from 'react-router-dom'
+import { Link, matchPath, useLocation } from 'react-router-dom'
+import { NavCore } from '../shell/navigationCore'
 
-// .nxl-link ya define display/padding/color propios; solo hace falta anular
-// el chrome nativo de <button> (borde, fondo, alineación, ancho) sin tocar
-// utilidades con !important (ej. p-0 rompería el padding de .nxl-link).
-const submenuTriggerStyle = { border: 0, background: 'transparent', textAlign: 'left', width: '100%' }
+function routerRouteScore(item, pathname) {
+  if (!item.to || item.to === '#') return -1
 
-function navItemIdentifier(item) {
-  return String(item.key ?? item.id ?? item.to ?? item.href ?? item.label ?? item.type ?? 'item')
-}
-
-function assignInternalKeys(items, parentKey = '') {
-  const occurrences = new Map()
-
-  return items.map((item) => {
-    const base = navItemIdentifier(item)
-    const occurrence = (occurrences.get(base) || 0) + 1
-    occurrences.set(base, occurrence)
-
-    const suffix = occurrence > 1 ? `#${occurrence}` : ''
-    const segment = `${base.length}:${base}${suffix}`
-    const internalKey = parentKey ? `${parentKey}/${segment}` : segment
-
-    return {
-      ...item,
-      _key: internalKey,
-      children: item.children ? assignInternalKeys(item.children, internalKey) : item.children,
-    }
-  })
-}
-
-function routeEnds(item) {
-  return item.end ?? (item.to === '/')
-}
-
-function routeMatches(item, pathname) {
-  return Boolean(
-    item.to && matchPath({ path: item.to, end: routeEnds(item) }, pathname),
-  )
-}
-
-function activeRouteSpecificity(item, pathname) {
-  let specificity = routeMatches(item, pathname) ? item.to.length : -1
-
-  for (const child of item.children || []) {
-    specificity = Math.max(specificity, activeRouteSpecificity(child, pathname))
+  try {
+    const end = item.end ?? (item.to === '/')
+    return matchPath({ path: item.to, end }, pathname) ? item.to.length : -1
+  } catch {
+    return -1
   }
-
-  return specificity
 }
 
-function hasActiveItem(item, pathname) {
-  return activeRouteSpecificity(item, pathname) >= 0
+function routerNavItem(item, pathname) {
+  const hasRouterDestination = Boolean(item.to && item.to !== '#')
+  const hasAnchorDestination = Boolean(!hasRouterDestination && item.href && item.href !== '#')
+  const destination = hasRouterDestination
+    ? item.to
+    : hasAnchorDestination
+      ? item.href
+      : undefined
+
+  return {
+    key: item.key ?? item.id ?? item.to ?? item.href ?? item.label ?? item.type ?? 'item',
+    label: item.label,
+    icon: item.icon,
+    href: destination,
+    linkKind: hasRouterDestination ? 'router' : 'anchor',
+    routeScore: routerRouteScore(item, pathname),
+    action: typeof item.onClick === 'function' ? item.onClick : undefined,
+    disabled: item.disabled,
+    type: item.type === 'caption' ? 'caption' : 'item',
+    children: item.children?.length
+      ? item.children.map(child => routerNavItem(child, pathname))
+      : item.children,
+  }
 }
 
-// Duralux pinta el fondo "pill" del item activo vía `.nxl-item.active > .nxl-link`
-// (ver theme.min.css) — la clase `active` tiene que ir en el <li>, no solo en el <a>.
-function NavItem({ item, pathname, openKey, setOpenKey, onNavigate }) {
-  const active = hasActiveItem(item, pathname)
-  const isOpen = openKey === item._key
-  const submenuId = useId()
+/**
+ * RouterAdapter is the only place where Sidebar knows react-router. It turns
+ * the legacy item shape into NavCore's small navigation seam; it does not
+ * render rows or own disclosure state.
+ */
+export function RouterAdapter({ navItems, pathname, onNavigate }) {
+  return {
+    sections: [{ items: navItems.map(item => routerNavItem(item, pathname)) }],
+    adapter: {
+      routeMode: true,
+      brandLinkKind: 'router',
+      renderLink: ({ item, href, className, ariaLabel, ariaCurrent, tabIndex, onClick, children }) => {
+        const props = {
+          className,
+          'aria-label': ariaLabel,
+          'aria-current': ariaCurrent,
+          tabIndex,
+          onClick,
+        }
 
-  if (item.type === 'caption') {
-    return (
-      <li className="nxl-item nxl-caption">
-        <span>{item.label}</span>
-      </li>
-    )
+        return item.linkKind === 'router'
+          ? <Link to={href} {...props}>{children}</Link>
+          : <a href={href} {...props}>{children}</a>
+      },
+      onNavigate: (event) => onNavigate?.(event),
+    },
   }
-
-  if (item.children?.length) {
-    return (
-      <li className={`nxl-item nxl-hasmenu${active ? ' active' : ''}${isOpen ? ' nxl-trigger' : ''}`}>
-        <button
-          type="button"
-          className="nxl-link"
-          style={submenuTriggerStyle}
-          aria-expanded={isOpen}
-          aria-controls={submenuId}
-          onClick={() => setOpenKey(isOpen ? null : item._key)}
-        >
-          {item.icon && <span className="nxl-micon"><i className={item.icon}></i></span>}
-          <span className="nxl-mtext">{item.label}</span>
-          <span className="nxl-arrow"><i className="feather-chevron-right"></i></span>
-        </button>
-        {isOpen && (
-          <ul id={submenuId} className="nxl-submenu">
-            {item.children.map((child) => (
-              <SubNavItem
-                key={child._key}
-                item={child}
-                pathname={pathname}
-                onNavigate={onNavigate}
-              />
-            ))}
-          </ul>
-        )}
-      </li>
-    )
-  }
-
-  if (item.to) {
-    return (
-      <li className={`nxl-item${active ? ' active' : ''}`}>
-        <NavLink
-          to={item.to}
-          className={`nxl-link${active ? ' active' : ''}`}
-          end={routeEnds(item)}
-          onClick={onNavigate}
-        >
-          {item.icon && <span className="nxl-micon"><i className={item.icon}></i></span>}
-          <span className="nxl-mtext">{item.label}</span>
-        </NavLink>
-      </li>
-    )
-  }
-
-  return (
-    <li className="nxl-item">
-      <a className="nxl-link" href={item.href || '#'} onClick={onNavigate}>
-        {item.icon && <span className="nxl-micon"><i className={item.icon}></i></span>}
-        <span className="nxl-mtext">{item.label}</span>
-      </a>
-    </li>
-  )
 }
 
-function SubNavItem({ item, pathname, onNavigate }) {
-  const active = hasActiveItem(item, pathname)
-  const [open, setOpen] = useState(active)
-  const submenuId = useId()
-
-  useEffect(() => {
-    if (active) setOpen(true)
-  }, [active])
-
-  if (item.children?.length) {
-    return (
-      <li className={`nxl-item nxl-hasmenu${active ? ' active' : ''}${open ? ' nxl-trigger' : ''}`}>
-        <button
-          type="button"
-          className="nxl-link"
-          style={submenuTriggerStyle}
-          aria-expanded={open}
-          aria-controls={submenuId}
-          onClick={() => setOpen((o) => !o)}
-        >
-          <span className="nxl-mtext">{item.label}</span>
-          <span className="nxl-arrow"><i className="feather-chevron-right"></i></span>
-        </button>
-        {open && (
-          <ul id={submenuId} className="nxl-submenu">
-            {item.children.map((child) => (
-              <SubNavItem
-                key={child._key}
-                item={child}
-                pathname={pathname}
-                onNavigate={onNavigate}
-              />
-            ))}
-          </ul>
-        )}
-      </li>
-    )
-  }
-
-  if (item.to) {
-    return (
-      <li className={`nxl-item${active ? ' active' : ''}`}>
-        <NavLink
-          to={item.to}
-          className={`nxl-link${active ? ' active' : ''}`}
-          end={routeEnds(item)}
-          onClick={onNavigate}
-        >
-          {item.label}
-        </NavLink>
-      </li>
-    )
-  }
-
-  return (
-    <li className="nxl-item">
-      <a className="nxl-link" href={item.href || '#'} onClick={onNavigate}>
-        {item.label}
-      </a>
-    </li>
-  )
-}
-
-export function Sidebar({ navItems = [], logo, logoAbbr, promoCard, mobileOpen = false, onNavigate }) {
+export function Sidebar({
+  navItems = [],
+  logo,
+  logoAbbr,
+  promoCard,
+  mobileOpen = false,
+  onNavigate,
+  navigationId = 'duralux-sidebar',
+}) {
   const { pathname } = useLocation()
-  const keyedItems = assignInternalKeys(navItems)
-  let activeItem = null
-  let activeSpecificity = -1
-
-  for (const item of keyedItems) {
-    const specificity = activeRouteSpecificity(item, pathname)
-    if (specificity > activeSpecificity) {
-      activeItem = item
-      activeSpecificity = specificity
-    }
-  }
-
-  const activeKey = activeItem?._key ?? null
-  const [openKey, setOpenKey] = useState(activeKey)
-
-  useEffect(() => {
-    if (activeKey) setOpenKey(activeKey)
-  }, [activeKey])
+  const router = RouterAdapter({ navItems, pathname, onNavigate })
 
   return (
-    <nav className={`nxl-navigation${mobileOpen ? ' mob-navigation-active' : ''}`}>
-      <div className="navbar-wrapper">
-        <div className="m-header">
-          <a href="/" className="b-brand">
-            {logo && <img src={logo} alt="Logo" className="logo logo-lg" />}
-            {logoAbbr && <img src={logoAbbr} alt="" className="logo logo-sm" />}
-          </a>
-        </div>
-        <div className="navbar-content">
-          <ul className="nxl-navbar">
-            {keyedItems.map((item) => (
-              <NavItem
-                key={item._key}
-                item={item}
-                pathname={pathname}
-                openKey={openKey}
-                setOpenKey={setOpenKey}
-                onNavigate={onNavigate}
-              />
-            ))}
-          </ul>
-          {promoCard && (
-            <div className="card text-center">
-              <div className="card-body">{promoCard}</div>
-            </div>
-          )}
-        </div>
-      </div>
-    </nav>
+    <NavCore
+      brand={{
+        href: '/',
+        logoLg: logo,
+        logoSm: logoAbbr,
+        alt: 'Logo',
+      }}
+      sections={router.sections}
+      adapter={router.adapter}
+      mobileOpen={mobileOpen}
+      navigationId={navigationId}
+      promoCard={promoCard}
+    />
   )
 }

@@ -345,25 +345,14 @@ html {
 			border-color: $black !important;
 		}
 		.alert {
-			&.alert-soft-success-message {
-				color: $success;
-				background-color: rgb($success, 0.075);
-				border: 1px dashed darken($success, 25);
-			}
-			&.alert-soft-warning-message {
-				color: $warning;
-				background-color: rgb($warning, 0.075);
-				border: 1px dashed darken($warning, 25);
-			}
-			&.alert-soft-danger-message {
-				color: $danger;
-				background-color: rgb($danger, 0.075);
-				border: 1px dashed darken($danger, 20);
-			}
-			&.alert-soft-teal-message {
-				color: $teal;
-				background-color: rgb($teal, 0.075);
-				border: 1px dashed darken($teal, 20);
+			@each $name, $color in $gcu-alert-soft-colors {
+				&.alert-soft-#{$name}-message {
+					// Dark mode owns a dark soft surface; white is scoped to this
+					// surface instead of being imposed on every brand variant.
+					color: $white !important;
+					background-color: $dark-theme-color-dark !important;
+					border: 1px dashed $dark-theme-color !important;
+				}
 			}
 		}
 

@@ -1,26 +1,99 @@
-import React from 'react';
-import { cx } from '../../utils/cx';
+import { useEffect, useRef } from 'react'
 
-function range(start, end) {
-  const result = [];
-  for (let i = start; i <= end; i++) result.push(i);
-  return result;
+// Three siblings on either side keeps the rendered window bounded at thirteen
+// buttons (including previous/next), even if a caller passes a huge sibling.
+const MAX_SIBLING_COUNT = 3
+
+function normalizeTotalPages(totalPages) {
+  if (!Number.isFinite(totalPages)) return 0
+  return Math.max(0, Math.floor(totalPages))
 }
 
-function Item({ p, page, onPageChange }) {
+function normalizePage(page, totalPages) {
+  const candidate = Number.isFinite(page) ? Math.floor(page) : 1
+  return Math.min(Math.max(candidate, 1), Math.max(totalPages, 1))
+}
+
+function normalizeSibling(sibling) {
+  if (!Number.isFinite(sibling)) return 1
+  return Math.min(Math.max(0, Math.floor(sibling)), MAX_SIBLING_COUNT)
+}
+
+function normalizeLabel(value, fallback) {
+  if (typeof value !== 'string') return fallback
+  const label = value.trim()
+  return label || fallback
+}
+
+function pageLabelFor(pageAriaLabel, pageNumber) {
+  try {
+    const label = typeof pageAriaLabel === 'function'
+      ? pageAriaLabel(pageNumber)
+      : undefined
+    return normalizeLabel(
+      typeof label === 'string' ? label : String(label ?? ''),
+      `Página ${pageNumber}`,
+    )
+  } catch {
+    return `Página ${pageNumber}`
+  }
+}
+
+function pageWindow(currentPage, totalPages, siblingCount) {
+  const left = Math.max(1, currentPage - siblingCount)
+  const right = Math.min(totalPages, currentPage + siblingCount)
+  const items = []
+
+  if (left > 2) {
+    items.push({ type: 'page', page: 1, key: 'page-1' })
+    items.push({ type: 'ellipsis', key: 'ellipsis-left' })
+  } else {
+    for (let value = 1; value < left; value += 1) {
+      items.push({ type: 'page', page: value, key: `page-${value}` })
+    }
+  }
+
+  for (let value = left; value <= right; value += 1) {
+    items.push({ type: 'page', page: value, key: `page-${value}` })
+  }
+
+  if (right < totalPages - 1) {
+    items.push({ type: 'ellipsis', key: 'ellipsis-right' })
+    items.push({ type: 'page', page: totalPages, key: `page-${totalPages}` })
+  } else {
+    for (let value = right + 1; value <= totalPages; value += 1) {
+      items.push({ type: 'page', page: value, key: `page-${value}` })
+    }
+  }
+
+  return items
+}
+
+function PageItem({ pageNumber, page, emitPageChange, pageAriaLabel, buttonRef }) {
+  const isCurrent = page === pageNumber
+
   return (
-    <li className={`page-item${page === p ? ' active' : ''}`}>
+    <li className={`page-item${isCurrent ? ' active' : ''}`}>
       <button
+        ref={buttonRef}
         type="button"
         className="page-link"
-        onClick={() => onPageChange(p)}
-        aria-current={page === p ? 'page' : undefined}
-        aria-label={`Página ${p}`}
+        onClick={() => emitPageChange(pageNumber)}
+        aria-current={isCurrent ? 'page' : undefined}
+        aria-label={pageLabelFor(pageAriaLabel, pageNumber)}
       >
-        {p}
+        {pageNumber}
       </button>
     </li>
-  );
+  )
+}
+
+function Ellipsis({ itemKey }) {
+  return (
+    <li key={itemKey} className="page-item disabled" aria-hidden="true">
+      <span className="page-link">…</span>
+    </li>
+  )
 }
 
 export function Pagination({
@@ -29,57 +102,83 @@ export function Pagination({
   onPageChange,
   sibling = 1,
   className,
+  pageAriaLabel,
   'aria-label': label = 'Paginación',
 }) {
-  if (totalPages <= 1) return null;
+  const normalizedTotalPages = normalizeTotalPages(totalPages)
+  const pageButtonRefs = useRef(new Map())
+  const focusCurrentPageRef = useRef(false)
+  const currentPage = normalizePage(page, normalizedTotalPages)
+  const siblingCount = normalizeSibling(sibling)
 
-  const left = Math.max(1, page - sibling);
-  const right = Math.min(totalPages, page + sibling);
-  const pages = range(left, right);
-  const showLeftDots = left > 2;
-  const showRightDots = right < totalPages - 1;
+  useEffect(() => {
+    if (normalizedTotalPages <= 1 || !focusCurrentPageRef.current) return
+    focusCurrentPageRef.current = false
+    pageButtonRefs.current.get(currentPage)?.focus()
+  }, [currentPage, normalizedTotalPages])
+
+  if (normalizedTotalPages <= 1) return null
+
+  const items = pageWindow(currentPage, normalizedTotalPages, siblingCount)
+  const navLabel = normalizeLabel(label, 'Paginación')
+  const safeClassName = typeof className === 'string' ? className : ''
+
+  const emitPageChange = nextPage => {
+    if (typeof onPageChange !== 'function') return
+    if (!Number.isFinite(nextPage)) return
+
+    const normalizedNextPage = Math.floor(nextPage)
+    if (normalizedNextPage < 1 || normalizedNextPage > normalizedTotalPages) return
+
+    focusCurrentPageRef.current = true
+    onPageChange(normalizedNextPage)
+  }
+
+  const registerPageButton = pageNumber => node => {
+    if (node) pageButtonRefs.current.set(pageNumber, node)
+    else pageButtonRefs.current.delete(pageNumber)
+  }
 
   return (
-    <nav aria-label={label}>
-      <ul className={cx('pagination', className)}>
-        <li className={`page-item${page === 1 ? ' disabled' : ''}`}>
+    <nav aria-label={navLabel}>
+      <ul className={['pagination', safeClassName].filter(Boolean).join(' ')}>
+        <li className={`page-item${currentPage === 1 ? ' disabled' : ''}`}>
           <button
             type="button"
             className="page-link"
-            onClick={() => onPageChange(page - 1)}
-            disabled={page === 1}
+            onClick={() => emitPageChange(currentPage - 1)}
+            disabled={currentPage === 1}
             aria-label="Página anterior"
           >
-            <i className="feather-chevron-left" aria-hidden />
+            <i className="feather-chevron-left" aria-hidden="true" />
           </button>
         </li>
 
-        {left > 1 && <Item p={1} page={page} onPageChange={onPageChange} />}
-        {showLeftDots && (
-          <li className="page-item disabled">
-            <span className="page-link">…</span>
-          </li>
-        )}
-        {pages.map(p => <Item key={p} p={p} page={page} onPageChange={onPageChange} />)}
-        {showRightDots && (
-          <li className="page-item disabled">
-            <span className="page-link">…</span>
-          </li>
-        )}
-        {right < totalPages && <Item p={totalPages} page={page} onPageChange={onPageChange} />}
+        {items.map(item => item.type === 'ellipsis' ? (
+          <Ellipsis key={item.key} itemKey={item.key} />
+        ) : (
+          <PageItem
+            key={item.key}
+            pageNumber={item.page}
+            page={currentPage}
+            emitPageChange={emitPageChange}
+            pageAriaLabel={pageAriaLabel}
+            buttonRef={registerPageButton(item.page)}
+          />
+        ))}
 
-        <li className={`page-item${page === totalPages ? ' disabled' : ''}`}>
+        <li className={`page-item${currentPage === normalizedTotalPages ? ' disabled' : ''}`}>
           <button
             type="button"
             className="page-link"
-            onClick={() => onPageChange(page + 1)}
-            disabled={page === totalPages}
+            onClick={() => emitPageChange(currentPage + 1)}
+            disabled={currentPage === normalizedTotalPages}
             aria-label="Página siguiente"
           >
-            <i className="feather-chevron-right" aria-hidden />
+            <i className="feather-chevron-right" aria-hidden="true" />
           </button>
         </li>
       </ul>
     </nav>
-  );
+  )
 }

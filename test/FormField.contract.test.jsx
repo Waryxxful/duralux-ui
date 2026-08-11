@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { expect, test, vi } from 'vitest'
 import { FormField } from '../src/components/form/FormField.jsx'
+import { InputGroup } from '../src/components/form/InputGroup.jsx'
 
 test('clones one control to associate its label and error semantics', () => {
   render(
@@ -85,4 +86,36 @@ test('avoids generated label associations for multiple children', () => {
   expect(label).not.toHaveAttribute('for')
   expect(screen.getByTestId('start')).not.toHaveAttribute('id')
   expect(screen.getByTestId('end')).not.toHaveAttribute('id')
+})
+
+
+test('does not claim a multi-control InputGroup and preserves custom-control forwarding', () => {
+  function CustomInput(props) {
+    return <input data-testid="custom" {...props} />
+  }
+  CustomInput.duraluxFormControl = true
+
+  const { rerender } = render(
+    <FormField label="Rango" required>
+      <InputGroup>
+        <input data-testid="start" />
+        <input data-testid="end" />
+      </InputGroup>
+    </FormField>,
+  )
+  const rangeLabel = screen.getByText('Rango').closest('label')
+  expect(rangeLabel).not.toHaveAttribute('for')
+  expect(screen.getByTestId('start')).not.toBeRequired()
+  expect(screen.getByTestId('end')).not.toBeRequired()
+  expect(screen.queryByText('*')).not.toBeInTheDocument()
+
+  rerender(
+    <FormField label="Personalizado" required error="Error de wrapper">
+      <CustomInput />
+    </FormField>,
+  )
+  const custom = screen.getByTestId('custom')
+  expect(custom).toHaveAccessibleName('Personalizado')
+  expect(custom).toBeRequired()
+  expect(custom).toHaveAttribute('aria-invalid', 'true')
 })

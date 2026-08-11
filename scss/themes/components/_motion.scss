@@ -2,9 +2,8 @@
  * Motion craft layer — design engineering defaults (crisp product UI).
  * Tokens + press feedback + reduced-motion. Does not add decorative motion.
  *
- * DESIGN.md house motion signature is `all 0.3s ease` on interactive
- * surfaces (Do's: "Apply transition: all 0.3s ease to interactive surfaces
- * — it is the house motion signature"). This layer keeps properties scoped
+ * DESIGN.md house motion signature is a 0.3s ease response on interactive
+ * surfaces. This layer keeps properties scoped
  * (never literal `all`, to avoid transitioning layout props) but the
  * duration/easing tokens below now resolve to spec: 0.3s ease.
  */
@@ -18,7 +17,7 @@
 	--duration-panel: 300ms;
 }
 
-/* Buttons: specific properties (never transition: all), snappy press */
+/* Buttons: specific paint and press properties only, snappy response */
 .btn {
 	transition:
 		color var(--duration-fast) var(--ease-out),
@@ -67,12 +66,35 @@
 		background-color var(--duration-fast) var(--ease-out);
 }
 
+/* Public SVG progress-ring hook. The React component may provide the class
+   from the consuming app while keeping the animation policy in the theme. */
+.gcu-progress-ring__indicator {
+	transition: stroke-dashoffset var(--duration-panel) var(--ease-out);
+}
+
+/* Custom form controls use paint-only feedback and share the same motion
+   token as the rest of the theme. */
+.custom-control-label::before,
+.custom-file-label,
+.custom-select {
+	transition:
+		background-color var(--duration-fast) var(--ease-out),
+		border-color var(--duration-fast) var(--ease-out),
+		box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.custom-checkbox .custom-control-label::after {
+	transition:
+		opacity var(--duration-fast) var(--ease-out),
+		transform var(--duration-fast) var(--ease-out);
+}
+
 /* Progress fill — GPU-friendly width is layout; keep short + ease-out for perceived speed */
 .progress-bar {
 	transition: width var(--duration-panel) var(--ease-out);
 }
 
-/* Reduced motion: drop transforms; keep short color/opacity if any */
+/* Reduced motion: stop public animation and transition effects. */
 @media (prefers-reduced-motion: reduce) {
 	:root {
 		--duration-press: 0ms;
@@ -95,6 +117,23 @@
 	}
 
 	.progress-bar {
+		transition: none;
+	}
+
+	.progress-bar-animated,
+	.spinner-border,
+	.spinner-grow {
+		animation: none;
+	}
+
+	.gcu-progress-ring__indicator {
+		transition: none;
+	}
+
+	.custom-control-label::before,
+	.custom-file-label,
+	.custom-select,
+	.custom-checkbox .custom-control-label::after {
 		transition: none;
 	}
 

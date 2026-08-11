@@ -78,6 +78,26 @@ afterEach(() => {
 })
 
 describe('ThemeProvider responsive mini preference', () => {
+  test.each([
+    [1024, 'expanded'],
+    [1025, 'mini'],
+    [1400, 'mini'],
+    [1401, 'expanded'],
+  ])('uses the audited breakpoint at %spx', (width, expected) => {
+    setWidth(width)
+    renderTheme()
+    expectState(expected)
+  })
+
+  test('returns to expanded mode when resizing toward mobile', () => {
+    setWidth(1200)
+    renderTheme()
+    expectState('mini')
+
+    resizeTo(800)
+    expectState('expanded')
+  })
+
   test('applies responsive mini without persisting automatic state', () => {
     setWidth(1200)
     renderTheme()

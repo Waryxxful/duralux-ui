@@ -4,13 +4,16 @@
  * haya demanda real (ver auth-login-creative.html / auth-login-minimal.html).
  */
 export function AuthLayout({ children, image, imageAlt = '' }) {
+  const hasImage = typeof image === 'string' ? image.trim() !== '' : Boolean(image)
+  const accessibleImageAlt = imageAlt == null ? '' : String(imageAlt)
+
   return (
     <main className="auth-cover-wrapper">
-      {image && (
+      {hasImage && (
         <div className="auth-cover-content-inner">
           <div className="auth-cover-content-wrapper">
             <div className="auth-img">
-              <img src={image} alt={imageAlt} className="img-fluid" />
+              <img src={image} alt={accessibleImageAlt} className="img-fluid" />
             </div>
           </div>
         </div>

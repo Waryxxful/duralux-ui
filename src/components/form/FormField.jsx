@@ -1,4 +1,45 @@
 import { Fragment, cloneElement, isValidElement, useId } from 'react'
+import { Checkbox } from './Checkbox.jsx'
+import { FileInput } from './FileInput.jsx'
+import { Input } from './Input.jsx'
+import { Radio } from './Radio.jsx'
+import { Select } from './Select.jsx'
+import { Textarea } from './Textarea.jsx'
+
+const CONTROL_COMPONENTS = new Set([Checkbox, FileInput, Input, Radio, Select, Textarea])
+const NATIVE_CONTROL_TAGS = new Set(['button', 'input', 'select', 'textarea'])
+const REQUIRED_NATIVE_CONTROL_TAGS = new Set(['input', 'select', 'textarea'])
+
+function isPackageControl(type, props) {
+  if (CONTROL_COMPONENTS.has(type)) return true
+  const marker = type?.duraluxFormControl
+  if (marker === undefined) return false
+  try {
+    return typeof marker === 'function' ? Boolean(marker(props)) : Boolean(marker)
+  } catch {
+    return false
+  }
+}
+
+function hasContent(value) {
+  return value !== undefined && value !== null && value !== false && value !== ''
+}
+
+function describedByTokens(value) {
+  if (typeof value !== 'string') return []
+  return value.trim().split(/\s+/).filter(Boolean)
+}
+
+function appendUnique(values, next) {
+  const seen = new Set(values)
+  next.forEach((value) => {
+    if (value && !seen.has(value)) {
+      seen.add(value)
+      values.push(value)
+    }
+  })
+  return values
+}
 
 /**
  * FormField — fila horizontal label (col-lg-4) + control (col-lg-8).
@@ -12,6 +53,11 @@ import { Fragment, cloneElement, isValidElement, useId } from 'react'
  *   htmlFor  — id explícito del control (si no, se genera y se pasa al render-prop)
  *   className — clase extra en la fila
  *   children — nodo, o render-prop (id) => nodo para asociar el label al control
+ *
+ * Un único control, incluidos los wrappers compuestos de este paquete (por
+ * ejemplo Input con addons o Checkbox/Radio), recibe id/required/describedby.
+ * Con varios hijos no se inventa una asociación `for`: usá `htmlFor` para un
+ * control principal o el render-prop para decidir las asociaciones explícitas.
  */
 export function FormField({ label, htmlFor, required, error, helpText, hint, className, children }) {
   const generatedId = useId()
@@ -19,9 +65,13 @@ export function FormField({ label, htmlFor, required, error, helpText, hint, cla
   const isRenderProp = typeof children === 'function'
   const fallbackId = htmlFor ?? generatedId
   const renderedContent = isRenderProp ? children(fallbackId) : children
-  const isSingleControl = isValidElement(renderedContent) && renderedContent.type !== Fragment && (
-    typeof renderedContent.type !== 'string' ||
-    ['button', 'input', 'meter', 'output', 'progress', 'select', 'textarea'].includes(renderedContent.type)
+  const candidateType = isValidElement(renderedContent) && renderedContent.type !== Fragment
+    ? renderedContent.type
+    : null
+  const packageControl = candidateType ? isPackageControl(candidateType, renderedContent.props) : false
+  const isSingleControl = Boolean(candidateType) && (
+    (typeof candidateType === 'string' && NATIVE_CONTROL_TAGS.has(candidateType))
+    || packageControl
   )
   const id = isSingleControl
     ? (renderedContent.props.id ?? fallbackId)
@@ -30,23 +80,30 @@ export function FormField({ label, htmlFor, required, error, helpText, hint, cla
       : htmlFor
   const errorId = `${generatedId}-error`
   const helpId = `${generatedId}-help`
-  const descriptionId = error ? errorId : help ? helpId : undefined
+  const hasError = hasContent(error)
+  const hasHelp = hasContent(help)
+  const appliesRequired = Boolean(
+    required
+    && isSingleControl
+    && (typeof candidateType !== 'string' || REQUIRED_NATIVE_CONTROL_TAGS.has(candidateType)),
+  )
 
   let content = renderedContent
   if (isSingleControl) {
     const controlProps = {}
 
     if (renderedContent.props.id == null) controlProps.id = id
-    if (descriptionId) {
-      controlProps['aria-describedby'] = [renderedContent.props['aria-describedby'], descriptionId]
-        .filter(Boolean)
-        .join(' ')
+    const descriptionIds = appendUnique([], describedByTokens(renderedContent.props['aria-describedby']))
+    if (hasHelp) appendUnique(descriptionIds, [helpId])
+    if (hasError) appendUnique(descriptionIds, [errorId])
+    if (descriptionIds.length > 0) {
+      controlProps['aria-describedby'] = descriptionIds.join(' ')
     }
-    if (required) {
+    if (appliesRequired) {
       controlProps.required = true
       if (renderedContent.props['aria-required'] === undefined) controlProps['aria-required'] = true
     }
-    if (error && renderedContent.props['aria-invalid'] === undefined) controlProps['aria-invalid'] = true
+    if (hasError && renderedContent.props['aria-invalid'] === undefined) controlProps['aria-invalid'] = true
 
     content = cloneElement(renderedContent, controlProps)
   }
@@ -55,13 +112,17 @@ export function FormField({ label, htmlFor, required, error, helpText, hint, cla
     <div className={`row mb-4 align-items-center${className ? ' ' + className : ''}`}>
       <div className="col-lg-4">
         <label htmlFor={id} className="fw-semibold">
-          {label}{required && <span className="text-danger ms-1" aria-hidden="true">*</span>}
+          {label}{appliesRequired && <span className="text-danger ms-1" aria-hidden="true">*</span>}
         </label>
       </div>
       <div className="col-lg-8">
         {content}
-        {error && <div id={errorId} className="text-danger fs-12 mt-1">{error}</div>}
-        {help && !error && <div id={helpId} className="text-muted fs-12 mt-1">{help}</div>}
+        {hasHelp && <div id={helpId} className="text-muted fs-12 mt-1">{help}</div>}
+        {hasError && (
+          <div id={errorId} className="text-danger fs-12 mt-1" role="alert" aria-live="polite">
+            {error}
+          </div>
+        )}
       </div>
     </div>
   )

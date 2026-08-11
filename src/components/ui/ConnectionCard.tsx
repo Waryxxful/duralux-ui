@@ -33,6 +33,7 @@ export function ConnectionCard({
 }: ConnectionCardProps) {
   const titleId = useId();
   const switchId = useId();
+  const switchLabelId = useId();
 
   return (
     <div
@@ -57,8 +58,8 @@ export function ConnectionCard({
         </div>
       </div>
       <div className="form-check form-switch form-switch-sm flex-shrink-0">
-        <label className="form-check-label c-pointer" htmlFor={switchId}>
-          <span className="visually-hidden">{title}</span>
+        <label id={switchLabelId} className="form-check-label c-pointer" htmlFor={switchId}>
+          <span className="visually-hidden">Activar conexión</span>
         </label>
         <input
           className="form-check-input c-pointer"
@@ -66,7 +67,7 @@ export function ConnectionCard({
           id={switchId}
           checked={checked}
           disabled={disabled}
-          aria-labelledby={titleId}
+          aria-labelledby={`${switchLabelId} ${titleId}`}
           onChange={(event) => onChange(event.target.checked)}
         />
       </div>

@@ -1,31 +1,26 @@
+import { semanticColors } from './generated/semantic-colors'
+
+export { semanticColors }
+
 /**
  * Design tokens — espejo 1:1 de las variables SCSS de la plantilla Duralux v2:
  *   scss/themes/_variables.scss
  *   scss/themes/_bs-custom-variables.scss
  *
- * Fuente de verdad visual = SCSS, que a su vez sigue duralux-v2 (react-vite).
- * Si cambiás un color/escala en SCSS, actualizá acá en el mismo PR.
+ * Los colores semánticos se generan desde tokens/semantic-colors.json para que
+ * SCSS, runtime TS y custom properties no puedan derivar por separado.
  */
 export const tokens = {
   colors: {
-    // Final $theme-colors after SCSS re-assign in _bs-custom-variables.scss
-    // (the intermediate $success:#25b865 etc. are overwritten by $green/$red/…).
-    // Must match compiled utilities (.bg-success) and --gcu-* in grancrm-ui.css.
-    primary: '#3454d1',   // $blue / $primary
-    success: '#17c666',   // $green → final $success
-    danger: '#ea4d4d',    // $red → final $danger
-    warning: '#ffa21d',   // $yellow → final $warning
-    info: '#3dc7be',      // $cyan → final $info
-    dark: '#283c50',      // $brand-dark
-    darken: '#001327',
-    secondary: '#727981', // $gray-600
-    light: '#eff0f6',     // $gray-100 / $light
+    ...semanticColors,
     // _variables.scss brand
-    brand: '#283c50',
+    brand: semanticColors.dark,
     brandBody: '#6b7885', // $brand-body
-    brandMuted: '#7587a7', // $brand-muted (breadcrumbs)
+    brandMuted: '#5f6f8a', // $brand-muted (breadcrumbs)
     brandLight: '#eaebef', // $brand-light
-    bg: '#f0f2f8',        // $body-bg
+    bg: semanticColors.bg, // Bootstrap $body-bg
+    body: semanticColors.body, // Bootstrap $body-color
+    canvas: semanticColors.canvas, // visual body selector canvas
     border: '#dcdee4',    // $border-color-2
   },
   font: {
@@ -79,8 +74,8 @@ export const tokens = {
   // main-content padding. _bs-custom-variables.scss, nxl-common.scss.
   layoutGutter: { card: 25, content: 30 },
   /** Motion craft — alineado a scss/themes/components/_motion.scss.
-   *  DESIGN.md house signature: `all 0.3s ease` on interactive surfaces
-   *  (scoped to paint props here instead of literal `all`). No es parte
+   *  DESIGN.md house signature: 0.3s ease on interactive paint properties.
+   *  No es parte
    *  de v2 (que no tokeniza motion ni soporta prefers-reduced-motion) —
    *  se mantiene como capa de accesibilidad, no como desviacion a corregir. */
   motion: {

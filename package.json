@@ -1,7 +1,8 @@
 {
   "name": "@duralux/ui",
-  "version": "1.0.0",
-  "description": "Librer\u00eda de componentes React + Duralux CSS",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Librería de componentes React + Duralux CSS",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,6 +12,21 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./charts": {
+      "types": "./dist/charts/index.d.ts",
+      "import": "./dist/charts/index.js",
+      "require": "./dist/charts/index.cjs"
+    },
+    "./charts/apex": {
+      "types": "./dist/charts/apex.d.ts",
+      "import": "./dist/charts/apex.js",
+      "require": "./dist/charts/apex.cjs"
+    },
+    "./charts/recharts": {
+      "types": "./dist/charts/recharts.d.ts",
+      "import": "./dist/charts/recharts.js",
+      "require": "./dist/charts/recharts.cjs"
     },
     "./styles/grancrm-ui.css": "./dist/styles/grancrm-ui.css",
     "./styles/feather-icons.css": "./dist/styles/feather-icons.css",
@@ -22,18 +38,25 @@
   },
   "files": [
     "dist",
-    "scss"
+    "scss",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build:scss": "node scripts/build-scss.mjs",
-    "build": "node scripts/audit-contract.mjs && vite build && node scripts/copy-styles.mjs && node scripts/write-index-dts.mjs && node scripts/check-manual-dts.mjs && npm run build:scss && npm run typecheck:public",
+    "build:styles": "node scripts/copy-styles.mjs",
+    "tokens:generate": "node scripts/generate-tokens.mjs",
+    "tokens:check": "node scripts/generate-tokens.mjs --check",
+    "gate:bundle": "node scripts/check-bundle.mjs",
+    "gate:package": "node scripts/check-package.mjs",
+    "build": "node scripts/audit-contract.mjs && npm run tokens:check && vite build && npm run build:styles && npm run build:scss && npm run typecheck:public && npm run gate:bundle && npm run gate:package",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "typecheck:public": "tsc -p test-types/tsconfig.json",
     "prepare": "npm run build",
     "dev:demo": "vite --config demo/vite.config.js",
-    "preview:demo": "vite preview --config demo/vite.config.js"
+    "preview:demo": "vite preview --config demo/vite.config.js",
+    "doctor": "npx react-doctor@latest"
   },
   "engines": {
     "node": ">=20.19"
@@ -41,13 +64,23 @@
   "peerDependencies": {
     "react": ">=18",
     "react-dom": ">=18",
-    "react-router-dom": "^6.0.0 || ^7.0.0"
-  },
-  "dependencies": {
+    "react-router-dom": "^6.0.0 || ^7.0.0",
     "apexcharts": "^5.15.2",
     "react-apexcharts": "^2.1.1",
     "recharts": "^3.8.1"
   },
+  "peerDependenciesMeta": {
+    "apexcharts": {
+      "optional": true
+    },
+    "react-apexcharts": {
+      "optional": true
+    },
+    "recharts": {
+      "optional": true
+    }
+  },
+  "dependencies": {},
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -55,15 +88,19 @@
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.4",
+    "apexcharts": "^5.15.2",
     "jsdom": "^26.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-apexcharts": "^2.1.1",
     "react-router-dom": "^7.1.5",
+    "recharts": "^3.8.1",
     "sass": "^1.101.0",
     "typescript": "^5.9.3",
     "vite": "^6.0.5",
     "vite-plugin-dts": "^5.0.3",
-    "vitest": "^3.2.7"
+    "vitest": "^3.2.7",
+    "react-doctor": "^0.9.11"
   },
   "sideEffects": [
     "**/*.css"

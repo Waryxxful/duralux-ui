@@ -17,7 +17,19 @@ test('retry button uses canonical light-brand, never outline', async () => {
 
 test('renders title and message without retry when onRetry omitted', () => {
   render(<ErrorState title="Falló" message="Detalle" />)
-  expect(screen.getByText('Falló')).toBeInTheDocument()
+  expect(screen.getByRole('heading', { name: 'Falló' })).toBeInTheDocument()
   expect(screen.getByText('Detalle')).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: /Reintentar/i })).not.toBeInTheDocument()
+})
+
+test('announces dynamic errors and ignores non-callable retry values', () => {
+  const { rerender } = render(<ErrorState title="Falló" message="Primer detalle" onRetry />)
+  const alert = screen.getByRole('alert')
+
+  expect(alert).toHaveAttribute('aria-live', 'assertive')
+  expect(screen.getByRole('heading', { name: 'Falló' })).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /Reintentar/i })).not.toBeInTheDocument()
+
+  rerender(<ErrorState title="Falló" message="Segundo detalle" />)
+  expect(screen.getByText('Segundo detalle')).toBeInTheDocument()
 })

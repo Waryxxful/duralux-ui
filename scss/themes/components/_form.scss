@@ -114,30 +114,28 @@ input[type="radio"] {
 			background-color: darken($gray-100, 1);
 		}
 		&:after {
-			top: 1px;
+			top: 2px;
 			content: "";
-			left: -1.65rem;
+			left: -28px;
 			display: block;
-			width: 0.75rem;
-			height: 0.75rem;
+			width: 18px;
+			height: 18px;
 			position: absolute;
-			background-size: 0;
+			background-size: 12px 12px;
+			background-position: center;
 			background-repeat: no-repeat;
-			background: no-repeat 50%/50% 50%;
-			transition: background-size 0.15s ease-in-out;
+			background-image: none;
+			opacity: 0;
+			transform: scale(0.8);
+			transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out;
 		}
 	}
 	.custom-control-input:checked ~ .custom-control-label::after {
-		background-size: 100%;
-		transition: background-size 0.15s ease-in-out;
-	}
-	.custom-control-input:checked ~ .custom-control-label::after {
-		top: 1px;
-		left: -26px;
-		color: $white;
-		content: "\f272";
-		position: absolute;
-		font-family: bootstrap-icons !important;
+		content: "";
+		opacity: 1;
+		transform: scale(1);
+		// Self-contained SVG checkmark; no external icon font or asset path.
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M5 12l4 4L19 6'/%3E%3C/svg%3E");
 	}
 	.custom-control-input:checked ~ .custom-control-label::before {
 		color: $white;
@@ -145,16 +143,17 @@ input[type="radio"] {
 		background-color: $primary;
 	}
 }
+.custom-control-input:focus-visible ~ .custom-control-label::before {
+	outline: 2px solid $primary;
+	outline-offset: 2px;
+}
 .custom-control-label:before,
 .custom-file-label,
 .custom-select {
-	-webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-size 5s ease-in-out;
-	-webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, background-size 5s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-	transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, background-size 5s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-	-o-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -o-background-size 5s ease-in-out;
-	-moz-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-size 5s ease-in-out, -moz-box-shadow 0.15s ease-in-out, -moz-background-size 5s ease-in-out;
-	transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-size 5s ease-in-out;
-	transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-size 5s ease-in-out, -webkit-box-shadow 0.15s ease-in-out, -moz-box-shadow 0.15s ease-in-out, -moz-background-size 5s ease-in-out, -o-background-size 5s ease-in-out;
+	transition:
+		background-color 0.15s ease-in-out,
+		border-color 0.15s ease-in-out,
+		box-shadow 0.15s ease-in-out;
 }
 .custom-radio {
 	.custom-control-label {

@@ -1,4 +1,63 @@
-import { useId, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { safeRead, toSafeDomSegment } from './internal/safeDom.js'
+
+const EMPTY_TABS = []
+
+function isDevelopment() {
+  const nodeEnvironment = typeof process !== 'undefined' ? process.env?.NODE_ENV : undefined
+  if (nodeEnvironment) return nodeEnvironment !== 'production'
+  return import.meta.env?.DEV === true
+}
+
+function sameKey(left, right) {
+  return Object.is(left, right) || left === right
+}
+
+function buildTabEntries(tabs) {
+  const occurrences = new Map()
+  const usedReactKeys = new Set()
+
+  return tabs.map((tab, index) => {
+    const key = safeRead(tab, 'key', undefined)
+    const token = `${typeof key}:${String(toSafeDomSegment(key))}`
+    const occurrence = occurrences.get(token) || 0
+    occurrences.set(token, occurrence + 1)
+    const baseSegment = `${toSafeDomSegment(key)}-${occurrence}`
+    let reactKey = `duralux-tab-${baseSegment}`
+    if (usedReactKeys.has(reactKey)) reactKey = `${reactKey}-${index}`
+    usedReactKeys.add(reactKey)
+
+    return {
+      tab,
+      index,
+      key,
+      label: safeRead(tab, 'label', null),
+      content: safeRead(tab, 'content', null),
+      icon: safeRead(tab, 'icon', null),
+      disabled: Boolean(safeRead(tab, 'disabled', false)),
+      reactKey,
+      segment: baseSegment,
+      token,
+    }
+  })
+}
+
+function warnDuplicateTabs(entries, warnedRef) {
+  if (!isDevelopment()) return
+  const seen = new Map()
+  entries.forEach((entry) => {
+    if (!seen.has(entry.token)) {
+      seen.set(entry.token, entry.index)
+      return
+    }
+    const warningKey = `${entry.token}:${seen.get(entry.token)}:${entry.index}`
+    if (warnedRef.current.has(warningKey)) return
+    warnedRef.current.add(warningKey)
+    console.warn(
+      `[duralux/ui] Tabs: la key debe ser única; las pestañas ${seen.get(entry.token) + 1} y ${entry.index + 1} comparten la misma identidad.`,
+    )
+  })
+}
 
 export function Tabs({
   tabs = [],
@@ -8,89 +67,142 @@ export function Tabs({
   defaultActiveKey,
   onChange,
 }) {
+  const normalizedTabs = Array.isArray(tabs) ? tabs : EMPTY_TABS
   const isControlled = activeKey !== undefined
+  const firstEnabledKey = () => {
+    const firstEnabled = normalizedTabs.find((tab) => !safeRead(tab, 'disabled', false))
+    return safeRead(firstEnabled, 'key', undefined)
+  }
   const [uncontrolledActiveKey, setUncontrolledActiveKey] = useState(
-    () => defaultActiveKey ?? tabs[0]?.key,
+    () => defaultActiveKey ?? firstEnabledKey(),
   )
+  const entries = useMemo(() => buildTabEntries(normalizedTabs), [normalizedTabs])
   const requestedActiveKey = isControlled ? activeKey : uncontrolledActiveKey
-  const active = tabs.some((tab) => tab.key === requestedActiveKey)
-    ? requestedActiveKey
-    : tabs[0]?.key
+  const requestedTab = entries.find((entry) => sameKey(entry.key, requestedActiveKey))
+  const hasRequestedActiveTab = Boolean(requestedTab && !requestedTab.disabled)
+  const activeEntry = hasRequestedActiveTab
+    ? requestedTab
+    : entries.find((entry) => !entry.disabled)
+  const active = activeEntry?.key
   const idPrefix = useId()
+  const safeIdPrefix = useMemo(() => `duralux-tabs-${toSafeDomSegment(idPrefix)}`, [idPrefix])
   const tabRefs = useRef(new Map())
+  const reconciliationRef = useRef(null)
+  const warnedRef = useRef(new Set())
 
-  const selectTab = (key) => {
-    if (key === active) return
-    if (!isControlled) setUncontrolledActiveKey(key)
-    onChange?.(key)
+  useEffect(() => {
+    warnDuplicateTabs(entries, warnedRef)
+  }, [entries])
+
+  useEffect(() => {
+    if (!isControlled && entries.length > 0 && !sameKey(uncontrolledActiveKey, active)) {
+      if (active !== undefined) setUncontrolledActiveKey(active)
+    }
+  }, [active, entries.length, isControlled, uncontrolledActiveKey])
+
+  useEffect(() => {
+    const needsReconciliation = isControlled && entries.length > 0 && !hasRequestedActiveTab
+    if (!needsReconciliation) {
+      reconciliationRef.current = null
+      return
+    }
+
+    if (active === undefined || !onChange) return
+
+    const previousRequest = reconciliationRef.current
+    if (
+      previousRequest
+      && sameKey(previousRequest.requestedKey, activeKey)
+      && sameKey(previousRequest.fallbackKey, active)
+    ) {
+      return
+    }
+
+    reconciliationRef.current = { requestedKey: activeKey, fallbackKey: active }
+    onChange(active)
+  }, [active, activeKey, entries.length, hasRequestedActiveTab, isControlled, onChange])
+
+  const selectTab = (entry) => {
+    if (!entry || entry.disabled || sameKey(entry.key, active)) return
+    if (!isControlled) setUncontrolledActiveKey(entry.key)
+    onChange?.(entry.key)
   }
 
-  const handleKeyDown = (event, index) => {
-    let nextIndex
+  const handleKeyDown = (event, entry) => {
+    if (!entry || entry.disabled) return
+    const enabledEntries = entries.filter((candidate) => !candidate.disabled)
+    if (enabledEntries.length === 0) return
+
+    let nextPosition
+    const currentPosition = enabledEntries.findIndex((candidate) => candidate.reactKey === entry.reactKey)
+    if (currentPosition === -1) return
 
     switch (event.key) {
       case 'ArrowRight':
-        nextIndex = (index + 1) % tabs.length
+        nextPosition = (currentPosition + 1) % enabledEntries.length
         break
       case 'ArrowLeft':
-        nextIndex = (index - 1 + tabs.length) % tabs.length
+        nextPosition = (currentPosition - 1 + enabledEntries.length) % enabledEntries.length
         break
       case 'Home':
-        nextIndex = 0
+        nextPosition = 0
         break
       case 'End':
-        nextIndex = tabs.length - 1
+        nextPosition = enabledEntries.length - 1
         break
       default:
         return
     }
 
     event.preventDefault()
-    const nextTab = tabs[nextIndex]
-    tabRefs.current.get(nextTab.key)?.focus()
-    selectTab(nextTab.key)
+    const nextEntry = enabledEntries[nextPosition]
+    tabRefs.current.get(nextEntry.reactKey)?.focus()
+    selectTab(nextEntry)
   }
 
-  const getTabId = (key) => `${idPrefix}-tab-${encodeURIComponent(String(key))}`
-  const getPanelId = (key) => `${idPrefix}-panel-${encodeURIComponent(String(key))}`
+  const getTabId = (entry) => `${safeIdPrefix}-tab-${entry.segment}`
+  const getPanelId = (entry) => `${safeIdPrefix}-panel-${entry.segment}`
+  const isActiveEntry = (entry) => activeEntry?.reactKey === entry.reactKey
 
   return (
     <>
       <ul className={`nav nav-tabs ${className}`} role="tablist" aria-orientation="horizontal">
-        {tabs.map((tab, index) => (
-          <li key={tab.key} className={`nav-item ${tabClassName}`} role="presentation">
+        {entries.map((entry) => (
+          <li key={entry.reactKey} className={`nav-item ${tabClassName}`} role="presentation">
             <button
               ref={(node) => {
-                if (node) tabRefs.current.set(tab.key, node)
-                else tabRefs.current.delete(tab.key)
+                if (node) tabRefs.current.set(entry.reactKey, node)
+                else tabRefs.current.delete(entry.reactKey)
               }}
-              id={getTabId(tab.key)}
-              className={`nav-link${active === tab.key ? ' active' : ''}`}
-              onClick={() => selectTab(tab.key)}
-              onKeyDown={(event) => handleKeyDown(event, index)}
+              id={getTabId(entry)}
+              className={`nav-link${isActiveEntry(entry) ? ' active' : ''}`}
+              onClick={() => selectTab(entry)}
+              onKeyDown={(event) => handleKeyDown(event, entry)}
               type="button"
               role="tab"
-              aria-controls={getPanelId(tab.key)}
-              aria-selected={active === tab.key}
-              tabIndex={active === tab.key ? 0 : -1}
+              disabled={entry.disabled}
+              aria-controls={getPanelId(entry)}
+              aria-selected={isActiveEntry(entry)}
+              aria-disabled={entry.disabled ? 'true' : undefined}
+              tabIndex={entry.disabled ? -1 : isActiveEntry(entry) ? 0 : -1}
             >
-              {tab.icon && <i className={`${tab.icon} me-2`} aria-hidden></i>}
-              {tab.label}
+              {entry.icon && <i className={`${entry.icon} me-2`} aria-hidden></i>}
+              {entry.label}
             </button>
           </li>
         ))}
       </ul>
       <div className="tab-content">
-        {tabs.map((tab) => (
+        {entries.map((entry) => (
           <div
-            key={tab.key}
-            id={getPanelId(tab.key)}
-            className={`tab-pane fade${active === tab.key ? ' show active' : ''}`}
+            key={entry.reactKey}
+            id={getPanelId(entry)}
+            className={`tab-pane fade${isActiveEntry(entry) ? ' show active' : ''}`}
             role="tabpanel"
-            aria-labelledby={getTabId(tab.key)}
-            hidden={active !== tab.key}
+            aria-labelledby={getTabId(entry)}
+            hidden={!isActiveEntry(entry)}
           >
-            {active === tab.key && tab.content}
+            {isActiveEntry(entry) && entry.content}
           </div>
         ))}
       </div>

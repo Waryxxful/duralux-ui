@@ -89,7 +89,7 @@
 										display: flex;
 										font-size: 12px;
 										color: $primary;
-										content: "\f272";
+										content: "\2713";
 										position: absolute;
 										align-items: center;
 										cursor: not-allowed;
@@ -97,7 +97,7 @@
 										justify-content: center;
 										transition: all 0.5s ease;
 										background-color: darken($gray-100, 1);
-										font-family: bootstrap-icons !important;
+										font-family: sans-serif;
 									}
 								}
 							}
@@ -115,7 +115,7 @@
 								display: flex;
 								font-size: 12px;
 								color: $primary;
-								content: "\f272";
+										content: "\2713";
 								position: absolute;
 								align-items: center;
 								cursor: not-allowed;
@@ -123,7 +123,7 @@
 								justify-content: center;
 								transition: all 0.5s ease;
 								background-color: darken($gray-100, 1);
-								font-family: bootstrap-icons !important;
+										font-family: sans-serif;
 							}
 						}
 					}

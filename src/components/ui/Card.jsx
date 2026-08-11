@@ -1,3 +1,25 @@
+import { Fragment } from 'react'
+import { CardLoader } from './CardLoader'
+
+function hasContent(value) {
+  if (value === null || value === undefined || value === false || value === true) return false
+  if (typeof value === 'string') return value.trim() !== ''
+  if (Array.isArray(value)) return value.some(hasContent)
+  return true
+}
+
+function callbackAction(callback, node, label, icon) {
+  const action = typeof callback === 'function' ? callback : node
+  if (typeof action === 'function') {
+    return (
+      <button type="button" className="btn btn-sm btn-light-brand" aria-label={label} onClick={action}>
+        <i className={`feather-${icon}`} aria-hidden="true"></i>
+      </button>
+    )
+  }
+  return hasContent(action) ? action : null
+}
+
 /**
  * Card — wrapper con las clases Duralux.
  *
@@ -8,6 +30,9 @@
  *   noPadding   — p-0 on card-body, para tablas a ras de borde (alias legacy: noPad)
  *   bodyClassName — clases extra en card-body
  *   stretch     — adds "stretch stretch-full" for full-height cards
+ *   loading     — controlled loading overlay
+ *   loadingLabel — accessible name for the loading status
+ *   onRefresh/onRemove/onExpand — optional accessible generic actions
  *   className   — extra classes for the card
  *   elementRef  — ref al div raíz
  */
@@ -20,6 +45,17 @@ export function Card({
   stretch,
   noPadding,
   noPad,
+  loading = false,
+  loadingLabel = 'Cargando',
+  onRefresh,
+  onRemove,
+  onExpand,
+  refresh = undefined,
+  remove = undefined,
+  expand = undefined,
+  refreshLabel = 'Refresh',
+  removeLabel = 'Remove',
+  expandLabel = 'Expand',
   bodyClassName = '',
   className = '',
   elementRef,
@@ -28,23 +64,38 @@ export function Card({
 }) {
   const right = actions ?? headerRight
   const flush = noPadding ?? noPad
-  const showHeader = title != null || subtitle != null || right
+  const genericActions = [
+    callbackAction(onRefresh, refresh, refreshLabel, 'refresh-cw'),
+    callbackAction(onRemove, remove, removeLabel, 'trash-2'),
+    callbackAction(onExpand, expand, expandLabel, 'maximize-2'),
+  ].filter(Boolean).map((action, index) => <Fragment key={`card-action-${index}`}>{action}</Fragment>)
+  const composedRight = [right, genericActions].some(hasContent)
+    ? <>{hasContent(right) && right}{genericActions}</>
+    : null
+  const showHeader = hasContent(title) || hasContent(subtitle) || hasContent(composedRight)
+  const isLoading = Boolean(loading)
   return (
-    <div ref={elementRef} className={`card${stretch ? ' stretch stretch-full' : ''}${className ? ` ${className}` : ''}`} {...rest}>
+    <div
+      ref={elementRef}
+      className={`card${stretch ? ' stretch stretch-full' : ''}${isLoading ? ' card-loading' : ''}${className ? ` ${className}` : ''}`}
+      aria-busy={isLoading ? 'true' : undefined}
+      {...rest}
+    >
       {showHeader && (
         <div className="card-header">
           <div className="min-w-0">
             {/* h2 semántico (tras page h1); clase .h5 conserva tipografía Duralux */}
-            {title != null && <h2 className="h5 card-title mb-0">{title}</h2>}
-            {subtitle != null && <div className="text-muted fs-12 mt-1">{subtitle}</div>}
+            {hasContent(title) && <h2 className="h5 card-title mb-0">{title}</h2>}
+            {hasContent(subtitle) && <div className="text-muted fs-12 mt-1">{subtitle}</div>}
           </div>
-          {right && <div className="card-header-action">{right}</div>}
+          {hasContent(composedRight) && <div className="card-header-action">{composedRight}</div>}
         </div>
       )}
       <div className={`card-body${flush ? ' p-0' : ''}${bodyClassName ? ` ${bodyClassName}` : ''}`}>
         {children}
       </div>
-      {footer && <div className="card-footer">{footer}</div>}
+      {hasContent(footer) && <div className="card-footer">{footer}</div>}
+      <CardLoader loading={isLoading} label={loadingLabel} />
     </div>
   )
 }
