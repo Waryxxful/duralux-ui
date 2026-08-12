@@ -6,22 +6,14 @@
 
 @each $color, $value in $gcu-theme-colors {
 	$solid-foreground: map-get($gcu-solid-foregrounds, $color);
+	$solid-fill: map-get($gcu-solid-fills, $color);
 	$soft-foreground: map-get($gcu-soft-foregrounds, $color);
 	$soft-background: shift-color($value, $soft-bg-level);
-	$hover-background: shade-color($value, 8%);
-	$active-background: shade-color($value, 20%);
+	$hover-background: shade-color($solid-fill, 8%);
+	$active-background: shade-color($solid-fill, 20%);
 	$state-foreground: $solid-foreground;
-	@if $color == "danger" {
-		// The preserved red brand hex needs dark text at rest. Once the
-		// interaction shade is applied, white becomes the accessible choice.
-		$hover-background: shade-color($value, 30%);
-		$active-background: shade-color($value, 35%);
-		$state-foreground: $white;
-	}
 
-	// Soft buttons keep their tint at rest and use the solid brand color for
-	// interaction states. Each state gets the foreground that passes AA on its
-	// actual background; no state falls back to a blanket white override.
+	// Soft buttons keep the family hue at rest. Hover uses the deeper AA fill.
 	.btn-light-#{$color},
 	.btn.bg-soft-#{$color} {
 		color: $soft-foreground !important;
@@ -179,19 +171,15 @@ button:focus:not(:focus-visible) {
 @each $color, $value in $gcu-theme-colors {
 	@if $color != "light" and $color != "darken" {
 		$foreground: map-get($gcu-solid-foregrounds, $color);
-		$hover-background: shade-color($value, 8%);
-		$active-background: shade-color($value, 20%);
+		$solid-fill: map-get($gcu-solid-fills, $color);
+		$hover-background: shade-color($solid-fill, 8%);
+		$active-background: shade-color($solid-fill, 20%);
 		$state-foreground: $foreground;
-		@if $color == "danger" {
-			$hover-background: shade-color($value, 30%);
-			$active-background: shade-color($value, 35%);
-			$state-foreground: $white;
-		}
 
 		.btn-#{$color} {
 			color: $foreground !important;
-			background-color: $value !important;
-			border-color: $value !important;
+			background-color: $solid-fill !important;
+			border-color: $solid-fill !important;
 		}
 		.btn-#{$color}:hover,
 		.btn-#{$color}:focus,

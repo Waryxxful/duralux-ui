@@ -213,6 +213,7 @@ html.app-skin-dark .nxl-navigation .m-header .logo-lg { filter: none !important;
 .nxl-navigation .gcu-nav-group{width:calc(100% - 30px);border:0;background:transparent;appearance:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
 .nxl-navigation .gcu-nav-group .nxl-arrow{margin-left:auto}
 html.minimenu .nxl-navigation .gcu-nav-group{width:calc(100% - 40px);margin:0 20px}
+html.minimenu .nxl-navigation .navbar-content .nxl-caption label,html.minimenu .nxl-navigation .navbar-content .nxl-caption span:not(.badge){display:none}
 .gcu-header-icon-button:focus-visible,.gcu-link-button:focus-visible,.gcu-nav-group:focus-visible,.gcu-modules-trigger:focus-visible,.gcu-modules-back:focus-visible,.gcu-search-close:focus-visible,.nxl-navigation .nxl-link:focus-visible,.nxl-navigation .b-brand:focus-visible,.gcu-search-results a:focus-visible,.gcu-notifications-list a:focus-visible,.nxl-notifications-menu .notifications-footer a:focus-visible{outline:2px solid var(--gcu-primary);outline-offset:2px}
 
 .nxl-header .header-wrapper{min-height:80px}
@@ -239,6 +240,7 @@ html.minimenu .nxl-navigation .gcu-nav-group{width:calc(100% - 40px);margin:0 20
 
 @media (min-width:1024.01px){
   html.minimenu .nxl-navigation:hover .gcu-nav-group{width:calc(100% - 30px);margin:0 15px 3px}
+  html.minimenu .nxl-navigation:hover .navbar-content .nxl-caption label,html.minimenu .nxl-navigation:hover .navbar-content .nxl-caption span:not(.badge){display:block}
 }
 
 @media (min-width:1024.01px) and (max-width:1199.98px){

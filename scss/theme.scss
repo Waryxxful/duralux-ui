@@ -26,8 +26,9 @@
 @import "themes/variables";
 
 // The React runtime also exposes teal and indigo soft variants even though
-// Bootstrap's default theme-colors map does not. These maps centralize the
-// foreground policy without changing the public brand hex values.
+// Bootstrap's default theme-colors map does not. Public brand hex values stay
+// on $success/$warning/…. Component pairs only change lightness: white on a
+// deeper fill, and a darker same-hue text on soft tints, until 4.5:1.
 $gcu-theme-colors: map-merge(
 	$theme-colors,
 	(
@@ -39,28 +40,42 @@ $gcu-theme-colors: map-merge(
 $gcu-solid-foregrounds: (
 	"primary": $white,
 	"secondary": $white,
-	"success": $black,
-	"info": $black,
-	"warning": $black,
-	"danger": $black,
+	"success": $white,
+	"info": $white,
+	"warning": $white,
+	"danger": $white,
 	"light": $dark,
 	"dark": $white,
 	"darken": $white,
-	"teal": $black,
+	"teal": $white,
 	"indigo": $white,
+);
+
+$gcu-solid-fills: (
+	"primary": $primary,
+	"secondary": $secondary,
+	"success": shade-color($success, 32%),
+	"info": shade-color($info, 34%),
+	"warning": shade-color($warning, 36%),
+	"danger": shade-color($danger, 12%),
+	"light": $light,
+	"dark": $dark,
+	"darken": $darken,
+	"teal": shade-color($teal, 28%),
+	"indigo": $indigo,
 );
 
 $gcu-soft-foregrounds: (
 	"primary": $primary,
-	"secondary": $dark,
-	"success": $dark,
-	"info": $dark,
-	"warning": $dark,
-	"danger": $dark,
+	"secondary": shade-color($secondary, 12%),
+	"success": shade-color($success, 38%),
+	"info": shade-color($info, 40%),
+	"warning": shade-color($warning, 42%),
+	"danger": shade-color($danger, 24%),
 	"light": $dark,
 	"dark": $dark,
-	"darken": $dark,
-	"teal": $dark,
+	"darken": $darken,
+	"teal": shade-color($teal, 36%),
 	"indigo": $indigo,
 );
 

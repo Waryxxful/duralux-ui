@@ -13,24 +13,18 @@
 
 @each $color, $value in $gcu-theme-colors {
 	$solid-foreground: map-get($gcu-solid-foregrounds, $color);
+	$solid-fill: map-get($gcu-solid-fills, $color);
 	$soft-foreground: map-get($gcu-soft-foregrounds, $color);
 	$soft-background: shift-color($value, $soft-bg-level);
-	$solid-hover-background: shade-color($value, 8%);
-	$solid-active-background: shade-color($value, 20%);
+	$solid-hover-background: shade-color($solid-fill, 8%);
+	$solid-active-background: shade-color($solid-fill, 20%);
 	$solid-state-foreground: $solid-foreground;
-	@if $color == "danger" {
-		$solid-hover-background: shade-color($value, 30%);
-		$solid-active-background: shade-color($value, 35%);
-		$solid-state-foreground: $white;
-	}
 
-	// Badge backgrounds are explicit here instead of relying on Bootstrap's
-	// inherited white foreground. This keeps both the Bootstrap bg-* API and
-	// the React Badge component's soft bg-soft-* API AA-compliant.
+	// Soft badges keep the family hue. Solid badges use the AA fill, not $black.
 	.badge.bg-#{$color} {
 		color: $solid-foreground !important;
-		background-color: $value !important;
-		border-color: $value !important;
+		background-color: $solid-fill !important;
+		border-color: $solid-fill !important;
 	}
 	.badge.bg-#{$color}:hover,
 	.badge.bg-#{$color}:focus,

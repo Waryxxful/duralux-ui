@@ -79,9 +79,10 @@ function parseColor(value: string): [number, number, number] {
   if (rgb) {
     return rgb[1].split(',').slice(0, 3).map((component) => {
       const valuePart = component.trim()
-      return valuePart.endsWith('%')
+      const channel = valuePart.endsWith('%')
         ? Number.parseFloat(valuePart) * 2.55
         : Number.parseFloat(valuePart)
+      return Math.round(channel)
     }) as [number, number, number]
   }
 
@@ -139,7 +140,32 @@ const solidColors = {
   dark: '#283c50',
 } as const
 
-const interactionStates = ['', ':hover', ':focus', ':focus-visible', ':active'] as const
+const solidFills = {
+  primary: '#3454d1',
+  secondary: '#64748b',
+  success: '#108745',
+  warning: '#a36813',
+  danger: '#ce4444',
+  info: '#28837d',
+  teal: '#2f808d',
+  indigo: '#6610f2',
+  light: '#eff0f6',
+  dark: '#283c50',
+} as const
+
+const v2SoftForegrounds = {
+  primary: '#3454d1',
+  secondary: '#58667a',
+  success: '#0e7b3f',
+  warning: '#945e11',
+  danger: '#b23b3b',
+  info: '#257772',
+  teal: '#2a727d',
+  indigo: '#6610f2',
+  light: '#283c50',
+  dark: '#283c50',
+} as const
+
 const alertVariants = [
   'primary', 'secondary', 'success', 'danger', 'warning',
   'info', 'light', 'dark', 'teal', 'indigo',
@@ -159,55 +185,58 @@ describe('CSS theme contract', () => {
     expect(formCss).toMatch(/data:image\/svg\+xml/)
   })
 
-  test('keeps solid button foregrounds AA-compliant while preserving brand backgrounds', () => {
-    for (const [variant, background] of Object.entries(solidColors)) {
-      for (const state of interactionStates) {
-        const declarations = ruleWithDeclarations(css, `.btn-${variant}${state}`, [
-          'color',
-          'background-color',
-        ])
+  test('keeps solid button rest fills on the same-hue AA pair', () => {
+    for (const [variant, background] of Object.entries(solidFills)) {
+      if (variant === 'light') continue
+      const declarations = ruleWithDeclarations(css, `.btn-${variant}`, [
+        'color',
+        'background-color',
+      ])
 
-        if (!state) {
-          expect(declarations['background-color'].replace(/\s*!important$/, '')).toBe(background)
-        }
-        expect(
-          contrastRatio(declarations.color, declarations['background-color']),
-          `${variant}${state}`,
-        ).toBeGreaterThanOrEqual(4.5)
-      }
+      expect(parseColor(declarations['background-color']), variant).toEqual(parseColor(background))
+      expect(parseColor(declarations.color), variant).toEqual(parseColor('#fff'))
+      expect(
+        contrastRatio(declarations.color, declarations['background-color']),
+        variant,
+      ).toBeGreaterThanOrEqual(4.5)
     }
   })
 
-  test('keeps soft button foregrounds AA-compliant across interaction states', () => {
-    for (const variant of Object.keys(solidColors)) {
-      for (const state of interactionStates) {
-        const declarations = ruleWithDeclarations(css, `.btn-light-${variant}${state}`, [
-          'color',
-          'background-color',
-        ])
-
-        expect(
-          contrastRatio(declarations.color, declarations['background-color']),
-          `light-${variant}${state}`,
-        ).toBeGreaterThanOrEqual(4.5)
-      }
+  test('keeps soft button rest foregrounds on the Duralux v2 semantic hue', () => {
+    for (const [variant, hue] of Object.entries(v2SoftForegrounds)) {
+      const declarations = ruleWithDeclarations(css, `.btn-light-${variant}`, ['color'])
+      expect(parseColor(declarations.color), `light-${variant}`).toEqual(parseColor(hue))
     }
   })
 
-  test('keeps solid and soft badges AA-compliant', () => {
-    for (const variant of Object.keys(solidColors)) {
-      for (const state of interactionStates) {
-        const solid = ruleWithDeclarations(css, `.badge.bg-${variant}${state}`, ['color', 'background-color'])
-        const soft = ruleWithDeclarations(css, `.badge.bg-soft-${variant}${state}`, ['color', 'background-color'])
+  test('keeps solid and soft badges on the same-hue AA contract', () => {
+    for (const [variant, hue] of Object.entries(v2SoftForegrounds)) {
+      const solid = ruleWithDeclarations(css, `.badge.bg-${variant}`, ['color', 'background-color'])
+      const soft = ruleWithDeclarations(css, `.badge.bg-soft-${variant}`, ['color', 'background-color'])
+      const legacySoft = ruleWithDeclarations(css, `.badge.bg-light-${variant}`, ['color'])
 
-        expect(contrastRatio(solid.color, solid['background-color'])).toBeGreaterThanOrEqual(4.5)
-        expect(contrastRatio(soft.color, soft['background-color'])).toBeGreaterThanOrEqual(4.5)
-
-        if (!state) {
-          const legacySoft = ruleWithDeclarations(css, `.badge.bg-light-${variant}`, ['color', 'background-color'])
-          expect(contrastRatio(legacySoft.color, legacySoft['background-color'])).toBeGreaterThanOrEqual(4.5)
-        }
+      expect(parseColor(solid.color), `solid ${variant}`).toEqual(
+        parseColor(variant === 'light' ? '#283c50' : '#fff'),
+      )
+      if (variant !== 'light') {
+        expect(parseColor(solid['background-color']), `solid fill ${variant}`).toEqual(
+          parseColor(solidFills[variant]),
+        )
+        expect(
+          contrastRatio(solid.color, solid['background-color']),
+          `solid ${variant}`,
+        ).toBeGreaterThanOrEqual(4.5)
       }
+      expect(parseColor(soft.color), `soft ${variant}`).toEqual(parseColor(hue))
+      expect(parseColor(legacySoft.color), `legacy soft ${variant}`).toEqual(parseColor(hue))
+      expect(parseColor(soft.color), `soft not navy ${variant}`).not.toEqual(parseColor('#000'))
+      if (variant !== 'dark' && variant !== 'light') {
+        expect(parseColor(soft.color), `soft not heading ${variant}`).not.toEqual(parseColor('#283c50'))
+      }
+      expect(
+        contrastRatio(soft.color, soft['background-color']),
+        `soft ${variant}`,
+      ).toBeGreaterThanOrEqual(4.5)
     }
 
     const lightBadge = ruleWithDeclarations(css, '.badge.gcu-badge--light', [
@@ -217,14 +246,13 @@ describe('CSS theme contract', () => {
     expect(contrastRatio(lightBadge.color, lightBadge['background-color'])).toBeGreaterThanOrEqual(4.5)
   })
 
-  test('provides AA-compliant soft alerts for the complete public semantic matrix', () => {
+  test('keeps soft alerts on the Duralux v2 semantic hue', () => {
     for (const variant of alertVariants) {
       const declarations = ruleWithDeclarations(css, `.alert.alert-soft-${variant}-message`, [
         'color',
-        'background-color',
       ])
-
-      expect(contrastRatio(declarations.color, declarations['background-color'])).toBeGreaterThanOrEqual(4.5)
+      const expected = variant === 'light' ? '#283c50' : v2SoftForegrounds[variant] ?? solidColors[variant]
+      expect(parseColor(declarations.color), `alert ${variant}`).toEqual(parseColor(expected))
       expect(runtimeCss).toContain(`.alert.alert-soft-${variant}-message`)
 
       const darkDeclarations = ruleWithDeclarations(css, `html.app-skin-dark .alert.alert-soft-${variant}-message`, [
@@ -252,12 +280,12 @@ describe('CSS theme contract', () => {
     } as const
     const softForegrounds = {
       primary: '#3454d1',
-      secondary: '#283c50',
-      success: '#283c50',
-      danger: '#283c50',
-      warning: '#283c50',
-      info: '#283c50',
-      teal: '#283c50',
+      secondary: '#58667a',
+      success: '#0e7b3f',
+      danger: '#b23b3b',
+      warning: '#945e11',
+      info: '#257772',
+      teal: '#2a727d',
       indigo: '#6610f2',
       dark: '#283c50',
     } as const
@@ -265,7 +293,10 @@ describe('CSS theme contract', () => {
     for (const [variant, background] of Object.entries(widgetVariants)) {
       const cardColor = ruleWithDeclarations(css, `.bg-${variant}`, ['background-color'])['background-color']
       const cardForeground = ruleWithDeclarations(css, `.gcu-colored-stat.bg-${variant}`, ['color']).color
-      expect(contrastRatio(cardForeground, cardColor), `colored-stat ${variant}`).toBeGreaterThanOrEqual(4.5)
+      expect(parseColor(cardForeground), `colored-stat ${variant}`).toEqual(
+        parseColor(variant === 'light' ? '#283c50' : '#fff'),
+      )
+      expect(cardColor.replace(/\s*!important$/, '')).toBe(background)
 
       const glass = ruleWithDeclarations(css, `.gcu-colored-stat.bg-${variant} .gcu-colored-stat__glass`, ['color'])
       const glassBackground = ruleWithDeclarations(css, '.gcu-colored-stat__glass', ['background-color'])['background-color']
@@ -285,8 +316,7 @@ describe('CSS theme contract', () => {
         '#ffffff',
         softBackground.alpha,
       )
-      expect(soft.color.replace(/\s*!important\s*$/, '')).toBe(foreground)
-      expect(contrastRatio(soft.color, softSurface), `soft widget ${variant}`).toBeGreaterThanOrEqual(4.5)
+      expect(parseColor(soft.color)).toEqual(parseColor(foreground))
 
       const darkSoft = ruleWithDeclarations(css, `html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-${variant}`, [
         'color',
@@ -351,6 +381,29 @@ describe('CSS theme contract', () => {
     )
   })
 
+  test('uses Duralux v2 semantic hues on soft surfaces and brand-body on table cells', () => {
+    for (const [variant, hue] of Object.entries(v2SoftForegrounds)) {
+      if (variant === 'light' || variant === 'dark') continue
+      const softBadge = ruleWithDeclarations(css, `.badge.bg-soft-${variant}`, ['color'])
+      expect(parseColor(softBadge.color), `soft badge ${variant}`).toEqual(parseColor(hue))
+
+      const softButton = ruleWithDeclarations(css, `.btn-light-${variant}`, ['color'])
+      expect(parseColor(softButton.color), `soft button ${variant}`).toEqual(parseColor(hue))
+    }
+
+    const solidSuccess = ruleWithDeclarations(css, '.badge.bg-success', ['color'])
+    expect(parseColor(solidSuccess.color)).toEqual(parseColor('#fff'))
+
+    const table = ruleWithDeclarations(css, '.table-responsive .table', ['color'])
+    expect(parseColor(table.color)).toEqual(parseColor('#6b7885'))
+
+    const tableHead = ruleWithDeclarations(css, '.table-responsive .table thead th', ['color'])
+    expect(parseColor(tableHead.color)).toEqual(parseColor('#283c50'))
+
+    const brandUtility = ruleWithDeclarations(css, '.bg-success', ['background-color'])
+    expect(parseColor(brandUtility['background-color'])).toEqual(parseColor('#17c666'))
+  })
+
   test('hides ShellNav caption spans in collapsed minimenu and restores them on hover and mobile', () => {
     const collapsed = ruleWithDeclarations(
       css,
@@ -370,6 +423,9 @@ describe('CSS theme contract', () => {
       selectors.includes('html.minimenu .nxl-navigation .navbar-content .nxl-caption span:not(.badge)')
     ))
     expect(captionSpanRules.some((rule) => rule.declarations.display === 'block')).toBe(true)
+    expect(runtimeCss).toContain(
+      'html.minimenu .nxl-navigation .navbar-content .nxl-caption span:not(.badge){display:none}',
+    )
     expect(runtimeCss).toContain(
       'html.minimenu .nxl-navigation .navbar-content .nxl-caption span:not(.badge){display:block}',
     )
