@@ -307,7 +307,8 @@ html.minimenu {
 					font-family: feather !important;
 				}
 
-				label {
+				label,
+				span:not(.badge) {
 					display: none;
 				}
 			}
@@ -370,7 +371,8 @@ html.minimenu {
 						content: none;
 					}
 
-					label {
+					label,
+					span:not(.badge) {
 						display: block;
 					}
 				}

@@ -350,4 +350,28 @@ describe('CSS theme contract', () => {
       source.indexOf('@import "themes/variables"'),
     )
   })
+
+  test('hides ShellNav caption spans in collapsed minimenu and restores them on hover and mobile', () => {
+    const collapsed = ruleWithDeclarations(
+      css,
+      'html.minimenu .nxl-navigation .navbar-content .nxl-caption span:not(.badge)',
+      ['display'],
+    )
+    expect(collapsed.display).toBe('none')
+
+    const hover = ruleWithDeclarations(
+      css,
+      'html.minimenu .nxl-navigation:hover .navbar-content .nxl-caption span:not(.badge)',
+      ['display'],
+    )
+    expect(hover.display).toBe('block')
+
+    const captionSpanRules = parseRules(css).filter(({ selectors }) => (
+      selectors.includes('html.minimenu .nxl-navigation .navbar-content .nxl-caption span:not(.badge)')
+    ))
+    expect(captionSpanRules.some((rule) => rule.declarations.display === 'block')).toBe(true)
+    expect(runtimeCss).toContain(
+      'html.minimenu .nxl-navigation .navbar-content .nxl-caption span:not(.badge){display:block}',
+    )
+  })
 })

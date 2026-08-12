@@ -675,7 +675,8 @@
 					content: none;
 				}
 
-				label {
+				label,
+				span:not(.badge) {
 					display: block;
 				}
 			}

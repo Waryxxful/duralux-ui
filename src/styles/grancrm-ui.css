@@ -268,7 +268,7 @@ html.minimenu .nxl-navigation .gcu-nav-group{width:calc(100% - 40px);margin:0 20
   html.minimenu .nxl-navigation .logo-sm{display:none}
   html.minimenu .nxl-navigation .navbar-content{width:100%}
   html.minimenu .nxl-navigation .navbar-content .nxl-caption:before{content:none}
-  html.minimenu .nxl-navigation .navbar-content .nxl-caption label{display:block}
+  html.minimenu .nxl-navigation .navbar-content .nxl-caption label,html.minimenu .nxl-navigation .navbar-content .nxl-caption span:not(.badge){display:block}
   html.minimenu .nxl-navigation .navbar-content .nxl-hasmenu.nxl-trigger>.nxl-submenu{display:block}
   .nxl-navigation .nxl-link{display:flex;min-height:44px;align-items:center}
 
