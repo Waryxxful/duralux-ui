@@ -202,6 +202,54 @@ html {
 				}
 			}
 		}
+		// Soft semantic buttons keep the family hue. The blanket
+		// `html.app-skin-dark .btn { color: $white }` would paint white
+		// on the light-mode pastel fill (1.3:1 on danger).
+		@each $color, $value in $gcu-theme-colors {
+			@if $color != "light" {
+				$soft-fill: rgba($value, 0.16);
+				$soft-border: rgba($value, 0.36);
+				$soft-text: if($color == "dark" or $color == "darken", $gray-200, lighten($value, 24%));
+
+				@if $color != "dark" and $color != "darken" {
+					$hover-fill: map-get($gcu-solid-fills, $color);
+
+					.btn-light-#{$color},
+					.btn.bg-soft-#{$color} {
+						color: $soft-text !important;
+						background-color: $soft-fill !important;
+						border-color: $soft-border !important;
+					}
+					.btn-light-#{$color}:hover,
+					.btn-light-#{$color}:focus,
+					.btn-light-#{$color}:focus-visible,
+					.btn-light-#{$color}:active,
+					.btn-light-#{$color}.active,
+					.btn.bg-soft-#{$color}:hover,
+					.btn.bg-soft-#{$color}:focus,
+					.btn.bg-soft-#{$color}:focus-visible,
+					.btn.bg-soft-#{$color}:active {
+						color: $white !important;
+						background-color: $hover-fill !important;
+						border-color: $hover-fill !important;
+					}
+				}
+
+				.badge.bg-soft-#{$color},
+				.badge.bg-light-#{$color},
+				.avatar-text.bg-soft-#{$color},
+				.bg-soft-#{$color}.text-#{$color} {
+					color: $soft-text !important;
+					background-color: $soft-fill !important;
+					border-color: $soft-border !important;
+				}
+			}
+		}
+		.badge.gcu-badge--light {
+			color: $gray-200 !important;
+			background-color: $dark-theme-color-hover !important;
+			border-color: $dark-theme-color-border !important;
+		}
 		.daterangepicker,
 		.apexcharts-tooltip {
 			box-shadow: 0 4px 24px 0 rgb(4 0 40 / 80%);
@@ -246,52 +294,52 @@ html {
 			background-color: lighten($dark-theme-color-dark, 6) !important;
 		}
 		.bg-primary {
-			background-color: $primary !important;
+			background-color: map-get($gcu-solid-fills, "primary") !important;
 		}
 		.bg-success {
-			background-color: $success !important;
+			background-color: map-get($gcu-solid-fills, "success") !important;
 		}
 		.bg-danger {
-			background-color: $danger !important;
+			background-color: map-get($gcu-solid-fills, "danger") !important;
 		}
 		.bg-warning {
-			background-color: $warning !important;
+			background-color: map-get($gcu-solid-fills, "warning") !important;
 		}
 		.bg-indigo {
-			background-color: $indigo !important;
+			background-color: map-get($gcu-solid-fills, "indigo") !important;
 		}
 		.bg-teal {
-			background-color: $teal !important;
+			background-color: map-get($gcu-solid-fills, "teal") !important;
 		}
 		.bg-info {
-			background-color: $info !important;
+			background-color: map-get($gcu-solid-fills, "info") !important;
 		}
 		.bg-soft-primary {
-			background-color: rgb($primary, 0.075) !important;
+			background-color: rgba($primary, 0.16) !important;
 		}
 		.bg-soft-success {
-			background-color: rgb($success, 0.075) !important;
+			background-color: rgba($success, 0.16) !important;
 		}
 		.bg-soft-danger {
-			background-color: rgb($danger, 0.075) !important;
+			background-color: rgba($danger, 0.16) !important;
 		}
 		.bg-soft-info {
-			background-color: rgb($info, 0.075) !important;
+			background-color: rgba($info, 0.16) !important;
 		}
 		.bg-soft-warning {
-			background-color: rgb($warning, 0.075) !important;
+			background-color: rgba($warning, 0.16) !important;
 		}
 		.bg-soft-teal {
-			background-color: rgb($teal, 0.075) !important;
+			background-color: rgba($teal, 0.16) !important;
 		}
 		.bg-soft-indigo {
-			background-color: rgb($indigo, 0.075) !important;
+			background-color: rgba($indigo, 0.16) !important;
 		}
 		.bg-soft-dark {
-			background-color: rgb($dark, 0.075) !important;
+			background-color: rgba($dark, 0.16) !important;
 		}
 		.bg-soft-darken {
-			background-color: rgb($darken, 0.075) !important;
+			background-color: rgba($darken, 0.16) !important;
 		}
 		.text-primary {
 			color: $primary !important;
@@ -347,11 +395,15 @@ html {
 		.alert {
 			@each $name, $color in $gcu-alert-soft-colors {
 				&.alert-soft-#{$name}-message {
-					// Dark mode owns a dark soft surface; white is scoped to this
-					// surface instead of being imposed on every brand variant.
-					color: $white !important;
-					background-color: $dark-theme-color-dark !important;
-					border: 1px dashed $dark-theme-color !important;
+					@if $name == "light" or $name == "dark" {
+						color: $gray-200 !important;
+						background-color: $dark-theme-color-dark !important;
+						border: 1px dashed $dark-theme-color !important;
+					} @else {
+						color: lighten($color, 24%) !important;
+						background-color: rgba($color, 0.16) !important;
+						border: 1px dashed rgba($color, 0.45) !important;
+					}
 				}
 			}
 		}

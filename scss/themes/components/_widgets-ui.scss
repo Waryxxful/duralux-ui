@@ -126,8 +126,8 @@ html.app-skin-dark {
 		// Más opacidad de tinte en dark para que el soft se vea sobre card oscura
 		@each $name, $color in $semantic-widget-colors {
 			.avatar-text.bg-soft-#{$name} {
-				background-color: rgba($color, 0.18) !important;
-				color: $white !important;
+				background-color: rgba($color, 0.16) !important;
+				color: if($name == "dark" or $name == "darken", $gray-200, lighten($color, 24%)) !important;
 				border-color: transparent !important;
 			}
 		}
@@ -162,8 +162,8 @@ html.app-skin-dark {
 	.gcu-stats-card {
 		@each $name, $color in $semantic-stat-colors {
 			.avatar-text.bg-soft-#{$name} {
-				background-color: rgba($color, 0.18) !important;
-				color: $white !important;
+				background-color: rgba($color, 0.16) !important;
+				color: if($name == "dark" or $name == "darken", $gray-200, lighten($color, 24%)) !important;
 				border-color: transparent !important;
 			}
 		}

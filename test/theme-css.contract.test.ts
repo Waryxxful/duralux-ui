@@ -259,9 +259,72 @@ describe('CSS theme contract', () => {
         'color',
         'background-color',
       ])
-      expect(contrastRatio(darkDeclarations.color, darkDeclarations['background-color']), `dark alert ${variant}`)
+      const darkFill = parseColorWithAlpha(darkDeclarations['background-color'])
+      const darkSurface = compositeColor(
+        `#${darkFill.channels.map((channel) => channel.toString(16).padStart(2, '0')).join('')}`,
+        '#121a2d',
+        darkFill.alpha,
+      )
+      expect(contrastRatio(darkDeclarations.color, darkSurface), `dark alert ${variant}`)
         .toBeGreaterThanOrEqual(4.5)
+      if (variant !== 'light' && variant !== 'dark') {
+        const hue = parseColor(darkDeclarations.color)
+        expect(hue[0] + hue[1] + hue[2], `dark alert ${variant} keeps hue`).toBeLessThan(255 * 3)
+      }
     }
+  })
+
+  test('keeps dark-mode soft buttons on the semantic hue with readable contrast', () => {
+    const softButtonVariants = ['primary', 'success', 'danger', 'warning', 'info', 'teal', 'indigo'] as const
+    const darkCanvas = '#121a2d'
+
+    for (const variant of softButtonVariants) {
+      const declarations = ruleWithDeclarations(css, `html.app-skin-dark .btn-light-${variant}`, [
+        'color',
+        'background-color',
+      ])
+      const fill = parseColorWithAlpha(declarations['background-color'])
+      const surface = compositeColor(
+        `#${fill.channels.map((channel) => channel.toString(16).padStart(2, '0')).join('')}`,
+        darkCanvas,
+        fill.alpha,
+      )
+      expect(
+        contrastRatio(declarations.color, surface),
+        `dark btn-light-${variant}`,
+      ).toBeGreaterThanOrEqual(4.5)
+
+      const hue = parseColor(declarations.color)
+      const token = parseColor(solidColors[variant])
+      const hueDrift = Math.hypot(hue[0] - token[0], hue[1] - token[1], hue[2] - token[2])
+      expect(hueDrift, `dark btn-light-${variant} stays in the ${variant} family`).toBeLessThan(180)
+    }
+  })
+
+  test('keeps dark-mode soft badges and the light chip readable', () => {
+    const darkCanvas = '#121a2d'
+    for (const variant of ['primary', 'success', 'danger', 'warning'] as const) {
+      const declarations = ruleWithDeclarations(css, `html.app-skin-dark .badge.bg-soft-${variant}`, [
+        'color',
+        'background-color',
+      ])
+      const fill = parseColorWithAlpha(declarations['background-color'])
+      const surface = compositeColor(
+        `#${fill.channels.map((channel) => channel.toString(16).padStart(2, '0')).join('')}`,
+        darkCanvas,
+        fill.alpha,
+      )
+      expect(contrastRatio(declarations.color, surface), `dark badge soft-${variant}`).toBeGreaterThanOrEqual(4.5)
+    }
+
+    const solidDanger = ruleWithDeclarations(css, 'html.app-skin-dark .bg-danger', ['background-color'])
+    expect(parseColor(solidDanger['background-color'])).toEqual(parseColor(solidFills.danger))
+
+    const lightChip = ruleWithDeclarations(css, 'html.app-skin-dark .badge.gcu-badge--light', [
+      'color',
+      'background-color',
+    ])
+    expect(contrastRatio(lightChip.color, lightChip['background-color'])).toBeGreaterThanOrEqual(4.5)
   })
 
   test('keeps React widget glue readable on solid and soft brand surfaces', () => {
@@ -328,7 +391,7 @@ describe('CSS theme contract', () => {
         '#0f172a',
         darkBackground.alpha,
       )
-      expect(parseColor(darkSoft.color)).toEqual([255, 255, 255])
+      expect(parseColor(darkSoft.color)).not.toEqual([255, 255, 255])
       expect(contrastRatio(darkSoft.color, darkSurface), `dark soft widget ${variant}`).toBeGreaterThanOrEqual(4.5)
     }
   })
