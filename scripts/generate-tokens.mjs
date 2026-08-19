@@ -114,13 +114,13 @@ ${rgbProperties}
   --gcu-shadow:0 1px 3px 0 rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1);--gcu-font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 [data-gcu-theme="dark"],.app-skin-dark{
-  --gcu-text:#b1b4c0;--gcu-muted:#9aa4b2;--gcu-surface:#121a2d;--gcu-surface-subtle:#0f172a;
-  --gcu-border:#1b2436;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
+  --gcu-text:#8b8d98;--gcu-muted:#7a7c85;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
+  --gcu-border:#26272e;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
 /* Dark theme override: .gcu-theme may re-declare light vars in its own scope. */
 .app-skin-dark .gcu-theme:not([data-gcu-theme="light"]){
-  --gcu-text:#b1b4c0;--gcu-muted:#9aa4b2;--gcu-surface:#121a2d;--gcu-surface-subtle:#0f172a;
-  --gcu-border:#1b2436;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
+  --gcu-text:#8b8d98;--gcu-muted:#7a7c85;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
+  --gcu-border:#26272e;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
 ${CSS_END}`
 }

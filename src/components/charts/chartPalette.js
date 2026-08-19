@@ -55,14 +55,16 @@ const LIGHT_CHART_THEME = Object.freeze({
   shadow: 'var(--gcu-shadow, 0 4px 20px rgb(0 0 0 / 0.1))',
 })
 
+// Paleta negro/gris (intouch-logo-demo.html) — background/surface siguen la
+// misma jerarquía que tokens.dark/tokens.nav (page vs card).
 const DARK_CHART_THEME = Object.freeze({
   mode: 'dark',
-  background: '#121a2d',
-  surface: '#1d2a45',
-  surfaceSubtle: '#121a2d',
+  background: '#0e0f12',
+  surface: '#17181d',
+  surfaceSubtle: '#0e0f12',
   text: '#f5f7ff',
-  muted: '#b8c4dc',
-  border: '#68799c',
+  muted: '#8b8d98',
+  border: '#3a3b42',
   primary: CHART_DARK_PALETTE[0],
   series: CHART_DARK_PALETTE,
   shadow: '0 4px 20px rgb(0 0 0 / 0.35)',
@@ -88,12 +90,12 @@ export const APEX_CHART_THEME = Object.freeze({
     shadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
   }),
   dark: Object.freeze({
-    background: '#121a2d',
-    surface: '#1d2a45',
-    surfaceSubtle: '#121a2d',
+    background: '#0e0f12',
+    surface: '#17181d',
+    surfaceSubtle: '#0e0f12',
     text: '#f5f7ff',
-    muted: '#b8c4dc',
-    border: '#68799c',
+    muted: '#8b8d98',
+    border: '#3a3b42',
     series: CHART_DARK_PALETTE,
     shadow: '0 0 20px rgba(0, 0, 0, 0.5)',
   }),
