@@ -8,6 +8,8 @@ export interface ShellNavBrand {
   logoLg: string;
   logoSm: string;
   alt: string;
+  logoMark?: string;
+  logoWord?: string;
 }
 
 // `href`/`active` remain the gateway API. `pathname` on ShellNav is optional:

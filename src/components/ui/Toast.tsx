@@ -17,12 +17,19 @@ import { createPortal } from 'react-dom';
  */
 export type ToastVariant = 'success' | 'danger' | 'warning' | 'info';
 
+const DEFAULT_AUTO_HIDE_MS: Record<ToastVariant, number> = {
+  success: 3000,
+  info: 3000,
+  warning: 0,
+  danger: 0,
+};
+
 export interface ToastProps {
   variant: ToastVariant;
   title: React.ReactNode;
   show: boolean;
   onClose: () => void;
-  /** ms antes del auto-dismiss. Omitido usa 3000; 0 o un valor no positivo lo desactiva. */
+  /** ms antes del auto-dismiss. Omitido usa 3000 en success/info y permanece hasta el cierre en danger/warning. 0 o un valor no positivo lo desactiva. */
   autoHideMs?: number;
   className?: string;
 }
@@ -112,13 +119,17 @@ function releaseViewport(element: HTMLElement) {
   viewportStates.delete(ownerDocument);
 }
 
-export function Toast({ variant, title, show, onClose, autoHideMs = 3000, className }: ToastProps) {
+export function Toast({ variant, title, show, onClose, autoHideMs, className }: ToastProps) {
   const resolvedVariant = normalizeVariant(variant);
+  const resolvedAutoHideMs = autoHideMs ?? DEFAULT_AUTO_HIDE_MS[resolvedVariant];
   const [closing, setClosing] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [viewport, setViewport] = useState<HTMLElement | null>(null);
   const viewportRef = useRef<HTMLElement | null>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const remainingMs = useRef(resolvedAutoHideMs);
+  const startedAt = useRef<number | null>(null);
   const closeRequested = useRef(false);
   const onCloseRef = useRef(onClose);
   const componentMountedRef = useRef(false);
@@ -186,16 +197,45 @@ export function Toast({ variant, title, show, onClose, autoHideMs = 3000, classN
   useEffect(() => {
     closeRequested.current = false;
     setClosing(false);
-    if (show && Number.isFinite(autoHideMs) && autoHideMs > 0) {
-      hideTimer.current = setTimeout(requestClose, autoHideMs);
-    }
+    setPaused(false);
+    remainingMs.current = resolvedAutoHideMs;
+    startedAt.current = null;
     return () => {
       clearTimeout(hideTimer.current);
       clearTimeout(closeTimer.current);
       hideTimer.current = undefined;
       closeTimer.current = undefined;
     };
-  }, [show, autoHideMs, requestClose]);
+  }, [show, resolvedAutoHideMs]);
+
+  useEffect(() => {
+    clearTimeout(hideTimer.current);
+    hideTimer.current = undefined;
+    if (!show || paused || closeRequested.current) return undefined;
+    if (!Number.isFinite(resolvedAutoHideMs) || resolvedAutoHideMs <= 0) return undefined;
+    startedAt.current = Date.now();
+    hideTimer.current = setTimeout(requestClose, remainingMs.current);
+    return () => {
+      clearTimeout(hideTimer.current);
+      hideTimer.current = undefined;
+    };
+  }, [paused, requestClose, resolvedAutoHideMs, show]);
+
+  const pauseTimer = () => {
+    if (!show || closeRequested.current || remainingMs.current <= 0) return;
+    if (startedAt.current !== null) {
+      remainingMs.current = Math.max(0, remainingMs.current - (Date.now() - startedAt.current));
+      startedAt.current = null;
+    }
+    setPaused(true);
+  };
+
+  const resumeTimer = (event: React.MouseEvent<HTMLDivElement> | React.FocusEvent<HTMLDivElement>) => {
+    if (!show || closeRequested.current) return;
+    const next = event.relatedTarget;
+    if (next instanceof Node && event.currentTarget.contains(next)) return;
+    setPaused(false);
+  };
 
   if (!show || !viewport || !viewport.isConnected) return null;
   const assertive = resolvedVariant === 'danger' || resolvedVariant === 'warning';
@@ -208,6 +248,10 @@ export function Toast({ variant, title, show, onClose, autoHideMs = 3000, classN
       role={assertive ? 'alert' : 'status'}
       aria-live={assertive ? 'assertive' : 'polite'}
       aria-atomic="true"
+      onMouseEnter={pauseTimer}
+      onMouseLeave={resumeTimer}
+      onFocus={pauseTimer}
+      onBlur={resumeTimer}
     >
       <i className={`gcu-icon gcu-toast__icon feather-${VARIANT_ICON[resolvedVariant]}`} aria-hidden="true" />
       <div className="gcu-toast__title">{title}</div>

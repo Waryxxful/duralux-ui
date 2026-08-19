@@ -34,6 +34,10 @@ export interface NavCoreBrand {
   logoLg: string;
   logoSm: string;
   alt: string;
+  /** Fixed mark (never clipped). Pair with `logoWord` for a Terafab-style lockup. */
+  logoMark?: string;
+  /** Wordmark inside an overflow track that collapses on `html.minimenu`. */
+  logoWord?: string;
 }
 
 export interface NavCoreLinkProps {
@@ -660,7 +664,14 @@ export function NavCore({
               ariaLabel: brand.alt || 'Inicio',
               tabIndex: mobileOffCanvas ? -1 : undefined,
               onClick: event => adapter.onNavigate?.(event, brandItem),
-              children: (
+              children: brand.logoMark && brand.logoWord ? (
+                <>
+                  <img src={brand.logoMark} alt="" className="logo logo-mark" />
+                  <span className="b-brand-rest-track">
+                    <img src={brand.logoWord} alt="" className="logo logo-word" />
+                  </span>
+                </>
+              ) : (
                 <>
                   {brand.logoLg && (
                     <img

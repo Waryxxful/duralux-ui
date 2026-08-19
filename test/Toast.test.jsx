@@ -67,6 +67,40 @@ test('reschedules auto-hide without leaving an earlier timer active', () => {
   expect(onClose).toHaveBeenCalledOnce()
 })
 
+test('keeps important danger and warning toasts until they are dismissed', () => {
+  vi.useFakeTimers()
+  mockReducedMotion(false)
+  const onClose = vi.fn()
+  const { rerender } = render(<Toast variant="danger" title="Failed" show onClose={onClose} />)
+
+  act(() => vi.advanceTimersByTime(10_000))
+  expect(screen.getByRole('alert')).not.toHaveClass('gcu-toast--closing')
+  expect(onClose).not.toHaveBeenCalled()
+
+  rerender(<Toast variant="warning" title="Check this" show onClose={onClose} />)
+  act(() => vi.advanceTimersByTime(10_000))
+  expect(screen.getByRole('alert')).not.toHaveClass('gcu-toast--closing')
+  expect(onClose).not.toHaveBeenCalled()
+})
+
+test('pauses auto-hide while hovered or focused', () => {
+  vi.useFakeTimers()
+  mockReducedMotion(false)
+  const onClose = vi.fn()
+  render(<Toast variant="success" title="Saved" show onClose={onClose} autoHideMs={100} />)
+
+  const toast = screen.getByRole('status')
+  fireEvent.mouseEnter(toast)
+  act(() => vi.advanceTimersByTime(200))
+  expect(toast).not.toHaveClass('gcu-toast--closing')
+
+  fireEvent.mouseLeave(toast)
+  act(() => vi.advanceTimersByTime(99))
+  expect(toast).not.toHaveClass('gcu-toast--closing')
+  act(() => vi.advanceTimersByTime(1))
+  expect(toast).toHaveClass('gcu-toast--closing')
+})
+
 test('uses the same close timer when CSS handles reduced motion', () => {
   vi.useFakeTimers()
   mockReducedMotion(true)

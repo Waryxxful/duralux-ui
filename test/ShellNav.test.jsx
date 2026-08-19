@@ -126,6 +126,28 @@ test('reflects controlled mobile state on the navigation landmark', () => {
   expect(screen.getByRole('navigation', { name: 'Navegación principal' })).toHaveClass('mob-navigation-active')
 })
 
+test('renders a split lockup when mark and word sources are set', () => {
+  const { container } = render(
+    <ShellNav
+      brand={{
+        ...brand,
+        logoMark: '/mark.svg',
+        logoWord: '/word.svg',
+      }}
+      sections={sections}
+      onNavigate={vi.fn()}
+    />,
+  )
+
+  expect(container.querySelector('.logo-mark')).toHaveAttribute('src', '/mark.svg')
+  expect(container.querySelector('.logo-word')).toHaveAttribute('src', '/word.svg')
+  expect(container.querySelector('.b-brand-rest-track')).toContainElement(
+    container.querySelector('.logo-word'),
+  )
+  expect(container.querySelector('.logo-lg')).toBeNull()
+  expect(container.querySelector('.logo-sm')).toBeNull()
+})
+
 test('keeps the brand name on the link and removes closed descendants from Tab order', async () => {
   const user = userEvent.setup()
   const { container } = render(

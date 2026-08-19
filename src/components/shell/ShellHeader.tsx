@@ -207,6 +207,9 @@ export interface ShellHeaderProps {
   onVolverSa: () => void;
   appHref: (app: AppManifestEntry) => string;
   csrfToken: string;
+  avatarUrl?: string | null;
+  profileHref?: string;
+  onNavigateProfile?: () => void;
   notifications?: Notificacion[];
   onMarkAllRead?: () => void;
   onNotificationClick?: (e: React.MouseEvent, n: Notificacion) => void;
@@ -235,6 +238,9 @@ export function ShellHeader({
   onVolverSa,
   appHref,
   csrfToken,
+  avatarUrl,
+  profileHref,
+  onNavigateProfile,
   notifications = [],
   onMarkAllRead,
   onNotificationClick,
@@ -758,20 +764,39 @@ export function ShellHeader({
                   className={`d-flex align-items-center gap-2 nxl-head-link me-0 gcu-header-icon-button gcu-avatar-trigger${open ? ' show is-active' : ''}`}
                   aria-label="Menú de usuario"
                 >
-                  <Avatar name={nombre} size="md" variant="primary" className="gcu-header-avatar" />
+                  <Avatar src={avatarUrl} name={nombre} size="md" variant="primary" className="gcu-header-avatar" />
                 </button>
               )}
             >
               <DropdownMenu className="nxl-h-dropdown nxl-user-dropdown" closeOnSelect={false} {...userInertProps}>
                 <div className="dropdown-header border-bottom pb-3 mb-1">
                   <div className="d-flex align-items-center gap-3">
-                    <Avatar name={nombre} size="lg" variant="primary" />
+                    <Avatar src={avatarUrl} name={nombre} size="lg" variant="primary" />
                     <div style={{ minWidth: 0 }}>
                       <h6 className="text-dark mb-0 fs-13 fw-bold text-truncate">{nombre}</h6>
                       <span className="fs-11 text-muted text-truncate d-block">{email}</span>
                     </div>
                   </div>
                 </div>
+                {profileHref && (
+                  <a
+                    href={profileHref}
+                    tabIndex={userOpen ? undefined : -1}
+                    onClick={(e) => {
+                      if (onNavigateProfile) {
+                        e.preventDefault();
+                        setUserOpen(false);
+                        onNavigateProfile();
+                      } else {
+                        setUserOpen(false);
+                      }
+                    }}
+                    className="dropdown-item d-flex align-items-center gap-2 py-2"
+                  >
+                    <Icon name="user" size={14} />
+                    <span className="fs-13">Mi Perfil y Configuración</span>
+                  </a>
+                )}
                 <div className="dropdown-divider my-1"></div>
                 <form method="post" action="/logout/">
                   <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
