@@ -93,6 +93,11 @@ img {
 	background-color: $white;
 	border: 1px solid $border-color-2;
 }
+.avatar-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
 .avatar-xs {
 	width: 12px;
 	height: 12px;
