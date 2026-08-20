@@ -14,10 +14,10 @@ import type {
   PieChartWidgetProps,
 } from './chart-types'
 
-export const AreaChartWidget: React.FC<AreaChartWidgetProps> = AreaChartRuntime as unknown as React.FC<AreaChartWidgetProps>
-export const BarChartWidget: React.FC<BarChartWidgetProps> = BarChartRuntime as unknown as React.FC<BarChartWidgetProps>
-export const LineChartWidget: React.FC<LineChartWidgetProps> = LineChartRuntime as unknown as React.FC<LineChartWidgetProps>
-export const PieChartWidget: React.FC<PieChartWidgetProps> = PieChartRuntime as unknown as React.FC<PieChartWidgetProps>
+export const AreaChartWidget: React.FC<AreaChartWidgetProps> = AreaChartRuntime
+export const BarChartWidget: React.FC<BarChartWidgetProps> = BarChartRuntime
+export const LineChartWidget: React.FC<LineChartWidgetProps> = LineChartRuntime
+export const PieChartWidget: React.FC<PieChartWidgetProps> = PieChartRuntime
 
 export { ChartCard }
 export type {

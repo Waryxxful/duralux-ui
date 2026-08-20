@@ -3,7 +3,7 @@ import { ApexChart as ApexChartRuntime } from '../components/charts/ApexChart'
 import { ChartCard } from './chart-card'
 import type { ApexChartProps } from './chart-types'
 
-export const ApexChart: React.FC<ApexChartProps> = ApexChartRuntime as unknown as React.FC<ApexChartProps>
+export const ApexChart: React.FC<ApexChartProps> = ApexChartRuntime
 
 export { ChartCard }
 export type {

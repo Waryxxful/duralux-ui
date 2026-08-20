@@ -1,4 +1,5 @@
 import { cx } from '../../utils/cx'
+import { isString } from '../../utils/typeGuards'
 
 /**
  * Avatar — imagen o iniciales con tamaños Duralux.
@@ -48,7 +49,7 @@ export function Avatar({
   const imageAlt = alt == null ? '' : safeString(alt)
   const initials = getInitials(name)
   const meaningfulAlt = imageAlt.trim() !== ''
-  const meaningfulLabel = typeof ariaLabel === 'string'
+  const meaningfulLabel = isString(ariaLabel)
     ? ariaLabel.trim() !== ''
     : ariaLabel !== undefined && ariaLabel !== null
   const hasLabelReference = ariaLabelledBy !== undefined && ariaLabelledBy !== null && ariaLabelledBy !== ''

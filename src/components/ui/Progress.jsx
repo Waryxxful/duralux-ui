@@ -1,11 +1,12 @@
 import { normalizeProgress } from './internal/progress.js'
+import { isFiniteNumber, isString } from '../../utils/typeGuards'
 
 const CSS_LENGTH_PATTERN = /^(?:0|(?:\d+|\d*\.\d+)(?:px|rem|em|ex|ch|vw|vh|vmin|vmax|cm|mm|in|pt|pc|%))$/i
 
 function normalizeHeight(height) {
   if (height === undefined || height === null || height === '') return undefined
-  if (typeof height === 'number') return Number.isFinite(height) && height >= 0 ? height : undefined
-  if (typeof height !== 'string') return undefined
+  if (isFiniteNumber(height)) return height >= 0 ? height : undefined
+  if (!isString(height)) return undefined
   const value = height.trim()
   return CSS_LENGTH_PATTERN.test(value) ? value : undefined
 }
@@ -42,7 +43,7 @@ export function Progress({
 }) {
   const normalized = normalizeProgress(value, max)
   const safeHeight = normalizeHeight(height)
-  const labelText = typeof label === 'string' || typeof label === 'number'
+  const labelText = isString(label) || isFiniteNumber(label)
     ? String(label).trim()
     : ''
   const accessibleName = labelText || `${Math.round(normalized.value)} de ${normalized.max}`

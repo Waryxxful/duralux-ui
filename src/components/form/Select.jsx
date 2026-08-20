@@ -1,5 +1,6 @@
 import { cx } from '../../utils/cx'
-import { isSelectValue, valueToken } from './internal/selectCore.jsx'
+import { isSelectValue, valueToken } from './internal/selectCoreModel'
+import { isArray, isObject } from '../../utils/typeGuards'
 
 const MAX_OPTION_COUNT = 10000
 
@@ -12,7 +13,7 @@ function readOption(option, key) {
 }
 
 function normalizeNativeOptions(options) {
-  if (!Array.isArray(options)) return []
+  if (!isArray(options)) return []
 
   let length = 0
   try {
@@ -34,7 +35,7 @@ function normalizeNativeOptions(options) {
       normalized.push({ value: raw, label: raw, disabled: false, index })
       continue
     }
-    if (raw === null || typeof raw !== 'object') continue
+    if (raw === null || !isObject(raw)) continue
 
     const value = readOption(raw, 'value')
     if (!isSelectValue(value)) continue

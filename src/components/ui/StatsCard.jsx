@@ -1,4 +1,5 @@
 import { normalizeProgress } from './internal/progress.js'
+import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 
 /**
  * StatsCard — tarjeta KPI con ícono, número, label y progreso/trend.
@@ -26,12 +27,12 @@ export function StatsCard({
   footer = undefined,
   onFooter = undefined,
 }) {
-  const hasFooterAction = typeof onFooter === 'function'
+  const hasFooterAction = isFunction(onFooter)
   const hasFooter = footer !== undefined && footer !== null && footer !== false
   const normalizedProgress = progress
     ? normalizeProgress(progress.value, progress.max)
     : null
-  const progressLabel = progress && (typeof progress.label === 'string' || typeof progress.label === 'number')
+  const progressLabel = progress && (isString(progress.label) || isFiniteNumber(progress.label))
     ? String(progress.label).trim()
     : ''
 

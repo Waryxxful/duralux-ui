@@ -1,3 +1,5 @@
+import { isArray, isFiniteNumber, isString } from '../../utils/typeGuards'
+
 /**
  * QuickLinkGrid — grid de tiles ícono+label clicables (patrón
  * ConversionStatusMiscellaneous/TrafficSourceMiscellaneous de Duralux v2).
@@ -11,14 +13,15 @@
  */
 function quickLinkIdentity(item) {
   const candidate = item?.id ?? item?.href ?? item?.label ?? item?.icon
-  return typeof candidate === 'string' || typeof candidate === 'number'
-    ? `${typeof candidate}:${String(candidate)}`
+  const tag = isString(candidate) ? 'string' : isFiniteNumber(candidate) ? 'number' : 'fallback'
+  return isString(candidate) || isFiniteNumber(candidate)
+    ? `${tag}:${String(candidate)}`
     : 'quick-link'
 }
 
 function quickLinkEntries(items) {
   const occurrences = new Map()
-  return (Array.isArray(items) ? items : []).map((item) => {
+  return (isArray(items) ? items : []).map((item) => {
     const identity = quickLinkIdentity(item)
     const occurrence = (occurrences.get(identity) ?? 0) + 1
     occurrences.set(identity, occurrence)

@@ -13,7 +13,7 @@ export function resolveVariant(variant) {
   const raw = String(variant || 'primary')
   // outline* is banned (fidelity gate); soft light-* is the Duralux equivalent.
   if (raw === 'outline' || raw.startsWith('outline-')) {
-    if (typeof console !== 'undefined' && console.warn) {
+    if (globalThis.console?.warn) {
       console.warn(`[duralux/ui] Button variant "${raw}" is non-canonical; use "light-brand" or a solid semantic variant.`)
     }
     return 'light-brand'
@@ -26,7 +26,7 @@ export function resolveVariant(variant) {
     if (SOFT_THEME_COLORS.has(tone)) return raw
   }
   if (SOLID_VARIANTS.has(raw)) return raw
-  if (typeof console !== 'undefined' && console.warn) {
+  if (globalThis.console?.warn) {
     console.warn(`[duralux/ui] Button variant "${raw}" is unknown; falling back to "primary".`)
   }
   return 'primary'

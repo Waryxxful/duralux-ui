@@ -163,9 +163,9 @@ describe('ChatSidebar', () => {
     const user = userEvent.setup()
     let reads = 0
     const proxiedContacts = new Proxy(CONTACTS, {
-      get(target, property, receiver) {
+      get(target, property) {
         if (property === 'length' || property === '0' || property === '1') reads += 1
-        return Reflect.get(target, property, receiver)
+        return target[property]
       },
     })
 
@@ -340,7 +340,7 @@ describe('ChatWindow slots', () => {
   test.each([
     ['un elemento', <p>mensaje único</p>],
     ['un array', [<p key="one">mensaje uno</p>, <p key="two">mensaje dos</p>]],
-    ['un Fragment', <Fragment><p>fragmento uno</p><p>fragmento dos</p></Fragment>],
+    ['un Fragment', <Fragment><p key="f1">fragmento uno</p><p key="f2">fragmento dos</p></Fragment>],
   ])('renderiza messages como %s y composer como slots explícitos', (_, messages) => {
     renderWindow({ messages, composer: <div>compositor explícito</div> })
 

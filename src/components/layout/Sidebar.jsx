@@ -1,6 +1,8 @@
 import { Link, matchPath, useLocation } from 'react-router-dom'
 import { NavCore } from '../shell/navigationCore'
 
+import { isFunction } from '../../utils/typeGuards'
+
 function routerRouteScore(item, pathname) {
   if (!item.to || item.to === '#') return -1
 
@@ -28,7 +30,7 @@ function routerNavItem(item, pathname) {
     href: destination,
     linkKind: hasRouterDestination ? 'router' : 'anchor',
     routeScore: routerRouteScore(item, pathname),
-    action: typeof item.onClick === 'function' ? item.onClick : undefined,
+    action: isFunction(item.onClick) ? item.onClick : undefined,
     disabled: item.disabled,
     type: item.type === 'caption' ? 'caption' : 'item',
     children: item.children?.length

@@ -9,17 +9,18 @@
  */
 import { useId } from 'react'
 import { Button } from '../ui/Button'
+import { isArray, isFunction, isObject, isString } from '../../utils/typeGuards'
 
 function hasContent(value) {
   if (value === null || value === undefined || value === false || value === true) return false
-  if (typeof value === 'string') return value.trim() !== ''
+  if (isString(value)) return value.trim() !== ''
   return true
 }
 
 function normalizeMessage(value) {
   if (value instanceof Error) return value.message || 'Error desconocido'
-  if (value && typeof value === 'object' && !hasContent(value)) return null
-  if (value && typeof value === 'object' && 'message' in value && !Array.isArray(value)) return value.message
+  if (value && isObject(value) && !hasContent(value)) return null
+  if (value && isObject(value) && 'message' in value && !isArray(value)) return value.message
   return value
 }
 
@@ -33,7 +34,7 @@ export function ErrorState({
   const titleId = useId()
   const hasTitle = hasContent(title)
   const resolvedMessage = normalizeMessage(error === undefined ? message : error)
-  const canRetry = typeof onRetry === 'function'
+  const canRetry = isFunction(onRetry)
 
   return (
     <div

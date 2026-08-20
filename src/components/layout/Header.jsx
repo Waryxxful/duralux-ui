@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Dropdown, DropdownMenu } from '../ui/Dropdown'
+import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 
 function listIdentity(value, fallback) {
-  return typeof value === 'string' || typeof value === 'number'
-    ? `${typeof value}:${String(value)}`
+  const tag = isString(value) ? 'string' : isFiniteNumber(value) ? 'number' : 'fallback'
+  return isString(value) || isFiniteNumber(value)
+    ? `${tag}:${String(value)}`
     : fallback
 }
 
@@ -18,7 +20,7 @@ function withUniqueKeys(items, prefix, getIdentity) {
 }
 
 function NotificationItem({ notification, onNotificationClick, focusable = true }) {
-  const itemCallback = typeof notification.onClick === 'function'
+  const itemCallback = isFunction(notification.onClick)
     ? notification.onClick
     : onNotificationClick
   const content = (
@@ -134,7 +136,7 @@ function UserDropdown({ user, open }) {
           return <a key={key} href={item.href} className="dropdown-item" tabIndex={open ? undefined : -1} onClick={item.onClick}>{content}</a>
         }
 
-        if (typeof item.onClick === 'function') {
+        if (isFunction(item.onClick)) {
           return <button key={key} type="button" className="dropdown-item" tabIndex={open ? undefined : -1} onClick={item.onClick}>{content}</button>
         }
 
@@ -185,7 +187,7 @@ export function Header({
     <header className="nxl-header">
       <div className="header-wrapper">
         <div className="header-left d-flex align-items-center gap-4">
-          {typeof onToggleMobile === 'function' && (
+          {isFunction(onToggleMobile) && (
             <button
               ref={mobileTriggerRef}
               type="button"
@@ -204,7 +206,7 @@ export function Header({
           )}
 
           <div className="nxl-navigation-toggle">
-            {typeof onToggleMini === 'function' && (
+            {isFunction(onToggleMini) && (
               <button
                 type="button"
                 id="menu-mini-button"

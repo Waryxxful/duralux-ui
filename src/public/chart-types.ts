@@ -1,7 +1,8 @@
 import type * as React from 'react'
 
-export interface ChartDatum {
-  [key: string]: unknown
+export type ChartDatum = {
+  name?: string | number
+  [key: string]: string | number | boolean | null | undefined | object
 }
 
 export interface ChartSeries {
@@ -11,8 +12,7 @@ export interface ChartSeries {
   dashed?: boolean
 }
 
-export interface PieChartDatum extends ChartDatum {
-  name?: string | number
+export type PieChartDatum = ChartDatum & {
   value?: number | string
   x?: string | number
   y?: number | string
@@ -29,13 +29,72 @@ export type ChartError = Error | string | ChartErrorObject | React.ReactNode
 
 export type ChartThemeMode = 'light' | 'dark'
 
-export interface ApexThemeOptions extends Record<string, unknown> {
+export interface ApexThemeOptions {
   mode?: ChartThemeMode
+  palette?: string
 }
 
 export type ChartTheme = ChartThemeMode | ApexThemeOptions
-export type ApexChartOptions = Record<string, unknown>
-export type ApexChartSeries = ReadonlyArray<unknown>
+
+export interface ApexChartSeriesItem {
+  name?: string
+  data?: number[]
+  type?: string
+  color?: string
+}
+
+export type ApexChartSeries = ReadonlyArray<ApexChartSeriesItem | number>
+
+export interface ApexChartOptions {
+  chart?: {
+    type?: string
+    height?: number | string
+    width?: number | string
+    background?: string
+    foreColor?: string
+    animations?: {
+      enabled?: boolean
+    }
+  }
+  colors?: string[]
+  theme?: ApexThemeOptions
+  grid?: {
+    borderColor?: string
+  }
+  xaxis?: {
+    categories?: string[]
+    labels?: {
+      style?: {
+        colors?: string | string[]
+      }
+    }
+    axisBorder?: {
+      color?: string
+    }
+    axisTicks?: {
+      color?: string
+    }
+  }
+  yaxis?: {
+    labels?: {
+      style?: {
+        colors?: string | string[]
+      }
+    }
+  }
+  tooltip?: {
+    theme?: string
+    style?: {
+      fontSize?: string
+      fontFamily?: string
+    }
+  }
+  legend?: {
+    labels?: {
+      colors?: string
+    }
+  }
+}
 
 export interface ChartStateProps {
   theme?: ChartTheme

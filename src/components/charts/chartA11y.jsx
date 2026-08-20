@@ -1,66 +1,24 @@
-import React, { createContext, useContext, useId } from 'react'
+import React, { useId } from 'react'
 import { useClientReady } from './chartMotion'
 import { EmptyState } from '../feedback/EmptyState'
 import { ErrorState } from '../feedback/ErrorState'
-
-export const ChartCardTitleContext = createContext(null)
-
-export function useChartCardTitleId() {
-  return useContext(ChartCardTitleContext)
-}
-
-function safeIdPart(value) {
-  try {
-    return String(value).replace(/[^A-Za-z0-9_-]+/g, '-')
-  } catch {
-    return 'chart'
-  }
-}
-
-function hasValue(value) {
-  if (typeof value === 'string') return value.trim() !== ''
-  return value !== undefined && value !== null && value !== false
-}
-
-function isObject(value) {
-  return value !== null && typeof value === 'object' && !Array.isArray(value)
-}
-
-function ownDescriptor(value, key) {
-  if (value === null || value === undefined) return undefined
-  if (typeof value !== 'object' && typeof value !== 'function') return undefined
-  try {
-    return Object.getOwnPropertyDescriptor(value, key)
-  } catch {
-    return undefined
-  }
-}
-
-function hasOwnDataValue(value, key) {
-  const descriptor = ownDescriptor(value, key)
-  return Boolean(descriptor && Object.prototype.hasOwnProperty.call(descriptor, 'value'))
-}
-
-export function readChartDataValue(value, key) {
-  const descriptor = ownDescriptor(value, key)
-  return descriptor && Object.prototype.hasOwnProperty.call(descriptor, 'value')
-    ? descriptor.value
-    : undefined
-}
-
-function safeArrayLength(value) {
-  const length = readChartDataValue(value, 'length')
-  return Number.isSafeInteger(length) && length >= 0 ? length : 0
-}
-
-function safeObjectKeys(value) {
-  if (value === null || value === undefined) return []
-  try {
-    return Object.keys(value)
-  } catch {
-    return []
-  }
-}
+import {
+  columnHeaderId,
+  chartErrorMessage,
+  chartErrorTitle,
+  chartRetryHandler,
+  firstDefinedValue,
+  formatAlternativeValue,
+  hasOwnDataValue,
+  hasValue,
+  readChartDataValue,
+  safeArrayLength,
+  safeIdPart,
+  safeObjectKeys,
+  tableCaption,
+  useChartCardTitleId,
+} from './chartA11yModel'
+import { isArray, isObject } from '../../utils/typeGuards'
 
 function useChartA11yIds() {
   const reactId = safeIdPart(useId())
@@ -77,41 +35,6 @@ function useTableA11yIds(prefix) {
     tableId,
     categoryHeaderId: `${tableId}-category`,
   }
-}
-
-function columnHeaderId(tableId, key, index) {
-  return `${tableId}-column-${safeIdPart(key)}-${index}`
-}
-
-function resolveErrorValue(error, key) {
-  if (!error || typeof error !== 'object' || React.isValidElement(error)) return undefined
-  return readChartDataValue(error, key)
-}
-
-export function chartErrorMessage(error, explicitMessage) {
-  if (hasValue(explicitMessage)) return explicitMessage
-  if (error instanceof Error) return error.message
-  if (typeof error === 'string') return error
-  if (React.isValidElement(error)) return error
-  return resolveErrorValue(error, 'message')
-}
-
-export function chartErrorTitle(error, explicitTitle) {
-  if (hasValue(explicitTitle)) return explicitTitle
-  return resolveErrorValue(error, 'title')
-}
-
-export function chartRetryHandler(error, onRetry) {
-  const errorRetry = resolveErrorValue(error, 'onRetry')
-  if (typeof errorRetry === 'function') return errorRetry
-  return typeof onRetry === 'function' ? onRetry : undefined
-}
-
-/** Resolve the shared accessible-table contract: false disables it, true uses the default table, and a node replaces it. */
-export function resolveChartAlternative(value, fallback) {
-  if (value === false) return false
-  if (value === true || value === undefined) return fallback
-  return value
 }
 
 /**
@@ -176,70 +99,6 @@ export function ChartState({
   return null
 }
 
-function safeDisplayValue(value, seen = new WeakSet(), depth = 0) {
-  if (value === undefined || value === null || value === '') return '—'
-  if (typeof value !== 'object') {
-    try {
-      return String(value)
-    } catch {
-      return '[objeto]'
-    }
-  }
-  if (depth >= 3 || seen.has(value)) return '[objeto]'
-  seen.add(value)
-
-  if (Array.isArray(value)) {
-    const values = []
-    for (let index = 0; index < safeArrayLength(value); index += 1) {
-      values.push(safeDisplayValue(readChartDataValue(value, index), seen, depth + 1))
-    }
-    return `[${values.join(', ')}]`
-  }
-
-  const entries = {}
-  safeObjectKeys(value).forEach((key) => {
-    if (!hasOwnDataValue(value, key)) return
-    entries[key] = safeDisplayValue(readChartDataValue(value, key), seen, depth + 1)
-  })
-  try {
-    return JSON.stringify(entries)
-  } catch {
-    return '[objeto]'
-  }
-}
-
-function formatAlternativeValue(value) {
-  return safeDisplayValue(value)
-}
-
-function tableCaption(title, fallback) {
-  return hasValue(title) ? title : fallback
-}
-
-export function normalizeCartesianData(data) {
-  if (!Array.isArray(data)) return []
-  return Array.from({ length: safeArrayLength(data) }, (_, index) => {
-    const row = readChartDataValue(data, index)
-    if (!isObject(row) || hasOwnDataValue(row, 'name') || !hasOwnDataValue(row, 'x')) return row
-
-    const copy = {}
-    safeObjectKeys(row).forEach((key) => {
-      if (hasOwnDataValue(row, key)) copy[key] = readChartDataValue(row, key)
-    })
-    copy.name = readChartDataValue(row, 'x')
-    return copy
-  })
-}
-
-function firstDefinedValue(value, keys) {
-  for (const key of keys) {
-    if (!hasOwnDataValue(value, key)) continue
-    const candidate = readChartDataValue(value, key)
-    if (candidate !== undefined && candidate !== null && candidate !== '') return candidate
-  }
-  return undefined
-}
-
 function categoryValue(row, index) {
   if (!isObject(row)) return index + 1
   return firstDefinedValue(row, ['name', 'label', 'category', 'x']) ?? index + 1
@@ -273,7 +132,7 @@ function rechartsColumns(rows, series) {
     return [{ key: 'value', label: 'Valor', index: 0 }]
   }
 
-  const definitions = (Array.isArray(series) ? series : [])
+  const definitions = (isArray(series) ? series : [])
     .flatMap((item, index) => {
       const definition = normalizeRechartsDefinition(item, index)
       return definition ? [definition] : []
@@ -298,7 +157,7 @@ function rechartsColumns(rows, series) {
 }
 
 export function RechartsDataTable({ data = [], series = [], title = 'Datos del gráfico' }) {
-  const rows = Array.isArray(data) ? data : []
+  const rows = isArray(data) ? data : []
   const { tableId, categoryHeaderId } = useTableA11yIds('recharts')
   if (!rows.length) return null
 
@@ -355,7 +214,7 @@ function pieTableRows(rows) {
 }
 
 export function PieDataTable({ data = [], title = 'Datos del gráfico' }) {
-  const rows = Array.isArray(data) ? data : []
+  const rows = isArray(data) ? data : []
   const { tableId, categoryHeaderId } = useTableA11yIds('pie')
   if (!rows.length) return null
 
@@ -383,7 +242,7 @@ export function PieDataTable({ data = [], title = 'Datos del gráfico' }) {
 }
 
 function copyArrayData(value) {
-  if (!Array.isArray(value)) return value === undefined || value === null ? [] : [value]
+  if (!isArray(value)) return value === undefined || value === null ? [] : [value]
   const result = []
   for (let index = 0; index < safeArrayLength(value); index += 1) {
     result.push(readChartDataValue(value, index))
@@ -401,14 +260,14 @@ function apexSeriesName(item, index) {
 }
 
 function normalizeApexSeries(series) {
-  const items = Array.isArray(series) ? series : []
+  const items = isArray(series) ? series : []
   const itemCount = safeArrayLength(items)
   if (!itemCount) return []
 
   let hasSeriesContainers = false
   for (let index = 0; index < itemCount; index += 1) {
     const item = readChartDataValue(items, index)
-    if (isApexNamedSeries(item) || Array.isArray(item)) {
+    if (isApexNamedSeries(item) || isArray(item)) {
       hasSeriesContainers = true
       break
     }
@@ -423,7 +282,7 @@ function normalizeApexSeries(series) {
         data: copyArrayData(readChartDataValue(item, 'data')),
       }
     }
-    if (Array.isArray(item)) return { name: `Serie ${index + 1}`, data: copyArrayData(item) }
+    if (isArray(item)) return { name: `Serie ${index + 1}`, data: copyArrayData(item) }
     return { name: `Serie ${index + 1}`, data: [item] }
   })
 }
@@ -443,9 +302,9 @@ function apexPointValue(point) {
 function apexCategories(options) {
   const xaxis = readChartDataValue(options, 'xaxis')
   const xaxisCategories = readChartDataValue(xaxis, 'categories')
-  if (Array.isArray(xaxisCategories)) return copyArrayData(xaxisCategories)
+  if (isArray(xaxisCategories)) return copyArrayData(xaxisCategories)
   const labels = readChartDataValue(options, 'labels')
-  return Array.isArray(labels) ? copyArrayData(labels) : []
+  return isArray(labels) ? copyArrayData(labels) : []
 }
 
 function apexRows(series, options) {

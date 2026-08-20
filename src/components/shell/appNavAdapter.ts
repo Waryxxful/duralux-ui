@@ -1,5 +1,5 @@
 import type { AppNavItem } from '../../contract';
-import { navigationIconName } from './navigationCore';
+import { navigationIconName } from './navigationModel';
 
 export interface AdaptedAppNavItem {
   label: string;
@@ -27,10 +27,19 @@ function normalizePrefix(routePrefix: string | undefined): string {
   return canonical && canonical !== '/' ? canonical : '/';
 }
 
-function splitInner(inner: string): { path: string; suffix: string } {
+interface InnerSplit {
+  path: string;
+  suffix: string;
+}
+
+function splitInner(inner: string): InnerSplit {
   const marker = inner.search(/[?#]/);
-  if (marker < 0) return { path: inner, suffix: '' };
-  return { path: inner.slice(0, marker), suffix: inner.slice(marker) };
+  if (marker < 0) {
+    const result: InnerSplit = { path: inner, suffix: '' };
+    return result;
+  }
+  const result: InnerSplit = { path: inner.slice(0, marker), suffix: inner.slice(marker) };
+  return result;
 }
 
 const NAVIGATION_ORIGIN = 'https://duralux-navigation.invalid';
@@ -154,12 +163,18 @@ function adaptItem(item: AppNavItem, options: Required<Pick<AppNavAdapterOptions
   // root, preserving the shell's legacy behavior.
   if (item.children?.length && !hasChildren && !item.inner) return null;
 
-  return {
+  const adapted: AdaptedAppNavItem = {
     label: item.label,
     icon: navigationIconName(item.icon),
-    ...(href ? { href, to: href } : {}),
-    ...(hasChildren ? { children } : {}),
   };
+  if (href) {
+    adapted.href = href;
+    adapted.to = href;
+  }
+  if (hasChildren && children) {
+    adapted.children = children;
+  }
+  return adapted;
 }
 
 /**

@@ -1,5 +1,6 @@
 import { Avatar } from './Avatar'
 import { cx } from '../../utils/cx'
+import { isArray, isFunction, isNonEmptyString } from '../../utils/typeGuards'
 
 function safeToken(value, fallback) {
   let token = ''
@@ -9,10 +10,10 @@ function safeToken(value, fallback) {
     token = ''
   }
   token = token
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-zA-Z0-9_-]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 48)
+  .replace(/[\u0300-\u036f]/g, '')
+  .replace(/[^a-zA-Z0-9_-]+/g, '-')
+  .replace(/^-+|-+$/g, '')
+  .slice(0, 48)
   return token || fallback
 }
 
@@ -23,7 +24,7 @@ function normalizedMax(max, fallback = 5) {
 }
 
 function hasHref(href) {
-  return typeof href === 'string' && href.trim() !== '' && href !== '#'
+  return isNonEmptyString(href) && href !== '#'
 }
 
 function itemLabel(item) {
@@ -34,11 +35,11 @@ function itemLabel(item) {
 
 function AvatarItem({ item, index, renderItem, size, className }) {
   const name = itemLabel(item)
-  const onClick = typeof item?.onClick === 'function' ? item.onClick : undefined
+  const onClick = isFunction(item?.onClick) ? item.onClick : undefined
   const href = hasHref(item?.href) ? item.href : undefined
-  const customRenderer = typeof item?.renderItem === 'function'
+  const customRenderer = isFunction(item?.renderItem)
     ? item.renderItem
-    : typeof renderItem === 'function' ? renderItem : undefined
+    : isFunction(renderItem) ? renderItem : undefined
   const content = customRenderer
     ? customRenderer(item, index)
     : (
@@ -81,7 +82,7 @@ export function AvatarGroup({
   overflowLabel = undefined,
   overflowClassName = '',
 }) {
-  const list = Array.isArray(items) ? items : []
+  const list = isArray(items) ? items : []
   const limit = normalizedMax(max)
   const visibleItems = list.slice(0, limit)
   const overflowCount = Math.max(0, list.length - visibleItems.length)
@@ -97,7 +98,7 @@ export function AvatarGroup({
   }
   const label = overflowLabel ?? `${overflowCount} ${overflowCount === 1 ? 'persona' : 'personas'} más`
   const overflow = overflowCount > 0
-    ? typeof onOverflowClick === 'function'
+    ? isFunction(onOverflowClick)
       ? (
         <button
           type="button"

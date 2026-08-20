@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react'
+import { isFunction } from '../../utils/typeGuards'
 
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
 
@@ -8,7 +9,7 @@ let reducedMotion = false
 const subscribers = new Set()
 
 function ensureMediaQuery() {
-  if (mediaQuery || typeof window === 'undefined' || typeof window.matchMedia !== 'function') return
+  if (mediaQuery || !globalThis.window || !isFunction(globalThis.window.matchMedia)) return
 
   mediaQuery = window.matchMedia(REDUCED_MOTION_QUERY)
   reducedMotion = Boolean(mediaQuery.matches)
@@ -18,8 +19,8 @@ function ensureMediaQuery() {
   }
 
   if (
-    typeof mediaQuery.addEventListener === 'function'
-    && typeof mediaQuery.removeEventListener === 'function'
+    isFunction(mediaQuery.addEventListener)
+    && isFunction(mediaQuery.removeEventListener)
   ) {
     mediaQuery.addEventListener('change', onChange)
     mediaQueryCleanup = () => mediaQuery?.removeEventListener('change', onChange)
@@ -27,8 +28,8 @@ function ensureMediaQuery() {
   }
 
   if (
-    typeof mediaQuery.addListener === 'function'
-    && typeof mediaQuery.removeListener === 'function'
+    isFunction(mediaQuery.addListener)
+    && isFunction(mediaQuery.removeListener)
   ) {
     mediaQuery.addListener(onChange)
     mediaQueryCleanup = () => mediaQuery?.removeListener(onChange)

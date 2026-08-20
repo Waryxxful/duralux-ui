@@ -8,6 +8,7 @@ import React from 'react';
 import type { SemanticVariant, StatusVariant } from '../../tokens';
 import { Badge } from '../ui/Badge';
 import { StatsCard as RuntimeStatsCard } from '../ui/StatsCard';
+import { isString } from '../../utils/typeGuards';
 
 // ── CardHeader / CardBody / CardFooter (sub-components not in @duralux/ui) ────
 
@@ -20,7 +21,7 @@ export function CardHeader({ title, actions, className, children, ...rest }: Car
   // Duralux-first: .card-header / .card-title / .card-header-action (not legacy gcu-card__*).
   const content = children ?? (
     <>
-      {typeof title === 'string' ? <h2 className="h5 card-title mb-0">{title}</h2> : title}
+      {isString(title) ? <h2 className="h5 card-title mb-0">{title}</h2> : title}
       {actions && <div className="card-header-action">{actions}</div>}
     </>
   );
@@ -31,7 +32,7 @@ export function CardHeader({ title, actions, className, children, ...rest }: Car
   );
 }
 
-export interface CardBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type CardBodyProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function CardBody({ className, children, ...rest }: CardBodyProps) {
   return (
@@ -41,7 +42,7 @@ export function CardBody({ className, children, ...rest }: CardBodyProps) {
   );
 }
 
-export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type CardFooterProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function CardFooter({ className, children, ...rest }: CardFooterProps) {
   return (

@@ -1,27 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { HiddenValues } from './internal/selectCore'
 import {
-  HiddenValues,
+  EMPTY_OPTIONS,
   normalizeOptions,
-  optionVisual,
   optionText,
+  optionVisual,
   safeOptionId,
   safeString,
   useListboxCore,
   valueToken,
-} from './internal/selectCore.jsx'
-
-const EMPTY_OPTIONS = Object.freeze([])
+} from './internal/selectCoreModel'
+import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 
 function hasValue(value) {
-  return typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value))
+  return isString(value) || isFiniteNumber(value)
 }
 
 function renderSelected(option, renderValue) {
   if (!option) return ''
-  if (typeof renderValue === 'function') {
+  if (isFunction(renderValue)) {
     try {
       const rendered = renderValue(option.raw, option)
-      if (typeof rendered === 'string' || typeof rendered === 'number') return safeString(rendered)
+      if (isString(rendered) || isFiniteNumber(rendered)) return safeString(rendered)
     } catch {
       // Fall through to the option label.
     }
@@ -83,12 +83,15 @@ export function SearchableSelect({
     setInternalValue(undefined)
   }, [controlled, internalValue, optionByToken])
 
-  const isSelected = candidate => hasValue(selectedValue) && valueToken(candidate) === valueToken(selectedValue)
-  const commit = option => {
+  const isSelected = useCallback(
+    candidate => hasValue(selectedValue) && valueToken(candidate) === valueToken(selectedValue),
+    [selectedValue],
+  )
+  const commit = useCallback((option) => {
     if (!controlled) setInternalValue(option.value)
     setQuery('')
-    if (typeof onChange === 'function') onChange(option.value, option.raw)
-  }
+    if (isFunction(onChange)) onChange(option.value, option.raw)
+  }, [controlled, onChange])
   const core = useListboxCore({
     options: normalized,
     query,
@@ -113,7 +116,7 @@ export function SearchableSelect({
     if (disabled || !hasSelection) return
     if (!controlled) setInternalValue(undefined)
     setQuery('')
-    if (typeof onChange === 'function') onChange(undefined, undefined)
+    if (isFunction(onChange)) onChange(undefined, undefined)
     core.inputRef.current?.focus()
   }
 
@@ -147,12 +150,12 @@ export function SearchableSelect({
           aria-controls={listboxId}
           aria-activedescendant={activeId}
           onFocus={(event) => {
-            if (typeof onFocus === 'function') onFocus(event)
+            if (isFunction(onFocus)) onFocus(event)
             if (!event.defaultPrevented) core.show()
           }}
           onBlur={onBlur}
           onClick={(event) => {
-            if (typeof onClick === 'function') onClick(event)
+            if (isFunction(onClick)) onClick(event)
             if (!event.defaultPrevented) core.show()
           }}
           onChange={(event) => {
@@ -160,16 +163,16 @@ export function SearchableSelect({
             setQuery(event.currentTarget.value)
           }}
           onKeyDown={(event) => {
-            if (typeof onKeyDown === 'function') onKeyDown(event)
+            if (isFunction(onKeyDown)) onKeyDown(event)
             if (!event.defaultPrevented) core.handleKeyDown(event)
           }}
           onCompositionStart={(event) => {
             core.onCompositionStart()
-            if (typeof onCompositionStart === 'function') onCompositionStart(event)
+            if (isFunction(onCompositionStart)) onCompositionStart(event)
           }}
           onCompositionEnd={(event) => {
             core.onCompositionEnd()
-            if (typeof onCompositionEnd === 'function') onCompositionEnd(event)
+            if (isFunction(onCompositionEnd)) onCompositionEnd(event)
           }}
         />
         {clearable && hasSelection && !disabled ? (

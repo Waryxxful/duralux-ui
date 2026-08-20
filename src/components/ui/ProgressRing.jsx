@@ -1,4 +1,5 @@
 import { normalizeProgress } from './internal/progress.js'
+import { isFiniteNumber, isString } from '../../utils/typeGuards'
 
 const DEFAULT_PROGRESS_COLOR = 'var(--gcu-primary, #3454d1)'
 const MAX_RING_SIZE = 1000
@@ -6,7 +7,7 @@ const MAX_RING_SIZE = 1000
 function positiveFinite(value, fallback, maximum = MAX_RING_SIZE) {
   try {
     const number = Number(value)
-    return Number.isFinite(number) && number > 0
+    return isFiniteNumber(number) && number > 0
       ? Math.min(number, maximum)
       : fallback
   } catch {
@@ -46,7 +47,7 @@ export function ProgressRing({
   const offset = circumference - (normalized.percentage / 100) * circumference
   const visibleLabel = label ?? `${Math.round(normalized.percentage)}%`
   const indicatorColor = color || DEFAULT_PROGRESS_COLOR
-  const labelText = typeof label === 'string' || typeof label === 'number'
+  const labelText = isString(label) || isFiniteNumber(label)
     ? String(label).trim()
     : ''
   const accessibleName = labelText || `${Math.round(normalized.percentage)}%`

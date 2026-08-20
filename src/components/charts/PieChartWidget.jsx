@@ -2,13 +2,15 @@ import { useRef } from 'react'
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend,
 } from 'recharts'
-import { ChartFrame, PieDataTable, readChartDataValue, resolveChartAlternative } from './chartA11y'
+import { ChartFrame, PieDataTable } from './chartA11y'
+import { readChartDataValue, resolveChartAlternative } from './chartA11yModel'
 import { usePrefersReducedMotion } from './chartMotion'
 import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalette'
 import { useChartTheme } from './chartTheme'
+import { isArray, isFiniteNumber, isObject, isString } from '../../utils/typeGuards'
 
 function normalizePieEntry(entry) {
-  if (!entry || typeof entry !== 'object' || Array.isArray(entry)) return entry
+  if (!entry || !isObject(entry) || isArray(entry)) return entry
   const value = readChartDataValue(entry, 'value')
   const y = readChartDataValue(entry, 'y')
   if (value !== undefined || y === undefined) return entry
@@ -32,8 +34,9 @@ function pieEntryIdentity(entry) {
     ?? readChartDataValue(entry, 'name')
     ?? readChartDataValue(entry, 'label')
     ?? readChartDataValue(entry, 'value')
-  return typeof candidate === 'string' || typeof candidate === 'number'
-    ? `${typeof candidate}:${String(candidate)}`
+  const tag = isString(candidate) ? 'string' : isFiniteNumber(candidate) ? 'number' : 'slice'
+  return isString(candidate) || isFiniteNumber(candidate)
+    ? `${tag}:${String(candidate)}`
     : 'slice'
 }
 

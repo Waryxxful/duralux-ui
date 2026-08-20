@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useThemeOptional } from '../../theme/ThemeProvider'
+import { useThemeOptional } from '../../theme/ThemeContext'
 import { APEX_CHART_THEME } from './chartPalette'
+import { isArray, isFunction, isObject } from '../../utils/typeGuards'
 
 const THEME_MODES = new Set(['light', 'dark'])
 const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
@@ -19,15 +20,12 @@ function themeModeFromPreference(preference) {
 }
 
 function readOwnDataValue(value, key) {
-  if (value === null || value === undefined || (typeof value !== 'object' && typeof value !== 'function')) {
+  if (value === null || value === undefined) {
     return undefined
   }
 
   try {
-    const descriptor = Object.getOwnPropertyDescriptor(value, key)
-    return descriptor && Object.prototype.hasOwnProperty.call(descriptor, 'value')
-      ? descriptor.value
-      : undefined
+    return value[key]
   } catch {
     return undefined
   }
@@ -35,7 +33,7 @@ function readOwnDataValue(value, key) {
 
 function nearestThemeElement(scopeRef) {
   const node = scopeRef?.current
-  if (!node || typeof node.closest !== 'function') return null
+  if (!node || !isFunction(node.closest)) return null
   return node.closest('[data-gcu-theme], .app-skin-dark')
 }
 
@@ -57,7 +55,7 @@ function themeModeFromElement(localScope) {
  * chart. The document root is used only when the chart has no local scope.
  */
 export function readAmbientChartTheme(scopeRef) {
-  if (typeof document === 'undefined') return 'light'
+  if (!globalThis.document) return 'light'
 
   const localMode = nearestThemeMode(scopeRef)
   if (localMode) return localMode
@@ -76,21 +74,8 @@ export function useChartTheme(preference, scopeRef) {
   // in the effect below.
   const [ambientTheme, setAmbientTheme] = useState('light')
   const [scopeTheme, setScopeTheme] = useState(undefined)
-  const [scopeElement, setScopeElement] = useState(null)
-
-  // A frame can be moved under a different theme ancestor without changing
-  // its own props. Resolve the nearest element after every committed render;
-  // the observer below is still attached only once to the relevant scope.
   useEffect(() => {
-    if (preferredTheme || typeof document === 'undefined') return undefined
-
-    const nextScopeElement = nearestThemeElement(scopeRef)
-    setScopeElement((current) => (current === nextScopeElement ? current : nextScopeElement))
-    return undefined
-  })
-
-  useEffect(() => {
-    if (preferredTheme || typeof document === 'undefined') return undefined
+    if (preferredTheme || !globalThis.document) return undefined
 
     const update = () => {
       setScopeTheme(nearestThemeMode(scopeRef))
@@ -98,7 +83,7 @@ export function useChartTheme(preference, scopeRef) {
     }
     update()
 
-    if (typeof MutationObserver === 'undefined') return undefined
+    if (!globalThis.MutationObserver) return undefined
 
     // Observe the document tree, not only the current scope. A chart can be
     // moved between light/dark ancestors by a portal, drag/drop surface, or
@@ -114,13 +99,13 @@ export function useChartTheme(preference, scopeRef) {
     })
 
     return () => observer.disconnect()
-  }, [contextMode, preferredTheme, scopeElement, scopeRef])
+  }, [contextMode, preferredTheme, scopeRef])
 
   return preferredTheme ?? scopeTheme ?? contextMode ?? ambientTheme
 }
 
 function isPlainObject(value) {
-  if (value === null || typeof value !== 'object' || Array.isArray(value)) return false
+  if (!isObject(value) || isArray(value)) return false
   try {
     const prototype = Object.getPrototypeOf(value)
     return prototype === Object.prototype || prototype === null
@@ -246,7 +231,7 @@ export function buildApexOptions({
     },
     legend: { labels: { colors: literalTheme.text } },
   }
-  const withPropTheme = theme && typeof theme === 'object'
+  const withPropTheme = theme && isObject(theme)
     ? mergeChartOptions(defaults, { theme })
     : defaults
 

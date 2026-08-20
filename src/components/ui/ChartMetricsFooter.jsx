@@ -1,3 +1,5 @@
+import { isArray, isFiniteNumber, isString } from '../../utils/typeGuards'
+
 /**
  * ChartMetricsFooter — fila de 2-4 métricas bajo un chart (patrón
  * TimeSpentChart/PaymentRecordChartTwo de Duralux v2: "Billable Hours 120h / Unbillable Hours 40h").
@@ -7,14 +9,15 @@
  */
 function metricIdentity(metric) {
   const candidate = metric?.id ?? metric?.label ?? metric?.value
-  return typeof candidate === 'string' || typeof candidate === 'number'
-    ? `${typeof candidate}:${String(candidate)}`
+  const tag = isString(candidate) ? 'string' : isFiniteNumber(candidate) ? 'number' : 'fallback'
+  return isString(candidate) || isFiniteNumber(candidate)
+    ? `${tag}:${String(candidate)}`
     : 'metric'
 }
 
 function metricEntries(metrics) {
   const occurrences = new Map()
-  return (Array.isArray(metrics) ? metrics : []).map((metric, position) => {
+  return (isArray(metrics) ? metrics : []).map((metric, position) => {
     const identity = metricIdentity(metric)
     const occurrence = (occurrences.get(identity) ?? 0) + 1
     occurrences.set(identity, occurrence)

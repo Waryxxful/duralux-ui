@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { cx } from '../../utils/cx'
+import { isFunction } from '../../utils/typeGuards'
 
 const ALERT_VARIANTS = new Set([
   'primary', 'secondary', 'success', 'danger', 'warning', 'info',
@@ -45,7 +46,7 @@ export function Alert({
   if (!visible) return null
 
   const resolvedVariant = resolveAlertVariant(variant)
-  const canDismiss = typeof onDismiss === 'function'
+  const canDismiss = isFunction(onDismiss)
   const closable = Boolean(dismissible || canDismiss)
   const toneClass = soft
     ? `alert-soft-${resolvedVariant}-message`

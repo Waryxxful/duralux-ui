@@ -104,7 +104,8 @@ export function Dropdown({
       onOpenChange?.(false);
     };
     const handlePointerDown = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) close();
+      const target = event.target;
+      if (target instanceof Node && !rootRef.current?.contains(target)) close();
     };
 
     document.addEventListener('pointerdown', handlePointerDown);

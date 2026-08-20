@@ -26,11 +26,11 @@ function useDesktopHover() {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return undefined;
+    if (!globalThis.window?.matchMedia) return undefined;
     const mediaQuery = window.matchMedia(DESKTOP_MEDIA_QUERY);
     const onChange = () => setEnabled(mediaQuery.matches);
     onChange();
-    if (typeof mediaQuery.addEventListener === 'function') {
+    if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener('change', onChange);
       return () => mediaQuery.removeEventListener('change', onChange);
     }
@@ -94,13 +94,14 @@ function AppCategoryMenu({
 }) {
   const menuId = useId();
   const [open, setOpen] = useState(false);
+  const [prevParentOpen, setPrevParentOpen] = useState(parentOpen);
+  if (prevParentOpen !== parentOpen) {
+    setPrevParentOpen(parentOpen);
+    if (!parentOpen) setOpen(false);
+  }
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const wasVisible = useRef(false);
-
-  useEffect(() => {
-    if (!parentOpen) setOpen(false);
-  }, [parentOpen]);
 
   const visible = parentOpen && open;
   const menuInertProps = visible ? {} : { inert: '' };
@@ -306,7 +307,7 @@ export function ShellHeader({
 
   useEffect(() => {
     if (!modulesOpen) return;
-    if (typeof window.matchMedia !== 'function') return undefined;
+    if (!globalThis.window?.matchMedia) return undefined;
     const mediaQuery = window.matchMedia('(max-width: 1024px)');
     const moveFocusForLayout = () => {
       if (mediaQuery.matches) {
@@ -317,7 +318,7 @@ export function ShellHeader({
     };
 
     moveFocusForLayout();
-    if (typeof mediaQuery.addEventListener === 'function') {
+    if (mediaQuery.addEventListener) {
       mediaQuery.addEventListener('change', moveFocusForLayout);
       return () => mediaQuery.removeEventListener('change', moveFocusForLayout);
     }
@@ -327,7 +328,8 @@ export function ShellHeader({
 
   useEffect(() => {
     const onPointerDown = (event: PointerEvent) => {
-      const target = event.target as Node;
+      const target = event.target;
+      if (!(target instanceof Node)) return;
       if (
         modulesOpen
         && !modulesMenuRef.current?.contains(target)

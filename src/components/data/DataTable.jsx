@@ -1,86 +1,45 @@
 import { isValidElement, memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Checkbox } from '../form/Checkbox'
+import { Table } from './Table'
 import {
   createRowEntries,
   createSafeDomId,
+  isDevelopment,
+  isObjectLike,
   isUsableRowKey,
+  readProperty,
   resolveRowKey,
-  Table,
+  safeString,
   validateRowEntries,
-} from './Table'
-import { DataTableToolbar, normalizePageSizeOptions } from './DataTableToolbar'
+  warnOnce,
+} from './tableModel'
+import { DataTableToolbar } from './DataTableToolbar'
+import { normalizePageSizeOptions, EMPTY_ARRAY } from './dataTableToolbarModel'
 import { Pagination } from './Pagination'
+import {
+  clampPage,
+  defaultFilterResolver,
+  filterText,
+  isSortableKey,
+  matchesFilter,
+  normalizePageSize,
+  normalizeSearchValue,
+  sameSelection,
+  sortableColumn,
+} from './dataTablePaginationModel'
+import {
+  isArray,
+  isFiniteNumber,
+  isFunction,
+  isNonEmptyString,
+  isObject,
+  isString,
+} from '../../utils/typeGuards'
 
-const EMPTY_ARRAY = Object.freeze([])
 const DEFAULT_FILTER_MODE = 'local'
 
-function isDevelopment() {
-  return typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production'
-}
-
-function safeString(value, fallback = '') {
-  try {
-    return String(value)
-  } catch {
-    return fallback
-  }
-}
-
-function readProperty(target, property) {
-  if (target === null || target === undefined) return undefined
-
-  try {
-    return target[property]
-  } catch {
-    return undefined
-  }
-}
-
-function warnOnce(warningsRef, key, message) {
-  if (!isDevelopment() || warningsRef.current.has(key)) return
-  warningsRef.current.add(key)
-  console.warn(`[duralux/ui] ${message}`)
-}
-
-function normalizeSearchValue(value) {
-  if (value === null || value === undefined) return ''
-  return safeString(value).trim()
-}
-
-function normalizePageSize(pageSize) {
-  return Number.isFinite(pageSize) && pageSize > 0
-    ? Math.max(1, Math.floor(pageSize))
-    : 10
-}
-
-function clampPage(page, totalPages) {
-  const normalizedPage = Number.isFinite(page) ? Math.floor(page) : 1
-  return Math.min(Math.max(normalizedPage, 1), Math.max(totalPages, 1))
-}
-
-function sameSelection(left, right) {
-  if (left.size !== right.size) return false
-  for (const value of left) {
-    if (!right.has(value)) return false
-  }
-  return true
-}
-
-function isSortableKey(key) {
-  return (typeof key === 'string' && key.length > 0) || typeof key === 'number'
-}
-
-function sortableColumn(column) {
-  return Boolean(readProperty(column, 'sortable'))
-    && isSortableKey(readProperty(column, 'key'))
-}
-
-function isObjectLike(value) {
-  return value !== null && (typeof value === 'object' || typeof value === 'function')
-}
-
 function normalizeAccessibleLabel(value, fallback) {
-  if (typeof value === 'string' || typeof value === 'number') {
+  if (isString(value) || isFiniteNumber(value)) {
     const label = safeString(value).trim()
     if (label) return label
   }
@@ -118,7 +77,7 @@ function resolveAccessibleRowLabel(resolveRowLabel, row, index, warningsRef) {
 }
 
 function normalizeActionLabel(value, fallback) {
-  if (typeof value === 'string' || typeof value === 'number') {
+  if (isString(value) || isFiniteNumber(value)) {
     const label = safeString(value).trim()
     if (label) return { accessibleLabel: label, visibleLabel: label }
   }
@@ -131,7 +90,7 @@ function normalizeActionLabel(value, fallback) {
 }
 
 function normalizeAction(action, index, warningsRef) {
-  if (action === null || (typeof action !== 'object' && typeof action !== 'function')) {
+  if (action === null || (!isObject(action) && !isFunction(action))) {
     warnOnce(
       warningsRef,
       `action-invalid-${index}`,
@@ -141,7 +100,7 @@ function normalizeAction(action, index, warningsRef) {
   }
 
   const onClick = readProperty(action, 'onClick')
-  if (typeof onClick !== 'function') {
+  if (!isFunction(onClick)) {
     warnOnce(
       warningsRef,
       `action-callback-${index}`,
@@ -156,14 +115,12 @@ function normalizeAction(action, index, warningsRef) {
     fallbackLabel,
   )
   const iconValue = readProperty(action, 'icon')
-  const icon = typeof iconValue === 'string' && iconValue.trim()
-    ? iconValue.trim()
-    : ''
+  const icon = isNonEmptyString(iconValue) ? iconValue.trim() : ''
   const requestedVariant = readProperty(action, 'variant')
   const variant = requestedVariant === 'button' ? 'button' : 'icon'
   const effectiveVariant = variant === 'icon' && !icon ? 'button' : variant
   const buttonVariantValue = readProperty(action, 'buttonVariant')
-  const buttonVariant = typeof buttonVariantValue === 'string'
+  const buttonVariant = isString(buttonVariantValue)
     && /^[A-Za-z0-9_-]+$/.test(buttonVariantValue.trim())
     ? buttonVariantValue.trim()
     : 'light-brand'
@@ -211,55 +168,6 @@ function renderActionControl(action, row) {
   )
 }
 
-function defaultFilterResolver(row) {
-  if (row === null || row === undefined) return row
-  if (typeof row !== 'object') return row
-
-  try {
-    return Object.keys(row).map(key => readProperty(row, key))
-  } catch {
-    return row
-  }
-}
-
-function filterText(value, seen = new Set()) {
-  if (value === null || value === undefined) return ''
-  if (typeof value !== 'object') return safeString(value)
-  if (seen.has(value)) return ''
-  seen.add(value)
-
-  if (Array.isArray(value)) return value.map(item => filterText(item, seen)).join(' ')
-
-  try {
-    return Object.keys(value)
-      .map(key => filterText(readProperty(value, key), seen))
-      .join(' ')
-  } catch {
-    return safeString(value)
-  }
-}
-
-function matchesFilter(entry, searchValue, filterResolver, filterPredicate, warningsRef) {
-  try {
-    if (typeof filterPredicate === 'function') {
-      return Boolean(filterPredicate(entry.row, searchValue, entry.index))
-    }
-
-    const resolved = typeof filterResolver === 'function'
-      ? filterResolver(entry.row, entry.index)
-      : defaultFilterResolver(entry.row)
-    return filterText(resolved).toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
-  } catch {
-    const mode = typeof filterPredicate === 'function' ? 'predicate' : 'resolver'
-    warnOnce(
-      warningsRef,
-      `filter-${mode}-${entry.index}`,
-      `DataTable: el ${mode} de filtro falló para la fila ${entry.index + 1}; se omitirá esa fila.`,
-    )
-    return false
-  }
-}
-
 function compareEntries(left, right, sortKey, sortDir) {
   const leftValue = readProperty(left.row, sortKey) ?? ''
   const rightValue = readProperty(right.row, sortKey) ?? ''
@@ -283,7 +191,7 @@ const DataTableCell = memo(function DataTableCell({ entry, column, pageRowIndex 
 
   return (
     <td>
-      {typeof render === 'function'
+      {isFunction(render)
         ? render(entry.row, value, pageRowIndex)
         : value}
     </td>
@@ -399,28 +307,28 @@ export function DataTable({
   'aria-labelledby': ariaLabelledBy,
   ...tableProps
 }) {
-  const normalizedColumns = Array.isArray(columns) ? columns : EMPTY_ARRAY
-  const normalizedData = Array.isArray(data) ? data : EMPTY_ARRAY
-  const normalizedActions = Array.isArray(actions) ? actions : EMPTY_ARRAY
-  const resolvedOnSelectionChange = typeof onSelectionChange === 'function'
+  const normalizedColumns = isArray(columns) ? columns : EMPTY_ARRAY
+  const normalizedData = isArray(data) ? data : EMPTY_ARRAY
+  const normalizedActions = isArray(actions) ? actions : EMPTY_ARRAY
+  const resolvedOnSelectionChange = isFunction(onSelectionChange)
     ? onSelectionChange
     : undefined
-  const resolvedOnPageSizeChange = typeof onPageSizeChange === 'function'
+  const resolvedOnPageSizeChange = isFunction(onPageSizeChange)
     ? onPageSizeChange
     : undefined
   const resolvedSearchValue = searchValue !== undefined ? searchValue : search
   const resolvedDefaultSearchValue = defaultSearchValue !== undefined
     ? defaultSearchValue
     : defaultSearch
-  const resolvedOnSearchChange = typeof onSearchChange === 'function'
+  const resolvedOnSearchChange = isFunction(onSearchChange)
     ? onSearchChange
-    : typeof onSearch === 'function'
+    : isFunction(onSearch)
       ? onSearch
       : undefined
-  const resolvedFilterResolver = typeof filterResolver === 'function'
+  const resolvedFilterResolver = isFunction(filterResolver)
     ? filterResolver
     : searchResolver
-  const resolvedFilterPredicate = typeof filterPredicate === 'function'
+  const resolvedFilterPredicate = isFunction(filterPredicate)
     ? filterPredicate
     : searchPredicate
   const resolvedFilterMode = manualFiltering
@@ -430,20 +338,20 @@ export function DataTable({
     : 'local'
   const resolvedTotalItems = totalItems !== undefined ? totalItems : totalCount
   const hasRemoteTotal = resolvedFilterMode === 'manual'
-    && Number.isFinite(resolvedTotalItems)
+    && isFiniteNumber(resolvedTotalItems)
     && resolvedTotalItems >= 0
   const remoteTotal = hasRemoteTotal ? Math.floor(resolvedTotalItems) : null
   const searchEnabled = searchable === true
     || resolvedSearchValue !== undefined
     || resolvedDefaultSearchValue !== undefined
-    || typeof resolvedOnSearchChange === 'function'
-  const resolveRowLabel = typeof getRowLabel === 'function'
+    || isFunction(resolvedOnSearchChange)
+  const resolveRowLabel = isFunction(getRowLabel)
     ? getRowLabel
     : defaultGetRowLabel
   const normalizedRequestedPageSize = normalizePageSize(pageSize)
   const [internalPageSize, setInternalPageSize] = useState(normalizedRequestedPageSize)
   const pageSizePropRef = useRef(normalizedRequestedPageSize)
-  const pageSizeControlled = typeof resolvedOnPageSizeChange === 'function'
+  const pageSizeControlled = isFunction(resolvedOnPageSizeChange)
   const effectivePageSize = pageSizeControlled
     ? normalizedRequestedPageSize
     : internalPageSize
@@ -465,7 +373,7 @@ export function DataTable({
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState(() => new Set())
   const selectedRef = useRef(selected)
-  const rowKeyHistoryRef = useRef(new WeakMap())
+  const rowKeyHistoryRef = useRef(new Map())
   const warningsRef = useRef(new Set())
   const instanceId = createSafeDomId('duralux-table', useId())
 
@@ -514,7 +422,7 @@ export function DataTable({
   )
 
   useEffect(() => {
-    if (typeof rowKey !== 'function') return
+    if (!isFunction(rowKey)) return
 
     displayEntries.forEach((entry, displayIndex) => {
       const nextValue = resolveRowKey(rowKey, entry.row, displayIndex)
@@ -555,17 +463,6 @@ export function DataTable({
     pageSizePropRef.current = nextPageSize
     if (!pageSizeControlled) setInternalPageSize(nextPageSize)
   }, [normalizedRequestedPageSize, pageSizeControlled])
-
-  useEffect(() => {
-    setPage(current => {
-      const nextPage = clampPage(current, pageCount)
-      return current === nextPage ? current : nextPage
-    })
-  }, [pageCount])
-
-  useEffect(() => {
-    setPage(current => (current === 1 ? current : 1))
-  }, [activeSearch, resolvedFilterMode])
 
   const availableSelectionKeys = useMemo(
     () => new Set(allRowEntries.map(entry => entry.identity)),
@@ -644,7 +541,7 @@ export function DataTable({
   }, [allSelected, commitSelection, pageEntries])
 
   const changePage = useCallback((nextPage) => {
-    if (!Number.isFinite(nextPage)) return
+    if (!isFiniteNumber(nextPage)) return
     const normalizedNextPage = Math.floor(nextPage)
     if (normalizedNextPage < 1 || normalizedNextPage > pageCount) return
     setPage(normalizedNextPage)
@@ -669,7 +566,7 @@ export function DataTable({
   ], [normalizedColumns, selectable, validActions.length])
   const tableClassName = [
     autoWidth ? 'table-auto-width' : '',
-    typeof className === 'string' ? className : '',
+    isString(className) ? className : '',
   ].filter(Boolean).join(' ')
   const selectAllId = `${instanceId}-select-all`
 
@@ -842,7 +739,7 @@ export function DataTable({
   ) : null
   const toolbarContent = toolbarRenderer === undefined
     ? defaultToolbar
-    : typeof toolbarRenderer === 'function'
+    : isFunction(toolbarRenderer)
       ? toolbarRenderer(toolbarContext)
       : toolbarRenderer
 

@@ -47,11 +47,12 @@ export type {
 
 export * from './contract'
 export * from './tokens'
+export { ThemeProvider, type ThemeProviderProps } from './theme/ThemeProvider'
 export {
-  ThemeProvider,
   useTheme,
   useThemeOptional,
   THEME_HEAD_SNIPPET,
-} from './theme/ThemeProvider'
-export type { ThemeContextValue, ThemeMode } from './theme/ThemeProvider'
+  type ThemeContextValue,
+  type ThemeMode,
+} from './theme/ThemeContext'
 export { apiFetch, SESSION_EXPIRED_EVENT } from './api/client'

@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ApexDataTable, ChartFrame, readChartDataValue, resolveChartAlternative } from './chartA11y'
+import { ApexDataTable, ChartFrame } from './chartA11y'
+import { readChartDataValue, resolveChartAlternative } from './chartA11yModel'
 import { useClientReady, usePrefersReducedMotion } from './chartMotion'
 import {
   buildApexOptions,
   getApexOptionThemeMode,
   useChartTheme,
 } from './chartTheme'
+import { isArray, isFunction, isObject } from '../../utils/typeGuards'
 
 let apexChartModulePromise
 const EMPTY_OPTIONS = Object.freeze({})
@@ -16,16 +18,16 @@ function loadApexChartComponent() {
 }
 
 function hasApexData(series) {
-  if (!Array.isArray(series)) return false
+  if (!isArray(series)) return false
 
   const length = readChartDataValue(series, 'length')
   if (!Number.isSafeInteger(length) || length === 0) return false
 
   for (let index = 0; index < length; index += 1) {
     const item = readChartDataValue(series, index)
-    if (item && typeof item === 'object') {
+    if (item && isObject(item)) {
       const data = readChartDataValue(item, 'data')
-      if (Array.isArray(data)) {
+      if (isArray(data)) {
         const dataLength = readChartDataValue(data, 'length')
         if (Number.isSafeInteger(dataLength) && dataLength > 0) return true
       } else if (data !== null && data !== undefined) {
@@ -50,7 +52,7 @@ function ApexVisual({ type, options, series, height, width }) {
     let cancelled = false
 
     loadApexChartComponent().then((component) => {
-      if (!cancelled && typeof component === 'function') {
+      if (!cancelled && isFunction(component)) {
         setApexChartComponent(() => component)
       }
     })
@@ -127,7 +129,7 @@ export function ApexChart({
       height,
       width,
       mode: getApexOptionThemeMode(options) ?? ambientTheme,
-      theme: typeof theme === 'object' ? theme : undefined,
+      theme: isObject(theme) ? theme : undefined,
       reducedMotion,
     }),
     [ambientTheme, height, options, reducedMotion, theme, type, width],

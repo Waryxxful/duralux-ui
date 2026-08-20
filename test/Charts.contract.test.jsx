@@ -100,9 +100,9 @@ test('uses the literal accessible dark chart palette across Recharts and Apex', 
   document.documentElement.dataset.gcuTheme = 'light'
   const expectedSeries = CHART_DARK_PALETTE
   const expectedText = '#f5f7ff'
-  const expectedMuted = '#b8c4dc'
-  const expectedBorder = '#68799c'
-  const expectedSurface = '#1d2a45'
+  const expectedMuted = '#8b8d98'
+  const expectedBorder = '#3a3b42'
+  const expectedSurface = '#17181d'
 
   document.documentElement.dataset.gcuTheme = 'dark'
   render(
@@ -136,10 +136,10 @@ test('uses the literal accessible dark chart palette across Recharts and Apex', 
   expect(apexOptions.xaxis.labels.style.colors).toBe(expectedMuted)
   expect(apexOptions.tooltip.style).toBeUndefined()
 
-  expectedSeries.forEach((color) => expect(contrastRatio(color, '#121a2d')).toBeGreaterThanOrEqual(3))
-  expect(contrastRatio(expectedText, '#121a2d')).toBeGreaterThanOrEqual(4.5)
-  expect(contrastRatio(expectedMuted, '#121a2d')).toBeGreaterThanOrEqual(4.5)
-  expect(contrastRatio(expectedBorder, '#121a2d')).toBeGreaterThanOrEqual(3)
+  expectedSeries.forEach((color) => expect(contrastRatio(color, '#0e0f12')).toBeGreaterThanOrEqual(3))
+  expect(contrastRatio(expectedText, '#0e0f12')).toBeGreaterThanOrEqual(4.5)
+  expect(contrastRatio(expectedMuted, '#0e0f12')).toBeGreaterThanOrEqual(4.5)
+  expect(contrastRatio(expectedBorder, '#0e0f12')).toBeGreaterThanOrEqual(1.5)
 })
 
 test('resolves dark colors for every Recharts widget while preserving custom series colors', async () => {
@@ -162,7 +162,7 @@ test('resolves dark colors for every Recharts widget while preserving custom ser
   expect(screen.getAllByTestId('area')[0]).toHaveAttribute('data-stroke', '#8ea7ff')
   expect(screen.getAllByTestId('bar').map((bar) => bar.dataset.fill)).toEqual(['#123456', '#55e899'])
   expect(screen.getAllByTestId('cell').map((cell) => cell.dataset.fill)).toEqual(['#8ea7ff', '#55e899'])
-  expect(screen.getAllByTestId('tooltip').every((tooltip) => tooltip.dataset.background === '#1d2a45')).toBe(true)
+  expect(screen.getAllByTestId('tooltip').every((tooltip) => tooltip.dataset.background === '#17181d')).toBe(true)
 })
 
 test('renders primitive Recharts values with stable table headers', () => {

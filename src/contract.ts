@@ -80,8 +80,8 @@ export function topLevelApps(apps: AppManifestEntry[]): AppManifestEntry[] {
 }
 
 export interface EventBus {
-  emit(event: 'logout' | 'sessionExpired' | 'navigate', payload?: unknown): void;
-  on(event: string, cb: (payload: unknown) => void): () => void;
+  emit<T = void>(event: 'logout' | 'sessionExpired' | 'navigate', payload?: T): void;
+  on<T = void>(event: string, cb: (payload: T) => void): () => void;
 }
 
 export interface GranCrmRemoteProps {

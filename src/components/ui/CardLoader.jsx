@@ -1,8 +1,9 @@
 import { cx } from '../../utils/cx'
+import { isFiniteNumber, isNonEmptyString } from '../../utils/typeGuards'
 
 function labelText(value, fallback = 'Cargando') {
-  if (typeof value === 'string' && value.trim() !== '') return value
-  if (typeof value === 'number') return String(value)
+  if (isNonEmptyString(value)) return value
+  if (isFiniteNumber(value)) return String(value)
   return fallback
 }
 

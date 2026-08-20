@@ -9,6 +9,7 @@
  *   style      — estilos adicionales (se fusionan con font-size del size)
  */
 import { cx } from '../../utils/cx'
+import { isFiniteNumber } from '../../utils/typeGuards'
 
 const sizeMap = {
   xs: '0.625rem',
@@ -19,7 +20,7 @@ const sizeMap = {
 }
 
 export function Icon({ name, size = undefined, 'aria-label': label = undefined, className = '', style = undefined, ...rest }) {
-  const resolvedSize = typeof size === 'number' ? size : sizeMap[size]
+  const resolvedSize = isFiniteNumber(size) ? size : sizeMap[size]
   const inlineSize = resolvedSize ? { fontSize: resolvedSize, ...style } : style
   const cls = cx('gcu-icon', 'feather-' + name, className)
 

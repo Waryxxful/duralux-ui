@@ -1,3 +1,5 @@
+import { isBoolean, isFiniteNumber, isString } from '../../../utils/typeGuards'
+
 function safeString(value, fallback = '') {
   try {
     return String(value)
@@ -12,7 +14,8 @@ function safeString(value, fallback = '') {
  * distinction between numeric and string keys.
  */
 export function toSafeDomSegment(value) {
-  const source = `${typeof value}:${safeString(value)}`
+  const tag = isString(value) ? 'string' : isFiniteNumber(value) ? 'number' : isBoolean(value) ? 'boolean' : 'object'
+  const source = `${tag}:${safeString(value)}`
   return Array.from(source)
     .map((character) => character.codePointAt(0).toString(16))
     .join('-') || 'empty'

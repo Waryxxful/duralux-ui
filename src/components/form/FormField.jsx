@@ -5,6 +5,7 @@ import { Input } from './Input.jsx'
 import { Radio } from './Radio.jsx'
 import { Select } from './Select.jsx'
 import { Textarea } from './Textarea.jsx'
+import { isFunction, isString } from '../../utils/typeGuards'
 
 const CONTROL_COMPONENTS = new Set([Checkbox, FileInput, Input, Radio, Select, Textarea])
 const NATIVE_CONTROL_TAGS = new Set(['button', 'input', 'select', 'textarea'])
@@ -15,7 +16,7 @@ function isPackageControl(type, props) {
   const marker = type?.duraluxFormControl
   if (marker === undefined) return false
   try {
-    return typeof marker === 'function' ? Boolean(marker(props)) : Boolean(marker)
+    return isFunction(marker) ? Boolean(marker(props)) : Boolean(marker)
   } catch {
     return false
   }
@@ -26,7 +27,7 @@ function hasContent(value) {
 }
 
 function describedByTokens(value) {
-  if (typeof value !== 'string') return []
+  if (!isString(value)) return []
   return value.trim().split(/\s+/).filter(Boolean)
 }
 
@@ -62,7 +63,7 @@ function appendUnique(values, next) {
 export function FormField({ label, htmlFor, required, error, helpText, hint, className, children }) {
   const generatedId = useId()
   const help = helpText ?? hint
-  const isRenderProp = typeof children === 'function'
+  const isRenderProp = isFunction(children)
   const fallbackId = htmlFor ?? generatedId
   const renderedContent = isRenderProp ? children(fallbackId) : children
   const candidateType = isValidElement(renderedContent) && renderedContent.type !== Fragment
@@ -70,7 +71,7 @@ export function FormField({ label, htmlFor, required, error, helpText, hint, cla
     : null
   const packageControl = candidateType ? isPackageControl(candidateType, renderedContent.props) : false
   const isSingleControl = Boolean(candidateType) && (
-    (typeof candidateType === 'string' && NATIVE_CONTROL_TAGS.has(candidateType))
+    (isString(candidateType) && NATIVE_CONTROL_TAGS.has(candidateType))
     || packageControl
   )
   const id = isSingleControl
@@ -85,7 +86,7 @@ export function FormField({ label, htmlFor, required, error, helpText, hint, cla
   const appliesRequired = Boolean(
     required
     && isSingleControl
-    && (typeof candidateType !== 'string' || REQUIRED_NATIVE_CONTROL_TAGS.has(candidateType)),
+    && (!isString(candidateType) || REQUIRED_NATIVE_CONTROL_TAGS.has(candidateType)),
   )
 
   let content = renderedContent

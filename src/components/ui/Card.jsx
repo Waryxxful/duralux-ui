@@ -1,16 +1,17 @@
 import { Fragment } from 'react'
 import { CardLoader } from './CardLoader'
+import { isArray, isFunction, isString } from '../../utils/typeGuards'
 
 function hasContent(value) {
   if (value === null || value === undefined || value === false || value === true) return false
-  if (typeof value === 'string') return value.trim() !== ''
-  if (Array.isArray(value)) return value.some(hasContent)
+  if (isString(value)) return value.trim() !== ''
+  if (isArray(value)) return value.some(hasContent)
   return true
 }
 
 function callbackAction(callback, node, label, icon) {
-  const action = typeof callback === 'function' ? callback : node
-  if (typeof action === 'function') {
+  const action = isFunction(callback) ? callback : node
+  if (isFunction(action)) {
     return (
       <button type="button" className="btn btn-sm btn-light-brand" aria-label={label} onClick={action}>
         <i className={`feather-${icon}`} aria-hidden="true"></i>

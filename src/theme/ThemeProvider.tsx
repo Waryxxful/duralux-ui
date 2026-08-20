@@ -1,75 +1,21 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  isResponsiveMiniWidth,
+  LEGACY_MINI_KEY,
+  MINI_KEY,
+  MINI_PIN_KEY,
+  MINI_PIN_VERSION,
+  readInitialMiniState,
+  readStoredMode,
+  ThemeContext,
+  THEME_STORAGE_KEY,
+  type ThemeContextValue,
+  type ThemeMode,
+} from './ThemeContext';
 
-export type ThemeMode = 'light' | 'dark';
-
-const STORAGE_KEY = 'grancrm-theme';
-const MINI_KEY = 'grancrm-menu-mini';
-const LEGACY_MINI_KEY = 'nexel-classic-dashboard-menu-mini-theme';
-// MINI_KEY remains compatible; this marker identifies an explicit user choice rather than responsive state.
-const MINI_PIN_KEY = 'grancrm-menu-mini-pinned';
-const MINI_PIN_VERSION = '1';
-
-export interface ThemeContextValue {
-  mode: ThemeMode;
-  dark: boolean;
-  setMode: (mode: ThemeMode) => void;
-  toggleDark: () => void;
-  mini: boolean;
-  setMini: (mini: boolean) => void;
-  toggleMini: () => void;
-}
-
-const ThemeContext = createContext<ThemeContextValue | null>(null);
-
-function readStoredMode(): ThemeMode {
-  try {
-    return localStorage.getItem(STORAGE_KEY) === 'dark' ? 'dark' : 'light';
-  } catch {
-    return 'light';
-  }
-}
-
-function parseStoredMini(value: string | null): boolean | null {
-  if (value === '1' || value === 'true' || value === 'menu-mini-theme') return true;
-  if (value === '0' || value === 'false' || value === 'menu-expend-theme') return false;
-  return null;
-}
-
-function readStoredMiniPreference(): boolean | null {
-  try {
-    if (localStorage.getItem(MINI_PIN_KEY) !== MINI_PIN_VERSION) return null;
-    return parseStoredMini(localStorage.getItem(MINI_KEY))
-      ?? parseStoredMini(localStorage.getItem(LEGACY_MINI_KEY));
-  } catch {
-    return null;
-  }
-}
-
-/** Responsive menu contract: only the narrow desktop band is mini. */
-export function isResponsiveMiniWidth(width: number): boolean {
-  return Number.isFinite(width) && width > 1024 && width <= 1400;
-}
-
-/** Snippet anti-FOUC para <head> — exportado como string para apps. */
-export const THEME_HEAD_SNIPPET = `try{var t=localStorage.getItem('${STORAGE_KEY}');if(t==='dark')document.documentElement.classList.add('app-skin-dark');var p=localStorage.getItem('${MINI_PIN_KEY}'),m=localStorage.getItem('${MINI_KEY}')||localStorage.getItem('${LEGACY_MINI_KEY}');if(p==='${MINI_PIN_VERSION}'&&(m==='1'||m==='true'||m==='menu-mini-theme'))document.documentElement.classList.add('minimenu')}catch(e){}`;
-
-interface MiniState {
-  mini: boolean;
-  userPinnedMini: boolean;
-}
-
-function readInitialMiniState(enableResponsiveMini = true): MiniState {
-  const preference = readStoredMiniPreference();
-  if (preference !== null) return { mini: preference, userPinnedMini: true };
-
-  if (enableResponsiveMini && typeof window !== 'undefined') {
-    return { mini: isResponsiveMiniWidth(window.innerWidth), userPinnedMini: false };
-  }
-
-  return {
-    mini: typeof document !== 'undefined' && document.documentElement.classList.contains('minimenu'),
-    userPinnedMini: false,
-  };
+export interface ThemeProviderProps {
+  children: React.ReactNode;
+  enableResponsiveMini?: boolean;
 }
 
 /**
@@ -82,16 +28,13 @@ function readInitialMiniState(enableResponsiveMini = true): MiniState {
 export function ThemeProvider({
   children,
   enableResponsiveMini = true,
-}: {
-  children: React.ReactNode;
-  enableResponsiveMini?: boolean;
-}) {
+}: ThemeProviderProps) {
   const [mode, setModeState] = useState<ThemeMode>(() =>
-    typeof document !== 'undefined' && document.documentElement.classList.contains('app-skin-dark')
+    globalThis.document?.documentElement.classList.contains('app-skin-dark')
       ? 'dark'
       : readStoredMode(),
   );
-  const [miniState, setMiniState] = useState<MiniState>(() => readInitialMiniState(enableResponsiveMini));
+  const [miniState, setMiniState] = useState(() => readInitialMiniState(enableResponsiveMini));
   const { mini, userPinnedMini } = miniState;
 
   const setMode = useCallback((next: ThemeMode) => {
@@ -114,7 +57,7 @@ export function ThemeProvider({
     const html = document.documentElement;
     html.classList.toggle('app-skin-dark', mode === 'dark');
     try {
-      localStorage.setItem(STORAGE_KEY, mode);
+      localStorage.setItem(THEME_STORAGE_KEY, mode);
     } catch { /* ignore */ }
   }, [mode]);
 
@@ -132,8 +75,6 @@ export function ThemeProvider({
     } catch { /* ignore */ }
   }, [mini, userPinnedMini]);
 
-  // Responsive v2: mobile/tablet and wide desktop stay expanded; only the
-  // 1024.01..1400 desktop band collapses automatically.
   useEffect(() => {
     if (!enableResponsiveMini || userPinnedMini) return;
     const apply = () => {
@@ -166,15 +107,13 @@ export function ThemeProvider({
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
-export function useTheme(): ThemeContextValue {
-  const ctx = useContext(ThemeContext);
-  if (!ctx) {
-    throw new Error('useTheme() debe usarse dentro de <ThemeProvider>');
-  }
-  return ctx;
-}
-
-/** Variante safe para componentes que pueden vivir fuera del provider. */
-export function useThemeOptional(): ThemeContextValue | null {
-  return useContext(ThemeContext);
-}
+export {
+  useTheme,
+  useThemeOptional,
+  THEME_HEAD_SNIPPET,
+  THEME_STORAGE_KEY,
+  MINI_KEY,
+  MINI_PIN_KEY,
+  type ThemeContextValue,
+  type ThemeMode,
+} from './ThemeContext';

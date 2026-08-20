@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { isFiniteNumber, isFunction, isObject, isString } from '../../utils/typeGuards'
 
 const DEFAULT_LABELS = {
   input: 'Mensaje',
@@ -9,7 +10,7 @@ const DEFAULT_LABELS = {
 
 function resolveLabel(labels, propLabel, key) {
   let label
-  if (labels && typeof labels === 'object') {
+  if (labels && isObject(labels)) {
     try {
       label = labels[key]
     } catch {
@@ -18,7 +19,7 @@ function resolveLabel(labels, propLabel, key) {
   }
   const candidate = label ?? propLabel
 
-  if (typeof candidate === 'string' || typeof candidate === 'number') {
+  if (isString(candidate) || isFiniteNumber(candidate)) {
     const normalized = String(candidate).trim()
     if (normalized) return normalized
   }
@@ -59,12 +60,12 @@ export function ChatInputBar({
   const resolvedAttachLabel = resolveLabel(labels, attachLabel, 'attach')
   const resolvedEmojiLabel = resolveLabel(labels, emojiLabel, 'emoji')
   const resolvedSendLabel = resolveLabel(labels, sendLabel, 'send')
-  const canSend = typeof onSend === 'function'
-  const canAttach = typeof onAttach === 'function'
-  const canInsertEmoji = typeof onEmoji === 'function'
+  const canSend = isFunction(onSend)
+  const canAttach = isFunction(onAttach)
+  const canInsertEmoji = isFunction(onEmoji)
   const isDisabled = Boolean(disabled)
   const inputDisabled = isDisabled || !canSend
-  const resolvedPlaceholder = typeof placeholder === 'string' || typeof placeholder === 'number'
+  const resolvedPlaceholder = isString(placeholder) || isFiniteNumber(placeholder)
     ? String(placeholder)
     : 'Escribe un mensaje...'
 

@@ -1,6 +1,8 @@
+import { isArray, isString } from '../../utils/typeGuards'
+
 function hasContent(value) {
   if (value === null || value === undefined || value === false || value === true) return false
-  if (typeof value === 'string') return value.trim() !== ''
+  if (isString(value)) return value.trim() !== ''
   return true
 }
 
@@ -29,7 +31,7 @@ function safeToken(value, fallback) {
 }
 
 function isDevelopment() {
-  return typeof process === 'undefined' || process.env?.NODE_ENV !== 'production'
+  return globalThis.process?.env?.NODE_ENV !== 'production'
 }
 
 function itemIdentity(item, index) {
@@ -67,7 +69,7 @@ function buildKeys(items) {
  *   }]
  */
 export function Timeline({ items = [], className = '', 'aria-label': ariaLabel = undefined }) {
-  const list = Array.isArray(items) ? items : []
+  const list = isArray(items) ? items : []
   const keys = buildKeys(list)
 
   return (

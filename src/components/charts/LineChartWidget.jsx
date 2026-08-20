@@ -3,7 +3,8 @@ import {
   ResponsiveContainer, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts'
-import { ChartFrame, normalizeCartesianData, RechartsDataTable, resolveChartAlternative } from './chartA11y'
+import { ChartFrame, RechartsDataTable } from './chartA11y'
+import { normalizeCartesianData, resolveChartAlternative } from './chartA11yModel'
 import { usePrefersReducedMotion } from './chartMotion'
 import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalette'
 import { useChartTheme } from './chartTheme'

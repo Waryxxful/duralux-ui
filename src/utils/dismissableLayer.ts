@@ -23,8 +23,9 @@ interface DismissableLayerState {
 const STATE_KEY = Symbol.for('@duralux/ui/dismissable-layer-state');
 
 function getState(): DismissableLayerState {
-  const scope = globalThis as typeof globalThis & Record<PropertyKey, unknown>;
-  const existing = scope[STATE_KEY] as DismissableLayerState | undefined;
+  // SAFETY: Symbol-keyed singleton registry on globalThis across module boundaries
+  const scope = globalThis as { [STATE_KEY]?: DismissableLayerState };
+  const existing = scope[STATE_KEY];
   if (existing) return existing;
 
   const state: DismissableLayerState = {
@@ -62,7 +63,7 @@ function topmostLayer(layers: RegisteredLayer[]) {
 
 export function registerDismissableLayer(layer: DismissableLayer) {
   const ownerDocument = layer.element?.ownerDocument
-    ?? (typeof document === 'undefined' ? null : document);
+    ?? (globalThis.document ?? null);
   if (!ownerDocument) return () => {};
 
   let documentState = state.documents.get(ownerDocument);

@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { cx } from '../../utils/cx'
+import { isString } from '../../utils/typeGuards'
 
 export function FileInput({
   label,
@@ -17,7 +18,7 @@ export function FileInput({
   const helpId = `${id}-help`
   const describedBy = [
     providedDescribedBy,
-    typeof error === 'string' ? errorId : undefined,
+    isString(error) ? errorId : undefined,
     helpText && !error ? helpId : undefined,
   ].filter(Boolean).join(' ') || undefined
 
@@ -34,7 +35,7 @@ export function FileInput({
         aria-invalid={error ? true : providedInvalid}
         {...rest}
       />
-      {typeof error === 'string' && <div id={errorId} className="invalid-feedback">{error}</div>}
+      {isString(error) && <div id={errorId} className="invalid-feedback">{error}</div>}
       {helpText && !error && <div id={helpId} className="form-text">{helpText}</div>}
     </div>
   )

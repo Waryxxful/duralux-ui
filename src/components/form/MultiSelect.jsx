@@ -1,24 +1,25 @@
 import { useEffect, useMemo, useState } from 'react'
+import { HiddenValues } from './internal/selectCore'
 import {
-  HiddenValues,
+  EMPTY_OPTIONS,
   isSelectValue,
   normalizeOptions,
-  optionVisual,
   optionText,
+  optionVisual,
   safeOptionId,
   safeRenderable,
   safeString,
   useListboxCore,
   valueToken,
-} from './internal/selectCore.jsx'
+} from './internal/selectCoreModel'
+import { isArray, isFiniteNumber, isFunction } from '../../utils/typeGuards'
 
-const EMPTY_OPTIONS = Object.freeze([])
 const EMPTY_VALUES = Object.freeze([])
 const MAX_VALUE_COUNT = 10000
 
 function normalizeValues(values) {
   try {
-    if (!Array.isArray(values)) return []
+    if (!isArray(values)) return []
   } catch {
     return []
   }
@@ -57,7 +58,7 @@ function normalizeMax(max) {
   } catch {
     return Infinity
   }
-  return Number.isFinite(numeric) ? Math.max(0, Math.floor(numeric)) : Infinity
+  return isFiniteNumber(numeric) ? Math.max(0, Math.floor(numeric)) : Infinity
 }
 
 /** Accessible searchable multi-select with removable value chips. */
@@ -125,7 +126,7 @@ export function MultiSelect({
   function emit(nextValues) {
     const normalizedNext = normalizeValues(nextValues).slice(0, selectionLimit)
     if (!controlled) setInternalValues(normalizedNext)
-    if (typeof onChange === 'function') {
+    if (isFunction(onChange)) {
       onChange(
         normalizedNext,
         normalizedNext.map(valueItem => optionByToken.get(valueToken(valueItem))?.raw).filter(item => item !== undefined),
@@ -171,7 +172,7 @@ export function MultiSelect({
   function renderChip(valueItem) {
     const option = optionByToken.get(valueToken(valueItem))
     const fallback = optionText(option, safeString(valueItem))
-    if (typeof renderValue === 'function') {
+    if (isFunction(renderValue)) {
       try {
         return safeRenderable(
           renderValue(option?.raw, option ?? { value: valueItem, label: safeString(valueItem) }),
@@ -232,12 +233,12 @@ export function MultiSelect({
           aria-controls={listboxId}
           aria-activedescendant={activeId}
           onFocus={(event) => {
-            if (typeof onFocus === 'function') onFocus(event)
+            if (isFunction(onFocus)) onFocus(event)
             if (!event.defaultPrevented) core.show()
           }}
           onBlur={onBlur}
           onClick={(event) => {
-            if (typeof onClick === 'function') onClick(event)
+            if (isFunction(onClick)) onClick(event)
             if (!event.defaultPrevented) core.show()
           }}
           onChange={(event) => {
@@ -245,7 +246,7 @@ export function MultiSelect({
             setQuery(event.currentTarget.value)
           }}
           onKeyDown={(event) => {
-            if (typeof onKeyDown === 'function') onKeyDown(event)
+            if (isFunction(onKeyDown)) onKeyDown(event)
             if (event.defaultPrevented) return
             if (event.key === 'Backspace' && !query && selectedValues.length) {
               event.preventDefault()
@@ -256,11 +257,11 @@ export function MultiSelect({
           }}
           onCompositionStart={(event) => {
             core.onCompositionStart()
-            if (typeof onCompositionStart === 'function') onCompositionStart(event)
+            if (isFunction(onCompositionStart)) onCompositionStart(event)
           }}
           onCompositionEnd={(event) => {
             core.onCompositionEnd()
-            if (typeof onCompositionEnd === 'function') onCompositionEnd(event)
+            if (isFunction(onCompositionEnd)) onCompositionEnd(event)
           }}
         />
         <button

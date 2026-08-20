@@ -1,146 +1,14 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { PLACEHOLDER_AVATAR } from '../../assets/placeholders'
+import {
+  normalizeContacts,
+  normalizeDisplayText,
+  normalizeLabelText,
+  normalizeSearchText,
+  resolveLabel,
+} from './chatModel'
+import { isFunction } from '../../utils/typeGuards'
 
 const EMPTY_CONTACTS = []
-const EMPTY_OBJECT = {}
-const DIACRITICS_PATTERN = /\p{Diacritic}/gu
-
-const DEFAULT_LABELS = {
-  sidebar: 'Chat',
-  search: 'Buscar conversaciones',
-  searchPlaceholder: 'Buscar conversación...',
-  edit: 'Editar conversación',
-  list: 'Lista de conversaciones',
-  online: 'En línea',
-  offline: 'Fuera de línea',
-  unread: 'sin leer',
-  selected: 'Conversación seleccionada',
-  noResults: 'No se encontraron conversaciones',
-  results: 'conversaciones encontradas',
-}
-
-function isCallable(value) {
-  return typeof value === 'function'
-}
-
-function isArray(value) {
-  try {
-    return Array.isArray(value)
-  } catch {
-    return false
-  }
-}
-
-function isRecord(value) {
-  return value !== null && typeof value === 'object' && !isArray(value)
-}
-
-function readProperty(value, key) {
-  if (value === null || value === undefined) return undefined
-
-  try {
-    return value[key]
-  } catch {
-    return undefined
-  }
-}
-
-function normalizeDisplayText(value, fallback = '') {
-  if (typeof value === 'string') return value
-  if (typeof value === 'number' && Number.isFinite(value)) return String(value)
-  return fallback
-}
-
-function normalizeLabelText(value, fallback) {
-  const text = normalizeDisplayText(value).trim()
-  return text || fallback
-}
-
-function normalizeImageSource(value) {
-  const source = normalizeDisplayText(value).trim()
-  return source || PLACEHOLDER_AVATAR
-}
-
-function normalizeUnread(value) {
-  const numericValue = typeof value === 'number'
-    ? value
-    : (typeof value === 'string' && value.trim() ? Number(value) : 0)
-
-  if (!Number.isFinite(numericValue) || numericValue <= 0) return 0
-  return Math.floor(numericValue)
-}
-
-function normalizeIdentity(value, index) {
-  if (typeof value === 'string' && value.trim()) return value
-  if (typeof value === 'number' && Number.isFinite(value)) return value
-  return `chat-contact-${index}`
-}
-
-function normalizeContacts(contacts) {
-  if (!isArray(contacts)) return []
-
-  let length
-  try {
-    length = contacts.length
-  } catch {
-    return []
-  }
-
-  const usedIds = new Set()
-  const usedKeys = new Set()
-  const normalizedContacts = []
-
-  for (let index = 0; index < length; index += 1) {
-    const rawContact = readProperty(contacts, index)
-    const source = isRecord(rawContact) ? rawContact : EMPTY_OBJECT
-    const initialId = normalizeIdentity(readProperty(source, 'id'), index)
-    const initialIdKey = String(initialId)
-    const id = usedIds.has(initialIdKey) ? `${initialIdKey}-${index}` : initialId
-    const baseKey = String(id)
-    let key = baseKey
-
-    usedIds.add(initialIdKey)
-    usedIds.add(String(id))
-    if (usedKeys.has(key)) key = `${baseKey}-${index}`
-    usedKeys.add(key)
-
-    normalizedContacts.push({
-      raw: rawContact,
-      id,
-      key,
-      name: normalizeLabelText(readProperty(source, 'name'), 'Conversación sin nombre'),
-      avatar: normalizeImageSource(readProperty(source, 'avatar')),
-      preview: normalizeDisplayText(readProperty(source, 'preview')),
-      time: normalizeDisplayText(readProperty(source, 'time')),
-      online: readProperty(source, 'online') === true,
-      unread: normalizeUnread(readProperty(source, 'unread')),
-    })
-  }
-
-  return normalizedContacts
-}
-
-function resolveLabel(labels, propLabel, key) {
-  const label = labels && typeof labels === 'object' ? readProperty(labels, key) : undefined
-  const candidate = label ?? propLabel
-
-  if (typeof candidate === 'string' || typeof candidate === 'number') {
-    const normalized = String(candidate).trim()
-    if (normalized) return normalized
-  }
-
-  return DEFAULT_LABELS[key]
-}
-
-function normalizeSearchText(value) {
-  const text = normalizeDisplayText(value)
-
-  try {
-    return text.normalize('NFD').replace(DIACRITICS_PATTERN, '').toLocaleLowerCase()
-  } catch {
-    return text.toLowerCase()
-  }
-}
 
 function ContactVisual({ contact, description, descriptionId, nameId }) {
   return (
@@ -201,9 +69,6 @@ export function ChatSidebar({
   selectedLabel,
   labels = undefined,
 }) {
-  // Keep the O(n) normalization independent from local selection, search and
-  // announcement state. Consumers should replace the contacts array when its
-  // data changes, as with other React collection props.
   const normalizedContacts = useMemo(
     () => normalizeContacts(contacts ?? EMPTY_CONTACTS),
     [contacts],
@@ -217,8 +82,8 @@ export function ChatSidebar({
   const searchRef = useRef(null)
   const descriptionPrefix = useId()
   const listId = useId()
-  const canSelect = isCallable(onSelect)
-  const canEdit = isCallable(onEdit)
+  const canSelect = isFunction(onSelect)
+  const canEdit = isFunction(onEdit)
   const isControlled = selectedId !== undefined
   const activeSelectedId = isControlled ? selectedId : uncontrolledSelectedId
   const resolvedSidebarLabel = resolveLabel(labels, sidebarLabel, 'sidebar')
@@ -248,7 +113,7 @@ export function ChatSidebar({
   const selectedContact = selectedIndex >= 0 ? filteredContacts[selectedIndex] : null
   const focusedContact = focusedContactRef.current
   const focusIsTracked = Boolean(
-    typeof document !== 'undefined'
+    globalThis.document
     && focusedContact?.element
     && document.activeElement === focusedContact.element,
   )
@@ -264,9 +129,7 @@ export function ChatSidebar({
     if (!currentFocus || !currentFocus.element) return
     if (filteredContacts.some((contact) => contact.key === currentFocus.key)) return
 
-    // Only repair focus when this component had focus. Typing in search must
-    // keep focus in the searchbox even if it removes a previously focused row.
-    if (!focusIsTracked && (typeof document === 'undefined' || document.activeElement !== currentFocus.element)) return
+    if (!focusIsTracked && (!globalThis.document || document.activeElement !== currentFocus.element)) return
 
     const fallback = selectedContact || filteredContacts[0]
     if (fallback) {
@@ -301,75 +164,61 @@ export function ChatSidebar({
     onSelect(contact.raw)
   }
 
-  function handleSearchChange(event) {
-    const nextQuery = event.target.value
-    setSearchQuery(nextQuery)
-    setAnnouncement('')
-    if (isCallable(onSearch)) onSearch(nextQuery)
-  }
+  function handleKeyDown(event, currentIndex) {
+    if (!canSelect || !filteredContacts.length) return
 
-  function moveFocus(event, contact) {
-    if (!canSelect || filteredContacts.length === 0) return
+    let nextIndex = null
 
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault()
-      selectContact(contact)
-      return
-    }
-
-    const index = filteredContacts.findIndex((item) => item.key === contact.key)
-    if (index < 0) return
-
-    let nextIndex = index
-    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-      nextIndex = Math.min(index + 1, filteredContacts.length - 1)
-    } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-      nextIndex = Math.max(index - 1, 0)
+    if (event.key === 'ArrowDown') {
+      nextIndex = (currentIndex + 1) % filteredContacts.length
+    } else if (event.key === 'ArrowUp') {
+      nextIndex = (currentIndex - 1 + filteredContacts.length) % filteredContacts.length
     } else if (event.key === 'Home') {
       nextIndex = 0
     } else if (event.key === 'End') {
       nextIndex = filteredContacts.length - 1
-    } else {
-      return
     }
 
+    if (nextIndex === null) return
+
     event.preventDefault()
-    const nextContact = filteredContacts[nextIndex]
-    setRovingKey(nextContact.key)
-    itemRefs.current.get(nextContact.key)?.focus()
+    const targetContact = filteredContacts[nextIndex]
+    if (!targetContact) return
+
+    setRovingKey(targetContact.key)
+    itemRefs.current.get(targetContact.key)?.focus()
   }
 
-  const hasSearchQuery = searchQuery.trim().length > 0
-  const statusMessage = announcement || (hasSearchQuery
-    ? (filteredContacts.length === 0
-      ? resolvedNoResultsLabel
-      : `${filteredContacts.length} ${resolvedResultsLabel}`)
-    : '')
+  function handleSearchChange(event) {
+    const query = event.target.value
+    setSearchQuery(query)
+
+    if (isFunction(onSearch)) onSearch(query)
+
+    const normalizedQuery = normalizeSearchText(query).trim()
+    const nextCount = normalizedQuery
+      ? normalizedContacts.filter((contact) => {
+        const name = normalizeSearchText(contact.name)
+        const preview = normalizeSearchText(contact.preview)
+        return name.includes(normalizedQuery) || preview.includes(normalizedQuery)
+      }).length
+      : normalizedContacts.length
+
+    setAnnouncement(
+      nextCount === 0
+        ? resolvedNoResultsLabel
+        : `${nextCount} ${resolvedResultsLabel}`,
+    )
+  }
 
   return (
-    <aside className="content-sidebar content-sidebar-xl chat-sidebar" aria-label={resolvedSidebarLabel}>
-      <div className="content-sidebar-header px-4 py-3 border-bottom d-flex align-items-center gap-3">
-        <div className="input-group flex-grow-1 chat-sidebar__search">
-          <span className="input-group-text border-0 bg-transparent ps-0" aria-hidden="true">
-            <i className="feather-search text-muted"></i>
-          </span>
-          <input
-            ref={searchRef}
-            type="search"
-            name="chat-search"
-            autoComplete="off"
-            className="form-control border-0 bg-transparent"
-            aria-label={resolvedSearchLabel}
-            aria-controls={listId}
-            placeholder={resolvedSearchPlaceholder}
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-        </div>
+    <aside className="content-sidebar content-sidebar-md" aria-label={resolvedSidebarLabel}>
+      <div className="content-sidebar-header bg-white sticky-top hstack justify-content-between">
+        <h4 className="fw-bolder mb-0">{resolvedSidebarLabel}</h4>
         {canEdit ? (
           <button
             type="button"
-            className="chat-sidebar__action avatar-text avatar-sm bg-primary text-white border-0 flex-shrink-0"
+            className="avatar-text avatar-md"
             aria-label={resolvedEditLabel}
             title={resolvedEditLabel}
             onClick={() => onEdit()}
@@ -378,68 +227,95 @@ export function ChatSidebar({
           </button>
         ) : null}
       </div>
-      <div className="content-sidebar-body chat-sidebar__body">
-        <ul id={listId} className="content-sidebar-items chat-sidebar__items list-unstyled mb-0" aria-label={resolvedListLabel}>
-          {filteredContacts.map((contact, index) => {
-            const isSelected = activeSelectedId === contact.id
-            const descriptionId = `${descriptionPrefix}-contact-${index}`
-            const nameId = `${descriptionPrefix}-contact-name-${index}`
-            const description = [
-              contact.preview,
-              contact.time,
-              contact.unread > 0 ? `${contact.unread} ${resolvedUnreadLabel}` : null,
-              contact.online ? resolvedOnlineLabel : resolvedOfflineLabel,
-            ].filter(Boolean).join(', ')
 
-            return (
-              <li key={contact.key}>
-                {canSelect ? (
-                  <button
-                    ref={(element) => registerItem(contact.key, element)}
-                    type="button"
-                    className={`chat-sidebar__contact p-4 d-flex position-relative border-bottom single-item${isSelected ? ' active bg-soft-primary' : ''}`}
-                    aria-labelledby={nameId}
-                    aria-describedby={description ? descriptionId : undefined}
-                    aria-current={isSelected ? 'true' : undefined}
-                    tabIndex={contact.key === tabbableKey ? 0 : -1}
-                    onClick={() => selectContact(contact)}
-                    onFocus={(event) => handleItemFocus(contact, event)}
-                    onKeyDown={(event) => moveFocus(event, contact)}
-                  >
-                    <ContactVisual
-                      contact={contact}
-                      description={description}
-                      descriptionId={descriptionId}
-                      nameId={nameId}
-                    />
-                  </button>
-                ) : (
-                  <div
-                    className={`chat-sidebar__contact chat-sidebar__contact--view p-4 d-flex position-relative border-bottom single-item${isSelected ? ' active bg-soft-primary' : ''}`}
-                    role="group"
-                    aria-labelledby={nameId}
-                    aria-describedby={description ? descriptionId : undefined}
-                  >
-                    <ContactVisual
-                      contact={contact}
-                      description={description}
-                      descriptionId={descriptionId}
-                      nameId={nameId}
-                    />
-                  </div>
-                )}
-              </li>
-            )
-          })}
-        </ul>
+      <div className="content-sidebar-header">
+        <div className="input-group">
+          <span className="input-group-text bg-transparent border-0" id={`${descriptionPrefix}-search-icon`}>
+            <i className="feather-search text-muted fs-12" aria-hidden="true"></i>
+          </span>
+          <input
+            ref={searchRef}
+            type="search"
+            name="chat-contact-search"
+            autoComplete="off"
+            className="form-control border-0 ps-0"
+            placeholder={resolvedSearchPlaceholder}
+            aria-label={resolvedSearchLabel}
+            aria-controls={listId}
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+
+      {announcement ? (
+        <span className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+          {announcement}
+        </span>
+      ) : null}
+
+      <div className="content-sidebar-body">
         {filteredContacts.length === 0 ? (
-          <div className="chat-sidebar__empty p-4 text-muted">{resolvedNoResultsLabel}</div>
-        ) : null}
-        {statusMessage ? (
-          <div className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
-            {statusMessage}
+          <div className="p-4 text-center text-muted fs-13">
+            {resolvedNoResultsLabel}
           </div>
-        ) : null}
+        ) : (
+          <ul id={listId} className="list-unstyled mb-0" aria-label={resolvedListLabel}>
+            {filteredContacts.map((contact, index) => {
+              const isSelected = activeSelectedId !== undefined && contact.id === activeSelectedId
+              const itemDescriptionId = `${descriptionPrefix}-desc-${contact.key}`
+              const itemNameId = `${descriptionPrefix}-name-${contact.key}`
+              const description = [
+                contact.preview,
+                contact.time,
+                contact.unread > 0 ? `${contact.unread} ${resolvedUnreadLabel}` : null,
+                contact.online ? resolvedOnlineLabel : resolvedOfflineLabel,
+                isSelected ? resolvedSelectedLabel : null,
+              ].filter(Boolean).join(', ')
+              const tabIndex = !canSelect ? undefined : (contact.key === tabbableKey ? 0 : -1)
+
+              return (
+                <li key={contact.key} className="p-0 border-bottom border-gray-100">
+                  {canSelect ? (
+                    <button
+                      ref={(node) => registerItem(contact.key, node)}
+                      type="button"
+                      tabIndex={tabIndex}
+                      className={`w-100 p-3 d-flex align-items-center bg-transparent border-0 text-decoration-none text-reset text-start cursor-pointer${isSelected ? ' bg-gray-100' : ''}`}
+                      aria-current={isSelected ? 'true' : undefined}
+                      aria-labelledby={itemNameId}
+                      aria-describedby={itemDescriptionId}
+                      onClick={() => selectContact(contact)}
+                      onFocus={(event) => handleItemFocus(contact, event)}
+                      onKeyDown={(event) => handleKeyDown(event, index)}
+                    >
+                      <ContactVisual
+                        contact={contact}
+                        description={description}
+                        descriptionId={itemDescriptionId}
+                        nameId={itemNameId}
+                      />
+                    </button>
+                  ) : (
+                    <div
+                      role="group"
+                      className={`p-3 d-flex align-items-center${isSelected ? ' bg-gray-100' : ''}`}
+                      aria-labelledby={itemNameId}
+                      aria-describedby={itemDescriptionId}
+                    >
+                      <ContactVisual
+                        contact={contact}
+                        description={description}
+                        descriptionId={itemDescriptionId}
+                        nameId={itemNameId}
+                      />
+                    </div>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </div>
     </aside>
   )

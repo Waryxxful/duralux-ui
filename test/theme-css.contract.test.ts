@@ -77,6 +77,7 @@ function parseColor(value: string): [number, number, number] {
 
   const rgb = clean.match(/^rgba?\(([^)]+)\)$/i)
   if (rgb) {
+    // SAFETY: Sliced 3 RGB channel numbers from comma-separated rgb(...) representation
     return rgb[1].split(',').slice(0, 3).map((component) => {
       const valuePart = component.trim()
       const channel = valuePart.endsWith('%')
@@ -95,6 +96,7 @@ function parseColorWithAlpha(value: string) {
   if (!rgb) return { channels: parseColor(clean), alpha: 1 }
 
   const parts = rgb[1].split(',').map((part) => part.trim())
+  // SAFETY: Sliced 3 RGB channel numbers from comma-separated rgb(...) representation
   const channels = parts.slice(0, 3).map((part) => (
     part.endsWith('%') ? Number.parseFloat(part) * 2.55 : Number.parseFloat(part)
   )) as [number, number, number]
@@ -374,8 +376,10 @@ describe('CSS theme contract', () => {
         'background-color',
       ])
       const softBackground = parseColorWithAlpha(soft['background-color'])
+      // SAFETY: variant is a known key in widgetVariants
+      const variantKey = variant as keyof typeof widgetVariants
       const softSurface = compositeColor(
-        widgetVariants[variant as keyof typeof widgetVariants],
+        widgetVariants[variantKey],
         '#ffffff',
         softBackground.alpha,
       )
@@ -387,7 +391,7 @@ describe('CSS theme contract', () => {
       ])
       const darkBackground = parseColorWithAlpha(darkSoft['background-color'])
       const darkSurface = compositeColor(
-        widgetVariants[variant as keyof typeof widgetVariants],
+        widgetVariants[variantKey],
         '#0f172a',
         darkBackground.alpha,
       )

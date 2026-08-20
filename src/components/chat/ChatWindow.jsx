@@ -1,159 +1,9 @@
-import { Children, isValidElement } from 'react'
-import { PLACEHOLDER_AVATAR } from '../../assets/placeholders'
-
-const DEFAULT_LABELS = {
-  window: 'Ventana de chat',
-  empty: 'Selecciona una conversación',
-  phone: 'Llamar',
-  video: 'Videollamada',
-  menu: 'Más opciones',
-  messages: 'Mensajes',
-  online: 'En línea',
-  offline: 'Fuera de línea',
-}
-
-function isCallable(value) {
-  return typeof value === 'function'
-}
-
-function isArray(value) {
-  try {
-    return Array.isArray(value)
-  } catch {
-    return false
-  }
-}
-
-function isRecord(value) {
-  return value !== null && typeof value === 'object' && !isArray(value)
-}
-
-function readProperty(value, key) {
-  if (value === null || value === undefined) return undefined
-
-  try {
-    return value[key]
-  } catch {
-    return undefined
-  }
-}
-
-function normalizeDisplayText(value, fallback = '') {
-  if (typeof value === 'string') return value
-  if (typeof value === 'number' && Number.isFinite(value)) return String(value)
-  return fallback
-}
-
-function normalizeLabelText(value, fallback) {
-  const text = normalizeDisplayText(value).trim()
-  return text || fallback
-}
-
-function normalizeImageSource(value) {
-  const source = normalizeDisplayText(value).trim()
-  return source || PLACEHOLDER_AVATAR
-}
-
-function resolveLabel(labels, propLabel, key) {
-  const label = labels && typeof labels === 'object' ? readProperty(labels, key) : undefined
-  const candidate = label ?? propLabel
-
-  if (typeof candidate === 'string' || typeof candidate === 'number') {
-    const normalized = String(candidate).trim()
-    if (normalized) return normalized
-  }
-
-  return DEFAULT_LABELS[key]
-}
-
-function normalizeContact(contact) {
-  const source = isRecord(contact) ? contact : {}
-
-  return {
-    name: normalizeLabelText(readProperty(source, 'name'), 'Contacto'),
-    avatar: normalizeImageSource(readProperty(source, 'avatar')),
-    online: readProperty(source, 'online') === true,
-    role: normalizeLabelText(readProperty(source, 'role'), ''),
-  }
-}
-
-function isRenderableNode(value) {
-  if (value === null || value === undefined || typeof value === 'boolean') return true
-  if (typeof value === 'string' || typeof value === 'number') return true
-  if (isArray(value)) {
-    try {
-      return value.every(isRenderableNode)
-    } catch {
-      return false
-    }
-  }
-
-  try {
-    return isValidElement(value)
-  } catch {
-    return false
-  }
-}
-
-function normalizeSlot(value) {
-  if (isArray(value)) {
-    let safeChildren
-    try {
-      safeChildren = value.filter(isRenderableNode)
-    } catch {
-      safeChildren = []
-    }
-
-    try {
-      return Children.toArray(safeChildren)
-    } catch {
-      return []
-    }
-  }
-
-  return isRenderableNode(value) ? value : null
-}
-
-function normalizeLegacyChildren(children) {
-  try {
-    return Children.toArray(children).filter(isRenderableNode)
-  } catch {
-    return []
-  }
-}
-
-/**
- * Legacy children are interpreted only when neither explicit slot is passed
- * and `legacyChildren` is enabled: a sequence of two or more children uses
- * the last child as `composer`; a single child remains a message. Explicit
- * `messages`/`composer` slots are unambiguous, and `legacyChildren={false}`
- * treats every child as a message with no composer.
- */
-function resolveChatSlots(children, messages, composer, legacyChildren) {
-  const hasMessagesSlot = messages !== undefined
-  const hasComposerSlot = composer !== undefined
-
-  if (hasMessagesSlot || hasComposerSlot) {
-    return {
-      messages: hasMessagesSlot ? normalizeSlot(messages) : null,
-      composer: hasComposerSlot ? normalizeSlot(composer) : null,
-    }
-  }
-
-  if (!legacyChildren) {
-    return { messages: normalizeSlot(children), composer: null }
-  }
-
-  const legacyChildNodes = normalizeLegacyChildren(children)
-  if (legacyChildNodes.length > 1) {
-    return {
-      messages: normalizeSlot(legacyChildNodes.slice(0, -1)),
-      composer: normalizeSlot(legacyChildNodes[legacyChildNodes.length - 1]),
-    }
-  }
-
-  return { messages: normalizeSlot(legacyChildNodes), composer: null }
-}
+import {
+  normalizeContact,
+  resolveChatSlots,
+  resolveLabel,
+} from './chatModel'
+import { isFunction } from '../../utils/typeGuards'
 
 /**
  * ChatWindow — área principal de chat (header + mensajes + composer).
@@ -204,9 +54,9 @@ export function ChatWindow({
 
   const normalizedContact = normalizeContact(contact)
   const resolvedSlots = resolveChatSlots(children, messages, composer, legacyChildren !== false)
-  const canPhone = isCallable(onPhone)
-  const canVideo = isCallable(onVideo)
-  const canMenu = isCallable(onMenu)
+  const canPhone = isFunction(onPhone)
+  const canVideo = isFunction(onVideo)
+  const canMenu = isFunction(onMenu)
   const hasHeaderActions = canPhone || canVideo || canMenu
 
   return (

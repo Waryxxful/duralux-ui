@@ -2,30 +2,36 @@ import { useId } from 'react'
 import { Dropdown, DropdownMenu } from '../ui/Dropdown'
 import {
   ChartCardTitleContext,
-  ChartState,
   readChartDataValue,
-} from './chartA11y'
-
-function safeIdPart(value) {
-  return String(value).replace(/[^A-Za-z0-9_-]+/g, '-')
-}
+  safeIdPart,
+} from './chartA11yModel'
+import { ChartState } from './chartA11y'
+import {
+  isArray,
+  isFiniteNumber,
+  isFunction,
+  isNonEmptyString,
+  isObject,
+  isString,
+} from '../../utils/typeGuards'
 
 function hasMeaningfulTitle(value) {
-  if (typeof value === 'string') return value.trim() !== ''
+  if (isString(value)) return value.trim() !== ''
   return value !== undefined && value !== null && value !== false
 }
 
 function actionIdentity(id, label) {
-  const candidate = typeof id === 'string' || typeof id === 'number'
+  const candidate = isString(id) || isFiniteNumber(id)
     ? id
-    : typeof label === 'string' || typeof label === 'number'
+    : isString(label) || isFiniteNumber(label)
       ? label
       : 'action'
-  return `${typeof candidate}:${String(candidate)}`
+  const tag = isString(candidate) ? 'string' : isFiniteNumber(candidate) ? 'number' : 'object'
+  return `${tag}:${String(candidate)}`
 }
 
 function normalizeActions(actions) {
-  if (!Array.isArray(actions)) return []
+  if (!isArray(actions)) return []
   const length = readChartDataValue(actions, 'length')
   if (!Number.isSafeInteger(length) || length <= 0) return []
 
@@ -33,11 +39,11 @@ function normalizeActions(actions) {
   const occurrences = new Map()
   for (let index = 0; index < length; index += 1) {
     const action = readChartDataValue(actions, index)
-    if (!action || typeof action !== 'object') continue
+    if (!action || !isObject(action)) continue
 
     const onClick = readChartDataValue(action, 'onClick')
     const label = readChartDataValue(action, 'label')
-    if (typeof onClick !== 'function' || !hasMeaningfulTitle(label)) continue
+    if (!isFunction(onClick) || !hasMeaningfulTitle(label)) continue
 
     const id = readChartDataValue(action, 'id')
     const baseKey = actionIdentity(id, label)
@@ -106,7 +112,7 @@ export function ChartCard({
                 <button
                   {...triggerProps}
                   className={`avatar-text avatar-sm bg-transparent border-0 text-muted${open ? ' show' : ''}`}
-                  aria-label={typeof title === 'string' && title.trim() ? `Acciones de ${title.trim()}` : 'Acciones del gráfico'}
+                  aria-label={isNonEmptyString(title) ? `Acciones de ${title.trim()}` : 'Acciones del gráfico'}
                   aria-haspopup="menu"
                 >
                   <i className="feather-more-vertical" aria-hidden="true"></i>

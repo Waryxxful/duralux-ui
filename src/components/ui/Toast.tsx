@@ -17,12 +17,12 @@ import { createPortal } from 'react-dom';
  */
 export type ToastVariant = 'success' | 'danger' | 'warning' | 'info';
 
-const DEFAULT_AUTO_HIDE_MS: Record<ToastVariant, number> = {
+const DEFAULT_AUTO_HIDE_MS = {
   success: 3000,
   info: 3000,
   warning: 0,
   danger: 0,
-};
+} as const satisfies Record<ToastVariant, number>;
 
 export interface ToastProps {
   variant: ToastVariant;
@@ -34,12 +34,12 @@ export interface ToastProps {
   className?: string;
 }
 
-const VARIANT_ICON: Record<ToastVariant, string> = {
+const VARIANT_ICON = {
   success: 'check-circle',
   danger: 'alert-octagon',
   warning: 'alert-triangle',
   info: 'info',
-};
+} as const satisfies Record<ToastVariant, string>;
 const VARIANTS = new Set<ToastVariant>(['success', 'danger', 'warning', 'info']);
 
 const VIEWPORT_ID = 'gcu-toast-viewport';
@@ -47,9 +47,10 @@ type ViewportState = { element: HTMLElement; consumers: number; owned: boolean }
 const VIEWPORT_REGISTRY_KEY = Symbol.for('@duralux/ui/toast-viewport-registry');
 
 function getViewportRegistry(): WeakMap<Document, ViewportState> {
-  const host = globalThis as unknown as Record<PropertyKey, unknown>;
+  // SAFETY: Symbol-keyed singleton registry on globalThis across module boundaries
+  const host = globalThis as { [VIEWPORT_REGISTRY_KEY]?: WeakMap<Document, ViewportState> };
   const existing = host[VIEWPORT_REGISTRY_KEY];
-  if (existing instanceof WeakMap) return existing as WeakMap<Document, ViewportState>;
+  if (existing instanceof WeakMap) return existing;
 
   const registry = new WeakMap<Document, ViewportState>();
   try {
@@ -72,9 +73,9 @@ function normalizeVariant(variant: ToastVariant): ToastVariant {
 }
 
 function acquireViewport(): HTMLElement | null {
-  if (typeof document === 'undefined' || !document.body) return null;
+  if (!globalThis.document?.body) return null;
 
-  let element = document.getElementById(VIEWPORT_ID) as HTMLElement | null;
+  let element = document.getElementById(VIEWPORT_ID);
   let state = viewportStates.get(document);
   let createdByThisRegistry = false;
   if (!element) {
@@ -146,7 +147,7 @@ export function Toast({ variant, title, show, onClose, autoHideMs, className }: 
   }, [onClose]);
 
   useEffect(() => {
-    if (!show || typeof document === 'undefined' || !document.body) return undefined;
+    if (!show || !globalThis.document?.body) return undefined;
 
     let alive = true;
     const ensureViewport = () => {
@@ -164,7 +165,7 @@ export function Toast({ variant, title, show, onClose, autoHideMs, className }: 
     };
 
     ensureViewport();
-    const observer = typeof MutationObserver === 'function'
+    const observer = globalThis.MutationObserver
       ? new MutationObserver(ensureViewport)
       : null;
     observer?.observe(document.body, { childList: true });
@@ -188,7 +189,7 @@ export function Toast({ variant, title, show, onClose, autoHideMs, className }: 
     setClosing(true);
     closeTimer.current = setTimeout(() => {
       closeTimer.current = undefined;
-      if (componentMountedRef.current && typeof onCloseRef.current === 'function') {
+      if (componentMountedRef.current && onCloseRef.current) {
         onCloseRef.current();
       }
     }, 300);

@@ -1,5 +1,6 @@
 import { cx } from '../../utils/cx'
 import { resolveVariant } from './buttonVariants'
+import { isString } from '../../utils/typeGuards'
 
 function blockDisabledEvent(event) {
   event.preventDefault()
@@ -46,7 +47,7 @@ export function Button({
   void outline
   const tone = resolveVariant(variant)
   const isDisabled = disabled || loading
-  const isNativeTag = typeof Tag === 'string'
+  const isNativeTag = isString(Tag)
   const isNativeButton = Tag === 'button'
   const isNativeAnchor = Tag === 'a'
   const isDisabledNonButton = !isNativeButton && isDisabled

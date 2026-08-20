@@ -211,7 +211,7 @@ export interface SearchableSelectOption {
   color?: string
   icon?: string
   avatar?: string
-  [key: string]: unknown
+  [key: string]: string | number | boolean | null | undefined
 }
 
 /** The default option domain; consumers may supply a narrower custom model. */
@@ -373,7 +373,7 @@ export type DataTableKey<T extends object> = Extract<keyof T, string | number>
 export type DataTableRowKey<T extends object> = Extract<keyof T, string>
 
 export type DataTableColumn<
-  T extends object = Record<string, unknown>,
+  T extends object = Record<string, string | number | boolean | null | undefined>,
   K extends DataTableKey<T> = DataTableKey<T>,
 > = {
   [P in K]: {
@@ -385,7 +385,7 @@ export type DataTableColumn<
   }
 }[K]
 
-export interface DataTableAction<T extends object = Record<string, unknown>> {
+export interface DataTableAction<T extends object = Record<string, string | number | boolean | null | undefined>> {
   label?: React.ReactNode
   icon?: string
   onClick: (row: T) => void
@@ -422,7 +422,7 @@ export interface DataTableToolbarProps {
   children?: React.ReactNode
 }
 
-export type DataTableProps<T extends object = Record<string, unknown>> = Omit<
+export type DataTableProps<T extends object = Record<string, string | number | boolean | null | undefined>> = Omit<
   React.TableHTMLAttributes<HTMLTableElement>,
   'children' | 'className' | 'aria-label' | 'aria-labelledby'
 > & {
@@ -449,7 +449,7 @@ export type DataTableProps<T extends object = Record<string, unknown>> = Omit<
   searchLabel?: React.ReactNode
   searchPlaceholder?: React.ReactNode
   filterMode?: 'local' | 'manual' | 'remote'
-  filterResolver?: (row: T, index: number) => unknown
+  filterResolver?: (row: T, index: number) => string | number | boolean | null | undefined
   filterPredicate?: (row: T, query: string, index: number) => boolean
   pageSizeOptions?: ReadonlyArray<number>
   onPageSizeChange?: (pageSize: number) => void
@@ -462,7 +462,7 @@ export type DataTableProps<T extends object = Record<string, unknown>> = Omit<
   search?: string | number
   defaultSearch?: string | number
   onSearch?: (value: string) => void
-  searchResolver?: (row: T, index: number) => unknown
+  searchResolver?: (row: T, index: number) => string | number | boolean | null | undefined
   searchPredicate?: (row: T, query: string, index: number) => boolean
   manualFiltering?: boolean
   'aria-label'?: string

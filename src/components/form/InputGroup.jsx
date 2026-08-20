@@ -5,7 +5,7 @@ function hasContent(value) {
 }
 
 function canForwardFieldSemantics(children) {
-  if (typeof children === 'function') return true
+  if (children instanceof Function) return true
   const items = Children.toArray(children)
   return items.length === 1 && isValidElement(items[0]) && items[0].type !== Fragment
 }
@@ -27,17 +27,16 @@ export function InputGroup({
   'aria-invalid': ariaInvalid,
   'aria-describedby': ariaDescribedBy,
 }) {
-  const controlProps = {
-    ...(id !== undefined ? { id } : {}),
-    ...(required !== undefined ? { required } : {}),
-    ...(disabled !== undefined ? { disabled } : {}),
-    ...(ariaRequired !== undefined ? { 'aria-required': ariaRequired } : {}),
-    ...(ariaInvalid !== undefined ? { 'aria-invalid': ariaInvalid } : {}),
-    ...(ariaDescribedBy !== undefined ? { 'aria-describedby': ariaDescribedBy } : {}),
-  }
+  const controlProps = {}
+  if (id !== undefined) controlProps.id = id
+  if (required !== undefined) controlProps.required = required
+  if (disabled !== undefined) controlProps.disabled = disabled
+  if (ariaRequired !== undefined) controlProps['aria-required'] = ariaRequired
+  if (ariaInvalid !== undefined) controlProps['aria-invalid'] = ariaInvalid
+  if (ariaDescribedBy !== undefined) controlProps['aria-describedby'] = ariaDescribedBy
 
   let content = children
-  if (typeof children === 'function') {
+  if (children instanceof Function) {
     content = children(controlProps)
   } else {
     const items = Children.toArray(children)

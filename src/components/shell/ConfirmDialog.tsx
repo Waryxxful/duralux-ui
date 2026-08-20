@@ -2,6 +2,7 @@ import React, { useId } from 'react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import type { SemanticVariant } from '../../tokens';
+import { isFunction } from '../../utils/typeGuards';
 
 export interface ConfirmDialogProps {
   open: boolean;
@@ -28,8 +29,8 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   const messageId = useId();
   const isLoading = Boolean(loading);
-  const canConfirm = typeof onConfirm === 'function';
-  const canCancel = typeof onCancel === 'function';
+  const canConfirm = isFunction(onConfirm);
+  const canCancel = isFunction(onCancel);
 
   return (
     <Modal

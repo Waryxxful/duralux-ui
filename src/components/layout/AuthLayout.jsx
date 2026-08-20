@@ -1,10 +1,12 @@
+import { isString } from '../../utils/typeGuards'
+
 /**
  * AuthLayout — auth-cover-wrapper de Duralux (duralux-admin/auth-login-cover.html:39-89).
  * Solo la variante "cover" está portada; "creative"/"minimal" quedan para cuando
  * haya demanda real (ver auth-login-creative.html / auth-login-minimal.html).
  */
 export function AuthLayout({ children, image, imageAlt = '' }) {
-  const hasImage = typeof image === 'string' ? image.trim() !== '' : Boolean(image)
+  const hasImage = isString(image) ? image.trim() !== '' : Boolean(image)
   const accessibleImageAlt = imageAlt == null ? '' : String(imageAlt)
 
   return (

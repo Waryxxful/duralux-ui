@@ -1,18 +1,20 @@
+import { isArray, isFiniteNumber, isFunction, isNonEmptyString, isString } from '../../utils/typeGuards'
+
 function hasContent(value) {
   if (value === null || value === undefined || value === false || value === true) return false
-  if (typeof value === 'string') return value.trim() !== ''
-  if (Array.isArray(value)) return value.some(hasContent)
+  if (isString(value)) return value.trim() !== ''
+  if (isArray(value)) return value.some(hasContent)
   return true
 }
 
 function hasActionContent(value) {
   // Numeric zero is a valid React child in general, but it is not an action
   // and should not create an empty action toolbar.
-  return typeof value !== 'number' && hasContent(value)
+  return !isFiniteNumber(value) && hasContent(value)
 }
 
 function hasHref(value) {
-  return typeof value === 'string' && value.trim() !== ''
+  return isNonEmptyString(value)
 }
 
 function safeKey(value, fallback) {
@@ -54,7 +56,7 @@ function breadcrumbKeys(items) {
  */
 export function PageHeader({ title, subtitle, breadcrumbs = [], actions, className = '', children }) {
   const right = actions ?? children
-  const items = Array.isArray(breadcrumbs) ? breadcrumbs : []
+  const items = isArray(breadcrumbs) ? breadcrumbs : []
   const keys = breadcrumbKeys(items)
   return (
     <>
@@ -72,7 +74,7 @@ export function PageHeader({ title, subtitle, breadcrumbs = [], actions, classNa
                   if (hasHref(crumb?.href) && !isLast) {
                     return (
                       <li key={keys[i]} className="breadcrumb-item">
-                        <a href={crumb.href} onClick={typeof crumb.onClick === 'function' ? crumb.onClick : undefined}>{crumb.label}</a>
+                        <a href={crumb.href} onClick={isFunction(crumb.onClick) ? crumb.onClick : undefined}>{crumb.label}</a>
                       </li>
                     )
                   }
@@ -83,7 +85,7 @@ export function PageHeader({ title, subtitle, breadcrumbs = [], actions, classNa
                       aria-current={isLast ? 'page' : undefined}
                     >
                       {hasHref(crumb?.href) && isLast
-                        ? <a href={crumb.href} onClick={typeof crumb.onClick === 'function' ? crumb.onClick : undefined} aria-current="page">{crumb.label}</a>
+                        ? <a href={crumb.href} onClick={isFunction(crumb.onClick) ? crumb.onClick : undefined} aria-current="page">{crumb.label}</a>
                         : crumb?.label}
                     </li>
                   )

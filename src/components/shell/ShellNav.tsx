@@ -1,5 +1,7 @@
 import type { MouseEvent } from 'react';
-import { NavCore, navigationPathScore } from './navigationCore';
+import { NavCore } from './navigationCore';
+import { navigationPathScore } from './navigationModel';
+import { isString } from '../../utils/typeGuards';
 
 // ─── ShellNav Props ───────────────────────────────────────────────────────────
 
@@ -81,7 +83,7 @@ export function GatewayAdapter({ sections, pathname, onNavigate }: {
       items: section.items.map(item => gatewayNavItem(item, pathname)),
     })),
     adapter: {
-      routeMode: typeof pathname === 'string',
+      routeMode: isString(pathname),
       brandLinkKind: 'anchor' as const,
       renderLink: ({ item, href, className, ariaLabel, ariaCurrent, tabIndex, onClick, children }) => (
         <a

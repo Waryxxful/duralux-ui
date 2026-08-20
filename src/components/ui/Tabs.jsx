@@ -1,11 +1,12 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import { safeRead, toSafeDomSegment } from './internal/safeDom.js'
+import { isArray, isFiniteNumber, isString } from '../../utils/typeGuards'
 
 const EMPTY_TABS = []
 const DEFAULT_TABLIST_LABEL = 'Pestañas'
 
 function isDevelopment() {
-  const nodeEnvironment = typeof process !== 'undefined' ? process.env?.NODE_ENV : undefined
+  const nodeEnvironment = globalThis.process?.env?.NODE_ENV
   if (nodeEnvironment) return nodeEnvironment !== 'production'
   return import.meta.env?.DEV === true
 }
@@ -20,7 +21,8 @@ function buildTabEntries(tabs) {
 
   return tabs.map((tab, index) => {
     const key = safeRead(tab, 'key', undefined)
-    const token = `${typeof key}:${String(toSafeDomSegment(key))}`
+    const tag = isString(key) ? 'string' : isFiniteNumber(key) ? 'number' : 'other'
+    const token = `${tag}:${String(toSafeDomSegment(key))}`
     const occurrence = occurrences.get(token) || 0
     occurrences.set(token, occurrence + 1)
     const baseSegment = `${toSafeDomSegment(key)}-${occurrence}`
@@ -71,7 +73,7 @@ export function Tabs({
   'aria-label': ariaLabelProp,
   'aria-labelledby': ariaLabelledBy,
 }) {
-  const normalizedTabs = Array.isArray(tabs) ? tabs : EMPTY_TABS
+  const normalizedTabs = isArray(tabs) ? tabs : EMPTY_TABS
   const isControlled = activeKey !== undefined
   const firstEnabledKey = () => {
     const firstEnabled = normalizedTabs.find((tab) => !safeRead(tab, 'disabled', false))

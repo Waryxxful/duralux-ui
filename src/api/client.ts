@@ -2,7 +2,7 @@
 export const SESSION_EXPIRED_EVENT = 'grancrm:sessionExpired'
 
 function getCsrfToken(): string {
-  if (typeof document === 'undefined') {
+  if (!globalThis.document) {
     return '';
   }
 
@@ -42,17 +42,20 @@ export async function apiFetch(url: string, options: FetchOptions = {}): Promise
     headers.set('Content-Type', 'application/json');
   }
 
-  const response = await fetch(url, {
+  const init: RequestInit = {
     ...rest,
     credentials: 'same-origin',
     headers,
-    ...(json !== undefined ? { body } : {}),
-  });
+  };
+  if (json !== undefined) {
+    init.body = body;
+  }
+  const response = await fetch(url, init);
 
-  if (response.status === 401 && typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('grancrm:unauthorized'));
+  if (response.status === 401 && globalThis.window) {
+    globalThis.window.dispatchEvent(new CustomEvent('grancrm:unauthorized'));
     // Keep the previous DOM event as a compatibility alias for existing shells.
-    window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
+    globalThis.window.dispatchEvent(new CustomEvent(SESSION_EXPIRED_EVENT));
   }
 
   return response;

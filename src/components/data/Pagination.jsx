@@ -1,37 +1,38 @@
 import { useEffect, useRef } from 'react'
+import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 
 // Three siblings on either side keeps the rendered window bounded at thirteen
 // buttons (including previous/next), even if a caller passes a huge sibling.
 const MAX_SIBLING_COUNT = 3
 
 function normalizeTotalPages(totalPages) {
-  if (!Number.isFinite(totalPages)) return 0
+  if (!isFiniteNumber(totalPages)) return 0
   return Math.max(0, Math.floor(totalPages))
 }
 
 function normalizePage(page, totalPages) {
-  const candidate = Number.isFinite(page) ? Math.floor(page) : 1
+  const candidate = isFiniteNumber(page) ? Math.floor(page) : 1
   return Math.min(Math.max(candidate, 1), Math.max(totalPages, 1))
 }
 
 function normalizeSibling(sibling) {
-  if (!Number.isFinite(sibling)) return 1
+  if (!isFiniteNumber(sibling)) return 1
   return Math.min(Math.max(0, Math.floor(sibling)), MAX_SIBLING_COUNT)
 }
 
 function normalizeLabel(value, fallback) {
-  if (typeof value !== 'string') return fallback
+  if (!isString(value)) return fallback
   const label = value.trim()
   return label || fallback
 }
 
 function pageLabelFor(pageAriaLabel, pageNumber) {
   try {
-    const label = typeof pageAriaLabel === 'function'
+    const label = isFunction(pageAriaLabel)
       ? pageAriaLabel(pageNumber)
       : undefined
     return normalizeLabel(
-      typeof label === 'string' ? label : String(label ?? ''),
+      isString(label) ? label : String(label ?? ''),
       `Página ${pageNumber}`,
     )
   } catch {
@@ -121,11 +122,11 @@ export function Pagination({
 
   const items = pageWindow(currentPage, normalizedTotalPages, siblingCount)
   const navLabel = normalizeLabel(label, 'Paginación')
-  const safeClassName = typeof className === 'string' ? className : ''
+  const safeClassName = isString(className) ? className : ''
 
   const emitPageChange = nextPage => {
-    if (typeof onPageChange !== 'function') return
-    if (!Number.isFinite(nextPage)) return
+    if (!isFunction(onPageChange)) return
+    if (!isFiniteNumber(nextPage)) return
 
     const normalizedNextPage = Math.floor(nextPage)
     if (normalizedNextPage < 1 || normalizedNextPage > normalizedTotalPages) return

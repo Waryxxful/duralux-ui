@@ -134,56 +134,66 @@ import type {
   ApiFetchOptions,
 } from './types'
 
-export const Button: React.FC<ButtonProps> = ButtonRuntime as unknown as React.FC<ButtonProps>
-export const LinkButton: React.FC<LinkButtonProps> = LinkButtonRuntime as unknown as React.FC<LinkButtonProps>
-export const IconButton: React.FC<IconButtonProps> = IconButtonRuntime as unknown as React.FC<IconButtonProps>
-export const Icon: React.FC<IconProps> = IconRuntime as unknown as React.FC<IconProps>
-export const Badge: React.FC<BadgeProps> = BadgeRuntime as unknown as React.FC<BadgeProps>
-export const Card: React.FC<CardProps> = CardRuntime as unknown as React.FC<CardProps>
-export const Avatar: React.FC<AvatarProps> = AvatarRuntime as unknown as React.FC<AvatarProps>
-export const Alert: React.FC<AlertProps> = AlertRuntime as unknown as React.FC<AlertProps>
-export const Modal: React.FC<ModalProps> = ModalRuntime as unknown as React.FC<ModalProps>
-export const EmptyState: React.FC<EmptyStateProps> = EmptyStateRuntime as unknown as React.FC<EmptyStateProps>
-export const ErrorState: React.FC<ErrorStateProps> = ErrorStateRuntime as unknown as React.FC<ErrorStateProps>
-export const LoadingState: React.FC<LoadingStateProps> = LoadingStateRuntime as unknown as React.FC<LoadingStateProps>
-export const Progress: React.FC<ProgressProps> = ProgressRuntime as unknown as React.FC<ProgressProps>
-export const ProgressRing: React.FC<ProgressRingProps> = ProgressRingRuntime as unknown as React.FC<ProgressRingProps>
-export const Checkbox: React.FC<CheckboxProps> = CheckboxRuntime as unknown as React.FC<CheckboxProps>
-export const Radio: React.FC<RadioProps> = RadioRuntime as unknown as React.FC<RadioProps>
-export const FileInput: React.FC<FileInputProps> = FileInputRuntime as unknown as React.FC<FileInputProps>
-export const InputGroup: React.FC<InputGroupProps> = InputGroupRuntime as unknown as React.FC<InputGroupProps>
-export const SearchableSelect = SearchableSelectRuntime as unknown as <TOption = import('./types').SelectOptionInput>(props: SearchableSelectProps<TOption>) => React.ReactElement | null
-export const MultiSelect = MultiSelectRuntime as unknown as <TOption = import('./types').SelectOptionInput>(props: MultiSelectProps<TOption>) => React.ReactElement | null
-export const FormField: React.FC<FormFieldProps> = FormFieldRuntime as unknown as React.FC<FormFieldProps>
-export const Input: React.FC<InputProps> = InputRuntime as unknown as React.FC<InputProps>
-export const Select: React.FC<SelectProps> = SelectRuntime as unknown as React.FC<SelectProps>
-export const Textarea: React.FC<TextareaProps> = TextareaRuntime as unknown as React.FC<TextareaProps>
-export const Pagination: React.FC<PaginationProps> = PaginationRuntime as unknown as React.FC<PaginationProps>
-export const MessageBubble: React.FC<MessageBubbleProps> = MessageBubbleRuntime as unknown as React.FC<MessageBubbleProps>
-export const ChatSidebar = ChatSidebarRuntime as unknown as <TContact extends import('./types').ChatContact = import('./types').ChatContact>(props: ChatSidebarProps<TContact>) => React.ReactElement
-export const ChatBubble: React.FC<ChatBubbleProps> = ChatBubbleRuntime as unknown as React.FC<ChatBubbleProps>
-export const ChatTypingIndicator: React.FC<ChatTypingIndicatorProps> = ChatTypingIndicatorRuntime as unknown as React.FC<ChatTypingIndicatorProps>
-export const ChatInputBar: React.FC<ChatInputBarProps> = ChatInputBarRuntime as unknown as React.FC<ChatInputBarProps>
-export const ChatWindow = ChatWindowRuntime as unknown as <TContact extends import('./types').ChatWindowContact = import('./types').ChatWindowContact>(props: ChatWindowProps<TContact>) => React.ReactElement
-export const StatsCard: React.FC<StatsCardProps> = StatsCardRuntime as unknown as React.FC<StatsCardProps>
-export const MiniStatCard: React.FC<MiniStatCardProps> = MiniStatCardRuntime as unknown as React.FC<MiniStatCardProps>
-export const ColoredStatCard: React.FC<ColoredStatCardProps> = ColoredStatCardRuntime as unknown as React.FC<ColoredStatCardProps>
-export const ChartMetricsFooter: React.FC<ChartMetricsFooterProps> = ChartMetricsFooterRuntime as unknown as React.FC<ChartMetricsFooterProps>
-export const QuickLinkGrid: React.FC<QuickLinkGridProps> = QuickLinkGridRuntime as unknown as React.FC<QuickLinkGridProps>
-export const Timeline: React.FC<TimelineProps> = TimelineRuntime as unknown as React.FC<TimelineProps>
-export const Tabs = TabsRuntime as unknown as <K extends string | number = string | number>(props: TabsProps<K>) => React.ReactElement
-export const DataTable = DataTableRuntime as unknown as <T extends object = Record<string, unknown>>(props: DataTableProps<T>) => React.ReactElement
-export const Table = TableRuntime as unknown as <T = unknown>(props: TableProps<T>) => React.ReactElement
-export const ResponsiveTable = ResponsiveTableRuntime as unknown as <T = unknown>(props: ResponsiveTableProps<T>) => React.ReactElement
-export const DataTableToolbar: React.FC<DataTableToolbarProps> = DataTableToolbarRuntime as unknown as React.FC<DataTableToolbarProps>
-export const AppLayout: React.FC<AppLayoutProps> = AppLayoutRuntime as unknown as React.FC<AppLayoutProps>
-export const AuthLayout: React.FC<AuthLayoutProps> = AuthLayoutRuntime as unknown as React.FC<AuthLayoutProps>
-export const Header: React.FC<HeaderProps> = HeaderRuntime as unknown as React.FC<HeaderProps>
-export const Sidebar: React.FC<SidebarProps> = SidebarRuntime as unknown as React.FC<SidebarProps>
-export const PageHeader: React.FC<PageHeaderProps> = PageHeaderRuntime as unknown as React.FC<PageHeaderProps>
-export const Footer: React.FC<FooterProps> = FooterRuntime as unknown as React.FC<FooterProps>
-export const AvatarGroup: React.FC<AvatarGroupProps> = AvatarGroupRuntime as unknown as React.FC<AvatarGroupProps>
-export const CardLoader: React.FC<CardLoaderProps> = CardLoaderRuntime as unknown as React.FC<CardLoaderProps>
+function asComponent<P>(runtime: React.ComponentType<any>): React.FC<P> {
+  // SAFETY: runtime JSX component implements the public React component contract P
+  return runtime as React.FC<P>
+}
+
+function asGenericComponent<F>(runtime: React.ComponentType<any>): F {
+  // SAFETY: runtime JSX component implements the public generic component contract F
+  return runtime as F
+}
+
+export const Button = asComponent<ButtonProps>(ButtonRuntime)
+export const LinkButton = asComponent<LinkButtonProps>(LinkButtonRuntime)
+export const IconButton = asComponent<IconButtonProps>(IconButtonRuntime)
+export const Icon = asComponent<IconProps>(IconRuntime)
+export const Badge = asComponent<BadgeProps>(BadgeRuntime)
+export const Card = asComponent<CardProps>(CardRuntime)
+export const Avatar = asComponent<AvatarProps>(AvatarRuntime)
+export const Alert = asComponent<AlertProps>(AlertRuntime)
+export const Modal = asComponent<ModalProps>(ModalRuntime)
+export const EmptyState = asComponent<EmptyStateProps>(EmptyStateRuntime)
+export const ErrorState = asComponent<ErrorStateProps>(ErrorStateRuntime)
+export const LoadingState = asComponent<LoadingStateProps>(LoadingStateRuntime)
+export const Progress = asComponent<ProgressProps>(ProgressRuntime)
+export const ProgressRing = asComponent<ProgressRingProps>(ProgressRingRuntime)
+export const Checkbox = asComponent<CheckboxProps>(CheckboxRuntime)
+export const Radio = asComponent<RadioProps>(RadioRuntime)
+export const FileInput = asComponent<FileInputProps>(FileInputRuntime)
+export const InputGroup = asComponent<InputGroupProps>(InputGroupRuntime)
+export const SearchableSelect = asGenericComponent<<TOption = import('./types').SelectOptionInput>(props: SearchableSelectProps<TOption>) => React.ReactElement | null>(SearchableSelectRuntime)
+export const MultiSelect = asGenericComponent<<TOption = import('./types').SelectOptionInput>(props: MultiSelectProps<TOption>) => React.ReactElement | null>(MultiSelectRuntime)
+export const FormField = asComponent<FormFieldProps>(FormFieldRuntime)
+export const Input = asComponent<InputProps>(InputRuntime)
+export const Select = asComponent<SelectProps>(SelectRuntime)
+export const Textarea = asComponent<TextareaProps>(TextareaRuntime)
+export const Pagination = asComponent<PaginationProps>(PaginationRuntime)
+export const MessageBubble = asComponent<MessageBubbleProps>(MessageBubbleRuntime)
+export const ChatSidebar = asGenericComponent<<TContact extends import('./types').ChatContact = import('./types').ChatContact>(props: ChatSidebarProps<TContact>) => React.ReactElement>(ChatSidebarRuntime)
+export const ChatBubble = asComponent<ChatBubbleProps>(ChatBubbleRuntime)
+export const ChatTypingIndicator = asComponent<ChatTypingIndicatorProps>(ChatTypingIndicatorRuntime)
+export const ChatInputBar = asComponent<ChatInputBarProps>(ChatInputBarRuntime)
+export const ChatWindow = asGenericComponent<<TContact extends import('./types').ChatWindowContact = import('./types').ChatWindowContact>(props: ChatWindowProps<TContact>) => React.ReactElement>(ChatWindowRuntime)
+export const StatsCard = asComponent<StatsCardProps>(StatsCardRuntime)
+export const MiniStatCard = asComponent<MiniStatCardProps>(MiniStatCardRuntime)
+export const ColoredStatCard = asComponent<ColoredStatCardProps>(ColoredStatCardRuntime)
+export const ChartMetricsFooter = asComponent<ChartMetricsFooterProps>(ChartMetricsFooterRuntime)
+export const QuickLinkGrid = asComponent<QuickLinkGridProps>(QuickLinkGridRuntime)
+export const Timeline = asComponent<TimelineProps>(TimelineRuntime)
+export const Tabs = asGenericComponent<<K extends string | number = string | number>(props: TabsProps<K>) => React.ReactElement>(TabsRuntime)
+export const DataTable = asGenericComponent<<T extends object = Record<string, string | number | boolean | null | undefined>>(props: DataTableProps<T>) => React.ReactElement>(DataTableRuntime)
+export const Table = asGenericComponent<<T = unknown>(props: TableProps<T>) => React.ReactElement>(TableRuntime)
+export const ResponsiveTable = asGenericComponent<<T = unknown>(props: ResponsiveTableProps<T>) => React.ReactElement>(ResponsiveTableRuntime)
+export const DataTableToolbar = asComponent<DataTableToolbarProps>(DataTableToolbarRuntime)
+export const AppLayout = asComponent<AppLayoutProps>(AppLayoutRuntime)
+export const AuthLayout = asComponent<AuthLayoutProps>(AuthLayoutRuntime)
+export const Header = asComponent<HeaderProps>(HeaderRuntime)
+export const Sidebar = asComponent<SidebarProps>(SidebarRuntime)
+export const PageHeader = asComponent<PageHeaderProps>(PageHeaderRuntime)
+export const Footer = asComponent<FooterProps>(FooterRuntime)
+export const AvatarGroup = asComponent<AvatarGroupProps>(AvatarGroupRuntime)
+export const CardLoader = asComponent<CardLoaderProps>(CardLoaderRuntime)
 
 export type {
   AlertProps,

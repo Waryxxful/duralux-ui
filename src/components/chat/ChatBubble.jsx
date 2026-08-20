@@ -1,45 +1,16 @@
 import { PLACEHOLDER_AVATAR } from '../../assets/placeholders'
-
-function isRecord(value) {
-  if (value === null || typeof value !== 'object') return false
-
-  try {
-    return !Array.isArray(value)
-  } catch {
-    return false
-  }
-}
-
-function readProperty(value, key) {
-  if (value === null || value === undefined) return undefined
-
-  try {
-    return value[key]
-  } catch {
-    return undefined
-  }
-}
-
-function normalizeDisplayText(value, fallback = '') {
-  if (typeof value === 'string') return value
-  if (typeof value === 'number' && Number.isFinite(value)) return String(value)
-  return fallback
-}
-
-function normalizeLabelText(value, fallback) {
-  const text = normalizeDisplayText(value).trim()
-  return text || fallback
-}
-
-function normalizeImageSource(value) {
-  const source = normalizeDisplayText(value).trim()
-  return source || PLACEHOLDER_AVATAR
-}
+import {
+  normalizeDisplayText,
+  normalizeImageSource,
+  normalizeLabelText,
+  readProperty,
+} from './chatModel'
+import { isObject } from '../../utils/typeGuards'
 
 function normalizeMessage(message) {
-  const source = isRecord(message) ? message : {}
+  const source = isObject(message) ? message : {}
   const senderValue = readProperty(source, 'sender')
-  const sender = isRecord(senderValue) ? senderValue : {}
+  const sender = isObject(senderValue) ? senderValue : {}
 
   return {
     text: normalizeDisplayText(readProperty(source, 'text')),

@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
+import { isFunction, isString } from '../../utils/typeGuards'
 
 const FOCUSABLE_SELECTOR = [
   'a[href]',
@@ -154,7 +155,7 @@ function rememberExternalBackgroundValues(record) {
  * inert. Each record restores only values still owned by this manager.
  */
 function syncModalBackground() {
-  if (typeof document === 'undefined' || !document.body) return
+  if (!globalThis.document?.body) return
 
   const activeEntries = new Set(modalState.modalStack)
   const bodyChildren = Array.from(document.body.children)
@@ -226,7 +227,7 @@ function focusDialog(dialog, last = false) {
 function restoreFocus(element) {
   if (
     !element?.isConnected
-    || typeof element.focus !== 'function'
+    || !isFunction(element.focus)
     || element.matches?.(':disabled')
     || element.closest?.('[hidden], [inert], [aria-hidden="true"]')
   ) {
@@ -349,10 +350,10 @@ export function Modal({
   ...rest
 }) {
   const titleId = useId()
-  const hasTitle = typeof title === 'string'
+  const hasTitle = isString(title)
     ? title.trim() !== ''
     : title !== undefined && title !== null && title !== false
-  const canClose = typeof onClose === 'function'
+  const canClose = isFunction(onClose)
   const [mounted, setMounted] = useState(false)
   const dialogRef = useRef(null)
   const backdropRef = useRef(null)
@@ -361,7 +362,7 @@ export function Modal({
   const onCloseRef = useRef(onClose)
 
   useEffect(() => {
-    if (typeof document !== 'undefined') setMounted(true)
+    if (globalThis.document) setMounted(true)
   }, [])
 
   useEffect(() => {
@@ -370,7 +371,7 @@ export function Modal({
   }, [closeOnEscape, onClose])
 
   useEffect(() => {
-    if (!open || !mounted || typeof document === 'undefined' || !document.body) return
+    if (!open || !mounted || !globalThis.document?.body) return
 
     const entry = modalEntryRef.current
     entry.dialog = dialogRef.current
@@ -381,10 +382,10 @@ export function Modal({
       element: entry.dialog,
       onEscape: () => {
         if (!closeOnEscapeRef.current) return
-        if (typeof onCloseRef.current === 'function') onCloseRef.current()
+        if (isFunction(onCloseRef.current)) onCloseRef.current()
       },
     })
-    const backgroundObserver = typeof MutationObserver === 'function'
+    const backgroundObserver = isFunction(globalThis.MutationObserver)
       ? new MutationObserver(() => syncModalBackground())
       : null
     backgroundObserver?.observe(document.body, {
@@ -415,7 +416,7 @@ export function Modal({
   }, [hasTitle, open, mounted])
 
   useEffect(() => {
-    if (!open || !mounted || typeof document === 'undefined' || !document.body) return
+    if (!open || !mounted || !globalThis.document?.body) return
 
     const handleKeyDown = (e) => {
       if (e.key !== 'Tab') return
@@ -448,7 +449,7 @@ export function Modal({
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [open, mounted])
 
-  if (!open || !mounted || typeof document === 'undefined' || !document.body) return null
+  if (!open || !mounted || !globalThis.document?.body) return null
 
   const effectiveLabelledBy = ariaLabelledBy
     ?? (hasTitle && ariaLabel === undefined ? titleId : undefined)
@@ -530,6 +531,6 @@ export function Modal({
     </>
   )
 
-  const portalTarget = typeof document === 'undefined' ? null : document.body
+  const portalTarget = globalThis.document?.body ?? null
   return portalTarget ? createPortal(modalMarkup, portalTarget) : null
 }

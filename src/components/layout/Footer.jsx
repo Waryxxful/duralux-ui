@@ -1,4 +1,5 @@
 import { cx } from '../../utils/cx'
+import { isArray, isFunction, isNonEmptyString } from '../../utils/typeGuards'
 
 const DEFAULT_LINKS = [
   { id: 'help', label: 'Ayuda' },
@@ -7,7 +8,7 @@ const DEFAULT_LINKS = [
 ]
 
 function hasHref(href) {
-  return typeof href === 'string' && href.trim() !== '' && href !== '#'
+  return isNonEmptyString(href) && href !== '#'
 }
 
 function entryKey(entry, index) {
@@ -19,16 +20,16 @@ function FooterEntry({ entry }) {
   const label = entry?.label ?? entry?.children
   const className = 'fs-11 fw-semibold text-uppercase gcu-link-button'
   if (hasHref(entry?.href)) {
-    return <a className={className} href={entry.href} onClick={typeof entry.onClick === 'function' ? entry.onClick : undefined}>{label}</a>
+    return <a className={className} href={entry.href} onClick={isFunction(entry.onClick) ? entry.onClick : undefined}>{label}</a>
   }
-  if (typeof entry?.onClick === 'function') {
+  if (isFunction(entry?.onClick)) {
     return <button type="button" className={className} onClick={entry.onClick}>{label}</button>
   }
   return <span className={className}>{label}</span>
 }
 
 function renderEntries(entries) {
-  if (!Array.isArray(entries)) return entries
+  if (!isArray(entries)) return entries
   return entries.map((entry, index) => (
     <FooterEntry key={entryKey(entry, index)} entry={entry} />
   ))

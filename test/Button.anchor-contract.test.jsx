@@ -4,8 +4,8 @@ import { expect, test, vi } from 'vitest'
 import { Button, LinkButton } from '../src/components/ui/Button.jsx'
 
 test.each([
-  ['disabled', <Button href="/target" disabled>Open</Button>],
-  ['loading', <LinkButton href="/target" loading>Open</LinkButton>],
+  ['disabled', <Button key="btn" href="/target" disabled>Open</Button>],
+  ['loading', <LinkButton key="lbtn" href="/target" loading>Open</LinkButton>],
 ])('blocks %s anchors without emitting native disabled', (_, anchor) => {
   const onClick = vi.fn()
   const onParentClick = vi.fn()

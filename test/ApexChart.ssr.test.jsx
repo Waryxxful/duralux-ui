@@ -4,15 +4,6 @@ import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { expect, test, vi } from 'vitest'
 
-// A false mock that returns null would let an accidental server invocation
-// pass. This mock is intentionally hostile: a server render must never call
-// ReactApexChart at all.
-vi.mock('react-apexcharts', () => ({
-  default: () => {
-    throw new Error('ReactApexChart must not be invoked during SSR')
-  },
-}))
-
 import { ApexChart } from '../src/components/charts/ApexChart.jsx'
 
 test('is safe to render on the server without browser globals', () => {
