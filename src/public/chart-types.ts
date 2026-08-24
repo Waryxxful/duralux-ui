@@ -30,17 +30,22 @@ export type ChartError = Error | string | ChartErrorObject | React.ReactNode
 export type ChartThemeMode = 'light' | 'dark'
 
 export interface ApexThemeOptions {
-  mode?: ChartThemeMode
+  // ApexCharts accepts arbitrary named modes; retain the common light/dark
+  // literals while keeping the wrapper an escape hatch for its native API.
+  mode?: ChartThemeMode | string
   palette?: string
+  [key: string]: unknown
 }
 
 export type ChartTheme = ChartThemeMode | ApexThemeOptions
 
 export interface ApexChartSeriesItem {
   name?: string
-  data?: number[]
+  // Null is a native ApexCharts gap value for time-series data.
+  data?: Array<number | null>
   type?: string
   color?: string
+  [key: string]: unknown
 }
 
 export type ApexChartSeries = ReadonlyArray<ApexChartSeriesItem | number>
@@ -54,7 +59,9 @@ export interface ApexChartOptions {
     foreColor?: string
     animations?: {
       enabled?: boolean
+      [key: string]: unknown
     }
+    [key: string]: unknown
   }
   colors?: string[]
   theme?: ApexThemeOptions
@@ -92,8 +99,12 @@ export interface ApexChartOptions {
   legend?: {
     labels?: {
       colors?: string
+      [key: string]: unknown
     }
+    [key: string]: unknown
   }
+  // Preserve ApexCharts' intentionally broad configuration escape hatch.
+  [key: string]: unknown
 }
 
 export interface ChartStateProps {
