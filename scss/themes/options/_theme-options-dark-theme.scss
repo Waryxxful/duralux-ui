@@ -257,8 +257,8 @@ html {
 		.apexcharts-graphical {
 			.apexcharts-radar-series {
 				polygon {
-					fill: #17181d;
-					stroke: #3a3b42;
+					fill: #121a2e;
+					stroke: #242f4a;
 				}
 			}
 		}
@@ -655,7 +655,7 @@ html {
 			.datepicker-cell.next:not(.disabled),
 			.datepicker-cell.prev:not(.disabled) {
 				opacity: 0.3;
-				color: #8b8d98;
+				color: #536577;
 			}
 			.datepicker-footer {
 				background-color: $dark-theme-color-hover;
@@ -936,7 +936,7 @@ html {
 		/* <---------------! Modal !---------------> */
 		.modal-backdrop {
 			--bs-backdrop-opacity: 0.9;
-			background-color: #050506;
+			background-color: #000915;
 		}
 
 		/* <---------------! Popover !---------------> */
@@ -1399,7 +1399,7 @@ html {
 		::-webkit-input-placeholder,
 		:-ms-input-placeholder,
 		::placeholder {
-			color: #7a7c85 !important;
+			color: #50566e !important;
 		}
 
 		/* <---------------! Scrollbar !---------------> */
