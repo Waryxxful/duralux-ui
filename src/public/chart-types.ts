@@ -67,34 +67,45 @@ export interface ApexChartOptions {
   theme?: ApexThemeOptions
   grid?: {
     borderColor?: string
+    [key: string]: unknown
   }
   xaxis?: {
     categories?: string[]
     labels?: {
       style?: {
         colors?: string | string[]
+        [key: string]: unknown
       }
+      [key: string]: unknown
     }
     axisBorder?: {
       color?: string
+      [key: string]: unknown
     }
     axisTicks?: {
       color?: string
+      [key: string]: unknown
     }
+    [key: string]: unknown
   }
   yaxis?: {
     labels?: {
       style?: {
         colors?: string | string[]
+        [key: string]: unknown
       }
+      [key: string]: unknown
     }
+    [key: string]: unknown
   }
   tooltip?: {
     theme?: string
     style?: {
       fontSize?: string
       fontFamily?: string
+      [key: string]: unknown
     }
+    [key: string]: unknown
   }
   legend?: {
     labels?: {
