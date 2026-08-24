@@ -37,13 +37,13 @@ export const tokens = {
   nav: {
     width: 280,
     collapsedWidth: 100,
-    background: '#131419', // modo oscuro — paleta negro/gris (intouch-logo-demo.html)
+    background: '#0f172a',
     headerHeight: 80,
   },
   dark: {
-    background: '#17181d', // superficie de card/modal — un tono más claro que nav.background
-    border: '#26272e',
-    hover: '#26272e',
+    background: '#0f172a',
+    border: '#1b2436',
+    hover: '#1c2438',
   },
   // $radius-* — scss/themes/_variables.scss:158-166
   radius: { none: 0, xs: 3, sm: 5, md: 10, lg: 15, xl: 20, xxl: 25, pill: 30, circle: 50 },

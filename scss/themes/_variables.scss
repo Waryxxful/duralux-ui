@@ -175,11 +175,11 @@ $navigation-width: 280px;
 $navigation-collapsed-width: 100px;
 $navigation-caption: $white;
 $navigation-active-color: $white;
-$navigation-color: #8b8d98;
-$navigation-icon-color: #8b8d98;
-$navigation-background: #131419;
-$navigation-hover-color: #26272e;
-$navigation-border-color: #26272e;
+$navigation-color: #b1b4c0;
+$navigation-icon-color: #b1b4c0;
+$navigation-background: #0f172a;
+$navigation-hover-color: #1c2438;
+$navigation-border-color: #1b2436;
 
 /*
 <--!----------------------------------------------------------------!-->
@@ -187,10 +187,10 @@ $navigation-border-color: #26272e;
 <--!----------------------------------------------------------------!-->
 */
 $header-color: #2c3344;
-$header-background: #131419;
+$header-background: #0f172a;
 $header-link-color: #6b7280;
-$header-brand-color: #131419;
-$header-border-color: #26272e;
+$header-brand-color: #0f172a;
+$header-border-color: #1b2436;
 
 /*
 <--!----------------------------------------------------------------!-->
@@ -199,8 +199,8 @@ $header-border-color: #26272e;
 */
 $topbar-height: 60px;
 $topbar-color: #b5bdca;
-$topbar-background: #131419;
-$header-submenu-color: #131419;
+$topbar-background: #1b2335;
+$header-submenu-color: #0f172a;
 $header-submenu-background: $white;
 
 /*
@@ -208,12 +208,10 @@ $header-submenu-background: $white;
 <--! Theme Dark !-->
 <--!----------------------------------------------------------------!-->
 */
-// Paleta negro/gris (intouch-logo-demo.html), reemplaza el navy anterior —
-// solo modo oscuro (html.app-skin-dark), el modo claro no se toca.
-$dark-theme-color: #8b8d98;
-$dark-theme-color-dark: #0e0f12;
-$dark-theme-color-darker: #17181d;
-$dark-theme-color-hover: #26272e;
-$dark-theme-color-hover-2: #0e0f12;
-$dark-theme-color-border: #26272e;
+$dark-theme-color: #b1b4c0;
+$dark-theme-color-dark: #121a2d;
+$dark-theme-color-darker: #0f172a;
+$dark-theme-color-hover: #1c2438;
+$dark-theme-color-hover-2: #121b2e;
+$dark-theme-color-border: #1b2436;
 $dark-theme-box-shadow: 0 0 20px rgb(0 0 0 / 50%);
