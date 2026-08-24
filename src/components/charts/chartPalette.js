@@ -9,12 +9,14 @@ function chartColor(name, fallback = tokens.colors[name]) {
 
 // Literal token colors are required by ApexCharts' color parser. Recharts can
 // resolve the CSS-aware variant at paint time, which also follows dark scopes.
+// Graphic marks need 3:1 contrast against the light canvas. These are
+// same-hue accessible fills, not the raw semantic colors used for decoration.
 export const CHART_PALETTE = Object.freeze([
   tokens.colors.primary,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.danger,
-  tokens.colors.info,
+  '#108745',
+  '#a36813',
+  '#ce4444',
+  '#28837d',
   tokens.colors.indigo,
   tokens.colors.secondary,
 ])
@@ -29,6 +31,9 @@ export const CHART_DARK_PALETTE = Object.freeze([
   '#c4cedd',
 ])
 
+// Recharts resolves CSS variables at paint time. The wrapper maps the raw
+// semantic names to foreground-safe chart roles without changing this public
+// fallback interface for unstyled hosts.
 export const CHART_CSS_PALETTE = Object.freeze([
   chartColor('primary'),
   chartColor('success'),

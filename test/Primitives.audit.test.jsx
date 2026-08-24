@@ -105,6 +105,14 @@ test('initials avatar stays decorative until it receives an explicit label', () 
   expect(avatar).toHaveAttribute('aria-hidden', 'true')
 })
 
+test('initials avatar resolves an explicit semantic surface instead of caller text classes', () => {
+  render(<Avatar name="Success" variant="success" />)
+  const avatar = screen.getByText('SU')
+
+  expect(avatar).toHaveClass('gcu-avatar--semantic', 'gcu-avatar--success')
+  expect(avatar).not.toHaveClass('text-white')
+})
+
 test('Modal has an accessible name and close button even without a title', () => {
   render(
     <Modal open aria-label="Delete customer" onClose={vi.fn()}>

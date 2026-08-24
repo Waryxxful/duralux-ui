@@ -47,7 +47,7 @@ function readSemanticColors(root = ROOT) {
   const source = JSON.parse(readFileSync(sourcePath, 'utf8'))
   const colors = source?.colors
 
-  if (!colors || typeof colors !== 'object' || Array.isArray(colors)) {
+  if (!colors || Object.prototype.toString.call(colors) !== '[object Object]' || Array.isArray(colors)) {
     throw new Error(`${sourcePath} must contain a colors object`)
   }
 
@@ -109,18 +109,20 @@ function renderGeneratedCss(colors) {
   return `${CSS_START}\n:root,.gcu-theme,[data-gcu-theme="light"]{
 ${semanticProperties}
 ${rgbProperties}
-  --gcu-text:var(--gcu-dark);--gcu-muted:var(--gcu-secondary);--gcu-surface:#fff;--gcu-surface-subtle:var(--gcu-canvas);
-  --gcu-border:#e5e7eb;--gcu-focus:rgba(var(--gcu-primary-rgb),.2);--gcu-radius:10px;
+  --gcu-text:var(--gcu-dark);--gcu-muted:#58667a;--gcu-primary-text:var(--gcu-primary);--gcu-surface:#fff;--gcu-surface-subtle:var(--gcu-canvas);
+  --gcu-border:#e5e7eb;--gcu-border-strong:#dcdee4;--gcu-focus:rgba(var(--gcu-primary-rgb),.2);--gcu-radius:10px;
+  --gcu-on-primary:#fff;--gcu-on-secondary:#fff;--gcu-on-success:var(--gcu-darken);--gcu-on-danger:var(--gcu-darken);--gcu-on-warning:var(--gcu-darken);--gcu-on-info:var(--gcu-darken);--gcu-on-teal:var(--gcu-darken);--gcu-on-indigo:#fff;--gcu-on-dark:#fff;--gcu-on-darken:#fff;--gcu-on-light:var(--gcu-dark);
+  --gcu-status-primary:#3454d1;--gcu-status-secondary:#58667a;--gcu-status-success:#0e7b3f;--gcu-status-danger:#b23b3b;--gcu-status-warning:#945e11;--gcu-status-info:#257772;--gcu-status-teal:#2a727d;--gcu-status-indigo:#6610f2;
   --gcu-shadow:0 1px 3px 0 rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1);--gcu-font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 [data-gcu-theme="dark"],.app-skin-dark{
-  --gcu-text:#8b8d98;--gcu-muted:#7a7c85;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
-  --gcu-border:#26272e;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
+  --gcu-text:#e2e8f0;--gcu-muted:#9aa4b2;--gcu-primary-text:#b9c5ff;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
+  --gcu-border:#3a3b42;--gcu-border-strong:#26272e;--gcu-focus:rgba(185,197,255,.35);--gcu-status-primary:#8ea7ff;--gcu-status-secondary:#c4cedd;--gcu-status-success:#55e899;--gcu-status-danger:#ff7a8a;--gcu-status-warning:#ffd166;--gcu-status-info:#5fd7ff;--gcu-status-teal:#5fd7ff;--gcu-status-indigo:#b39aff;--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
 /* Dark theme override: .gcu-theme may re-declare light vars in its own scope. */
 .app-skin-dark .gcu-theme:not([data-gcu-theme="light"]){
-  --gcu-text:#8b8d98;--gcu-muted:#7a7c85;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
-  --gcu-border:#26272e;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
+  --gcu-text:#e2e8f0;--gcu-muted:#9aa4b2;--gcu-primary-text:#b9c5ff;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
+  --gcu-border:#3a3b42;--gcu-border-strong:#26272e;--gcu-focus:rgba(185,197,255,.35);--gcu-status-primary:#8ea7ff;--gcu-status-secondary:#c4cedd;--gcu-status-success:#55e899;--gcu-status-danger:#ff7a8a;--gcu-status-warning:#ffd166;--gcu-status-info:#5fd7ff;--gcu-status-teal:#5fd7ff;--gcu-status-indigo:#b39aff;--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
 ${CSS_END}`
 }

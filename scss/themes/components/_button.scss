@@ -133,9 +133,15 @@ button,
 	}
 }
 .btn-close {
-	&:focus,
-	&:active {
+	&:focus:not(:focus-visible),
+	&:active:not(:focus-visible) {
 		outline: 0;
+		box-shadow: none;
+	}
+
+	&:focus-visible {
+		outline: 2px solid $primary;
+		outline-offset: 2px;
 		box-shadow: none;
 	}
 }

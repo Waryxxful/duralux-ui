@@ -12,8 +12,8 @@ import { cx } from '../../utils/cx'
 
 export function EmptyState({
   icon = 'inbox',
-  title = 'Sin resultados',
-  message,
+  title = 'No hay elementos todavía',
+  message = 'Cuando haya elementos disponibles, aparecerán aquí.',
   action,
   className,
 }) {

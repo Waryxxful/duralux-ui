@@ -25,6 +25,16 @@ test('Table owns the responsive Duralux wrapper and ResponsiveTable stays a sing
   expect(container.querySelector('table')).toHaveClass('table', 'table-hover')
 })
 
+test('Table consumes the legacy striped prop without exposing a non-canonical striped table', () => {
+  const { container } = render(
+    <Table columns={columns} rows={[{ id: 1, name: 'Ada' }]} rowKey="id" striped />,
+  )
+
+  const table = container.querySelector('table')
+  expect(table).not.toHaveClass('table-striped')
+  expect(table).not.toHaveAttribute('striped')
+})
+
 test('Table exposes responsive={false} for callers with their own overflow surface', () => {
   const { container } = render(
     <Table

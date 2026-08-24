@@ -50,9 +50,12 @@ export function StatsCard({
             </div>
           </div>
           {trend && (
-            <div className={`badge bg-soft-${trend.up ? 'success' : 'danger'} text-${trend.up ? 'success' : 'danger'}`}>
+            <div
+              className={`badge bg-soft-${trend.up ? 'success' : 'danger'} text-${trend.up ? 'success' : 'danger'}`}
+              aria-label={`${trend.up ? 'Sube' : 'Baja'} ${trend.value}`}
+            >
               <i className={`feather-arrow-${trend.up ? 'up' : 'down'} fs-10 me-1`} aria-hidden="true"></i>
-              {trend.value}
+              <span aria-hidden="true">{trend.value}</span>
             </div>
           )}
         </div>
@@ -82,14 +85,14 @@ export function StatsCard({
           ? (
             <button
               type="button"
-              className="card-footer btn border-0 fs-11 fw-bold text-uppercase text-center py-4"
+              className="card-footer btn border-0 fs-11 fw-bold text-uppercase text-center py-4 gcu-stats-card__footer"
               onClick={onFooter}
             >
               {footer}
             </button>
           )
           : (
-            <div className="card-footer fs-11 fw-bold text-uppercase text-center py-4">
+            <div className="card-footer fs-11 fw-bold text-uppercase text-center py-4 gcu-stats-card__footer">
               {footer}
             </div>
           )

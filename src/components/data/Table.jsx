@@ -49,8 +49,9 @@ export function Table({
   caption,
   ariaLabel,
   className,
-  // Duralux uses table-hover as the canonical table treatment.
-  striped: _striped = false,
+  // Duralux uses table-hover as the canonical table treatment. Consume the
+  // old JS-only prop without forwarding an invalid attribute to <table>.
+  striped: _striped = undefined,
   hover = true,
   responsive = true,
   wrapperClassName,
@@ -66,7 +67,6 @@ export function Table({
   ...tableProps
 }) {
   void _striped
-
   const normalizedColumns = isArray(columns) ? columns : EMPTY_ARRAY
   const normalizedRows = isArray(rows) ? rows : EMPTY_ARRAY
   const rowKeyHistoryRef = useRef(new Map())

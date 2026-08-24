@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useThemeBoundaryMode } from '../../theme/ThemeBoundaryContext';
 
 /**
  * Toast — feedback de acción canónico de la plantilla (SweetAlert2 toast:
@@ -121,6 +122,7 @@ function releaseViewport(element: HTMLElement) {
 }
 
 export function Toast({ variant, title, show, onClose, autoHideMs, className }: ToastProps) {
+  const themeMode = useThemeBoundaryMode();
   const resolvedVariant = normalizeVariant(variant);
   const resolvedAutoHideMs = autoHideMs ?? DEFAULT_AUTO_HIDE_MS[resolvedVariant];
   const [closing, setClosing] = useState(false);
@@ -243,9 +245,10 @@ export function Toast({ variant, title, show, onClose, autoHideMs, className }: 
 
   return createPortal(
     <div
-      className={['gcu-toast', `gcu-toast--${resolvedVariant}`, closing ? 'gcu-toast--closing' : '', className]
+      className={['gcu-toast', themeMode && 'gcu-theme', `gcu-toast--${resolvedVariant}`, closing ? 'gcu-toast--closing' : '', className]
         .filter(Boolean)
         .join(' ')}
+      data-gcu-theme={themeMode}
       role={assertive ? 'alert' : 'status'}
       aria-live={assertive ? 'assertive' : 'polite'}
       aria-atomic="true"

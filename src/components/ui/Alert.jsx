@@ -40,6 +40,7 @@ export function Alert({
   children,
   className = '',
   role,
+  announce = false,
   ...rest
 }) {
   const [visible, setVisible] = useState(true)
@@ -55,7 +56,7 @@ export function Alert({
     <div
       {...rest}
       className={cx('alert', 'gcu-alert', `gcu-alert--${resolvedVariant}`, toneClass, 'd-flex align-items-center gap-3', closable && 'alert-dismissible', closable && 'gcu-alert--dismissible', className)}
-      role={role ?? 'alert'}
+      role={role ?? (announce ? 'status' : undefined)}
     >
       {icon && (
         <div className={cx('gcu-alert__icon', 'avatar-text avatar-sm rounded flex-shrink-0')}>

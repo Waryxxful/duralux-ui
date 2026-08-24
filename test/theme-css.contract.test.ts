@@ -355,19 +355,37 @@ describe('CSS theme contract', () => {
       dark: '#283c50',
     } as const
 
+    const coloredStatSurfaces = {
+      primary: '#3454d1', secondary: '#64748b', success: '#108745', danger: '#ce4444',
+      warning: '#a36813', info: '#28837d', teal: '#2f808d', indigo: '#6610f2',
+      dark: '#283c50', light: '#eff0f6', darken: '#001327',
+    } as const
+
     for (const [variant, background] of Object.entries(widgetVariants)) {
-      const cardColor = ruleWithDeclarations(css, `.bg-${variant}`, ['background-color'])['background-color']
-      const cardForeground = ruleWithDeclarations(css, `.gcu-colored-stat.bg-${variant}`, ['color']).color
-      expect(parseColor(cardForeground), `colored-stat ${variant}`).toEqual(
+      const card = ruleWithDeclarations(css, `.gcu-colored-stat.bg-${variant}`, ['background-color', 'color'])
+      expect(parseColor(card['background-color']), `colored-stat ${variant} surface`).toEqual(
+        parseColor(coloredStatSurfaces[variant as keyof typeof coloredStatSurfaces]),
+      )
+      expect(parseColor(card.color), `colored-stat ${variant}`).toEqual(
         parseColor(variant === 'light' ? '#283c50' : '#fff'),
       )
-      expect(cardColor.replace(/\s*!important$/, '')).toBe(background)
 
-      const glass = ruleWithDeclarations(css, `.gcu-colored-stat.bg-${variant} .gcu-colored-stat__glass`, ['color'])
-      const glassBackground = ruleWithDeclarations(css, '.gcu-colored-stat__glass', ['background-color'])['background-color']
-      const glassColor = parseColorWithAlpha(glassBackground)
-      const glassSurface = compositeColor('#ffffff', background, glassColor.alpha)
-      expect(contrastRatio(glass.color, glassSurface), `colored-stat glass ${variant}`).toBeGreaterThanOrEqual(4.5)
+      const glass = ruleWithDeclarations(css, '.gcu-colored-stat__glass', ['color', 'background-color'])
+      const glassColor = parseColorWithAlpha(glass['background-color'])
+      const glassSurface = compositeColor('#001327', coloredStatSurfaces[variant as keyof typeof coloredStatSurfaces], glassColor.alpha)
+      expect(contrastRatio(variant === 'light' ? '#283c50' : '#fff', glassSurface), `colored-stat glass ${variant}`).toBeGreaterThanOrEqual(4.5)
+    }
+
+    // Avatars and visible progress labels are compact filled reading surfaces,
+    // so their foreground must follow the same solid AA contract as buttons.
+    for (const [variant, surface] of Object.entries(coloredStatSurfaces)) {
+      const expectedForeground = variant === 'light' ? '#283c50' : '#fff'
+      const progress = ruleWithDeclarations(css, `.progress-bar.bg-${variant}`, ['background-color', 'color'])
+      const avatar = ruleWithDeclarations(css, `.gcu-avatar--semantic.gcu-avatar--${variant}`, ['background-color', 'color'])
+      expect(parseColor(progress['background-color']), `progress ${variant}`).toEqual(parseColor(surface))
+      expect(parseColor(progress.color), `progress foreground ${variant}`).toEqual(parseColor(expectedForeground))
+      expect(parseColor(avatar['background-color']), `avatar ${variant}`).toEqual(parseColor(surface))
+      expect(parseColor(avatar.color), `avatar foreground ${variant}`).toEqual(parseColor(expectedForeground))
     }
 
     for (const [variant, foreground] of Object.entries(softForegrounds)) {
@@ -405,9 +423,11 @@ describe('CSS theme contract', () => {
     expect(runtimeCss).not.toMatch(/\b(?:shift-color|shade-color|tint-color|color-contrast|contrast-ratio)\(/)
     expect(css).not.toMatch(/bootstrap-icons/i)
     expect(runtimeCss).not.toMatch(/bootstrap-icons/i)
-    expect(runtimeCss).not.toContain('.gcu-colored-stat{color:#fff!important}')
-    expect(runtimeCss).toContain('.gcu-colored-stat.bg-success')
-    expect(runtimeCss).toContain('color:var(--gcu-darken)!important')
+    expect(runtimeCss).toContain('.gcu-colored-stat{color:#fff!important}')
+    expect(runtimeCss).toContain('.gcu-alert--success{--gcu-alert-icon-fill:#108745;--gcu-alert-icon-foreground:#fff}')
+    expect(runtimeCss).toContain('.progress-bar.bg-success,.gcu-avatar--semantic.gcu-avatar--success{background-color:#108745!important;color:#fff!important}')
+    expect(runtimeCss).toContain('.gcu-colored-stat.bg-success{background-color:#108745!important')
+    expect(runtimeCss).toContain('color:#283c50!important')
     expect(runtimeCss).toContain('color:var(--gcu-dark)!important')
     expect(runtimeCss).toContain('.gcu-btn--outline{background:transparent;color:var(--gcu-btn-outline-text,var(--gcu-btn-color))}')
     expect(readFileSync(resolve(repoRoot, 'scss/themes/components/_motion.scss'), 'utf8')).not.toContain('transition: all')
@@ -462,13 +482,32 @@ describe('CSS theme contract', () => {
     expect(parseColor(solidSuccess.color)).toEqual(parseColor('#fff'))
 
     const table = ruleWithDeclarations(css, '.table-responsive .table', ['color'])
-    expect(parseColor(table.color)).toEqual(parseColor('#6b7885'))
+    expect(parseColor(table.color)).toEqual(parseColor('#58667a'))
 
     const tableHead = ruleWithDeclarations(css, '.table-responsive .table thead th', ['color'])
     expect(parseColor(tableHead.color)).toEqual(parseColor('#283c50'))
 
     const brandUtility = ruleWithDeclarations(css, '.bg-success', ['background-color'])
     expect(parseColor(brandUtility['background-color'])).toEqual(parseColor('#17c666'))
+  })
+
+  test('keeps dark table stripes distinct from action controls', () => {
+    const stripe = ruleWithDeclarations(
+      css,
+      'html.app-skin-dark .table > tbody > tr:nth-of-type(odd) > *',
+      ['--bs-table-accent-bg'],
+    )
+    const hover = ruleWithDeclarations(
+      css,
+      'html.app-skin-dark .table > tbody > tr:hover > *',
+      ['--bs-table-accent-bg'],
+    )
+
+    expect(parseColor(stripe['--bs-table-accent-bg'])).toEqual(parseColor('#17181d'))
+    expect(parseColor(hover['--bs-table-accent-bg'])).toEqual(parseColor('#26272e'))
+    expect(
+      contrastRatio(stripe['--bs-table-accent-bg'], hover['--bs-table-accent-bg']),
+    ).toBeGreaterThanOrEqual(1.18)
   })
 
   test('hides ShellNav caption spans in collapsed minimenu and restores them on hover and mobile', () => {

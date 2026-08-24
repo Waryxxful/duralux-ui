@@ -19,6 +19,26 @@ $gcu-alert-soft-colors: (
 	"indigo": $indigo,
 );
 
+// Alert icons are compact filled surfaces. Match the AA solid-fill contract
+// rather than borrowing the alert's bright tint and a different foreground.
+@each $color, $fill in $gcu-solid-fills {
+	.gcu-alert--#{$color} {
+		--gcu-alert-icon-fill: #{$fill};
+		--gcu-alert-icon-foreground: #{map-get($gcu-solid-foregrounds, $color)};
+	}
+}
+
+.gcu-alert__icon {
+	background-color: var(--gcu-alert-icon-fill) !important;
+	color: var(--gcu-alert-icon-foreground) !important;
+}
+
+html.app-skin-dark .gcu-alert.gcu-alert .gcu-alert__icon,
+[data-gcu-theme="dark"] .gcu-alert.gcu-alert .gcu-alert__icon {
+	background-color: var(--gcu-alert-icon-fill) !important;
+	color: var(--gcu-alert-icon-foreground) !important;
+}
+
 @each $color, $value in $gcu-alert-soft-colors {
 	$foreground: map-get($gcu-soft-foregrounds, $color);
 	$background: shift-color($value, -90%);

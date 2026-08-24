@@ -5,7 +5,7 @@ export function AvatarsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Avatar</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>src, name, size (xs|sm|md|lg|xl|xxl), rounded (circle|3), bg</code></p>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>src, name, size (xs|sm|md|lg|xl|xxl), rounded (circle|3), variant</code></p>
 
       <ShowcaseSection
         title="Tamaños con imagen"
@@ -13,14 +13,14 @@ export function AvatarsPage() {
           <div className="d-flex align-items-center gap-3 flex-wrap">
             {['xs','sm','md','lg','xl','xxl'].map(s => (
               <div key={s} className="text-center">
-                <Avatar src="/assets/images/avatar/1.png" size={s} rounded="circle" />
+                <Avatar src="/assets/images/avatar/1.svg" size={s} rounded="circle" />
                 <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>{s}</div>
               </div>
             ))}
           </div>
         }
-        code={`<Avatar src="/assets/images/avatar/1.png" size="md" rounded="circle" />
-<Avatar src="/assets/images/avatar/1.png" size="xl" rounded="circle" />`}
+        code={`<Avatar src="/assets/images/avatar/1.svg" size="md" rounded="circle" />
+<Avatar src="/assets/images/avatar/1.svg" size="xl" rounded="circle" />`}
       />
 
       <ShowcaseSection
@@ -29,18 +29,18 @@ export function AvatarsPage() {
         preview={
           <div className="d-flex gap-3 flex-wrap">
             {[
-              { name: 'AD', bg: 'bg-primary' },
-              { name: 'MC', bg: 'bg-success' },
-              { name: 'RV', bg: 'bg-warning' },
-              { name: 'JL', bg: 'bg-danger' },
-              { name: 'PG', bg: 'bg-info' },
-            ].map(({ name, bg }) => (
-              <Avatar key={name} name={name} size="md" rounded="circle" bg={bg} />
+              { name: 'AD', variant: 'primary' },
+              { name: 'MC', variant: 'success' },
+              { name: 'RV', variant: 'warning' },
+              { name: 'JL', variant: 'danger' },
+              { name: 'PG', variant: 'info' },
+            ].map(({ name, variant }) => (
+              <Avatar key={name} name={name} size="md" rounded="circle" variant={variant} />
             ))}
           </div>
         }
-        code={`<Avatar name="AD" size="md" rounded="circle" bg="bg-primary" />
-<Avatar name="MC" size="lg" rounded="circle" bg="bg-success" />`}
+        code={`<Avatar name="AD" size="md" rounded="circle" variant="primary" />
+<Avatar name="MC" size="lg" rounded="circle" variant="success" />`}
       />
     </div>
   )

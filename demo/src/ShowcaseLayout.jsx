@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
+import { useTheme } from '../../src/theme/ThemeProvider'
 
 const NAV = [
   { label: 'Introducción', to: '/' },
@@ -31,27 +33,48 @@ const NAV = [
 ]
 
 export function ShowcaseLayout() {
+  const { dark, toggleDark } = useTheme()
+  const [navOpen, setNavOpen] = useState(false)
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <aside style={{ width: 240, flexShrink: 0, background: '#fff', borderRight: '1px solid #e2e8f0', padding: '24px 0', overflowY: 'auto', position: 'sticky', top: 0, height: '100vh' }}>
-        <div style={{ padding: '0 20px 24px', fontWeight: 800, fontSize: 16, color: '#3454d1' }}>
-          @duralux/ui
+    <div className="showcase-layout">
+      <aside className="showcase-sidebar">
+        <div className="showcase-sidebar__header">
+          <div className="showcase-brand">@duralux/ui</div>
+          <button
+            type="button"
+            className="showcase-nav-toggle"
+            aria-expanded={navOpen}
+            aria-controls="showcase-navigation"
+            onClick={() => setNavOpen(open => !open)}
+          >
+            {navOpen ? 'Cerrar navegación' : 'Abrir navegación'}
+          </button>
         </div>
-        {NAV.map((item) => {
-          const itemKey = item.to ?? `caption-${item.label}`
-          return item.type === 'caption'
-            ? <div key={itemKey} style={{ padding: '12px 20px 4px', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: '#94a3b8' }}>{item.label}</div>
-            : <NavLink key={itemKey} to={item.to} end={item.to === '/'}
-                style={({ isActive }) => ({
-                  display: 'block', padding: '6px 20px', fontSize: 13, fontWeight: 500,
-                  color: isActive ? '#3454d1' : '#475569',
-                  background: isActive ? '#eff4ff' : 'transparent',
-                  textDecoration: 'none', borderLeft: isActive ? '3px solid #3454d1' : '3px solid transparent',
-                })}
-              >{item.label}</NavLink>
-        })}
+        <button
+          type="button"
+          className="showcase-theme-toggle"
+          aria-pressed={dark}
+          onClick={toggleDark}
+        >
+          {dark ? 'Usar tema claro' : 'Usar tema oscuro'}
+        </button>
+        <nav id="showcase-navigation" className={`showcase-navigation${navOpen ? ' showcase-navigation--open' : ''}`} aria-label="Componentes">
+          {NAV.map((item) => {
+            const itemKey = item.to ?? `caption-${item.label}`
+            return item.type === 'caption'
+              ? <div key={itemKey} className="showcase-caption">{item.label}</div>
+              : <NavLink
+                  key={itemKey}
+                  to={item.to}
+                  end={item.to === '/'}
+                  onClick={() => setNavOpen(false)}
+                  className={({ isActive }) => `showcase-link${isActive ? ' showcase-link--active' : ''}`}
+                >{item.label}</NavLink>
+          })}
+        </nav>
       </aside>
-      <main style={{ flex: 1, padding: '40px', maxWidth: 900, overflowX: 'auto' }}>
+      <main className="showcase-main">
         <Outlet />
       </main>
     </div>

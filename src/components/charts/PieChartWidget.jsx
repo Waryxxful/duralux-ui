@@ -7,6 +7,7 @@ import { readChartDataValue, resolveChartAlternative } from './chartA11yModel'
 import { usePrefersReducedMotion } from './chartMotion'
 import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalette'
 import { useChartTheme } from './chartTheme'
+import { ChartLegend } from './ChartLegend'
 import { isArray, isFiniteNumber, isObject, isString } from '../../utils/typeGuards'
 
 function normalizePieEntry(entry) {
@@ -135,10 +136,7 @@ export function PieChartWidget({
           </Pie>
           <Tooltip contentStyle={{ ...getChartTooltipStyle(resolvedTheme) }} isAnimationActive={!reducedMotion} />
           {legend && (
-            <Legend
-              wrapperStyle={{ fontSize: 12, color: resolvedTheme.text }}
-              formatter={(value) => <span style={{ color: resolvedTheme.muted }}>{value}</span>}
-            />
+            <Legend wrapperStyle={{ fontSize: 12, color: resolvedTheme.text }} content={<ChartLegend theme={resolvedTheme} />} />
           )}
         </PieChart>
       </ResponsiveContainer>

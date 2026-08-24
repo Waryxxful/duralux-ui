@@ -93,11 +93,6 @@ export interface StatCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   footer?: React.ReactNode;
 }
 
-function featherIcon(icon: string | undefined): string | undefined {
-  if (!icon) return undefined;
-  return icon.startsWith('feather-') ? icon : `feather-${icon}`;
-}
-
 /**
  * Compatibility adapter for the older GranCRM signature.
  *
@@ -118,12 +113,12 @@ export function StatCard({
 }: StatCardProps) {
   const trend = change
     ? {
-      value: `${Math.abs(change.value)}%${change.label ? ` ${change.label}` : ''}`,
+      value: `${change.value}%${change.label ? ` ${change.label}` : ''}`,
       up: change.value >= 0,
     }
     : undefined;
   const runtimeCard = RuntimeStatsCard({
-    icon: featherIcon(icon),
+    icon: icon ? (icon.startsWith('feather-') ? icon : `feather-${icon}`) : undefined,
     iconBg: `bg-soft-${variant} text-${variant}`,
     value,
     label: title,

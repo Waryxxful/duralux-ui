@@ -32,18 +32,20 @@
   --gcu-dark-rgb:40, 60, 80;
   --gcu-darken-rgb:0, 19, 39;
   --gcu-light-rgb:239, 240, 246;
-  --gcu-text:var(--gcu-dark);--gcu-muted:var(--gcu-secondary);--gcu-surface:#fff;--gcu-surface-subtle:var(--gcu-canvas);
-  --gcu-border:#e5e7eb;--gcu-focus:rgba(var(--gcu-primary-rgb),.2);--gcu-radius:10px;
+  --gcu-text:var(--gcu-dark);--gcu-muted:#58667a;--gcu-primary-text:var(--gcu-primary);--gcu-surface:#fff;--gcu-surface-subtle:var(--gcu-canvas);
+  --gcu-border:#e5e7eb;--gcu-border-strong:#dcdee4;--gcu-focus:rgba(var(--gcu-primary-rgb),.2);--gcu-radius:10px;
+  --gcu-on-primary:#fff;--gcu-on-secondary:#fff;--gcu-on-success:var(--gcu-darken);--gcu-on-danger:var(--gcu-darken);--gcu-on-warning:var(--gcu-darken);--gcu-on-info:var(--gcu-darken);--gcu-on-teal:var(--gcu-darken);--gcu-on-indigo:#fff;--gcu-on-dark:#fff;--gcu-on-darken:#fff;--gcu-on-light:var(--gcu-dark);
+  --gcu-status-primary:#3454d1;--gcu-status-secondary:#58667a;--gcu-status-success:#0e7b3f;--gcu-status-danger:#b23b3b;--gcu-status-warning:#945e11;--gcu-status-info:#257772;--gcu-status-teal:#2a727d;--gcu-status-indigo:#6610f2;
   --gcu-shadow:0 1px 3px 0 rgb(0 0 0/.1),0 1px 2px -1px rgb(0 0 0/.1);--gcu-font:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 [data-gcu-theme="dark"],.app-skin-dark{
-  --gcu-text:#8b8d98;--gcu-muted:#7a7c85;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
-  --gcu-border:#26272e;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
+  --gcu-text:#e2e8f0;--gcu-muted:#9aa4b2;--gcu-primary-text:#b9c5ff;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
+  --gcu-border:#3a3b42;--gcu-border-strong:#26272e;--gcu-focus:rgba(185,197,255,.35);--gcu-status-primary:#8ea7ff;--gcu-status-secondary:#c4cedd;--gcu-status-success:#55e899;--gcu-status-danger:#ff7a8a;--gcu-status-warning:#ffd166;--gcu-status-info:#5fd7ff;--gcu-status-teal:#5fd7ff;--gcu-status-indigo:#b39aff;--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
 /* Dark theme override: .gcu-theme may re-declare light vars in its own scope. */
 .app-skin-dark .gcu-theme:not([data-gcu-theme="light"]){
-  --gcu-text:#8b8d98;--gcu-muted:#7a7c85;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
-  --gcu-border:#26272e;--gcu-focus:rgba(103,128,235,.28);--gcu-shadow:0 0 20px rgb(0 0 0/.5);
+  --gcu-text:#e2e8f0;--gcu-muted:#9aa4b2;--gcu-primary-text:#b9c5ff;--gcu-surface:#17181d;--gcu-surface-subtle:#0e0f12;
+  --gcu-border:#3a3b42;--gcu-border-strong:#26272e;--gcu-focus:rgba(185,197,255,.35);--gcu-status-primary:#8ea7ff;--gcu-status-secondary:#c4cedd;--gcu-status-success:#55e899;--gcu-status-danger:#ff7a8a;--gcu-status-warning:#ffd166;--gcu-status-info:#5fd7ff;--gcu-status-teal:#5fd7ff;--gcu-status-indigo:#b39aff;--gcu-shadow:0 0 20px rgb(0 0 0/.5);
 }
 /* END GENERATED SEMANTIC TOKENS */
 body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
@@ -536,3 +538,66 @@ html.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
   .gcu-btn,.gcu-control,.gcu-progress__bar,.gcu-toast__close,.gcu-link-button,.gcu-modules-menu,.nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow{transition:none!important}
   .gcu-spinner,.gcu-progress__bar--animated,.gcu-toast,.gcu-toast--closing{animation:none!important}
 }
+
+/* Contextual foreground roles. Raw semantic hues remain fills; these roles are
+   for readable text and icons placed on neutral or semantic surfaces. */
+.text-primary{color:var(--gcu-primary-text)!important}.text-success{color:var(--gcu-status-success)!important}.text-danger{color:var(--gcu-status-danger)!important}.text-warning{color:var(--gcu-status-warning)!important}.text-info{color:var(--gcu-status-info)!important}.text-teal{color:var(--gcu-status-teal)!important}.text-indigo{color:var(--gcu-status-indigo)!important}
+.gcu-progress-ring__indicator{stroke:var(--gcu-primary-text,#3454d1)}.gcu-progress-ring__label{color:var(--gcu-primary-text,#3454d1)}
+
+/* Avatar initials own their foreground when the component selected a semantic
+   variant. The legacy `bg` escape hatch intentionally retains caller control. */
+.gcu-avatar--semantic{background-color:var(--gcu-avatar-bg)!important;color:var(--gcu-avatar-fg)!important}.gcu-avatar--primary{--gcu-avatar-bg:var(--gcu-primary);--gcu-avatar-fg:var(--gcu-on-primary)}.gcu-avatar--secondary{--gcu-avatar-bg:var(--gcu-secondary);--gcu-avatar-fg:var(--gcu-on-secondary)}.gcu-avatar--success{--gcu-avatar-bg:var(--gcu-success);--gcu-avatar-fg:var(--gcu-on-success)}.gcu-avatar--danger{--gcu-avatar-bg:var(--gcu-danger);--gcu-avatar-fg:var(--gcu-on-danger)}.gcu-avatar--warning{--gcu-avatar-bg:var(--gcu-warning);--gcu-avatar-fg:var(--gcu-on-warning)}.gcu-avatar--info{--gcu-avatar-bg:var(--gcu-info);--gcu-avatar-fg:var(--gcu-on-info)}.gcu-avatar--teal{--gcu-avatar-bg:var(--gcu-teal);--gcu-avatar-fg:var(--gcu-on-teal)}.gcu-avatar--indigo{--gcu-avatar-bg:var(--gcu-indigo);--gcu-avatar-fg:var(--gcu-on-indigo)}.gcu-avatar--dark{--gcu-avatar-bg:var(--gcu-dark);--gcu-avatar-fg:var(--gcu-on-dark)}.gcu-avatar--darken{--gcu-avatar-bg:var(--gcu-darken);--gcu-avatar-fg:var(--gcu-on-darken)}.gcu-avatar--light{--gcu-avatar-bg:var(--gcu-light);--gcu-avatar-fg:var(--gcu-on-light)}
+
+.gcu-toast--success .gcu-toast__icon{color:var(--gcu-status-success)}.gcu-toast--danger .gcu-toast__icon{color:var(--gcu-status-danger)}.gcu-toast--warning .gcu-toast__icon{color:var(--gcu-status-warning)}.gcu-toast--info .gcu-toast__icon{color:var(--gcu-status-info)}
+
+/* Portal-safe message surfaces: ThemeProvider applies its class to <html>,
+   while local ThemeScope propagates data-gcu-theme onto the portal entry. */
+.app-skin-dark .gcu-message-bubble,[data-gcu-theme="dark"] .gcu-message-bubble{background:#17181d;border-color:var(--gcu-border);color:var(--gcu-text)}.app-skin-dark .gcu-message-bubble--incoming,[data-gcu-theme="dark"] .gcu-message-bubble--incoming{background:#1d4ed8;border-color:#3b82f6;color:#fff}.app-skin-dark .gcu-message-system,[data-gcu-theme="dark"] .gcu-message-system{background:#131419;border-color:var(--gcu-border);color:var(--gcu-muted)}
+
+/* The SCSS dark selector is document-rooted. These package primitives form a
+   usable local dark scope, and the explicit-light block wins over root dark
+   declarations for nested previews and portals. */
+.gcu-theme[data-gcu-theme="dark"] .card,.gcu-theme[data-gcu-theme="dark"] .modal-content,.gcu-theme[data-gcu-theme="dark"] .dropdown-menu,.gcu-theme[data-gcu-theme="dark"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}.gcu-theme[data-gcu-theme="dark"] .form-control,.gcu-theme[data-gcu-theme="dark"] .form-select,.gcu-theme[data-gcu-theme="dark"] .input-group-text{background-color:var(--gcu-surface-subtle)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}.gcu-theme[data-gcu-theme="dark"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)}
+html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .card,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .modal-content,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .dropdown-menu,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .form-control,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .form-select,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .input-group-text{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)!important}
+
+/* Runtime glue is loaded after the SCSS theme. Keep its dark widget foregrounds
+   semantic instead of flattening every icon to white. */
+html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"]{background-color:color-mix(in srgb,currentColor 16%,var(--gcu-surface-subtle))!important;color:var(--gcu-text)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary{color:var(--gcu-status-primary)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success{color:var(--gcu-status-success)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger{color:var(--gcu-status-danger)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning{color:var(--gcu-status-warning)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info{color:var(--gcu-status-info)!important}
+
+.gcu-stats-card__footer{color:var(--gcu-text)!important}.app-skin-dark .gcu-alert__icon,[data-gcu-theme="dark"] .gcu-alert__icon{background:var(--gcu-alert-color)!important;color:var(--gcu-alert-icon-text)!important}
+@media (max-width:575.98px){.gcu-control,.gcu-input-group__addon{font-size:16px}.form-control,.form-select,textarea.form-control{font-size:16px}.page-header{padding:0 20px!important}}
+/* Chart marks may use raw semantic variables, but their CSS-aware Recharts
+   scope maps them to foreground-safe roles for light and dark canvases. */
+.recharts-wrapper{--gcu-secondary:var(--gcu-status-secondary);--gcu-success:var(--gcu-status-success);--gcu-danger:var(--gcu-status-danger);--gcu-warning:var(--gcu-status-warning);--gcu-info:var(--gcu-status-info);--gcu-teal:var(--gcu-status-teal)}
+/* ColoredStatCard parity with the SCSS theme: its solid reading surfaces use
+   AA fills and one white foreground. This intentionally follows the existing
+   `.bg-*` class API while avoiding black text on bright status backgrounds. */
+.gcu-colored-stat{color:#fff!important}
+.gcu-colored-stat .fs-4,.gcu-colored-stat .fs-13,.gcu-colored-stat p{color:inherit!important}
+.gcu-colored-stat p{opacity:.82!important}
+.gcu-colored-stat .gcu-colored-stat__glass,.gcu-colored-stat .avatar-text,.gcu-colored-stat .badge.bg-white,.gcu-colored-stat .badge.bg-opacity-25{background-color:rgba(0,19,39,.14)!important;color:inherit!important;border:1px solid rgba(255,255,255,.22)!important}
+.gcu-colored-stat.bg-primary{background-color:#3454d1!important;border-color:#3454d1!important}
+.gcu-colored-stat.bg-secondary{background-color:#64748b!important;border-color:#64748b!important}
+.gcu-colored-stat.bg-success{background-color:#108745!important;border-color:#108745!important}
+.gcu-colored-stat.bg-danger{background-color:#ce4444!important;border-color:#ce4444!important}
+.gcu-colored-stat.bg-warning{background-color:#a36813!important;border-color:#a36813!important}
+.gcu-colored-stat.bg-info{background-color:#28837d!important;border-color:#28837d!important}
+.gcu-colored-stat.bg-teal{background-color:#2f808d!important;border-color:#2f808d!important}
+.gcu-colored-stat.bg-indigo{background-color:#6610f2!important;border-color:#6610f2!important}
+.gcu-colored-stat.bg-dark{background-color:#283c50!important;border-color:#283c50!important}
+.gcu-colored-stat.bg-darken{background-color:#001327!important;border-color:#001327!important}
+.gcu-colored-stat.bg-light{background-color:#eff0f6!important;border-color:#eff0f6!important;color:#283c50!important}
+.gcu-colored-stat.bg-light .fs-4,.gcu-colored-stat.bg-light .fs-13,.gcu-colored-stat.bg-light p{color:#283c50!important}
+.gcu-colored-stat.bg-light .gcu-colored-stat__glass,.gcu-colored-stat.bg-light .avatar-text,.gcu-colored-stat.bg-light .badge.bg-white,.gcu-colored-stat.bg-light .badge.bg-opacity-25{background-color:rgba(0,19,39,.07)!important;border-color:rgba(0,19,39,.16)!important}
+/* Override the previous compatibility rules with the card-level foreground. */
+.gcu-colored-stat.bg-primary,.gcu-colored-stat.bg-secondary,.gcu-colored-stat.bg-success,.gcu-colored-stat.bg-danger,.gcu-colored-stat.bg-warning,.gcu-colored-stat.bg-info,.gcu-colored-stat.bg-teal,.gcu-colored-stat.bg-indigo,.gcu-colored-stat.bg-dark,.gcu-colored-stat.bg-darken{color:#fff!important}
+.gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass,.gcu-colored-stat:not(.bg-light) .avatar-text,.gcu-colored-stat:not(.bg-light) .badge.bg-white,.gcu-colored-stat:not(.bg-light) .badge.bg-opacity-25,.gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass i,.gcu-colored-stat:not(.bg-light) .avatar-text i{color:#fff!important}
+html.app-skin-dark .gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .avatar-text,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .badge.bg-white,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .badge.bg-opacity-25,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass i,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .avatar-text i{color:#fff!important}
+/* Shared solid-surface contract: readable content is always white over the
+   deeper AA fills. Raw `.bg-*` remains available outside component APIs. */
+.progress-bar.bg-primary,.gcu-avatar--semantic.gcu-avatar--primary{background-color:#3454d1!important;color:#fff!important}.progress-bar.bg-secondary,.gcu-avatar--semantic.gcu-avatar--secondary{background-color:#64748b!important;color:#fff!important}.progress-bar.bg-success,.gcu-avatar--semantic.gcu-avatar--success{background-color:#108745!important;color:#fff!important}.progress-bar.bg-danger,.gcu-avatar--semantic.gcu-avatar--danger{background-color:#ce4444!important;color:#fff!important}.progress-bar.bg-warning,.gcu-avatar--semantic.gcu-avatar--warning{background-color:#a36813!important;color:#fff!important}.progress-bar.bg-info,.gcu-avatar--semantic.gcu-avatar--info{background-color:#28837d!important;color:#fff!important}.progress-bar.bg-teal,.gcu-avatar--semantic.gcu-avatar--teal{background-color:#2f808d!important;color:#fff!important}.progress-bar.bg-indigo,.gcu-avatar--semantic.gcu-avatar--indigo{background-color:#6610f2!important;color:#fff!important}.progress-bar.bg-dark,.gcu-avatar--semantic.gcu-avatar--dark{background-color:#283c50!important;color:#fff!important}.progress-bar.bg-darken,.gcu-avatar--semantic.gcu-avatar--darken{background-color:#001327!important;color:#fff!important}.progress-bar.bg-light,.gcu-avatar--semantic.gcu-avatar--light{background-color:#eff0f6!important;color:#283c50!important}
+.gcu-progress__bar{--gcu-progress-fill:#3454d1;--gcu-progress-text:#fff;background-color:var(--gcu-progress-fill)!important}.gcu-progress__bar--secondary{--gcu-progress-fill:#64748b}.gcu-progress__bar--success{--gcu-progress-fill:#108745;--gcu-progress-text:#fff}.gcu-progress__bar--danger{--gcu-progress-fill:#ce4444;--gcu-progress-text:#fff}.gcu-progress__bar--warning{--gcu-progress-fill:#a36813;--gcu-progress-text:#fff}.gcu-progress__bar--info{--gcu-progress-fill:#28837d;--gcu-progress-text:#fff}.gcu-progress__bar--teal{--gcu-progress-fill:#2f808d;--gcu-progress-text:#fff}.gcu-progress__bar--indigo{--gcu-progress-fill:#6610f2}
+/* Alert icon is an independent filled surface; never inherit avatar's dark
+   background or a dark glyph from its parent alert in dark mode. */
+.gcu-alert--primary{--gcu-alert-icon-fill:#3454d1;--gcu-alert-icon-foreground:#fff}.gcu-alert--secondary{--gcu-alert-icon-fill:#64748b;--gcu-alert-icon-foreground:#fff}.gcu-alert--success{--gcu-alert-icon-fill:#108745;--gcu-alert-icon-foreground:#fff}.gcu-alert--danger{--gcu-alert-icon-fill:#ce4444;--gcu-alert-icon-foreground:#fff}.gcu-alert--warning{--gcu-alert-icon-fill:#a36813;--gcu-alert-icon-foreground:#fff}.gcu-alert--info{--gcu-alert-icon-fill:#28837d;--gcu-alert-icon-foreground:#fff}.gcu-alert--teal{--gcu-alert-icon-fill:#2f808d;--gcu-alert-icon-foreground:#fff}.gcu-alert--indigo{--gcu-alert-icon-fill:#6610f2;--gcu-alert-icon-foreground:#fff}.gcu-alert--dark{--gcu-alert-icon-fill:#283c50;--gcu-alert-icon-foreground:#fff}.gcu-alert--darken{--gcu-alert-icon-fill:#001327;--gcu-alert-icon-foreground:#fff}.gcu-alert--light{--gcu-alert-icon-fill:#eff0f6;--gcu-alert-icon-foreground:#283c50}
+.gcu-alert__icon,.app-skin-dark .gcu-alert.gcu-alert .gcu-alert__icon,[data-gcu-theme="dark"] .gcu-alert.gcu-alert .gcu-alert__icon{background-color:var(--gcu-alert-icon-fill)!important;color:var(--gcu-alert-icon-foreground)!important}

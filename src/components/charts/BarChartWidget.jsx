@@ -8,6 +8,7 @@ import { normalizeCartesianData, resolveChartAlternative } from './chartA11yMode
 import { usePrefersReducedMotion } from './chartMotion'
 import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalette'
 import { useChartTheme } from './chartTheme'
+import { ChartLegend } from './ChartLegend'
 
 const CustomTooltip = ({ active, payload, label, theme }) => {
   if (!active || !payload?.length) return null
@@ -23,7 +24,7 @@ const CustomTooltip = ({ active, payload, label, theme }) => {
     }}>
       <p style={{ margin: '0 0 6px', fontWeight: 600, color: theme.text }}>{label}</p>
       {payload.map((p) => (
-        <p key={String(p.dataKey ?? p.name ?? p.fill ?? 'series')} style={{ margin: '2px 0', color: p.fill || theme.text }}>
+        <p key={String(p.dataKey ?? p.name ?? p.fill ?? 'series')} style={{ margin: '2px 0', color: theme.text }}>
           {p.name}: <strong>{p.value}</strong>
         </p>
       ))}
@@ -114,11 +115,7 @@ export function BarChartWidget({
             isAnimationActive={!reducedMotion}
           />
           {normalizedSeries.length > 1 && (
-            <Legend
-              iconType="circle"
-              iconSize={8}
-              wrapperStyle={{ fontSize: 11, paddingTop: 12, color: resolvedTheme.text }}
-            />
+            <Legend wrapperStyle={{ fontSize: 11, color: resolvedTheme.text }} content={<ChartLegend theme={resolvedTheme} />} />
           )}
           {normalizedSeries.map((s, index) => (
             <Bar

@@ -113,7 +113,6 @@ export function ChartCard({
                   {...triggerProps}
                   className={`avatar-text avatar-sm bg-transparent border-0 text-muted${open ? ' show' : ''}`}
                   aria-label={isNonEmptyString(title) ? `Acciones de ${title.trim()}` : 'Acciones del gráfico'}
-                  aria-haspopup="menu"
                 >
                   <i className="feather-more-vertical" aria-hidden="true"></i>
                 </button>

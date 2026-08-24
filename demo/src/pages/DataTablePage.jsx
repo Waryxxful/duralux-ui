@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DataTable, Badge, Button, Table, Pagination, ResponsiveTable } from '@duralux/ui'
+import { DataTable, Badge, Button, Modal, Table, Pagination, ResponsiveTable } from '@duralux/ui'
 import { ShowcaseSection } from '../ShowcaseSection'
 
 const COLUMNS = [
@@ -25,7 +25,6 @@ const DATA = [
 const ACTIONS = [
   { label: 'Ver', icon: 'feather-eye', onClick: (row) => alert(`Ver: ${row.name}`) },
   { label: 'Editar', icon: 'feather-edit-3', onClick: (row) => alert(`Editar: ${row.name}`) },
-  { label: 'Eliminar', icon: 'feather-trash-2', onClick: (row) => alert(`Eliminar: ${row.name}`) },
 ]
 
 const TABLE_COLUMNS = [
@@ -41,6 +40,7 @@ const TABLE_COLUMNS = [
 
 export function DataTablePage() {
   const [page, setPage] = useState(1)
+  const [pendingDelete, setPendingDelete] = useState(null)
 
   return (
     <div>
@@ -50,15 +50,28 @@ export function DataTablePage() {
       <ShowcaseSection
         title="Tabla con sort, checkboxes y acciones"
         preview={
-          <DataTable
-            columns={COLUMNS}
-            data={DATA}
-            rowKey="id"
-            selectable
-            pageSize={4}
-            actions={ACTIONS}
-            onSelectionChange={(ids) => console.log('Selected:', ids)}
-          />
+          <>
+            <DataTable
+              columns={COLUMNS}
+              data={DATA}
+              rowKey="id"
+              selectable
+              pageSize={4}
+              actions={[
+                ...ACTIONS,
+                { label: 'Eliminar', icon: 'feather-trash-2', variant: 'button', buttonVariant: 'danger', onClick: setPendingDelete },
+              ]}
+              onSelectionChange={(ids) => console.log('Selected:', ids)}
+            />
+            <Modal
+              open={Boolean(pendingDelete)}
+              onClose={() => setPendingDelete(null)}
+              title="Eliminar cliente"
+              footer={<div className="d-flex gap-2 justify-content-end"><Button variant="light-brand" onClick={() => setPendingDelete(null)}>Cancelar</Button><Button variant="danger" onClick={() => setPendingDelete(null)}>Eliminar cliente</Button></div>}
+            >
+              <p className="mb-0">Eliminarás a <strong>{pendingDelete?.name}</strong>. Esta acción no se puede deshacer.</p>
+            </Modal>
+          </>
         }
         code={`const COLUMNS = [
   { key: 'name', label: 'Cliente', sortable: true },
@@ -83,16 +96,15 @@ const ACTIONS = [
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>Table</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>columns, rows, rowKey, emptyMessage, loading, className, striped, hover</code></p>
+      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>columns, rows, rowKey, emptyMessage, loading, className, hover</code></p>
 
       <ShowcaseSection
-        title="Table básica con striped y hover"
+        title="Table básica con hover"
         preview={
           <Table
             columns={TABLE_COLUMNS}
             rows={DATA}
             rowKey={(row) => row.id}
-            striped
             hover
           />
         }
@@ -100,7 +112,6 @@ const ACTIONS = [
   columns={TABLE_COLUMNS}
   rows={DATA}
   rowKey={(row) => row.id}
-  striped
   hover
 />`}
       />

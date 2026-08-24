@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
+import { useThemeBoundaryMode } from '../../theme/ThemeBoundaryContext'
 import { isFunction, isString } from '../../utils/typeGuards'
 
 const FOCUSABLE_SELECTOR = [
@@ -350,6 +351,7 @@ export function Modal({
   ...rest
 }) {
   const titleId = useId()
+  const themeMode = useThemeBoundaryMode()
   const hasTitle = isString(title)
     ? title.trim() !== ''
     : title !== undefined && title !== null && title !== false
@@ -477,7 +479,8 @@ export function Modal({
         {...rest}
         id={id}
         data-gcu-modal-layer="dialog"
-        className={['modal fade show', className].filter(Boolean).join(' ')}
+        className={['modal fade show', themeMode && 'gcu-theme', className].filter(Boolean).join(' ')}
+        data-gcu-theme={themeMode}
         style={{ ...(dialogStyle || {}), display: 'block' }}
         tabIndex="-1"
         role={role ?? 'dialog'}

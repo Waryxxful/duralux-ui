@@ -72,8 +72,13 @@ export function ButtonsPage() {
         title="Icono solo (btn-icon)"
         preview={
           <div className="d-flex gap-2">
-            {['feather-edit','feather-trash-2','feather-eye','feather-download','feather-filter'].map(icon => (
-              <Button key={icon} variant="light-brand" className="btn-icon"><i className={icon}></i></Button>
+            {[
+              ['feather-edit', 'Editar'], ['feather-trash-2', 'Eliminar'], ['feather-eye', 'Ver'],
+              ['feather-download', 'Descargar'], ['feather-filter', 'Filtrar'],
+            ].map(([icon, label]) => (
+              <Button key={icon} variant="light-brand" className="btn-icon" aria-label={label} title={label}>
+                <i className={icon} aria-hidden="true" />
+              </Button>
             ))}
           </div>
         }

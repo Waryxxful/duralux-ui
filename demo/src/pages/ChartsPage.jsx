@@ -1,19 +1,8 @@
-import { tokens } from '@duralux/ui'
 import { ApexChart, ChartCard } from '@duralux/ui/charts/apex'
 import { ShowcaseSection } from '../ShowcaseSection'
 
-const CHART_COLORS = [
-  tokens.colors.primary,
-  tokens.colors.secondary,
-  tokens.colors.success,
-  tokens.colors.warning,
-  tokens.colors.danger,
-  tokens.colors.indigo,
-]
-
 const AREA_OPTIONS = {
   chart: { type: 'area', toolbar: { show: false } },
-  colors: [CHART_COLORS[0]],
   stroke: { curve: 'smooth', width: 2 },
   fill: { type: 'gradient', gradient: { opacityFrom: 0.4, opacityTo: 0 } },
   xaxis: { categories: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago'] },
@@ -22,7 +11,6 @@ const AREA_OPTIONS = {
 
 const BAR_OPTIONS = {
   chart: { type: 'bar', toolbar: { show: false } },
-  colors: [CHART_COLORS[0], CHART_COLORS[1]],
   plotOptions: { bar: { borderRadius: 4, columnWidth: '50%' } },
   xaxis: { categories: ['Ene','Feb','Mar','Abr','May','Jun'] },
   dataLabels: { enabled: false },
@@ -31,7 +19,6 @@ const BAR_OPTIONS = {
 
 const DONUT_OPTIONS = {
   chart: { type: 'donut' },
-  colors: [CHART_COLORS[0], CHART_COLORS[2], CHART_COLORS[3], CHART_COLORS[4], CHART_COLORS[5]],
   labels: ['Facebook','Google','Email','LinkedIn','Referido'],
   legend: { position: 'bottom' },
   plotOptions: { pie: { donut: { size: '65%' } } },
@@ -39,7 +26,6 @@ const DONUT_OPTIONS = {
 
 const LINE_OPTIONS = {
   chart: { type: 'line', toolbar: { show: false } },
-  colors: [CHART_COLORS[0], CHART_COLORS[2]],
   stroke: { curve: 'smooth', width: [2, 2] },
   xaxis: { categories: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago'] },
   dataLabels: { enabled: false },
@@ -50,7 +36,7 @@ export function ChartsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>ApexChart</h1>
-      <p style={{ color: tokens.colors.secondary, marginBottom: 32 }}>
+      <p style={{ marginBottom: 32 }}>
         Props: <code>type, options, series, height, width</code><br />
         Wrapper directo de <code>react-apexcharts</code> — misma configuración que los init files del template Duralux.
       </p>

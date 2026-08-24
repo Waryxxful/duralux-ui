@@ -40,7 +40,7 @@ test('ProgressRing uses the primary CSS token and keeps absurd geometry finite',
   const track = ring.querySelector('circle')
   const indicator = ring.querySelector('.gcu-progress-ring__indicator')
 
-  expect(indicator).toHaveAttribute('stroke', 'var(--gcu-primary, #3454d1)')
+  expect(indicator).toHaveAttribute('stroke', 'var(--gcu-primary-text, #3454d1)')
   expect(Number.isFinite(Number(svg.getAttribute('width')))).toBe(true)
   expect(Number.isFinite(Number(svg.getAttribute('height')))).toBe(true)
   expect(Number(track.getAttribute('r'))).toBeGreaterThan(0)
@@ -215,13 +215,13 @@ test('Avatar keeps explicit decorative images out of the accessibility tree', ()
 })
 
 test('Alert exposes a variant/icon styling seam without forcing white icon text', () => {
-  render(
+  const { container } = render(
     <Alert variant="warning" soft icon="feather-alert-triangle">
       Check the value.
     </Alert>,
   )
 
-  const alert = screen.getByRole('alert')
+  const alert = container.querySelector('.gcu-alert')
   const icon = alert.querySelector('.gcu-alert__icon')
   expect(alert).toHaveClass('gcu-alert--warning')
   expect(icon).toBeInTheDocument()
@@ -230,8 +230,8 @@ test('Alert exposes a variant/icon styling seam without forcing white icon text'
 })
 
 test('Alert falls back to its documented primary variant for unknown tones', () => {
-  render(<Alert variant="not-a-tone">Message</Alert>)
-  expect(screen.getByRole('alert')).toHaveClass('alert-primary', 'gcu-alert--primary')
+  const { container } = render(<Alert variant="not-a-tone">Message</Alert>)
+  expect(container.querySelector('.gcu-alert')).toHaveClass('alert-primary', 'gcu-alert--primary')
 })
 
 test('Tabs skip disabled items on click and roving keyboard navigation', async () => {

@@ -35,9 +35,13 @@ export function AppLayout({
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileCloseReason, setMobileCloseReason] = useState('dismiss')
   const mobileLayerRef = useRef(null)
+  const shellContentRef = useRef(null)
+  const mobileTriggerRef = useRef(null)
+  const mobileCloseReasonRef = useRef('dismiss')
   const previousPathnameRef = useRef(pathname)
 
   const closeMobile = useCallback((reason) => {
+    mobileCloseReasonRef.current = reason
     setMobileCloseReason(reason)
     setMobileOpen(false)
   }, [])
@@ -76,11 +80,46 @@ export function AppLayout({
   useEffect(() => {
     if (!mobileOpen) return
 
-    return registerDismissableLayer({
+    const navigation = document.getElementById(navigationId)
+    const shellContent = shellContentRef.current
+    const restoreTarget = mobileTriggerRef.current
+    const focusableSelector = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    const focusables = () => [...(navigation?.querySelectorAll(focusableSelector) ?? [])]
+      .filter(element => element instanceof HTMLElement && !element.closest('[hidden], [inert], [aria-hidden="true"]'))
+
+    if (shellContent) shellContent.inert = true
+    const first = focusables()[0]
+    first?.focus()
+
+    const trapFocus = (event) => {
+      if (event.key !== 'Tab') return
+      const entries = focusables()
+      if (entries.length === 0) return
+      const firstEntry = entries[0]
+      const lastEntry = entries[entries.length - 1]
+      if (event.shiftKey && document.activeElement === firstEntry) {
+        event.preventDefault()
+        lastEntry.focus()
+      } else if (!event.shiftKey && document.activeElement === lastEntry) {
+        event.preventDefault()
+        firstEntry.focus()
+      }
+    }
+    document.addEventListener('keydown', trapFocus)
+    const dismissLayer = registerDismissableLayer({
       element: mobileLayerRef.current,
       onEscape: () => closeMobile('escape'),
     })
-  }, [closeMobile, mobileOpen])
+
+    return () => {
+      document.removeEventListener('keydown', trapFocus)
+      dismissLayer()
+      if (shellContent) shellContent.inert = false
+      if (['escape', 'toggle', 'overlay'].includes(mobileCloseReasonRef.current) && restoreTarget?.isConnected) {
+        restoreTarget.focus()
+      }
+    }
+  }, [closeMobile, mobileOpen, navigationId])
 
   // Route changes can happen without clicking a Sidebar link (navigate(),
   // browser back/forward, redirects). The mobile drawer must follow the
@@ -103,34 +142,37 @@ export function AppLayout({
         onNavigate={() => closeMobile('navigation')}
       />
 
-      <Header
-        user={user}
-        notifications={notifications}
-        mini={themeContext?.mini ?? mini}
-        onToggleMini={themeContext?.toggleMini ?? (() => setMini((m) => !m))}
-        onToggleMobile={() => {
-          if (mobileOpen) closeMobile('toggle')
-          else {
-            setMobileCloseReason('open')
-            setMobileOpen(true)
-          }
-        }}
-        mobileOpen={mobileOpen}
-        mobileNavId={navigationId}
-        mobileCloseReason={mobileCloseReason}
-      />
+      <div ref={shellContentRef}>
+        <Header
+          user={user}
+          notifications={notifications}
+          mini={themeContext?.mini ?? mini}
+          onToggleMini={themeContext?.toggleMini ?? (() => setMini((m) => !m))}
+          onToggleMobile={() => {
+            if (mobileOpen) closeMobile('toggle')
+            else {
+              mobileTriggerRef.current = document.activeElement
+              setMobileCloseReason('open')
+              setMobileOpen(true)
+            }
+          }}
+          mobileOpen={mobileOpen}
+          mobileNavId={navigationId}
+          mobileCloseReason={mobileCloseReason}
+        />
 
-      <main className="nxl-container">
-        {/*
-          PAGE-STRUCTURE: children render directly under .nxl-content so
-          PageHeader can sit as a sibling of .main-content (v2 pattern).
-          Pages own their own <div className="main-content"> wrapper.
-        */}
-        <div className="nxl-content">
-          {children}
-          <Footer />
-        </div>
-      </main>
+        <main className="nxl-container">
+          {/*
+            PAGE-STRUCTURE: children render directly under .nxl-content so
+            PageHeader can sit as a sibling of .main-content (v2 pattern).
+            Pages own their own <div className="main-content"> wrapper.
+          */}
+          <div className="nxl-content">
+            {children}
+            <Footer />
+          </div>
+        </main>
+      </div>
 
       {mobileOpen && (
         <button

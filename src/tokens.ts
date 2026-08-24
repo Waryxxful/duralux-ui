@@ -21,7 +21,7 @@ export const tokens = {
     bg: semanticColors.bg, // Bootstrap $body-bg
     body: semanticColors.body, // Bootstrap $body-color
     canvas: semanticColors.canvas, // visual body selector canvas
-    border: '#dcdee4',    // $border-color-2
+    border: '#e5e7eb',    // $border-color
   },
   font: {
     family: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", // $font-inter

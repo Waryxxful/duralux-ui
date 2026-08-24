@@ -20,17 +20,17 @@ afterEach(() => {
 test('Alert keeps all public solid and soft tones instead of collapsing to primary', () => {
   const tones = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark', 'teal', 'indigo']
   const bootstrapSolidTones = new Set(['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'])
-  const { rerender } = render(<Alert variant={tones[0]}>Message</Alert>)
+  const { rerender, container } = render(<Alert variant={tones[0]}>Message</Alert>)
 
   for (const tone of tones) {
     rerender(<Alert variant={tone}>Message</Alert>)
-    const alert = screen.getByRole('alert')
+    const alert = container.querySelector('.gcu-alert')
     expect(alert).toHaveClass('gcu-alert', `gcu-alert--${tone}`)
     if (bootstrapSolidTones.has(tone)) expect(alert).toHaveClass(`alert-${tone}`)
     else expect(alert).not.toHaveClass(`alert-${tone}`)
 
     rerender(<Alert variant={tone} soft>Message</Alert>)
-    expect(screen.getByRole('alert')).toHaveClass(`alert-soft-${tone}-message`, 'gcu-alert', `gcu-alert--${tone}`)
+    expect(container.querySelector('.gcu-alert')).toHaveClass(`alert-soft-${tone}-message`, 'gcu-alert', `gcu-alert--${tone}`)
   }
 })
 

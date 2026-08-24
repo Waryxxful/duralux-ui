@@ -1,6 +1,11 @@
 import { cx } from '../../utils/cx'
 import { isString } from '../../utils/typeGuards'
 
+const SEMANTIC_VARIANTS = new Set([
+  'primary', 'secondary', 'success', 'danger', 'warning', 'info',
+  'teal', 'indigo', 'dark', 'darken', 'light',
+])
+
 /**
  * Avatar — imagen o iniciales con tamaños Duralux.
  *
@@ -44,7 +49,9 @@ export function Avatar({
   'aria-hidden': ariaHidden = undefined,
   ...rest
 }) {
-  const bgClass = bg ?? (variant ? `bg-${variant}` : 'bg-primary')
+  const normalizedVariant = isString(variant) && SEMANTIC_VARIANTS.has(variant) ? variant : 'primary'
+  const semanticBackground = bg === null
+  const bgClass = bg ?? `bg-${normalizedVariant}`
   const roundedClass = rounded === true ? 'circle' : rounded === false ? null : rounded
   const imageAlt = alt == null ? '' : safeString(alt)
   const initials = getInitials(name)
@@ -82,7 +89,15 @@ export function Avatar({
   return (
     <div
       {...rest}
-      className={cx('avatar-text', `avatar-${size}`, roundedClass && `rounded-${roundedClass}`, bgClass, 'text-white', className)}
+      className={cx(
+        'avatar-text',
+        `avatar-${size}`,
+        roundedClass && `rounded-${roundedClass}`,
+        bgClass,
+        semanticBackground && 'gcu-avatar--semantic',
+        semanticBackground && `gcu-avatar--${normalizedVariant}`,
+        className,
+      )}
       style={style}
       role={roleProp ?? (informative ? 'img' : undefined)}
       aria-label={meaningfulLabel ? ariaLabel : meaningfulAlt ? imageAlt : undefined}

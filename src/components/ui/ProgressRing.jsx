@@ -1,7 +1,7 @@
 import { normalizeProgress } from './internal/progress.js'
 import { isFiniteNumber, isString } from '../../utils/typeGuards'
 
-const DEFAULT_PROGRESS_COLOR = 'var(--gcu-primary, #3454d1)'
+const DEFAULT_PROGRESS_COLOR = 'var(--gcu-primary-text, #3454d1)'
 const MAX_RING_SIZE = 1000
 
 function positiveFinite(value, fallback, maximum = MAX_RING_SIZE) {
@@ -33,6 +33,7 @@ export function ProgressRing({
   stroke = 8,
   color = DEFAULT_PROGRESS_COLOR,
   label,
+  labelColor = 'var(--gcu-text)',
   className = '',
   style,
   'aria-label': ariaLabel,
@@ -80,8 +81,8 @@ export function ProgressRing({
         />
       </svg>
       <span
-        className="position-absolute fw-bold"
-        style={{ fontSize: safeSize * 0.22, color: indicatorColor }}
+        className="gcu-progress-ring__label position-absolute fw-bold"
+        style={{ fontSize: safeSize * 0.22, color: labelColor }}
       >
         {visibleLabel}
       </span>

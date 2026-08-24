@@ -1,4 +1,4 @@
-import { isArray, isFiniteNumber, isString } from '../../utils/typeGuards'
+import { isArray, isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 
 /**
  * QuickLinkGrid — grid de tiles ícono+label clicables (patrón
@@ -51,7 +51,7 @@ export function QuickLinkGrid({ items = [], columns = 4 }) {
               <a href={item.href} className="text-decoration-none" onClick={item.onClick}>
                 {body}
               </a>
-            ) : (
+            ) : isFunction(item.onClick) ? (
               <button
                 type="button"
                 className="p-0 border-0 bg-transparent w-100 text-start"
@@ -59,7 +59,7 @@ export function QuickLinkGrid({ items = [], columns = 4 }) {
               >
                 {body}
               </button>
-            )}
+            ) : body}
           </div>
         )
       })}

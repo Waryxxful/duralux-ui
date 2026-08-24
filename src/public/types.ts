@@ -100,6 +100,8 @@ export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
   title?: React.ReactNode
   onDismiss?: () => void
   dismissible?: boolean
+  /** Announces dynamic, non-urgent feedback through a polite live region. */
+  announce?: boolean
   children?: React.ReactNode
 }
 
@@ -155,6 +157,8 @@ export interface ProgressRingProps extends React.HTMLAttributes<HTMLDivElement> 
   size?: number
   stroke?: number
   color?: string
+  /** Foreground for the central label; intentionally independent of the stroke. */
+  labelColor?: string
   label?: React.ReactNode
 }
 
@@ -353,7 +357,6 @@ export interface TableProps<T = unknown> extends Omit<React.TableHTMLAttributes<
   caption?: React.ReactNode
   ariaLabel?: string
   className?: string
-  striped?: boolean
   hover?: boolean
   responsive?: boolean
   wrapperClassName?: string

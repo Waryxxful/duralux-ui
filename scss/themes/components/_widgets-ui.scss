@@ -7,107 +7,75 @@
 <--!----------------------------------------------------------------!-->
 */
 
-/* --- ColoredStatCard: card de color sólido + “vidrio” contrastado --- */
-$gcu-widget-glass-foregrounds: (
-	"primary": $darken,
-	"secondary": $darken,
-	"success": $darken,
-	"danger": $darken,
-	"warning": $darken,
-	"info": $darken,
-	"teal": $darken,
-	"indigo": $white,
-	"dark": $white,
-	"light": $darken,
-	"darken": $white,
-);
-
+/* --- ColoredStatCard: una superficie sólida, un único foreground --- */
+// Una tarjeta KPI no debe cambiar de blanco a negro entre variantes: parece
+// una familia de componentes distinta y hace que los iconos/badges compitan
+// con el valor principal. Las superficies se oscurecen al nivel AA de los
+// botones sólidos, por lo que el contenido puede ser siempre blanco.
 .gcu-colored-stat {
-	// El fondo semántico viene de .bg-primary / .bg-success / etc.
-	// El foreground se elige por variante más abajo; no imponemos blanco a
-	// los tonos claros (success/warning/info/etc.).
+	color: $white !important;
 
 	.fs-4,
 	.fs-13,
 	p {
-		color: inherit;
+		color: inherit !important;
 	}
+
 	p {
-		opacity: 1 !important;
+		opacity: .82 !important;
 	}
 
-	// Badge + avatar: no usar .bg-white (el theme lo pinta sólido #fff
-	// y en dark también lo reescribe). El vidrio conserva el tinte blanco,
-	// pero su foreground se resuelve por variante.
-	&__glass {
-		background-color: rgba($white, 0.22) !important;
-		color: inherit !important;
-		border-color: transparent !important;
-
-		i,
-		[class^="feather-"],
-		[class*=" feather-"] {
-			color: inherit !important;
-		}
-	}
-
-	// Por si queda un badge legacy con bg-white
+	// El detalle de "glass" se sombrea (no se aclara): conserva contraste
+	// blanco en todos los fondos y evita el texto negro sobre un tinte claro.
+	&__glass,
 	.badge.bg-white,
-	.badge.bg-opacity-25 {
-		background-color: rgba($white, 0.22) !important;
-		color: inherit !important;
-		border: 0;
-	}
-
-	// Avatar con clase genérica (sin __glass) dentro de la card
+	.badge.bg-opacity-25,
 	.avatar-text {
-		background-color: rgba($white, 0.22) !important;
+		background-color: rgba($darken, .14) !important;
 		color: inherit !important;
-		border-color: transparent !important;
+		border: 1px solid rgba($white, .22) !important;
+	}
+
+	&__glass i,
+	.avatar-text i,
+	&__glass [class^="feather-"],
+	&__glass [class*=" feather-"] {
+		color: inherit !important;
 	}
 }
 
-// Dark: el theme pinta .avatar-text / .bg-white con !important oscuro.
-// Re-aplicamos el vidrio con la misma o mayor especificidad.
-html.app-skin-dark {
-	.gcu-colored-stat {
-		&__glass,
-		.avatar-text,
-		.badge.bg-white,
-		.badge.bg-opacity-25 {
-			background-color: rgba($white, 0.22) !important;
-			color: inherit !important;
-			border-color: transparent !important;
-		}
-
-		&__glass i,
-		.avatar-text i {
-			color: inherit !important;
-		}
-	}
-}
-
-@each $name, $foreground in $gcu-solid-foregrounds {
-	$glass-foreground: map-get($gcu-widget-glass-foregrounds, $name);
-
+// `.bg-*` sigue siendo una API de marca en todo el sistema. Sólo estas
+// superficies de lectura usan el fill AA equivalente para estabilizar el
+// foreground blanco de la tarjeta.
+@each $name, $fill in $gcu-solid-fills {
 	.gcu-colored-stat.bg-#{$name} {
-		color: $foreground !important;
+		background-color: $fill !important;
+		border-color: $fill !important;
+		color: map-get($gcu-solid-foregrounds, $name) !important;
 	}
-	.gcu-colored-stat.bg-#{$name} .gcu-colored-stat__glass,
-	.gcu-colored-stat.bg-#{$name} .badge.bg-white,
-	.gcu-colored-stat.bg-#{$name} .badge.bg-opacity-25,
-	.gcu-colored-stat.bg-#{$name} .avatar-text {
-		color: $glass-foreground !important;
+}
+
+// `light` es una superficie neutral explícita, no una tarjeta de acento.
+.gcu-colored-stat.bg-light {
+	&,
+	.fs-4,
+	.fs-13,
+	p {
+		color: $dark !important;
 	}
-	.gcu-colored-stat.bg-#{$name} .gcu-colored-stat__glass i,
-	.gcu-colored-stat.bg-#{$name} .avatar-text i {
-		color: $glass-foreground !important;
+
+	.gcu-colored-stat__glass,
+	.badge.bg-white,
+	.badge.bg-opacity-25,
+	.avatar-text {
+		background-color: rgba($darken, .07) !important;
+		border-color: rgba($darken, .16) !important;
 	}
 }
 
 /* --- MiniStatCard / QuickLinkGrid: soft avatars deben ganar a .avatar-text --- */
 // En light: .avatar-text { bg: $white } pisa .bg-soft-* si el orden falla.
-// En dark:  html.app-skin-dark .avatar-text { bg: dark !important } gana por
+// En dark: html.app-skin-dark .avatar-text { bg: dark !important } gana por
 // especificidad a .bg-soft-primary. Forzamos soft sobre el avatar del widget.
 .gcu-mini-stat,
 .gcu-quick-link {

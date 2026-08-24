@@ -8,6 +8,7 @@ import { normalizeCartesianData, resolveChartAlternative } from './chartA11yMode
 import { usePrefersReducedMotion } from './chartMotion'
 import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalette'
 import { useChartTheme } from './chartTheme'
+import { ChartLegend } from './ChartLegend'
 
 /**
  * LineChartWidget — gráfico de líneas estilo Duralux.
@@ -77,7 +78,7 @@ export function LineChartWidget({
           <XAxis dataKey="name" tick={{ fontSize: 11, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} />
           <YAxis tick={{ fontSize: 11, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} />
           <Tooltip contentStyle={{ ...getChartTooltipStyle(resolvedTheme) }} isAnimationActive={!reducedMotion} />
-          {normalizedSeries.length > 1 && <Legend wrapperStyle={{ fontSize: 12, color: resolvedTheme.text }} />}
+          {normalizedSeries.length > 1 && <Legend wrapperStyle={{ fontSize: 12, color: resolvedTheme.text }} content={<ChartLegend theme={resolvedTheme} />} />}
           {normalizedSeries.map((s, index) => (
             <Line
               key={s.key}

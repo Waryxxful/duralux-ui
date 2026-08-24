@@ -17,8 +17,8 @@ export function LayoutPage() {
             breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'CRM', href: '/' }, { label: 'Clientes' }]}
           >
             <div className="d-flex gap-2">
-              <Button variant="light-brand" className="btn-icon"><i className="feather-filter"></i></Button>
-              <Button variant="light-brand" className="btn-icon"><i className="feather-download"></i></Button>
+              <Button variant="light-brand" className="btn-icon" aria-label="Filtrar" title="Filtrar"><i className="feather-filter" aria-hidden="true" /></Button>
+              <Button variant="light-brand" className="btn-icon" aria-label="Descargar" title="Descargar"><i className="feather-download" aria-hidden="true" /></Button>
               <Button variant="primary" icon="feather-plus">Nuevo Cliente</Button>
             </div>
           </PageHeader>
@@ -53,7 +53,7 @@ const NAV_ITEMS = [
 const USER = {
   name: 'Admin',
   email: 'admin@empresa.cl',
-  avatar: '/assets/images/avatar/1.png',
+  avatar: '/assets/images/avatar/1.svg',
   menuItems: [
     { label: 'Mi Perfil', icon: 'feather-user', href: '#' },
     { divider: true },
