@@ -503,8 +503,8 @@ describe('CSS theme contract', () => {
       ['--bs-table-accent-bg'],
     )
 
-    expect(parseColor(stripe['--bs-table-accent-bg'])).toEqual(parseColor('#17181d'))
-    expect(parseColor(hover['--bs-table-accent-bg'])).toEqual(parseColor('#26272e'))
+    expect(parseColor(stripe['--bs-table-accent-bg'])).toEqual(parseColor('#0f172a'))
+    expect(parseColor(hover['--bs-table-accent-bg'])).toEqual(parseColor('#1f2a40'))
     expect(
       contrastRatio(stripe['--bs-table-accent-bg'], hover['--bs-table-accent-bg']),
     ).toBeGreaterThanOrEqual(1.18)

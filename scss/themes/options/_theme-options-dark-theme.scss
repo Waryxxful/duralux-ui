@@ -905,7 +905,8 @@ html {
 			> tbody > tr:hover > *,
 			&.table-hover > tbody > tr:hover > * {
 				color: $white !important;
-				--bs-table-accent-bg: #{$dark-theme-color-hover} !important;
+				// ponytail: navy puro (#1c2438 vs #0f172a) da 1.155; el contrato exige >=1.18
+				--bs-table-accent-bg: #1f2a40 !important;
 			}
 			> tbody > tr:nth-of-type(odd) > *,
 			&.table-striped > tbody > tr:nth-of-type(odd) > * {
