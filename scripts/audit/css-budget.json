@@ -1,0 +1,257 @@
+{
+  "src/styles/feather-icons.css": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "src/styles/grancrm-ui.css": {
+    "important": 224,
+    "darkSelectors": 166,
+    "hex": 168
+  },
+  "src/components/charts/chartPalette.js": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 34
+  },
+  "src/components/charts/chartTheme.js": {
+    "important": 0,
+    "darkSelectors": 1,
+    "hex": 0
+  },
+  "src/components/ui/ColoredStatCard.jsx": {
+    "important": 0,
+    "darkSelectors": 1,
+    "hex": 0
+  },
+  "src/components/ui/MiniStatCard.jsx": {
+    "important": 0,
+    "darkSelectors": 1,
+    "hex": 0
+  },
+  "src/components/ui/ProgressRing.jsx": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 2
+  },
+  "src/components/ui/QuickLinkGrid.jsx": {
+    "important": 0,
+    "darkSelectors": 1,
+    "hex": 0
+  },
+  "src/components/ui/StatsCard.jsx": {
+    "important": 0,
+    "darkSelectors": 1,
+    "hex": 0
+  },
+  "scss/themes/_bs-custom-variables.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 20
+  },
+  "scss/themes/_variables.scss": {
+    "important": 0,
+    "darkSelectors": 1,
+    "hex": 23
+  },
+  "scss/themes/applications/_calendar.scss": {
+    "important": 10,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/applications/_chat.scss": {
+    "important": 17,
+    "darkSelectors": 1,
+    "hex": 4
+  },
+  "scss/themes/applications/_email.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 1
+  },
+  "scss/themes/applications/_tasks.scss": {
+    "important": 2,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_accordion.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_alert.scss": {
+    "important": 4,
+    "darkSelectors": 1,
+    "hex": 0
+  },
+  "scss/themes/components/_badge.scss": {
+    "important": 21,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_button.scss": {
+    "important": 29,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_card.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 4
+  },
+  "scss/themes/components/_dropdown.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_form.scss": {
+    "important": 9,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_general.scss": {
+    "important": 115,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_miscellaneous.scss": {
+    "important": 3,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_modal.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 1
+  },
+  "scss/themes/components/_motion-reduced.scss": {
+    "important": 6,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_motion.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 2
+  },
+  "scss/themes/components/_offcanvas.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/components/_table.scss": {
+    "important": 7,
+    "darkSelectors": 0,
+    "hex": 1
+  },
+  "scss/themes/components/_widgets-ui.scss": {
+    "important": 28,
+    "darkSelectors": 4,
+    "hex": 0
+  },
+  "scss/themes/layouts/_nxl-common.scss": {
+    "important": 3,
+    "darkSelectors": 0,
+    "hex": 7
+  },
+  "scss/themes/layouts/_nxl-header.scss": {
+    "important": 7,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/layouts/_nxl-navigation.scss": {
+    "important": 10,
+    "darkSelectors": 0,
+    "hex": 1
+  },
+  "scss/themes/layouts/_nxl-responsive.scss": {
+    "important": 32,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/options/_theme-options-customizer.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/options/_theme-options-dark-theme.scss": {
+    "important": 115,
+    "darkSelectors": 3,
+    "hex": 55
+  },
+  "scss/themes/options/_theme-options-header.scss": {
+    "important": 4,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/options/_theme-options-navigation.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/pages/_help-desk.scss": {
+    "important": 3,
+    "darkSelectors": 0,
+    "hex": 9
+  },
+  "scss/themes/pages/_help-knowledgebase.scss": {
+    "important": 4,
+    "darkSelectors": 0,
+    "hex": 4
+  },
+  "scss/themes/pages/_maintaince.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 2
+  },
+  "scss/themes/plugins/_jauery-steps.scss": {
+    "important": 1,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/plugins/_maxlength.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 1
+  },
+  "scss/themes/plugins/_notification.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 4
+  },
+  "scss/themes/plugins/_pace.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 1
+  },
+  "scss/themes/plugins/_perfect-scrollbar.scss": {
+    "important": 3,
+    "darkSelectors": 0,
+    "hex": 5
+  },
+  "scss/themes/plugins/_pnotify.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 3
+  },
+  "scss/themes/plugins/_select2.scss": {
+    "important": 7,
+    "darkSelectors": 0,
+    "hex": 0
+  },
+  "scss/themes/plugins/_sweetalert2.scss": {
+    "important": 7,
+    "darkSelectors": 0,
+    "hex": 1
+  },
+  "scss/themes/plugins/_tags-input.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 1
+  },
+  "scss/themes/widgets/_widgets-lists.scss": {
+    "important": 0,
+    "darkSelectors": 0,
+    "hex": 13
+  }
+}

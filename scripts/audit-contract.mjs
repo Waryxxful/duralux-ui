@@ -4,6 +4,7 @@
 import { readdirSync, readFileSync, statSync } from 'fs'
 import { basename, dirname, extname, join, resolve } from 'path'
 import { fileURLToPath } from 'url'
+import { measureCss } from './audit/baseline.mjs'
 
 export const BANNED = [
   { re: /btn-outline-/, why: 'la plantilla no usa btn-outline-*; usá variant="light-brand" o sólido semántico' },
@@ -11,6 +12,8 @@ export const BANNED = [
   { re: /variant\s*=\s*\{["']outline[^"']*["']\}/, why: 'variant outline* está prohibido; usá light-brand o semántico sólido' },
   { re: /table-striped/, why: 'la plantilla usa table table-hover, nunca striped' },
   { re: /bg-(?:\$\{[^}]+\}|primary|secondary|success|danger|warning|info|dark|light)-100/, why: 'bg-*-100 no existe en el theme; el canon es bg-soft-*' },
+  // Design system 2.1: los componentes de la librería usan tokens, nunca hex inline.
+  { re: /style=\{\{[^}]*['"]#[0-9a-fA-F]{3,8}['"]/, why: 'hex inline en un componente; usá un token var(--gcu-*)', scope: '/src/components/' },
 ]
 
 const SOURCE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx'])
@@ -112,8 +115,9 @@ export function auditText(source, file = '<text>') {
   const lines = stripComments(source).split('\n')
   const violations = []
 
-  BANNED.forEach(({ re, why, allow = [] }) => {
+  BANNED.forEach(({ re, why, allow = [], scope }) => {
     if (allow.some((allowed) => file.endsWith(allowed))) return
+    if (scope && !file.replaceAll('\\', '/').includes(scope)) return
     lines.forEach((line, index) => {
       if (!testPattern(re, line)) return
       violations.push({
@@ -144,7 +148,28 @@ export function auditContract({ roots = ['src', 'demo/src'], cwd = process.cwd()
   return { files, violations }
 }
 
+/**
+ * Presupuesto de deuda CSS: ningún archivo puede tener más `!important`, selectores
+ * `.app-skin-dark` ni hex sueltos que su presupuesto (scripts/audit/css-budget.json).
+ * Bajar la deuda está permitido; para fijar el nuevo piso: `node scripts/audit/baseline.mjs --budget`.
+ */
+export function auditCssBudget({ cwd = process.cwd() } = {}) {
+  const budget = JSON.parse(readFileSync(join(cwd, 'scripts/audit/css-budget.json'), 'utf8'))
+  const { files } = measureCss(cwd)
+  const violations = []
+  for (const [file, debt] of Object.entries(files)) {
+    const limit = budget[file] ?? { important: 0, darkSelectors: 0, hex: 0 }
+    for (const metric of ['important', 'darkSelectors', 'hex']) {
+      if (debt[metric] > limit[metric]) violations.push(`${file}: ${metric} ${debt[metric]} > presupuesto ${limit[metric]}`)
+    }
+  }
+  return violations
+}
+
 function run() {
+  const budgetViolations = auditCssBudget()
+  budgetViolations.forEach(v => console.error(`✗ presupuesto CSS — ${v}`))
+  if (budgetViolations.length) process.exitCode = 1
   const result = auditContract()
   result.violations.forEach(({ file, line, source, why }) => {
     console.error(`✗ ${file}:${line} — ${source}\n  → ${why}`)
@@ -154,7 +179,7 @@ function run() {
     process.exitCode = 1
     return
   }
-  console.log(`audit-contract: OK (${result.files.length} archivos, 0 violaciones)`)
+  if (!budgetViolations.length) console.log(`audit-contract: OK (${result.files.length} archivos, 0 violaciones; presupuesto CSS respetado)`)
 }
 
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : null

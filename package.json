@@ -52,7 +52,7 @@
     "gate:bundle": "node scripts/check-bundle.mjs",
     "gate:package": "node scripts/check-package.mjs",
     "build:prepare": "node scripts/audit-contract.mjs && npm run tokens:check && vite build && npm run build:styles && npm run build:scss && npm run typecheck:public",
-    "build": "npm run build:prepare && npm run gate:bundle && npm run gate:package",
+    "build": "npm run build:prepare && npm run gate:bundle && npm run gate:package && npm run gate:doctor",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
@@ -60,7 +60,8 @@
     "prepare": "npm run build:prepare",
     "dev:demo": "vite --config demo/vite.config.js",
     "preview:demo": "vite preview --config demo/vite.config.js",
-    "doctor": "npx react-doctor@latest"
+    "doctor": "react-doctor",
+    "gate:doctor": "node scripts/check-doctor.mjs"
   },
   "engines": {
     "node": ">=20.19"
