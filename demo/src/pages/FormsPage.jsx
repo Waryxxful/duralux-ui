@@ -185,17 +185,17 @@ export function FormsPage() {
         preview={
           <div style={{ maxWidth: 500 }} className="row g-3">
             <div className="col-md-6">
-              <FormField label="Nombre *" htmlFor="fn" required>
+              <FormField label="Nombre" htmlFor="fn" required>
                 <Input id="fn" placeholder="Nombre" />
               </FormField>
             </div>
             <div className="col-md-6">
-              <FormField label="Apellido *" htmlFor="ln" required>
+              <FormField label="Apellido" htmlFor="ln" required>
                 <Input id="ln" placeholder="Apellido" />
               </FormField>
             </div>
             <div className="col-12">
-              <FormField label="Email *" htmlFor="fem" required>
+              <FormField label="Email" htmlFor="fem" required>
                 <Input id="fem" type="email" icon="feather-mail" placeholder="tu@email.com" />
               </FormField>
             </div>
@@ -218,12 +218,12 @@ export function FormsPage() {
         }
         code={`<div className="row g-3">
   <div className="col-md-6">
-    <FormField label="Nombre *" required>
+    <FormField label="Nombre" required>
       <Input placeholder="Nombre" />
     </FormField>
   </div>
   <div className="col-md-6">
-    <FormField label="Email *" required>
+    <FormField label="Email" required>
       <Input type="email" icon="feather-mail" />
     </FormField>
   </div>

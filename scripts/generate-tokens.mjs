@@ -137,7 +137,7 @@ function scaleDeclarations(tokens) {
 
 function themeDeclarations(tokens, theme) {
   const r = resolveTheme(tokens, theme)
-  const d = THEME_COLOR_KEYS.filter(k => k !== 'focus-ring-color').map(key => `--gcu-${key}:${r[key]}`)
+  const d = THEME_COLOR_KEYS.map(key => `--gcu-${key}:${r[key]}`)
   for (const tone of TONES) {
     d.push(`--gcu-status-${tone}:${r[`status-${tone}`]}`)
     d.push(`--gcu-${tone}-soft:${r[`${tone}-soft`]}`)
@@ -148,7 +148,7 @@ function themeDeclarations(tokens, theme) {
   for (const [k, value] of Object.entries(r.shadow)) d.push(`--gcu-shadow-${k}:${value}`)
   // Compatibilidad: --gcu-shadow (único) = nivel 1.
   d.push('--gcu-shadow:var(--gcu-shadow-1)')
-  d.push(`--gcu-focus-ring:0 0 0 2px var(--gcu-surface),0 0 0 4px ${r['focus-ring-color']}`)
+  d.push("--gcu-focus-ring:0 0 0 2px var(--gcu-surface),0 0 0 4px var(--gcu-focus-ring-color)")
   return d
 }
 
