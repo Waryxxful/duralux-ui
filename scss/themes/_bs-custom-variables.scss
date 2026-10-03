@@ -69,9 +69,9 @@ $text-muted: var(--gcu-muted, #{$token-light-muted});
 $form-text-color: $text-muted;
 // Este archivo se importa antes de las variables de Bootstrap: los derivados (!default)
 // salen de estos valores y no de #d63384/#dc3545 (DX-001, DX-002).
-$code-color: var(--gcu-code, #b4236e);
+$code-color: var(--gcu-code, #{$token-light-code});
 $form-feedback-invalid-color: $token-light-status-danger;
-// Canon Duralux: controles con fondo blanco. Sin esto heredan $body-bg (#f0f2f8)
+// Canon Duralux: controles con fondo blanco. Sin esto heredan $body-bg (gris del canvas)
 // porque Bootstrap los deriva de él y estos overrides van antes de sus variables.
 $input-bg: $white;
 $form-select-bg: $white;

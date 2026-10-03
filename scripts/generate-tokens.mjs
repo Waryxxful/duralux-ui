@@ -199,7 +199,7 @@ function renderGeneratedScss(tokens) {
   lines.push(`$token-font-mono: ${v(tokens.font.family.mono)};`)
   for (const theme of THEMES) {
     const r = resolveTheme(tokens, theme)
-    for (const key of ['text', 'muted', 'surface', 'surface-subtle', 'border', 'border-strong']) {
+    for (const key of ['text', 'muted', 'code', 'surface', 'surface-subtle', 'border', 'border-strong']) {
       lines.push(`$token-${theme}-${key}: ${r[key]};`)
     }
     lines.push(`$token-${theme}-status-danger: ${r['status-danger']};`)
