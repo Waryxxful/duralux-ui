@@ -48,7 +48,7 @@ Consumidores y cómo se mide el éxito:
 
 | Export | Contenido | Dependencias |
 |---|---|---|
-| `@duralux/ui` | Componentes, shell, hooks, `contract`, `apiFetch`, `log` | react, react-dom (peer); `@tanstack/react-table`, `@tabler/icons-react` (dependencies) |
+| `@duralux/ui` | Componentes, shell, hooks, `contract`, `apiFetch`, `log` | react, react-dom (peer); `@tanstack/react-table` (dependency desde el subproyecto 3); `@tabler/icons-react` (devDependency en 2.1, pasa a dependency cuando un componente del núcleo lo use) |
 | `@duralux/ui/tokens.json` · `/tokens` (TS) · `/tokens.css` | Tokens generados | — |
 | `@duralux/ui/styles.css` | tokens + Bootstrap + theme + componentes | — |
 | `@duralux/ui/charts/apex` · `/charts/recharts` | Sin cambios de API | peers opcionales (como hoy) |
@@ -145,7 +145,7 @@ Archivo único `tokens/tokens.json` en formato W3C DTCG. Tres niveles:
 **De componente:** solo cuando un componente lo necesite (no se crean por adelantado).
 
 **Generación.** Se extiende `scripts/generate-tokens.mjs` (no se agrega Style Dictionary). Salidas:
-- `src/styles/tokens.css` — `--dx-*` bajo `:root` / `[data-theme="dark"]` / `[data-theme="navy"]`
+- Bloque generado de `src/styles/grancrm-ui.css` + `dist/styles/tokens.css` — custom properties `--gcu-*` (prefijo existente, ya consumido por los componentes) bajo `:root` / `[data-gcu-theme="dark"]` / `[data-gcu-theme="navy"]`
 - `scss/themes/_tokens.generated.scss` — alimenta las variables Bootstrap (`$primary`, `$border-radius`, etc.)
 - `src/tokens.ts` — valores y tipos (reemplaza el actual manteniendo sus exports)
 - `src/antd/theme.generated.ts` — objeto `ThemeConfig` de antd por tema
@@ -188,9 +188,10 @@ Control de riesgo:
 
 ### 8.4 Temas en runtime
 
-- `<html data-theme="light|dark|navy">`. `ThemeMode` pasa a `'light' | 'dark' | 'navy' | 'system'` (`system` sigue `prefers-color-scheme` y resuelve a `light`/`dark`).
+- `<html data-gcu-theme="light|dark|navy">` (mismo atributo que ya usa `ThemeScope`; un solo atributo para un solo concepto). `ThemeMode` pasa a `'light' | 'dark' | 'navy' | 'system'` (`system` sigue `prefers-color-scheme` y resuelve a `light`/`dark`).
 - Compatibilidad 2.x: en `dark` y `navy` también se aplica la clase `.app-skin-dark`.
-- `THEME_HEAD_SNIPPET` se actualiza para fijar `data-theme` antes del primer pintado (sin FOUC); lee el valor guardado actual (`'dark'`) sin romperlo.
+- `THEME_HEAD_SNIPPET` se actualiza para fijar `data-gcu-theme` antes del primer pintado (sin FOUC); lee el valor guardado actual (`'dark'`) sin romperlo.
+- Implementación 2.1 del oscuro: el bloque de `_theme-options-dark-theme.scss` se envuelve en un mixin parametrizado por un mapa de paleta y se emite dos veces (`html.app-skin-dark:not([data-gcu-theme="navy"])` y `html.app-skin-dark[data-gcu-theme="navy"]`), porque `lighten()`/`darken()` de Sass no operan sobre `var()`. El subproyecto 2 lo reduce componente a componente hacia custom properties.
 - La rama `theme/navy` se retira cuando el tema navy en runtime alcanza paridad visual (verificada con screenshots).
 - Migración en este subproyecto: la capa global de `grancrm-ui.css` (fondo, texto, bordes, sidebar, header, cards base) pasa a variables. Los overrides de dark por componente se migran en el subproyecto 2. Desde 2.1 el gate prohíbe overrides nuevos.
 - `ThemeProvider.tsx`: las constantes no-componente salen a un módulo propio (corrige el warning de oxlint).
@@ -204,7 +205,7 @@ Control de riesgo:
 ### 8.6 Storybook base
 
 - Storybook con builder `react-vite`, `@storybook/addon-a11y` y test runner.
-- Toolbar de tema (claro / oscuro / navy) que fija `data-theme` en el iframe.
+- Toolbar de tema (claro / oscuro / navy) que fija `data-gcu-theme` en el iframe.
 - Páginas de **Fundamentos** generadas desde `tokens.json`: Color (con contrastes), Tipografía, Espaciado, Radios, Elevación, Motion, Iconografía.
 - La demo Vite actual convive hasta que cada página se migra a stories en el subproyecto 2; luego se elimina. `Dockerfile` / `nginx.conf` pasan a servir `storybook-static`.
 - Scripts: `storybook`, `build-storybook`, `test:stories`.
