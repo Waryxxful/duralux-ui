@@ -75,10 +75,23 @@ const DARK_CHART_THEME = Object.freeze({
   shadow: '0 4px 20px rgb(0 0 0 / 0.35)',
 })
 
+// Navy: misma serie que el oscuro; superficies y bordes del tema navy.
+const NAVY_SURFACES = Object.freeze({
+  background: '#121a2d',
+  surface: '#1d2a45',
+  surfaceSubtle: '#121a2d',
+  muted: '#b8c4dc',
+  border: '#68799c',
+})
+
+const NAVY_CHART_THEME = Object.freeze({ ...DARK_CHART_THEME, mode: 'navy', ...NAVY_SURFACES })
+
 export const CHART_THEME = LIGHT_CHART_THEME
 
+const CHART_THEMES = Object.freeze({ light: LIGHT_CHART_THEME, dark: DARK_CHART_THEME, navy: NAVY_CHART_THEME })
+
 export function getChartTheme(mode = 'light') {
-  return mode === 'dark' ? DARK_CHART_THEME : LIGHT_CHART_THEME
+  return CHART_THEMES[mode] ?? LIGHT_CHART_THEME
 }
 
 // ApexCharts parses colors itself, so it receives literal token values rather
@@ -101,6 +114,12 @@ export const APEX_CHART_THEME = Object.freeze({
     text: '#f5f7ff',
     muted: '#8b8d98',
     border: '#3a3b42',
+    series: CHART_DARK_PALETTE,
+    shadow: '0 0 20px rgba(0, 0, 0, 0.5)',
+  }),
+  navy: Object.freeze({
+    ...NAVY_SURFACES,
+    text: '#f5f7ff',
     series: CHART_DARK_PALETTE,
     shadow: '0 0 20px rgba(0, 0, 0, 0.5)',
   }),

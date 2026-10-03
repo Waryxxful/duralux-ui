@@ -8,8 +8,10 @@
 // scss-docs-start import-stack
 // Configuration
 @import "functions";
-@import "variables";
+// Overrides ANTES de las variables de Bootstrap: sus valores usan !default, así que los
+// derivados (radios de botón/input, form-select, feedback) se calculan desde los nuestros.
 @import "./../themes/bs-custom-variables"; // Bootstrap Overwrite Variables
+@import "variables";
 @import "maps";
 @import "mixins";
 @import "utilities";

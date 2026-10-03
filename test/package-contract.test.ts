@@ -40,7 +40,8 @@ describe('public package contract', () => {
       'react-apexcharts': { optional: true },
       recharts: { optional: true },
     })
-    expect(manifest.dependencies).toEqual({})
+    // npm elimina el campo cuando queda vacío; ausente equivale a sin dependencias de runtime.
+    expect(manifest.dependencies ?? {}).toEqual({})
   })
 
   test('keeps the install lifecycle outside the package smoke gate', () => {

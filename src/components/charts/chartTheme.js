@@ -3,7 +3,7 @@ import { useThemeOptional } from '../../theme/ThemeContext'
 import { APEX_CHART_THEME } from './chartPalette'
 import { isArray, isFunction, isObject } from '../../utils/typeGuards'
 
-const THEME_MODES = new Set(['light', 'dark'])
+const THEME_MODES = new Set(['light', 'dark', 'navy'])
 const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 
 function isThemeMode(value) {
@@ -61,6 +61,7 @@ export function readAmbientChartTheme(scopeRef) {
   if (localMode) return localMode
 
   const root = document.documentElement
+  if (root.dataset.gcuTheme === 'navy') return 'navy'
   if (root.dataset.gcuTheme === 'dark' || root.classList.contains('app-skin-dark')) return 'dark'
   if (root.dataset.gcuTheme === 'light') return 'light'
   return 'light'
@@ -69,7 +70,7 @@ export function readAmbientChartTheme(scopeRef) {
 export function useChartTheme(preference, scopeRef) {
   const themeContext = useThemeOptional()
   const preferredTheme = themeModeFromPreference(preference)
-  const contextMode = themeContext?.mode
+  const contextMode = themeContext?.resolved
   // Stable on server and on the first hydrated render; DOM inspection lives
   // in the effect below.
   const [ambientTheme, setAmbientTheme] = useState('light')
@@ -216,7 +217,8 @@ export function buildApexOptions({
       foreColor: literalTheme.text,
       animations: { enabled: !reducedMotion },
     },
-    theme: { mode: resolvedMode },
+    // Apex solo conoce light/dark: navy usa su algoritmo oscuro con colores navy.
+    theme: { mode: resolvedMode === 'light' ? 'light' : 'dark' },
     grid: { borderColor: literalTheme.border },
     xaxis: {
       labels: { style: { colors: literalTheme.muted } },

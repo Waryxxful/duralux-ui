@@ -16,10 +16,10 @@ const WIDGET_COLOR_NAMES = ['primary', 'success', 'danger', 'warning', 'info', '
 const STAT_COLOR_NAMES = WIDGET_COLOR_NAMES.filter(name => name !== 'dark')
 const TONES = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'teal', 'indigo']
 const THEMES = ['light', 'dark', 'navy']
-const THEME_COLOR_KEYS = ['text', 'muted', 'text-subtle', 'text-inverse', 'primary-text', 'surface', 'surface-subtle', 'surface-raised', 'surface-sunken', 'overlay', 'border', 'border-strong', 'focus', 'focus-ring-color']
+const THEME_COLOR_KEYS = ['text', 'muted', 'text-subtle', 'text-inverse', 'primary-text', 'code', 'surface', 'surface-subtle', 'surface-raised', 'surface-sunken', 'overlay', 'border', 'border-strong', 'focus', 'focus-ring-color']
 // Pares texto/fondo que deben cumplir AA (4,5:1) en cada tema.
 const TEXT_ON = ['surface', 'surface-subtle', 'surface-raised']
-const TEXT_KEYS = ['text', 'muted', 'primary-text']
+const TEXT_KEYS = ['text', 'muted', 'primary-text', 'code']
 const SUBTLE_MIN = 3 // text-subtle: placeholders e info secundaria no esencial
 
 const HEX = /^#[0-9a-f]{6}$/i

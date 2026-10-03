@@ -3,8 +3,64 @@
 <--! Dark Theme !-->
 <--!----------------------------------------------------------------!-->
 */
-html {
-	&.app-skin-dark {
+// ponytail: el cuerpo se emite dos veces (dark y navy) porque lighten()/darken() de Sass
+// no operan sobre var(); techo: CSS oscuro x2 (~+60 KB sin comprimir). Salida: el
+// subproyecto 2 migra cada componente a custom properties --gcu-* y este mixin se reduce.
+$gcu-dark-palettes: (
+	dark: (
+		color: #8b8d98,
+		dark: #0e0f12,
+		darker: #17181d,
+		hover: #26272e,
+		border: #26272e,
+		navigation-color: #8b8d98,
+		navigation-background: #131419,
+		navigation-hover-color: #26272e,
+		navigation-border-color: #26272e,
+		header-brand-color: #131419,
+		radar-fill: #17181d,
+		radar-stroke: #3a3b42,
+		datepicker-muted: #8b8d98,
+		table-hover: #26272e,
+		backdrop: #050506,
+		glow: radial-gradient(circle, #202126, #191a1e, #131419, #0a0b0d, #050506),
+		placeholder: #7a7c85,
+	),
+	navy: (
+		color: #b1b4c0,
+		dark: #121a2d,
+		darker: #0f172a,
+		hover: #1c2438,
+		border: #1b2436,
+		navigation-color: #b1b4c0,
+		navigation-background: #0f172a,
+		navigation-hover-color: #1c2438,
+		navigation-border-color: #1b2436,
+		header-brand-color: #0f172a,
+		radar-fill: #121a2e,
+		radar-stroke: #242f4a,
+		datepicker-muted: #536577,
+		// navy puro (#1c2438 vs #0f172a) da 1,155; el contrato de filas exige >= 1,18
+		table-hover: #1f2a40,
+		backdrop: #000915,
+		glow: radial-gradient(circle, #1d2538, #181f31, #0f172a, #080f1f, #050a16),
+		placeholder: #50566e,
+	),
+);
+
+@mixin gcu-dark-theme($p) {
+	// Variables locales: sombrean las globales dentro del mixin, así el cuerpo
+	// (heredado de la plantilla) no cambia y cada paleta emite sus propios valores.
+	$dark-theme-color: map-get($p, color);
+	$dark-theme-color-dark: map-get($p, dark);
+	$dark-theme-color-darker: map-get($p, darker);
+	$dark-theme-color-hover: map-get($p, hover);
+	$dark-theme-color-border: map-get($p, border);
+	$navigation-color: map-get($p, navigation-color);
+	$navigation-background: map-get($p, navigation-background);
+	$navigation-hover-color: map-get($p, navigation-hover-color);
+	$navigation-border-color: map-get($p, navigation-border-color);
+	$header-brand-color: map-get($p, header-brand-color);
 		a,
 		.h1,
 		.h2,
@@ -257,8 +313,8 @@ html {
 		.apexcharts-graphical {
 			.apexcharts-radar-series {
 				polygon {
-					fill: #17181d;
-					stroke: #3a3b42;
+					fill: map-get($p, radar-fill);
+					stroke: map-get($p, radar-stroke);
 				}
 			}
 		}
@@ -655,7 +711,7 @@ html {
 			.datepicker-cell.next:not(.disabled),
 			.datepicker-cell.prev:not(.disabled) {
 				opacity: 0.3;
-				color: #8b8d98;
+				color: map-get($p, datepicker-muted);
 			}
 			.datepicker-footer {
 				background-color: $dark-theme-color-hover;
@@ -905,7 +961,7 @@ html {
 			> tbody > tr:hover > *,
 			&.table-hover > tbody > tr:hover > * {
 				color: $white !important;
-				--bs-table-accent-bg: #{$dark-theme-color-hover} !important;
+				--bs-table-accent-bg: #{map-get($p, table-hover)} !important;
 			}
 			> tbody > tr:nth-of-type(odd) > *,
 			&.table-striped > tbody > tr:nth-of-type(odd) > * {
@@ -936,7 +992,7 @@ html {
 		/* <---------------! Modal !---------------> */
 		.modal-backdrop {
 			--bs-backdrop-opacity: 0.9;
-			background-color: #050506;
+			background-color: map-get($p, backdrop);
 		}
 
 		/* <---------------! Popover !---------------> */
@@ -1333,7 +1389,7 @@ html {
 		}
 		.calling-modal-screen {
 			.chat-calling-content {
-				background-image: radial-gradient(circle, #202126, #191a1e, #131419, #0a0b0d, #050506);
+				background-image: map-get($p, glow);
 			}
 			.chat-calling-text-message-sidebar {
 				background-color: $dark-theme-color-darker;
@@ -1373,7 +1429,7 @@ html {
 
 		/* <---------------! Help Center !---------------> */
 		.help-center-content-header {
-			background-image: radial-gradient(circle, #202126, #191a1e, #131419, #0a0b0d, #050506);
+			background-image: map-get($p, glow);
 			.form-control {
 				background-color: $dark-theme-color-darker !important;
 			}
@@ -1399,7 +1455,7 @@ html {
 		::-webkit-input-placeholder,
 		:-ms-input-placeholder,
 		::placeholder {
-			color: #7a7c85 !important;
+			color: map-get($p, placeholder) !important;
 		}
 
 		/* <---------------! Scrollbar !---------------> */
@@ -1463,6 +1519,15 @@ html {
 				}
 			}
 		}
+}
+
+html {
+	&.app-skin-dark {
+		@include gcu-dark-theme(map-get($gcu-dark-palettes, dark));
+	}
+	// Navy gana por especificidad (+ atributo) sobre las mismas reglas del oscuro.
+	&.app-skin-dark[data-gcu-theme="navy"] {
+		@include gcu-dark-theme(map-get($gcu-dark-palettes, navy));
 	}
 }
 .dark-button {
