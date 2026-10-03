@@ -62,7 +62,6 @@
   "engines": {
     "node": ">=20.19"
   },
-  "dependencies": {},
   "peerDependencies": {
     "apexcharts": "^5.15.2 || ^6.0.0",
     "react": ">=18",
@@ -91,6 +90,7 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.4",
     "apexcharts": "^5.15.2",
+    "axe-core": "^4.13.0",
     "jsdom": "^26.1.0",
     "oxlint": "1.79.0",
     "react": "^18.3.1",

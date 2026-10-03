@@ -73,6 +73,27 @@ Reglas:
 7. Story con todas las variantes en claro / oscuro / navy + docs (uso, do/don't, props).
 8. Sin regresión visual no aprobada.
 
+### 5.1.1 Detalles premium (obligatorios en todo componente interactivo)
+
+Lo que separa una librería correcta de una premium. Las bases viven en Fundaciones (tokens y utilidades); cada componente las aplica en el subproyecto 2.
+
+| Detalle | Regla |
+|---|---|
+| Feedback de presión | `:active` con `scale(.98)` en 100 ms (`--gcu-press-scale`); nunca en elementos de texto |
+| Hover | Cambio de superficie (no solo de color de texto) en 150 ms `standard`; sin hover en dispositivos táctiles (`@media (hover: hover)`) |
+| Foco | Anillo único `--gcu-focus-ring` solo con `:focus-visible`; nunca `outline: none` sin reemplazo |
+| Carga | Botones con spinner que conserva el ancho (sin salto de layout) y `aria-busy`; listas y cards con skeleton (`.gcu-skeleton`, shimmer que respeta reduced-motion) en vez de spinner a pantalla completa |
+| Transiciones de entrada/salida | Popovers, dropdowns, modales, drawers y toasts entran con opacidad + desplazamiento de 4–8 px (`enter`, 150–200 ms) y salen más rápido (`exit`, 100–150 ms) |
+| Confirmación | Toda acción con efecto da feedback: toast, estado inline o cambio visible; acciones destructivas con confirmación y texto que nombra el objeto |
+| Estados vacíos y de error | Ícono, título, explicación en una línea y acción siguiente; nunca una tabla vacía muda |
+| Disabled | Explica por qué (tooltip o texto de ayuda) cuando la causa no es obvia |
+| Números | `tabular-nums` en tablas, KPIs y contadores; formatos `es-CL` consistentes |
+| Texto | Truncado con `…` y `title`/tooltip; `text-wrap: balance` en títulos; nunca texto cortado sin indicación |
+| Sombras y bordes | Elevación por nivel semántico (card 1, dropdown 2, modal 4); bordes de 1 px con alfa |
+| Scroll | Sombra o borde al hacer scroll en headers sticky; `scrollbar-gutter: stable` en contenedores con scroll |
+| Selección | `::selection` con el tono primario suave |
+| Iconos | Tamaño y trazo alineados ópticamente con el texto adyacente |
+
 ### 5.2 Gates (todos en `npm run build`, locales)
 
 | Gate | Regla |

@@ -107,6 +107,7 @@ export type GranCrmTheme = 'inherit' | 'light' | 'dark' | 'navy'
 
 - [ ] Step 1: tests que fallan: existe `@media (prefers-reduced-motion: reduce)` que fija `--gcu-duration-*:0ms` (Review Focus 5); `:focus-visible` de `.gcu-btn`/`.gcu-control` usa `--gcu-focus-ring` con offset; `.gcu-modal__content` usa `--gcu-radius-xl` y `--gcu-shadow-4`.
 - [ ] Step 2: reemplazar valores sueltos de la capa global por tokens (radios, sombras, alturas, duraciones, z-index de modal/toast/dropdown). Reglas de dark de la capa global que solo cambian colores → borrarlas cuando el token semántico ya cubre el caso.
+- [ ] Step 2b: bases premium (spec §5.1.1): `--gcu-press-scale`, hover solo con `@media (hover:hover)`, `.gcu-skeleton` con shimmer (sin animación con reduced-motion), keyframes `gcu-enter`/`gcu-exit` (opacidad + 6px), `::selection` primario suave, `scrollbar-gutter: stable` en `.gcu-scroll`, `.gcu-btn[aria-busy]` conserva ancho. Tests de CSS para cada una.
 - [ ] Step 3: build y tests verdes; commit `feat(styles): refinamiento visual global desde tokens`.
 
 ### Task 6: Iconos Feather + Tabler
