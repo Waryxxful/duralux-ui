@@ -1,6 +1,13 @@
 import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { useTheme } from '../../src/theme/ThemeProvider'
+import { useTheme } from '../../src/theme/ThemeContext'
+
+const THEMES = [
+  { value: 'light', label: 'Claro' },
+  { value: 'dark', label: 'Oscuro' },
+  { value: 'navy', label: 'Navy' },
+  { value: 'system', label: 'Sistema' },
+]
 
 const NAV = [
   { label: 'Introducción', to: '/' },
@@ -33,7 +40,7 @@ const NAV = [
 ]
 
 export function ShowcaseLayout() {
-  const { dark, toggleDark } = useTheme()
+  const { mode, setMode } = useTheme()
   const [navOpen, setNavOpen] = useState(false)
 
   return (
@@ -51,14 +58,19 @@ export function ShowcaseLayout() {
             {navOpen ? 'Cerrar navegación' : 'Abrir navegación'}
           </button>
         </div>
-        <button
-          type="button"
-          className="showcase-theme-toggle"
-          aria-pressed={dark}
-          onClick={toggleDark}
-        >
-          {dark ? 'Usar tema claro' : 'Usar tema oscuro'}
-        </button>
+        <div className="showcase-theme-switch" role="group" aria-label="Tema">
+          {THEMES.map(theme => (
+            <button
+              key={theme.value}
+              type="button"
+              className="showcase-theme-switch__option"
+              aria-pressed={mode === theme.value}
+              onClick={() => setMode(theme.value)}
+            >
+              {theme.label}
+            </button>
+          ))}
+        </div>
         <nav id="showcase-navigation" className={`showcase-navigation${navOpen ? ' showcase-navigation--open' : ''}`} aria-label="Componentes">
           {NAV.map((item) => {
             const itemKey = item.to ?? `caption-${item.label}`

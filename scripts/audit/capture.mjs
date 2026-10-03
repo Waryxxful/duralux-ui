@@ -30,7 +30,7 @@ const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome'
 try {
   for (const theme of themes) {
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 } })
-    await context.addInitScript(t => { try { localStorage.setItem('grancrm-theme', t) } catch {} }, theme)
+    await context.addInitScript(t => { try { localStorage.setItem("grancrm-theme", t) } catch {} }, theme)
     const page = await context.newPage()
     const errors = []
     page.on('pageerror', e => errors.push(String(e)))
