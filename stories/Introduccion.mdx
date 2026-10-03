@@ -1,0 +1,33 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Introducción" />
+
+# @duralux/ui
+
+Design system de In-Touch: componentes React, tokens y reglas de diseño para todas las apps del ecosistema GranCRM. Conserva el ADN visual de Duralux, refinado desde tokens.
+
+## Cómo usarlo
+
+```js
+import { Button, Card, ThemeProvider } from '@duralux/ui'
+import '@duralux/ui/bootstrap.min.css'
+import '@duralux/ui/theme.min.css'
+import '@duralux/ui/styles/grancrm-ui.css'
+```
+
+Los gráficos viven en `@duralux/ui/charts/apex` y `@duralux/ui/charts/recharts`. Los tokens están en `@duralux/ui/tokens.json` y `@duralux/ui/tokens.css`.
+
+## Temas
+
+Cuatro modos: claro, oscuro, navy y sistema. `ThemeProvider` fija `data-gcu-theme` en `<html>` y la clase `.app-skin-dark` en oscuro y navy. Usa el selector **Tema** de la barra superior para revisar cualquier página en los tres temas.
+
+## Principios
+
+1. **Tokens como única fuente de verdad.** Ningún componente usa hex, px mágicos ni `!important`.
+2. **Compatibilidad hacia atrás.** Lo que cambia se depreca en 2.x y se elimina en 3.0.
+3. **API consistente.** `variant`, `tone` y `size` significan lo mismo en todos los componentes.
+4. **Accesible por defecto.** WCAG 2.2 AA, foco visible, teclado completo.
+5. **Densidad operativa.** Pensado para pantallas de trabajo con mucha información.
+6. **Español internacional** en todo texto visible.
+
+Las reglas completas están en `docs/PRINCIPIOS.md`, `docs/REGLAS-DE-DISENO.md`, `docs/TOKENS.md` y `docs/ICONOGRAFIA.md`.

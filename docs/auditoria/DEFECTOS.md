@@ -54,3 +54,4 @@ react-doctor 67/100 (local 0.9.11; mínimo del gate: 60). Presupuesto CSS sin ar
 | DX-026 | P3 | tooling | Regla oxlint interna con aserciones encadenadas y parámetros `unknown` | `tools/oxlint/anti-slop/shared/lexical-type-parameters.ts:5,20` | 1 | no aplica: plugin de lint vendorizado, excluido por política |
 | DX-027 | P3 | demo | Orden de encabezados de la demo (`h3` sin `h2`), 404 en la intro | axe heading-order ×19, consola intro | 2 (migración a Storybook) | abierto |
 | DX-028 | P3 | seguridad | react-doctor `require-pnpm-hardening` ×2 (el repo construye con npm) | react-doctor | 1 | no aplica: el repo construye con npm |
+| DX-029 | P2 | copy | `Card` trae etiquetas por defecto en inglés (`Refresh`, `Remove`, `Expand`) | `src/components/ui/Card.jsx:58-60` | 2 | abierto |

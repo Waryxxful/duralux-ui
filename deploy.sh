@@ -14,4 +14,4 @@ fi
 "${compose[@]}" build demo
 "${compose[@]}" up -d demo
 
-echo "Demo started: http://<HOST_IP>:5200 (mapea 5200 -> nginx:80)"
+echo "Storybook publicado: http://<HOST_IP>:5200 (mapea 5200 -> nginx:80)"

@@ -1,5 +1,6 @@
 // Capturas + axe de la demo por tema (Fase 0 y verificación final).
 // Uso: node scripts/audit/capture.mjs --base http://localhost:5200 --out <dir> [--themes light,dark,navy] [--routes a,b]
+//      node scripts/audit/capture.mjs --storybook http://localhost:6006 --out <dir>   (todas las stories, tema por globals)
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
@@ -20,7 +21,16 @@ const arg = (name, fallback) => {
 const base = arg('base', 'http://localhost:5200').replace(/\/$/, '')
 const out = resolve(arg('out', 'audit-out'))
 const themes = arg('themes', 'light,dark').split(',')
-const routes = arg('routes', null)?.split(',') ?? ROUTES
+const storybook = arg('storybook', null)?.replace(/\/$/, '')
+let routes = arg('routes', null)?.split(',') ?? ROUTES
+if (storybook) {
+  // index.json de Storybook: una entrada por story (las páginas MDX son type "docs").
+  const index = await (await fetch(`${storybook}/index.json`)).json()
+  routes = Object.values(index.entries).filter(e => e.type === 'story').map(e => e.id)
+}
+const urlFor = (route, theme) => storybook
+  ? `${storybook}/iframe.html?id=${route}&viewMode=story&globals=theme:${theme}`
+  : `${base}/${route}`
 const axeSource = readFileSync(resolve('node_modules/axe-core/axe.min.js'), 'utf8')
 
 mkdirSync(out, { recursive: true })
@@ -40,12 +50,12 @@ try {
     for (const route of routes) {
       const name = route || 'intro'
       errors.length = 0
-      await page.goto(`${base}/${route}`, { waitUntil: 'networkidle' })
+      await page.goto(urlFor(route, theme), { waitUntil: 'networkidle' })
       await page.waitForTimeout(400)
       await page.screenshot({ path: join(out, `${theme}-${name}.png`), fullPage: true })
       await page.addScriptTag({ content: axeSource })
       const violations = await page.evaluate(async () => {
-        const r = await window.axe.run(document, { resultTypes: ['violations'] })
+        const r = await window.axe.run(document.querySelector('#storybook-root') ?? document, { resultTypes: ['violations'] })
         return r.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help, targets: v.nodes.slice(0, 8).map(n => ({ target: n.target.join(' '), summary: (n.failureSummary || '').split('\n').slice(1, 2).join(' ').slice(0, 160) })) }))
       })
       axeResults[name] = { violations, consoleErrors: [...errors] }
