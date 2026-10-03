@@ -55,3 +55,4 @@ react-doctor 67/100 (local 0.9.11; mínimo del gate: 60). Presupuesto CSS sin ar
 | DX-027 | P3 | demo | Orden de encabezados de la demo (`h3` sin `h2`), 404 en la intro | axe heading-order ×19, consola intro | 2 (migración a Storybook) | abierto |
 | DX-028 | P3 | seguridad | react-doctor `require-pnpm-hardening` ×2 (el repo construye con npm) | react-doctor | 1 | no aplica: el repo construye con npm |
 | DX-029 | P2 | copy | `Card` trae etiquetas por defecto en inglés (`Refresh`, `Remove`, `Expand`) | `src/components/ui/Card.jsx:58-60` | 2 | abierto |
+| DX-030 | P2 | copy | Voseo en documentación y comentarios (CHANGELOG 2.0, README, CLAUDE.md, JSDoc): viola la regla de español internacional. Mensajes del gate corregidos en 2.1 | 10 archivos (`grep -rE 'usá|corré|podés'`) | 6 | parcial |

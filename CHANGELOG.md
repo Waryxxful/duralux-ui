@@ -2,6 +2,38 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## 2.1.0 — Fundaciones del design system
+
+Primera entrega de la serie 2.x (spec `docs/superpowers/specs/2026-10-03-duralux-design-system-design.md`). Sin cambios incompatibles: el contrato shell ↔ satélite no cambia.
+
+### Agregado
+
+- **Tokens DTCG** (`tokens/tokens.json`): paletas OKLCH 50–950, roles semánticos por tema, escalas de espaciado, radios, alturas de control, tipografía, elevación, movimiento y capas. Se exportan como `@duralux/ui/tokens.json`, `@duralux/ui/tokens.css` y `designTokens` (TS). `tokens:check` exige contraste AA en los tres temas.
+- **Temas en runtime:** `ThemeMode` = `light | dark | navy | system`. `ThemeProvider` fija `data-gcu-theme` en `<html>` (y `.app-skin-dark` en dark y navy); `system` sigue al sistema operativo en caliente. `ThemeScope` acepta `navy`. Los gráficos (Apex y Recharts) tienen paleta navy.
+- **Iconos Tabler:** `Icon`, `Button` (`startIcon`/`endIcon`) e `IconButton` aceptan un elemento como `<IconRobot />` además del nombre Feather. Tipo público `IconSlot`.
+- `log` y `deprecate` exportados desde la raíz (prefijo `[duralux]`).
+- **Storybook** con Fundamentos (color, tipografía, espaciado, radios y elevación, motion, iconografía) y selector de tema. Docker publica Storybook.
+- Documentación: `docs/PRINCIPIOS.md`, `docs/REGLAS-DE-DISENO.md`, `docs/TOKENS.md`, `docs/ICONOGRAFIA.md`, `AGENTS.md` y `docs/auditoria/DEFECTOS.md`.
+- Gates: presupuesto de deuda CSS por archivo, hex inline prohibido en componentes y react-doctor ≥ 60.
+
+### Cambiado (visible)
+
+- Refinamiento visual global desde tokens: botones e inputs de 36 px alineados (32/40 en sm/lg), radios 6 (controles) y 12 (modales), cards con borde fino y elevación suave, anillo de foco único solo con teclado, presión con escala, entrada animada de dropdowns y modales, `::selection`, números tabulares y títulos balanceados.
+- Inter Variable autoalojada; ya no se carga Google Fonts.
+- Los overrides de Bootstrap se importan antes de sus variables: radios, `form-select` (mismo tamaño que `form-control`) y estados de validación salen de los tokens.
+
+### Corregido
+
+- Contraste AA de `code`, texto de ayuda, `.text-muted` y feedback inválido en claro y oscuro (DX-001, DX-002, DX-003).
+- `Select` con tamaño de fuente distinto al de `Input` (DX-009).
+- Un tema guardado desconocido ya no se pierde en silencio: cae en `light` con aviso (DX-012).
+
+### Migración
+
+- Actualiza el SHA de `@duralux/ui` y revisa visualmente tus pantallas en claro y oscuro.
+- Si tu app incrusta `THEME_HEAD_SNIPPET`, vuelve a copiarlo: ahora fija `data-gcu-theme`.
+- Si usas `useTheme().mode` para decidir colores, usa `resolved` (`mode` puede ser `system`).
+
 ## 2.0.0 — preparación de release
 
 ### Cambios incompatibles

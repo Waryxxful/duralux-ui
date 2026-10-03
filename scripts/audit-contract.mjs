@@ -7,13 +7,13 @@ import { fileURLToPath } from 'url'
 import { measureCss } from './audit/baseline.mjs'
 
 export const BANNED = [
-  { re: /btn-outline-/, why: 'la plantilla no usa btn-outline-*; usá variant="light-brand" o sólido semántico' },
-  { re: /variant\s*=\s*["']outline[^"']*["']/, why: 'variant outline* está prohibido; usá light-brand o semántico sólido' },
-  { re: /variant\s*=\s*\{["']outline[^"']*["']\}/, why: 'variant outline* está prohibido; usá light-brand o semántico sólido' },
+  { re: /btn-outline-/, why: 'la plantilla no usa btn-outline-*; usa variant="light-brand" o sólido semántico' },
+  { re: /variant\s*=\s*["']outline[^"']*["']/, why: 'variant outline* está prohibido; usa light-brand o semántico sólido' },
+  { re: /variant\s*=\s*\{["']outline[^"']*["']\}/, why: 'variant outline* está prohibido; usa light-brand o semántico sólido' },
   { re: /table-striped/, why: 'la plantilla usa table table-hover, nunca striped' },
   { re: /bg-(?:\$\{[^}]+\}|primary|secondary|success|danger|warning|info|dark|light)-100/, why: 'bg-*-100 no existe en el theme; el canon es bg-soft-*' },
   // Design system 2.1: los componentes de la librería usan tokens, nunca hex inline.
-  { re: /style=\{\{[^}]*['"]#[0-9a-fA-F]{3,8}['"]/, why: 'hex inline en un componente; usá un token var(--gcu-*)', scope: '/src/components/' },
+  { re: /style=\{\{[^}]*['"]#[0-9a-fA-F]{3,8}['"]/, why: 'hex inline en un componente; usa un token var(--gcu-*)', scope: '/src/components/' },
 ]
 
 const SOURCE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx'])
