@@ -1,0 +1,8 @@
+{
+  "ignore": {
+    "files": ["tools/oxlint/anti-slop/**", "scripts/**", "test-types/**"],
+    "overrides": [
+      { "files": ["test/**"], "rules": ["anti-slop/no-module-mocking"] }
+    ]
+  }
+}

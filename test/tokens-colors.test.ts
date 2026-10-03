@@ -8,7 +8,8 @@ import { checkArtifacts } from '../scripts/generate-tokens.mjs'
 
 const root = process.cwd()
 const dtcg = JSON.parse(readFileSync(resolve(root, 'tokens/tokens.json'), 'utf8'))
-const source = { colors: Object.fromEntries(Object.entries(dtcg.color.base).map(([name, token]) => [name, (token as { $value: string }).$value])) }
+const baseTokens: Record<string, { $value: string }> = dtcg.color.base
+const source = { colors: Object.fromEntries(Object.entries(baseTokens).map(([name, token]) => [name, token.$value])) }
 
 describe('tokens sincronizados con duralux-v2', () => {
   test('colores semanticos coinciden con $theme-colors final (y --gcu-*)', () => {

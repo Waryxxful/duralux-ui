@@ -363,6 +363,7 @@ describe('CSS theme contract', () => {
 
     for (const [variant, background] of Object.entries(widgetVariants)) {
       const card = ruleWithDeclarations(css, `.gcu-colored-stat.bg-${variant}`, ['background-color', 'color'])
+      // SAFETY: variant itera las claves de widgetVariants, que son las mismas de coloredStatSurfaces.
       expect(parseColor(card['background-color']), `colored-stat ${variant} surface`).toEqual(
         parseColor(coloredStatSurfaces[variant as keyof typeof coloredStatSurfaces]),
       )
@@ -372,6 +373,7 @@ describe('CSS theme contract', () => {
 
       const glass = ruleWithDeclarations(css, '.gcu-colored-stat__glass', ['color', 'background-color'])
       const glassColor = parseColorWithAlpha(glass['background-color'])
+      // SAFETY: misma invariante de claves que arriba (widgetVariants ⊆ coloredStatSurfaces).
       const glassSurface = compositeColor('#001327', coloredStatSurfaces[variant as keyof typeof coloredStatSurfaces], glassColor.alpha)
       expect(contrastRatio(variant === 'light' ? '#283c50' : '#fff', glassSurface), `colored-stat glass ${variant}`).toBeGreaterThanOrEqual(4.5)
     }
