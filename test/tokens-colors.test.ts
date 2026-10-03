@@ -7,7 +7,8 @@ import { tokens } from '../src/tokens'
 import { checkArtifacts } from '../scripts/generate-tokens.mjs'
 
 const root = process.cwd()
-const source = JSON.parse(readFileSync(resolve(root, 'tokens/semantic-colors.json'), 'utf8'))
+const dtcg = JSON.parse(readFileSync(resolve(root, 'tokens/tokens.json'), 'utf8'))
+const source = { colors: Object.fromEntries(Object.entries(dtcg.color.base).map(([name, token]) => [name, (token as { $value: string }).$value])) }
 
 describe('tokens sincronizados con duralux-v2', () => {
   test('colores semanticos coinciden con $theme-colors final (y --gcu-*)', () => {
@@ -95,8 +96,11 @@ describe('tokens sincronizados con duralux-v2', () => {
       for (const directory of ['tokens', 'src/generated', 'src/styles', 'scss/themes']) {
         mkdirSync(resolve(tempRoot, directory), { recursive: true })
       }
-      cpSync(resolve(root, 'tokens/semantic-colors.json'), resolve(tempRoot, 'tokens/semantic-colors.json'))
-      cpSync(resolve(root, 'src/generated/semantic-colors.ts'), resolve(tempRoot, 'src/generated/semantic-colors.ts'))
+      cpSync(resolve(root, 'tokens/tokens.json'), resolve(tempRoot, 'tokens/tokens.json'))
+      for (const file of ['semantic-colors.ts', 'tokens.ts', 'antd-theme.ts']) {
+        cpSync(resolve(root, `src/generated/${file}`), resolve(tempRoot, `src/generated/${file}`))
+      }
+      cpSync(resolve(root, 'src/styles/tokens.css'), resolve(tempRoot, 'src/styles/tokens.css'))
       cpSync(resolve(root, 'scss/themes/_semantic-tokens.generated.scss'), resolve(tempRoot, 'scss/themes/_semantic-tokens.generated.scss'))
       cpSync(resolve(root, 'src/styles/grancrm-ui.css'), resolve(tempRoot, 'src/styles/grancrm-ui.css'))
       cpSync(resolve(root, 'src/tokens.ts'), resolve(tempRoot, 'src/tokens.ts'))

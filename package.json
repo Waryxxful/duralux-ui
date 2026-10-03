@@ -34,12 +34,15 @@
     "./theme.css": "./dist/theme.css",
     "./theme.min.css": "./dist/theme.min.css",
     "./bootstrap.css": "./dist/bootstrap.css",
-    "./bootstrap.min.css": "./dist/bootstrap.min.css"
+    "./bootstrap.min.css": "./dist/bootstrap.min.css",
+    "./tokens.css": "./dist/styles/tokens.css",
+    "./tokens.json": "./tokens/tokens.json"
   },
   "files": [
     "dist",
     "scss",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "tokens"
   ],
   "scripts": {
     "build:scss": "node scripts/build-scss.mjs",
@@ -62,6 +65,7 @@
   "engines": {
     "node": ">=20.19"
   },
+  "dependencies": {},
   "peerDependencies": {
     "apexcharts": "^5.15.2 || ^6.0.0",
     "react": ">=18",

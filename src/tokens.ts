@@ -1,13 +1,15 @@
 import { semanticColors } from './generated/semantic-colors'
 
 export { semanticColors }
+/** Tokens DTCG completos (paletas, escalas y temas light/dark/navy). Fuente: tokens/tokens.json. */
+export { designTokens, type DesignTokens, type ThemeName } from './generated/tokens'
 
 /**
  * Design tokens — espejo 1:1 de las variables SCSS de la plantilla Duralux v2:
  *   scss/themes/_variables.scss
  *   scss/themes/_bs-custom-variables.scss
  *
- * Los colores semánticos se generan desde tokens/semantic-colors.json para que
+ * Los colores semánticos se generan desde tokens/tokens.json (DTCG) para que
  * SCSS, runtime TS y custom properties no puedan derivar por separado.
  */
 export const tokens = {
