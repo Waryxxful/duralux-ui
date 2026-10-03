@@ -20,7 +20,7 @@ Subproyecto: 1 Fundaciones · 2 Núcleo · 3 Nuevos · 4 Patrones · 5 Dominios 
 
 ## Estado tras 2.1
 
-react-doctor 67/100 (local 0.9.11; mínimo del gate: 60). Presupuesto CSS sin artefactos generados: 680 `!important`, 181 `.app-skin-dark`, 367 hex.
+react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 páginas × 3 temas): **color-contrast 0** (antes 20/19/19), aria-prohibited-attr 0, landmark-unique 0; quedan heading-order (estructura de la demo, DX-027) y nested-interactive en gráficos (DX-004). Storybook: 0 violaciones en 21 capturas. Línea base posterior: `docs/auditoria/baseline-2.1.json`. Presupuesto CSS sin artefactos generados: 680 `!important`, 181 `.app-skin-dark`, 367 hex.
 
 ## Defectos
 
@@ -30,9 +30,9 @@ react-doctor 67/100 (local 0.9.11; mínimo del gate: 60). Presupuesto CSS sin ar
 | DX-002 | P1 | a11y | Texto de error de formulario usa `#dc3545` (danger de Bootstrap, no el semántico): 4,11:1 claro / 4,23:1 oscuro | axe `#:rg:-error`, `label[for=":rd:"]` (forms) | 1 | cerrado 2.1 (overrides antes de Bootstrap; `--gcu-status-danger`) |
 | DX-003 | P1 | a11y | `text-muted` / ayuda de campo `#64748b` sobre canvas `#f3f4f6`: 4,32:1; en oscuro 4,02:1 | axe `#:rf:-help`, `#:r3:-help`, celda vacía de tabla | 1 | cerrado 2.1 (`$text-muted: var(--gcu-muted)`) |
 | DX-004 | P1 | a11y | Gráficos: contenedor con `aria-label` y descendientes enfocables (interactivo anidado) | axe nested-interactive, `div[aria-label="Fuentes de leads"]` (charts) | 2 | abierto |
-| DX-005 | P2 | a11y | `Pagination` emite `nav[aria-label="Paginación"]` sin nombre único cuando hay varias en la página | axe landmark-unique (datatable) | 2 | abierto |
+| DX-005 | P2 | a11y | `Pagination` emite `nav[aria-label="Paginación"]` sin nombre único cuando hay varias en la página | axe landmark-unique (datatable) | 2 | cerrado 2.1 (`Paginación de {tabla}`) |
 | DX-006 | P2 | a11y | `ChartCard` usa `h3`/`h4` fijo; rompe el orden de encabezados del contenedor | axe heading-order `#chart-card-title-…` | 2 | abierto |
-| DX-007 | P2 | a11y | Atributo ARIA prohibido en un elemento (ver `axe-light.json`) | axe aria-prohibited-attr | 2 | abierto |
+| DX-007 | P2 | a11y | Atributo ARIA prohibido en un elemento (ver `axe-light.json`) | axe aria-prohibited-attr | 2 | cerrado 2.1 (tendencia de StatsCard con texto oculto, sin aria-label en div) |
 | DX-008 | P1 | visual | Campo obligatorio muestra asterisco duplicado (`Nombre * *`) | captura `dark-forms.png` (formulario completo) | 2 | cerrado 2.1 (era la demo: label con `*` + `required`) |
 | DX-009 | P1 | visual | `Select` usa tamaño de fuente mayor que `Input` en la misma fila | captura `dark-forms.png` (Select País/Estado) | 1 | cerrado 2.1 (causa raíz: orden de imports de Bootstrap) |
 | DX-010 | P2 | visual | `FileInput`: botón nativo claro en tema oscuro | captura `dark-forms.png` (FileInput) | 2 | abierto |
@@ -56,3 +56,4 @@ react-doctor 67/100 (local 0.9.11; mínimo del gate: 60). Presupuesto CSS sin ar
 | DX-028 | P3 | seguridad | react-doctor `require-pnpm-hardening` ×2 (el repo construye con npm) | react-doctor | 1 | no aplica: el repo construye con npm |
 | DX-029 | P2 | copy | `Card` trae etiquetas por defecto en inglés (`Refresh`, `Remove`, `Expand`) | `src/components/ui/Card.jsx:58-60` | 2 | abierto |
 | DX-030 | P2 | copy | Voseo en documentación y comentarios (CHANGELOG 2.0, README, CLAUDE.md, JSDoc): viola la regla de español internacional. Mensajes del gate corregidos en 2.1 | 10 archivos (`grep -rE 'usá|corré|podés'`) | 6 | parcial |
+| DX-031 | P3 | tests | `Charts.contract.test.jsx` intermitente bajo carga (carga diferida de ApexChart): 1 fallo en 4 corridas completas | `test/Charts.contract.test.jsx` «uses the literal accessible dark chart palette» | 2 | abierto |

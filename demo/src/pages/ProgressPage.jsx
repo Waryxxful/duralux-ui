@@ -5,7 +5,7 @@ export function ProgressPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>ProgressRing</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>value (0-100), size, stroke, color, label</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>value (0-100), size, stroke, color, label</code></p>
 
       <ShowcaseSection
         title="Anillos de progreso"

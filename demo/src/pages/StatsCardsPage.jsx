@@ -5,7 +5,7 @@ export function StatsCardsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Stats Cards</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>StatsCard · MiniStatCard · ColoredStatCard · StatCard · StatusBadge · StatusButton</p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>StatsCard · MiniStatCard · ColoredStatCard · StatCard · StatusBadge · StatusButton</p>
 
       <ShowcaseSection
         title="StatsCard"

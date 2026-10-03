@@ -5,7 +5,7 @@ export function AvatarsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Avatar</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>src, name, size (xs|sm|md|lg|xl|xxl), rounded (circle|3), variant</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>src, name, size (xs|sm|md|lg|xl|xxl), rounded (circle|3), variant</code></p>
 
       <ShowcaseSection
         title="Tamaños con imagen"
@@ -14,7 +14,7 @@ export function AvatarsPage() {
             {['xs','sm','md','lg','xl','xxl'].map(s => (
               <div key={s} className="text-center">
                 <Avatar src="/assets/images/avatar/1.svg" size={s} rounded="circle" />
-                <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 4 }}>{s}</div>
+                <div style={{ fontSize: 10, color: 'var(--gcu-muted)', marginTop: 4 }}>{s}</div>
               </div>
             ))}
           </div>

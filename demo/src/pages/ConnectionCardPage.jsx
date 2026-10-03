@@ -17,7 +17,7 @@ export function ConnectionCardPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>ConnectionCard</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>
         Props: <code>icon, title, description, checked, onChange, disabled, className</code>
       </p>
 

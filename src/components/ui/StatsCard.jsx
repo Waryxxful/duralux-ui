@@ -50,12 +50,11 @@ export function StatsCard({
             </div>
           </div>
           {trend && (
-            <div
-              className={`badge bg-soft-${trend.up ? 'success' : 'danger'} text-${trend.up ? 'success' : 'danger'}`}
-              aria-label={`${trend.up ? 'Sube' : 'Baja'} ${trend.value}`}
-            >
+            <div className={`badge bg-soft-${trend.up ? 'success' : 'danger'} text-${trend.up ? 'success' : 'danger'}`}>
               <i className={`feather-arrow-${trend.up ? 'up' : 'down'} fs-10 me-1`} aria-hidden="true"></i>
-              <span aria-hidden="true">{trend.value}</span>
+              {/* El sentido va como texto para lectores de pantalla: la flecha es decorativa. */}
+              <span className="visually-hidden">{trend.up ? 'Sube' : 'Baja'} </span>
+              <span>{trend.value}</span>
             </div>
           )}
         </div>

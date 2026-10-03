@@ -78,7 +78,7 @@ test('composes the public navigation pager with current-page semantics', () => {
 
   render(<DataTable columns={columns} data={data} pageSize={1} />)
 
-  const nav = screen.getByRole('navigation', { name: 'Paginación' })
+  const nav = screen.getByRole('navigation', { name: 'Paginación de la tabla' })
   expect(nav.querySelector('[aria-current="page"]')).toHaveTextContent('1')
 })
 

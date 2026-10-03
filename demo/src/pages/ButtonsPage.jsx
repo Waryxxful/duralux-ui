@@ -5,7 +5,7 @@ export function ButtonsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Button</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>variant, size, outline, loading, disabled, icon, startIcon, endIcon, onClick, href, as, className, children, type</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>variant, size, outline, loading, disabled, icon, startIcon, endIcon, onClick, href, as, className, children, type</code></p>
 
       <ShowcaseSection
         title="Variantes"
@@ -88,7 +88,7 @@ export function ButtonsPage() {
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>Icon</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>name, size, aria-label, className, style</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>name, size, aria-label, className, style</code></p>
 
       <ShowcaseSection
         title="Tamaños"
@@ -121,7 +121,7 @@ export function ButtonsPage() {
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>LinkButton</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: mismas que Button + <code>href</code>. Renderiza como <code>&lt;a&gt;</code>.</p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: mismas que Button + <code>href</code>. Renderiza como <code>&lt;a&gt;</code>.</p>
 
       <ShowcaseSection
         title="Variantes"
@@ -148,7 +148,7 @@ export function ButtonsPage() {
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>IconButton</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>icon (bare name), label (required), variant, size, outline, disabled</code>. Solo icono, sin texto.</p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>icon (bare name), label (required), variant, size, outline, disabled</code>. Solo icono, sin texto.</p>
 
       <ShowcaseSection
         title="Variantes"

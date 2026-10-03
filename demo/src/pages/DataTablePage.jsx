@@ -45,7 +45,7 @@ export function DataTablePage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>DataTable</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>columns, data, actions, pageSize, selectable, onSelectionChange, rowKey</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>columns, data, actions, pageSize, selectable, onSelectionChange, rowKey</code></p>
 
       <ShowcaseSection
         title="Tabla con sort, checkboxes y acciones"
@@ -96,7 +96,7 @@ const ACTIONS = [
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>Table</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>columns, rows, rowKey, emptyMessage, loading, className, hover</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>columns, rows, rowKey, emptyMessage, loading, className, hover</code></p>
 
       <ShowcaseSection
         title="Table básica con hover"
@@ -142,7 +142,7 @@ const ACTIONS = [
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>Pagination</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>page, totalPages, onPageChange, sibling, className</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>page, totalPages, onPageChange, sibling, className</code></p>
 
       <ShowcaseSection
         title="Paginación (página actual: {page})"
@@ -165,7 +165,7 @@ const ACTIONS = [
       />
 
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4, marginTop: 48 }}>ResponsiveTable</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: mismos que Table más <code>wrapperClassName</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: mismos que Table más <code>wrapperClassName</code></p>
 
       <ShowcaseSection
         title="ResponsiveTable (scroll horizontal en pantallas pequeñas)"

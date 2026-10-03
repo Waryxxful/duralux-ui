@@ -21,10 +21,6 @@
 		color: inherit !important;
 	}
 
-	p {
-		opacity: .82 !important;
-	}
-
 	// El detalle de "glass" se sombrea (no se aclara): conserva contraste
 	// blanco en todos los fondos y evita el texto negro sobre un tinte claro.
 	&__glass,

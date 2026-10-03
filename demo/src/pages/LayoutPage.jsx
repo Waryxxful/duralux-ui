@@ -6,7 +6,7 @@ export function LayoutPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Layout Components</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>AppLayout · AuthLayout · Sidebar · Header · PageHeader</p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>AppLayout · AuthLayout · Sidebar · Header · PageHeader</p>
 
       <ShowcaseSection
         title="PageHeader"
@@ -33,7 +33,7 @@ export function LayoutPage() {
 
       <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 24, marginBottom: 24 }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>AppLayout</h3>
-        <p style={{ color: '#64748b', fontSize: 13, marginBottom: 16 }}>
+        <p style={{ color: 'var(--gcu-muted)', fontSize: 13, marginBottom: 16 }}>
           Envuelve toda la app. Incluye sidebar con mini-mode, header con notificaciones y user dropdown, y el área de contenido principal.
         </p>
         <div style={{ background: '#0f172a', color: '#e2e8f0', padding: '16px 20px', borderRadius: 8, fontSize: 12, fontFamily: 'monospace', lineHeight: 1.8 }}>
@@ -69,7 +69,7 @@ const USER = {
 
       <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: 24 }}>
         <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>AuthLayout</h3>
-        <p style={{ color: '#64748b', fontSize: 13, marginBottom: 16 }}>
+        <p style={{ color: 'var(--gcu-muted)', fontSize: 13, marginBottom: 16 }}>
           Layout para páginas sin sidebar (login, register). Porta la variante <code>auth-cover-wrapper</code> real de Duralux (tarjeta a la derecha + ilustración opcional a la izquierda).
         </p>
         <div style={{ background: '#0f172a', color: '#e2e8f0', padding: '16px 20px', borderRadius: 8, fontSize: 12, fontFamily: 'monospace', lineHeight: 1.8 }}>

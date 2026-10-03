@@ -7,7 +7,7 @@ export function BadgesPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Badge</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>Props: <code>variant, soft, pill, children</code></p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>Props: <code>variant, soft, pill, children</code></p>
 
       <ShowcaseSection
         title="Colores sólidos"

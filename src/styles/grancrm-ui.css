@@ -92,7 +92,7 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 .gcu-table-responsive{width:100%;overflow-x:auto}.gcu-table{width:100%;border-collapse:collapse;color:var(--gcu-text);font-family:var(--gcu-font)}.gcu-table th,.gcu-table td{padding:10px 12px;border-bottom:1px solid var(--gcu-border);vertical-align:middle}.gcu-table__heading{color:var(--gcu-muted);font-size:11px;font-weight:700;letter-spacing:.03em;text-align:left;text-transform:uppercase}.gcu-table__cell{font-size:13px}.gcu-table--striped tbody tr:nth-child(even){background:color-mix(in srgb,var(--gcu-surface-subtle) 65%,transparent)}.gcu-table--hover tbody tr:hover{background:var(--gcu-surface-subtle)}.gcu-table__state{padding:28px!important;color:var(--gcu-muted);font-size:13px;text-align:center}.gcu-table__state .gcu-spinner{margin-right:8px}
 .gcu-pagination{display:flex;margin:0;padding:0;list-style:none;font-family:var(--gcu-font)}.gcu-pagination__button{display:grid;min-width:31px;height:31px;padding:0 8px;place-items:center;border:1px solid var(--gcu-border);border-left:0;background:var(--gcu-surface);color:var(--gcu-muted);font:500 12px var(--gcu-font);cursor:pointer}.gcu-pagination__item:first-child .gcu-pagination__button{border-left:1px solid var(--gcu-border);border-radius:5px 0 0 5px}.gcu-pagination__item:last-child .gcu-pagination__button{border-radius:0 5px 5px 0}.gcu-pagination__item--active .gcu-pagination__button{border-color:var(--gcu-primary);background:var(--gcu-primary);color:#fff}.gcu-pagination__item--disabled .gcu-pagination__button{opacity:.5;cursor:not-allowed}
 
-.gcu-message-row{display:flex;width:100%;font-family:var(--gcu-font)}.gcu-message-row--incoming{justify-content:flex-start}.gcu-message-row--outgoing{justify-content:flex-end}.gcu-message-bubble{box-sizing:border-box;max-width:min(75%,680px);padding:10px 13px;border:1px solid var(--gcu-border);border-radius:12px;background:#e2e8f0;color:#0f172a;font-size:13px;line-height:1.5;box-shadow:0 1px 2px rgba(15,23,42,.06)}.gcu-message-bubble--incoming{border-color:#93c5fd;background:#dbeafe;color:#1e3a8a}.gcu-message-bubble--outgoing{border-color:var(--gcu-primary);background:var(--gcu-primary);color:#fff}.gcu-message-bubble--highlighted{box-shadow:0 0 0 2px var(--gcu-warning),0 8px 22px rgba(15,23,42,.12)}.gcu-message-bubble__header{margin-bottom:4px;color:inherit;font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;opacity:.88}.gcu-message-bubble__meta{margin-top:4px;color:inherit;font-size:10px;opacity:.72}.gcu-message-system{display:inline-block;padding:5px 10px;border:1px solid #cbd5e1;border-radius:999px;background:#f1f5f9;color:#475569;font:600 11px var(--gcu-font)}.gcu-badge--light{border:1px solid #94a3b8!important;background:#e2e8f0!important;color:#0f172a!important;font-weight:700}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble,.app-skin-dark .gcu-theme .gcu-message-bubble{background:var(--gcu-surface);border-color:var(--gcu-border-strong);color:#e2e8f0}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble--incoming,.app-skin-dark .gcu-theme .gcu-message-bubble--incoming{background:#1d4ed8;border-color:#3b82f6;color:#fff}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble--outgoing,.app-skin-dark .gcu-theme .gcu-message-bubble--outgoing{background:var(--gcu-primary);border-color:var(--gcu-primary);color:#fff}.gcu-theme[data-gcu-theme=dark] .gcu-message-system,.app-skin-dark .gcu-theme .gcu-message-system{background:var(--gcu-surface-sunken);border-color:var(--gcu-border-strong);color:var(--gcu-muted)}.gcu-theme[data-gcu-theme=dark] .gcu-badge--light,.app-skin-dark .gcu-theme .gcu-badge--light{border-color:var(--gcu-border-strong)!important;background:var(--gcu-surface)!important;color:#e2e8f0!important}
+.gcu-message-row{display:flex;width:100%;font-family:var(--gcu-font)}.gcu-message-row--incoming{justify-content:flex-start}.gcu-message-row--outgoing{justify-content:flex-end}.gcu-message-bubble{box-sizing:border-box;max-width:min(75%,680px);padding:10px 13px;border:1px solid var(--gcu-border);border-radius:12px;background:#e2e8f0;color:#0f172a;font-size:13px;line-height:1.5;box-shadow:0 1px 2px rgba(15,23,42,.06)}.gcu-message-bubble--incoming{border-color:#93c5fd;background:#dbeafe;color:#1e3a8a}.gcu-message-bubble--outgoing{border-color:var(--gcu-primary);background:var(--gcu-primary);color:#fff}.gcu-message-bubble--highlighted{box-shadow:0 0 0 2px var(--gcu-warning),0 8px 22px rgba(15,23,42,.12)}.gcu-message-bubble__header{margin-bottom:4px;color:inherit;font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;opacity:.88}.gcu-message-bubble__meta{margin-top:4px;color:inherit;font-size:10px;opacity:.86}.gcu-message-system{display:inline-block;padding:5px 10px;border:1px solid #cbd5e1;border-radius:999px;background:#f1f5f9;color:#475569;font:600 11px var(--gcu-font)}.gcu-badge--light{border:1px solid #94a3b8!important;background:#e2e8f0!important;color:#0f172a!important;font-weight:700}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble,.app-skin-dark .gcu-theme .gcu-message-bubble{background:var(--gcu-surface);border-color:var(--gcu-border-strong);color:#e2e8f0}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble--incoming,.app-skin-dark .gcu-theme .gcu-message-bubble--incoming{background:#1d4ed8;border-color:#3b82f6;color:#fff}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble--outgoing,.app-skin-dark .gcu-theme .gcu-message-bubble--outgoing{background:var(--gcu-primary);border-color:var(--gcu-primary);color:#fff}.gcu-theme[data-gcu-theme=dark] .gcu-message-system,.app-skin-dark .gcu-theme .gcu-message-system{background:var(--gcu-surface-sunken);border-color:var(--gcu-border-strong);color:var(--gcu-muted)}.gcu-theme[data-gcu-theme=dark] .gcu-badge--light,.app-skin-dark .gcu-theme .gcu-badge--light{border-color:var(--gcu-border-strong)!important;background:var(--gcu-surface)!important;color:#e2e8f0!important}
 
 .gcu-modal-open{overflow:hidden}.gcu-modal{position:fixed;z-index:1060;inset:0;display:flex;padding:20px;align-items:center;justify-content:center;overflow:auto;font-family:var(--gcu-font)}.gcu-modal__backdrop{position:fixed;z-index:1050;inset:0;background:rgba(1,10,24,.56)}.gcu-modal__dialog{position:relative;z-index:1;width:min(500px,100%);margin:auto}.gcu-modal__dialog--sm{width:min(380px,100%)}.gcu-modal__dialog--lg{width:min(800px,100%)}.gcu-modal__dialog--xl{width:min(1140px,100%)}.gcu-modal__dialog--fullscreen{width:100%;height:100%}.gcu-modal__content{display:flex;max-height:calc(100vh - 40px);flex-direction:column;border:1px solid var(--gcu-border);border-radius:8px;background:var(--gcu-surface);color:var(--gcu-text);box-shadow:0 18px 50px rgba(0,0,0,.25)}.gcu-modal__dialog--fullscreen .gcu-modal__content{height:100%;max-height:none}.gcu-modal__header,.gcu-modal__footer{display:flex;align-items:center;padding:14px 18px}.gcu-modal__header{justify-content:space-between;border-bottom:1px solid var(--gcu-border)}.gcu-modal__footer{justify-content:flex-end;gap:8px;border-top:1px solid var(--gcu-border)}.gcu-modal__title{margin:0;font-size:15px;font-weight:700}.gcu-modal__body{padding:18px;overflow:auto}.gcu-modal__dialog--scrollable .gcu-modal__body{overflow-y:auto}.gcu-confirm-dialog__message{margin:0;font-size:13px}
 .gcu-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
@@ -297,7 +297,8 @@ html.minimenu .nxl-navigation .navbar-content .nxl-caption label,html.minimenu .
 .gcu-colored-stat .avatar-text,
 .gcu-colored-stat .badge.bg-white,
 .gcu-colored-stat .badge.bg-opacity-25{
-  background-color:rgba(255,255,255,.22)!important;
+  /* El vidrio se sombrea (no se aclara) en todos los temas: conserva el texto blanco en AA. */
+  background-color:rgba(0,19,39,.14)!important;
   color:inherit!important;
   border-color:transparent!important
 }
@@ -305,15 +306,15 @@ html.minimenu .nxl-navigation .navbar-content .nxl-caption label,html.minimenu .
 .gcu-colored-stat .avatar-text i,
 .gcu-colored-stat__glass [class^="feather-"],
 .gcu-colored-stat__glass [class*=" feather-"]{color:inherit!important}
+/* El theme oscuro pinta .avatar-text con fondo sólido (html.app-skin-dark, mayor especificidad):
+   se reafirma el vidrio sombreado para que el ícono siga sobre el color de la tarjeta. */
 html.app-skin-dark .gcu-colored-stat__glass,
 html.app-skin-dark .gcu-colored-stat .avatar-text,
 html.app-skin-dark .gcu-colored-stat .badge.bg-white,
-html.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25,
-.app-skin-dark .gcu-colored-stat__glass,
-.app-skin-dark .gcu-colored-stat .avatar-text{
-  background-color:rgba(255,255,255,.22)!important;
+html.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25{
+  background-color:rgba(0,19,39,.14)!important;
   color:inherit!important;
-  border-color:transparent!important
+  border-color:rgba(255,255,255,.22)!important
 }
 html.app-skin-dark .gcu-colored-stat__glass i,
 html.app-skin-dark .gcu-colored-stat .avatar-text i,
@@ -549,7 +550,6 @@ html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-
    `.bg-*` class API while avoiding black text on bright status backgrounds. */
 .gcu-colored-stat{color:#fff!important}
 .gcu-colored-stat .fs-4,.gcu-colored-stat .fs-13,.gcu-colored-stat p{color:inherit!important}
-.gcu-colored-stat p{opacity:.82!important}
 .gcu-colored-stat .gcu-colored-stat__glass,.gcu-colored-stat .avatar-text,.gcu-colored-stat .badge.bg-white,.gcu-colored-stat .badge.bg-opacity-25{background-color:rgba(0,19,39,.14)!important;color:inherit!important;border:1px solid rgba(255,255,255,.22)!important}
 .gcu-colored-stat.bg-primary{background-color:#3454d1!important;border-color:#3454d1!important}
 .gcu-colored-stat.bg-secondary{background-color:#64748b!important;border-color:#64748b!important}
@@ -610,6 +610,7 @@ a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px
 .gcu-modal__dialog{animation:gcu-enter var(--gcu-duration-base) var(--gcu-ease-enter)}
 .badge{border-radius:var(--gcu-radius-sm)}
 .invalid-feedback{color:var(--gcu-status-danger)}
+.form-check-input.is-invalid~.form-check-label,.was-validated .form-check-input:invalid~.form-check-label{color:var(--gcu-status-danger)}
 
 /* Hover solo con puntero real: en táctil el hover se queda "pegado". */
 @media (hover:hover){.card.gcu-card--interactive:hover{box-shadow:var(--gcu-shadow-2)}.dropdown-item:hover{background-color:var(--gcu-surface-subtle)}}

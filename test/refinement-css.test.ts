@@ -65,3 +65,29 @@ describe('refinamiento visual 2.1 (grancrm-ui.css)', () => {
     expect(refinement).toContain('@media (hover:hover)')
   })
 })
+
+describe('ColoredStatCard: contraste AA en claro y oscuro (verificación final 2.1)', () => {
+  test('el vidrio se sombrea en todos los temas: ninguna regla lo aclara con blanco translúcido', () => {
+    expect(css).not.toMatch(/gcu-colored-stat__glass[^{]*\{[^}]*background-color:rgba\(255,255,255,\.22\)/)
+  })
+
+  test('el subtítulo no baja su opacidad (blanco sobre el relleno AA queda justo en 4,5:1)', () => {
+    expect(css).not.toMatch(/\.gcu-colored-stat p\{opacity:\.82/)
+  })
+
+  test('la meta de la burbuja saliente conserva AA sobre primary', () => {
+    expect(css).not.toMatch(/\.gcu-message-bubble__meta\{[^}]*opacity:\.72/)
+  })
+})
+
+describe('validación legible en todos los temas', () => {
+  test('la etiqueta de un checkbox o radio inválido usa el danger del tema', () => {
+    expect(refinement).toMatch(/\.form-check-input\.is-invalid~\.form-check-label[^{]*\{color:var\(--gcu-status-danger\)/)
+  })
+})
+
+describe('ColoredStatCard en oscuro', () => {
+  test('el avatar de vidrio conserva su fondo sombreado sobre el html.app-skin-dark .avatar-text del theme', () => {
+    expect(css).toMatch(/html\.app-skin-dark \.gcu-colored-stat \.avatar-text[^{]*\{[^}]*background-color:rgba\(0,19,39,\.14\)!important/)
+  })
+})

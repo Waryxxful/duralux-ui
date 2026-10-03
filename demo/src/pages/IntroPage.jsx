@@ -2,15 +2,15 @@ export function IntroPage() {
   return (
     <div>
       <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>@duralux/ui</h1>
-      <p style={{ color: '#64748b', marginBottom: 32, fontSize: 15 }}>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32, fontSize: 15 }}>
         Librería de componentes React para proyectos con Bootstrap 5 + Duralux CSS.<br />
         31 componentes listos para usar — UI, Forms, Charts, Chat y Layout.
       </p>
       <div style={{ background: '#0f172a', color: '#e2e8f0', padding: '20px 24px', borderRadius: 10, fontFamily: 'monospace', fontSize: 13, lineHeight: 1.8, marginBottom: 32 }}>
-        <div style={{ color: '#64748b' }}># Instalación desde GitHub</div>
+        <div style={{ color: '#94a3b8' }}># Instalación desde GitHub</div>
         <div>npm install github:tu-usuario/duralux-ui</div>
         <br />
-        <div style={{ color: '#64748b' }}># Uso</div>
+        <div style={{ color: '#94a3b8' }}># Uso</div>
         <div><span style={{ color: '#38bdf8' }}>import</span> {`{ Button, Card, StatsCard, DataTable }`} <span style={{ color: '#38bdf8' }}>from</span> <span style={{ color: '#86efac' }}>'@duralux/ui'</span></div>
       </div>
       <div style={{ background: '#fef9c3', border: '1px solid #fde047', borderRadius: 10, padding: '14px 18px', marginBottom: 32, fontSize: 13 }}>
@@ -27,8 +27,8 @@ export function IntroPage() {
         { cat: 'Layout', items: 'AppLayout · AuthLayout · Sidebar · Header · PageHeader · Footer' },
       ].map(({ cat, items }) => (
         <div key={cat} style={{ marginBottom: 10, padding: '10px 14px', background: '#f8fafc', borderRadius: 8, border: '1px solid #e2e8f0' }}>
-          <span style={{ fontWeight: 700, fontSize: 13, color: '#3454d1' }}>{cat}</span>
-          <span style={{ color: '#64748b', fontSize: 13 }}> — {items}</span>
+          <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--gcu-primary-text)' }}>{cat}</span>
+          <span style={{ color: 'var(--gcu-muted)', fontSize: 13 }}> — {items}</span>
         </div>
       ))}
     </div>

@@ -775,6 +775,7 @@ export function DataTable({
               totalPages={totalPages}
               onPageChange={changePage}
               className="pagination-sm mb-0"
+              aria-label={ariaLabel ? `Paginación de ${ariaLabel}` : 'Paginación de la tabla'}
               pageAriaLabel={numericPageAriaLabel}
             />
           ) : null}

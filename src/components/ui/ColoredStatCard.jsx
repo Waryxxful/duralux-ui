@@ -29,7 +29,7 @@ export function ColoredStatCard({ icon, value, label, trend, trendUp, bg = 'bg-p
               </span>
             )}
             <div className="fs-4 fw-bolder">{value}</div>
-            <p className="fs-13 mb-0 opacity-75">{label}</p>
+            <p className="fs-13 mb-0">{label}</p>
           </div>
           {icon && (
             <div className="avatar-text avatar-lg gcu-colored-stat__glass">

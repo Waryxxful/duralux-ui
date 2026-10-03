@@ -15,7 +15,7 @@ export function ChatComponentsPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Chat Components</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>ChatBubble · ChatTypingIndicator · ChatInputBar · ChatWindow · ChatSidebar · MessageBubble</p>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>ChatBubble · ChatTypingIndicator · ChatInputBar · ChatWindow · ChatSidebar · MessageBubble</p>
 
       <ShowcaseSection
         title="ChatBubble + ChatTypingIndicator"

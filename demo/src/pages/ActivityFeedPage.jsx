@@ -37,7 +37,7 @@ export function ActivityFeedPage() {
   return (
     <div>
       <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>ActivityFeed</h1>
-      <p style={{ color: '#64748b', marginBottom: 32 }}>
+      <p style={{ color: 'var(--gcu-muted)', marginBottom: 32 }}>
         Props: <code>items=[{'{key, variant, title, description, time, extra}'}]</code>
       </p>
 
