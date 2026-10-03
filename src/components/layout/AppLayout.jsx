@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useThemeOptional } from '../../theme/ThemeProvider'
+import { useThemeOptional } from '../../theme/ThemeContext'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
 import { PLACEHOLDER_LOGO, PLACEHOLDER_LOGO_ABBR } from '../../assets/placeholders'
 import { Sidebar } from './Sidebar'

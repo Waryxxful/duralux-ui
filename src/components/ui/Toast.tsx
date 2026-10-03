@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useThemeBoundaryMode } from '../../theme/ThemeBoundaryContext';
+import { useThemeBoundaryMode } from '../../theme/themeBoundary';
 
 /**
  * Toast — feedback de acción canónico de la plantilla (SweetAlert2 toast:

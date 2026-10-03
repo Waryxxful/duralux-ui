@@ -1,12 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import {
+  applyThemeToDocument,
+  DARK_MEDIA_QUERY,
   isResponsiveMiniWidth,
   LEGACY_MINI_KEY,
   MINI_KEY,
   MINI_PIN_KEY,
   MINI_PIN_VERSION,
   readInitialMiniState,
-  readStoredMode,
+  readStoredPreference,
+  resolveTheme,
+  systemPrefersDark,
   ThemeContext,
   THEME_STORAGE_KEY,
   type ThemeContextValue,
@@ -18,10 +22,27 @@ export interface ThemeProviderProps {
   enableResponsiveMini?: boolean;
 }
 
+function subscribeToSystemTheme(onChange: () => void): () => void {
+  const media = globalThis.window?.matchMedia?.(DARK_MEDIA_QUERY);
+  if (!media) return () => {};
+  media.addEventListener('change', onChange);
+  return () => media.removeEventListener('change', onChange);
+}
+
+function initialMode(): ThemeMode {
+  const stored = readStoredPreference();
+  if (stored) return stored;
+  // Otra pieza (snippet antiguo, AppLayout sin provider) pudo marcar el documento.
+  const root = globalThis.document?.documentElement;
+  if (root?.getAttribute('data-gcu-theme') === 'navy') return 'navy';
+  return root?.classList.contains('app-skin-dark') ? 'dark' : 'light';
+}
+
 /**
- * Un solo mecanismo de theming (plan D4):
- * - dark: clase `app-skin-dark` en <html> + localStorage grancrm-theme
- * - mini sidebar: clase `minimenu` en <html>; solo elecciones explícitas se persisten
+ * Un solo mecanismo de theming:
+ * - tema: `data-gcu-theme` (light | dark | navy) + clase `app-skin-dark` en dark y navy
+ *   sobre <html>; la preferencia (incluido `system`) se guarda en localStorage grancrm-theme.
+ * - mini sidebar: clase `minimenu` en <html>; solo elecciones explícitas se persisten.
  * Responsive v2: width <= 1024 → expandido; 1024.01..1400 → mini;
  * width > 1400 → expandido (salvo preferencia explícitamente fijada).
  */
@@ -29,21 +50,15 @@ export function ThemeProvider({
   children,
   enableResponsiveMini = true,
 }: ThemeProviderProps) {
-  const [mode, setModeState] = useState<ThemeMode>(() =>
-    globalThis.document?.documentElement.classList.contains('app-skin-dark')
-      ? 'dark'
-      : readStoredMode(),
-  );
+  const [mode, setMode] = useState<ThemeMode>(initialMode);
+  const prefersDark = useSyncExternalStore(subscribeToSystemTheme, systemPrefersDark, () => false);
+  const resolved = resolveTheme(mode, prefersDark);
   const [miniState, setMiniState] = useState(() => readInitialMiniState(enableResponsiveMini));
   const { mini, userPinnedMini } = miniState;
 
-  const setMode = useCallback((next: ThemeMode) => {
-    setModeState(next);
-  }, []);
-
   const toggleDark = useCallback(() => {
-    setModeState(m => (m === 'dark' ? 'light' : 'dark'));
-  }, []);
+    setMode(() => (resolved === 'light' ? 'dark' : 'light'));
+  }, [resolved]);
 
   const setMini = useCallback((next: boolean) => {
     setMiniState({ mini: next, userPinnedMini: true });
@@ -54,11 +69,13 @@ export function ThemeProvider({
   }, []);
 
   useEffect(() => {
-    const html = document.documentElement;
-    html.classList.toggle('app-skin-dark', mode === 'dark');
+    applyThemeToDocument(resolved);
+  }, [resolved]);
+
+  useEffect(() => {
     try {
       localStorage.setItem(THEME_STORAGE_KEY, mode);
-    } catch { /* ignore */ }
+    } catch { /* almacenamiento bloqueado: el tema sigue aplicado en memoria */ }
   }, [mode]);
 
   useEffect(() => {
@@ -78,9 +95,7 @@ export function ThemeProvider({
   useEffect(() => {
     if (!enableResponsiveMini || userPinnedMini) return;
     const apply = () => {
-      const w = window.innerWidth;
-      const next = isResponsiveMiniWidth(w);
-
+      const next = isResponsiveMiniWidth(window.innerWidth);
       setMiniState(current => {
         if (current.userPinnedMini || current.mini === next) return current;
         return { ...current, mini: next };
@@ -94,26 +109,16 @@ export function ThemeProvider({
   const value = useMemo<ThemeContextValue>(
     () => ({
       mode,
-      dark: mode === 'dark',
+      resolved,
+      dark: resolved !== 'light',
       setMode,
       toggleDark,
       mini,
       setMini,
       toggleMini,
     }),
-    [mode, mini, setMode, toggleDark, setMini, toggleMini],
+    [mode, resolved, mini, toggleDark, setMini, toggleMini],
   );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
-
-export {
-  useTheme,
-  useThemeOptional,
-  THEME_HEAD_SNIPPET,
-  THEME_STORAGE_KEY,
-  MINI_KEY,
-  MINI_PIN_KEY,
-  type ThemeContextValue,
-  type ThemeMode,
-} from './ThemeContext';

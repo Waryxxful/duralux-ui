@@ -52,7 +52,10 @@ export {
   useTheme,
   useThemeOptional,
   THEME_HEAD_SNIPPET,
+  THEME_STORAGE_KEY,
   type ThemeContextValue,
   type ThemeMode,
+  type ResolvedTheme,
 } from './theme/ThemeContext'
+export { log, deprecate } from './utils/log'
 export { apiFetch, SESSION_EXPIRED_EVENT } from './api/client'

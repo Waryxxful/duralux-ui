@@ -1,8 +1,9 @@
 import React from 'react';
-import { ThemeBoundaryProvider, useThemeBoundaryMode } from '../../theme/ThemeBoundaryContext';
+import { ThemeBoundaryProvider } from '../../theme/ThemeBoundaryContext';
+import { useThemeBoundaryMode } from '../../theme/themeBoundary';
 import { cx } from '../../utils/cx';
 
-export type GranCrmTheme = 'inherit' | 'light' | 'dark';
+export type GranCrmTheme = 'inherit' | 'light' | 'dark' | 'navy';
 
 export interface ThemeScopeProps extends React.HTMLAttributes<HTMLDivElement> {
   theme?: GranCrmTheme;

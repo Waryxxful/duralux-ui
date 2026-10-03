@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>@duralux/ui — Component Showcase</title>
-  <script>try{if(localStorage.getItem('grancrm-theme')==='dark')document.documentElement.classList.add('app-skin-dark')}catch(e){}</script>
+  <script>try{var h=document.documentElement,t=localStorage.getItem('grancrm-theme');if(t==='system')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';if(t!=='dark'&&t!=='navy')t='light';h.setAttribute('data-gcu-theme',t);if(t!=='light')h.classList.add('app-skin-dark')}catch(e){}</script>
 </head>
 <body class="nxl-body">
   <div id="root"></div>

@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
-import { useThemeBoundaryMode } from '../../theme/ThemeBoundaryContext'
+import { useThemeBoundaryMode } from '../../theme/themeBoundary'
 import { isFunction, isString } from '../../utils/typeGuards'
 
 const FOCUSABLE_SELECTOR = [

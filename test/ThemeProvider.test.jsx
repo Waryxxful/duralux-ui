@@ -1,10 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
-import {
-  THEME_HEAD_SNIPPET,
-  ThemeProvider,
-  useTheme,
-} from '../src/theme/ThemeProvider'
+import { ThemeProvider } from '../src/theme/ThemeProvider'
+import { THEME_HEAD_SNIPPET, useTheme } from '../src/theme/ThemeContext'
 
 const MINI_KEY = 'grancrm-menu-mini'
 const MINI_PIN_KEY = 'grancrm-menu-mini-pinned'

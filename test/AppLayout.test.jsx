@@ -6,7 +6,8 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 import { AppLayout } from '../src/components/layout/AppLayout'
 import { Sidebar } from '../src/components/layout/Sidebar'
 import { Modal } from '../src/components/ui/Modal'
-import { ThemeProvider, useThemeOptional } from '../src/theme/ThemeProvider'
+import { ThemeProvider } from '../src/theme/ThemeProvider'
+import { useThemeOptional } from '../src/theme/ThemeContext'
 import { adaptAppNavItems } from '../src/contract'
 
 afterEach(() => {
