@@ -55,5 +55,12 @@ react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 pá
 | DX-027 | P3 | demo | Orden de encabezados de la demo (`h3` sin `h2`), 404 en la intro | axe heading-order ×19, consola intro | 2 (migración a Storybook) | abierto |
 | DX-028 | P3 | seguridad | react-doctor `require-pnpm-hardening` ×2 (el repo construye con npm) | react-doctor | 1 | no aplica: el repo construye con npm |
 | DX-029 | P2 | copy | `Card` trae etiquetas por defecto en inglés (`Refresh`, `Remove`, `Expand`) | `src/components/ui/Card.jsx:58-60` | 2 | abierto |
-| DX-030 | P2 | copy | Voseo en documentación y comentarios (CHANGELOG 2.0, README, CLAUDE.md, JSDoc): viola la regla de español internacional. Mensajes del gate corregidos en 2.1 | 10 archivos (`grep -rE 'usá|corré|podés'`) | 6 | parcial |
+| DX-030 | P2 | copy | Voseo en documentación, comentarios y CLI (CHANGELOG 2.0, README, CLAUDE.md, JSDoc de Button/FormField, `scripts/check-doctor.mjs`): viola la regla de español internacional. Mensajes del gate corregidos en 2.1 | 10 archivos (`grep -rE 'usá|corré|podés'`) | 6 | parcial |
 | DX-031 | P3 | tests | `Charts.contract.test.jsx` intermitente bajo carga (carga diferida de ApexChart): 1 fallo en 4 corridas completas | `test/Charts.contract.test.jsx` «uses the literal accessible dark chart palette» | 2 | abierto |
+| DX-032 | P3 | theme | SSR con hidratación: `getServerSnapshot` = false hace que `system` con SO oscuro pinte light un instante y pise el snippet | `src/theme/ThemeProvider.tsx:54` | 2 | abierto |
+| DX-033 | P3 | theme | `setMode` no valida: un consumidor JS con `setMode('sepia')` deja `data-gcu-theme="sepia"` | `src/theme/ThemeProvider.tsx:53` | 2 | abierto |
+| DX-034 | P3 | icons | `Icon` con `icon` descarta `style` y `...rest` | `src/components/ui/Icon.jsx:25` | 2 | abierto |
+| DX-035 | P3 | a11y | `renderIconSlot` pisa el `aria-label` propio del elemento con `aria-hidden` | `src/utils/iconSlot.jsx:24-29` | 2 | abierto |
+| DX-036 | P3 | styles | La capa de refinamiento quita padding vertical a todo `.btn` (afecta `.btn-link` en línea y botones de dos líneas) | `src/styles/grancrm-ui.css` (REFINEMENT 2.1) | 2 | abierto |
+| DX-037 | P3 | tests | Los tests de cascada de ThemeScope × tema de html × reduced-motion verifican texto, no la cascada medida en navegador | `test/tokens-generator.test.ts`, `test/refinement-css.test.ts` | 2 | abierto |
+| DX-038 | P3 | theme | Navy Sass agrega un atributo de especificidad: un override de app con el selector del oscuro pierde en navy (alternativa `:where()`) | `_theme-options-dark-theme.scss` | 2 | abierto |

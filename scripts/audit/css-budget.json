@@ -47,7 +47,7 @@
   "scss/themes/_bs-custom-variables.scss": {
     "important": 1,
     "darkSelectors": 0,
-    "hex": 20
+    "hex": 22
   },
   "scss/themes/_variables.scss": {
     "important": 0,

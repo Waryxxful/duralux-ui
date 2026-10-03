@@ -45,7 +45,7 @@ describe('theme.scss — fundaciones 2.1', () => {
   })
 
   test('code usa un color con contraste AA (DX-001)', () => {
-    expect(bootstrap).toMatch(/--bs-code-color:\s*var\(--gcu-code\)/)
+    expect(bootstrap).toMatch(/--bs-code-color:\s*var\(--gcu-code(?:, #[0-9a-f]{6})?\)/)
   })
 
   test('feedback inválido usa el danger semántico, no #dc3545 de Bootstrap (DX-002)', () => {

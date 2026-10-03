@@ -4,7 +4,14 @@ Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe 
 
 ## 2.1.0 — Fundaciones del design system
 
-Primera entrega de la serie 2.x (spec `docs/superpowers/specs/2026-10-03-duralux-design-system-design.md`). Sin cambios incompatibles: el contrato shell ↔ satélite no cambia.
+Primera entrega de la serie 2.x (spec `docs/superpowers/specs/2026-10-03-duralux-design-system-design.md`). El contrato shell ↔ satélite (`src/contract.ts`) no cambia y no se elimina ninguna API. Sí hay **cambios visuales globales** y una **ampliación de tipos** que puede requerir ajustes:
+
+### Posibles rupturas
+
+- **TypeScript:** `ThemeMode` pasa de `'light' | 'dark'` a `'light' | 'dark' | 'navy' | 'system'`. Un `switch` exhaustivo o un `Record<ThemeMode, …>` deja de compilar hasta cubrir los modos nuevos.
+- **Lógica de tema:** `mode === 'dark'` ya no basta para saber si la interfaz está oscura (navy y `system` también pueden serlo). Usa `dark` (booleano) o `resolved`.
+- **Bootstrap recalculado:** los overrides de Duralux se importan antes de las variables de Bootstrap, así que los derivados por fin salen de ellos. Cambian, entre otros: `--bs-blue/red/green/gray-*` a los colores de marca, `--bs-link-color`, `--bs-font-sans-serif` (Inter), el padding de inputs y botones (0,375 → 0,5 rem, luego normalizado a 36 px por la capa de refinamiento), radios de botón/input/card y variantes de tabla. El fondo de inputs, selects y checks se mantiene blanco como en la plantilla.
+- **Estilos obligatorios:** `grancrm-ui.css` declara los tokens y la fuente Inter; `bootstrap.css` y `theme.css` traen valores de respaldo, pero la apariencia completa requiere los tres archivos (como ya indicaba la guía de consumo).
 
 ### Agregado
 

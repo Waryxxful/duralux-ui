@@ -65,12 +65,19 @@ $body-color: $semantic-body;
 // earlier in variables.scss and would keep the low-contrast value otherwise.
 // Tokens por tema vía custom properties: .text-muted y form-text siguen el tema activo
 // (#64748b no llegaba a 4,5:1 sobre el canvas — DX-003).
-$text-muted: var(--gcu-muted);
+$text-muted: var(--gcu-muted, #{$token-light-muted});
 $form-text-color: $text-muted;
 // Este archivo se importa antes de las variables de Bootstrap: los derivados (!default)
 // salen de estos valores y no de #d63384/#dc3545 (DX-001, DX-002).
-$code-color: var(--gcu-code);
+$code-color: var(--gcu-code, #b4236e);
 $form-feedback-invalid-color: $token-light-status-danger;
+// Canon Duralux: controles con fondo blanco. Sin esto heredan $body-bg (#f0f2f8)
+// porque Bootstrap los deriva de él y estos overrides van antes de sus variables.
+$input-bg: $white;
+$form-select-bg: $white;
+$form-check-input-bg: $white;
+$accordion-bg: $white;
+$thumbnail-bg: $white;
 
 
 // Colors Map

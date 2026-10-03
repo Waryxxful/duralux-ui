@@ -171,10 +171,10 @@ export function renderGeneratedCss(tokens) {
     block(':root,.gcu-theme,[data-gcu-theme="light"]', [...baseDecl, ...themeDeclarations(tokens, 'light')]),
     block('[data-gcu-theme="dark"],.app-skin-dark', themeDeclarations(tokens, 'dark')),
     '/* Dark theme override: .gcu-theme may re-declare light vars in its own scope. */',
-    block('.app-skin-dark .gcu-theme:not([data-gcu-theme="light"])', themeDeclarations(tokens, 'dark')),
+    block('.app-skin-dark .gcu-theme:not([data-gcu-theme="light"]):not([data-gcu-theme="navy"])', themeDeclarations(tokens, 'dark')),
     '/* Navy gana a dark: <html> en navy también lleva .app-skin-dark. */',
     block(`[data-gcu-theme="navy"],${nestedNavy}`, themeDeclarations(tokens, 'navy')),
-    '@media (prefers-reduced-motion:reduce){:root{--gcu-duration-instant:0ms;--gcu-duration-fast:0ms;--gcu-duration-base:0ms;--gcu-duration-slow:0ms;--gcu-press-scale:1}}',
+    '@media (prefers-reduced-motion:reduce){:root,.gcu-theme,[data-gcu-theme]{--gcu-duration-instant:0ms;--gcu-duration-fast:0ms;--gcu-duration-base:0ms;--gcu-duration-slow:0ms;--gcu-press-scale:1}}',
     CSS_END,
   ].join('\n')
 }
