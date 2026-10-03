@@ -128,7 +128,7 @@ export const Tipografia: Story = {
           <span style={{ fontWeight: 600 }}>Semibold 600</span>
         </div>
       </Section>
-      <Section title="Números tabulares" description="Tablas, KPIs y contadores alinean cifras con tabular-nums (automático en .table y .gcu-table).">
+      <Section title="Números tabulares" description="Tablas, KPIs y contadores alinean cifras con tabular-nums (automático en celdas .text-end; en otras, .gcu-tabular).">
         <div className="sb-panel sb-row" style={{ gap: 48 }}>
           <div><p className="sb-section__description" style={{ margin: 0 }}>Proporcional</p>{['1.111', '8.888', '4.070'].map(n => <div key={n} style={{ fontVariantNumeric: 'proportional-nums', fontSize: 20 }}>{n}</div>)}</div>
           <div><p className="sb-section__description" style={{ margin: 0 }}>Tabular</p>{['1.111', '8.888', '4.070'].map(n => <div key={n} style={{ fontVariantNumeric: 'tabular-nums', fontSize: 20 }}>{n}</div>)}</div>

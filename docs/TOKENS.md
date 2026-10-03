@@ -27,7 +27,7 @@ npm run tokens:check      # falla si hay deriva o si un par de texto no cumple A
 |---|---|
 | Espaciado | `--gcu-space-{0,0-5,1,2,3,4,5,6,8,10,12,16}` (base 4 px) |
 | Radios | `--gcu-radius-{xs,sm,md,lg,xl,full}` |
-| Alturas de control | `--gcu-control-h-{sm,md,lg}` = 32/36/40 |
+| Alturas de control | `--gcu-control-h-{xs,sm,md,lg}` = 28/32/36/40 (xs: iconos en tablas densas) |
 | Tipografía | `--gcu-font-size-*`, `--gcu-line-height-*`, `--gcu-font-weight-*`, `--gcu-tracking-*`, `--gcu-font-sans`, `--gcu-font-mono` |
 | Elevación | `--gcu-shadow-{0..4}` (por tema) |
 | Movimiento | `--gcu-duration-{instant,fast,base,slow}`, `--gcu-ease-{standard,enter,exit}`, `--gcu-press-scale` |

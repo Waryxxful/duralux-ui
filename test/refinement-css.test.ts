@@ -91,3 +91,16 @@ describe('ColoredStatCard en oscuro', () => {
     expect(css).toMatch(/html\.app-skin-dark \.gcu-colored-stat \.avatar-text[^{]*\{[^}]*background-color:rgba\(0,19,39,\.14\)!important/)
   })
 })
+
+describe('regresiones vistas en apps reales (DEV)', () => {
+  test('tabular-nums no se aplica a toda la tabla (en Inter ensancha guiones y puntuación de emails)', () => {
+    expect(refinement).not.toMatch(/(^|\n|,)table,\.table,/)
+    expect(refinement).toMatch(/td\.text-end[^{]*\{font-variant-numeric:tabular-nums/)
+  })
+
+  test('IconButton sm conserva 32 px y en tablas usa la altura densa xs', () => {
+    expect(refinement).toContain('.btn-icon.btn-sm{min-width:var(--gcu-control-h-sm);min-height:var(--gcu-control-h-sm)}')
+    expect(refinement).toContain('.table .btn-icon{min-width:var(--gcu-control-h-xs);min-height:var(--gcu-control-h-xs)}')
+    expect(css).toContain('--gcu-control-h-xs:28px')
+  })
+})

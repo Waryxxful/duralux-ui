@@ -32,7 +32,7 @@ En oscuro y navy la elevación se expresa con superficies más claras (`surface-
 
 - Inter Variable. Pesos: 400 lectura, 500 etiquetas y énfasis, 600 títulos. No usar 700 o más en interfaz.
 - Un solo título de página por vista. Títulos de card hasta 18 px.
-- Cifras en tablas, KPIs y contadores con `tabular-nums` (automático en `.table` y `.gcu-table`).
+- Cifras en tablas, KPIs y contadores con `tabular-nums`: automático en celdas `.text-end`; en otras usa `.gcu-tabular` o `data-numeric`. No se aplica a toda la tabla porque en Inter también ensancha guiones y puntuación.
 - Títulos con `text-wrap: balance`; texto largo con ancho máximo de ~68 caracteres.
 - Texto truncado siempre con `…` y el valor completo en `title` o tooltip.
 

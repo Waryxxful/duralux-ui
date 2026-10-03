@@ -131,6 +131,7 @@ export const designTokens = {
     "full": "9999px"
   },
   "controlHeight": {
+    "xs": "28px",
     "sm": "32px",
     "md": "36px",
     "lg": "40px"
