@@ -3,6 +3,7 @@
  *
  * Props:
  *   name       — bare feather icon name (e.g. "airplay"); class built as feather-${name}
+ *   icon       — alternativa a name: icono Tabler (`<IconRobot />`), normalizado a tamaño y trazo 2
  *   size       — "xs" | "sm" | "md" | "lg" | "xl" | number (px)
  *   aria-label — si se pasa, se establece role="img"; si no, aria-hidden="true"
  *   className  — clases adicionales
@@ -10,6 +11,7 @@
  */
 import { cx } from '../../utils/cx'
 import { isFiniteNumber } from '../../utils/typeGuards'
+import { renderIconSlot } from '../../utils/iconSlot'
 
 const sizeMap = {
   xs: '0.625rem',
@@ -19,7 +21,8 @@ const sizeMap = {
   xl: '1.5rem',
 }
 
-export function Icon({ name, size = undefined, 'aria-label': label = undefined, className = '', style = undefined, ...rest }) {
+export function Icon({ name, icon = undefined, size = undefined, 'aria-label': label = undefined, className = '', style = undefined, ...rest }) {
+  if (icon) return renderIconSlot(icon, { size: size ?? 'md', label, className })
   const resolvedSize = isFiniteNumber(size) ? size : sizeMap[size]
   const inlineSize = resolvedSize ? { fontSize: resolvedSize, ...style } : style
   const cls = cx('gcu-icon', 'feather-' + name, className)

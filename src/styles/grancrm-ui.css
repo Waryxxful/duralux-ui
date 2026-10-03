@@ -621,6 +621,9 @@ a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px
 /* Scroll sin saltos de layout. */
 .gcu-scroll{overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
 
+/* Iconos SVG (Tabler) alineados con el texto como los glifos Feather. */
+.gcu-icon-svg{display:inline-block;flex-shrink:0;vertical-align:-0.125em}
+
 @keyframes gcu-enter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @keyframes gcu-exit{from{opacity:1;transform:none}to{opacity:0;transform:translateY(4px)}}
 @keyframes gcu-shimmer{from{background-position:100% 50%}to{background-position:0 50%}}

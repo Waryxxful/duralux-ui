@@ -20,8 +20,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
   icon?: string | null
-  startIcon?: string | null
-  endIcon?: string | null
+  /** Nombre Feather (string) o icono Tabler (`<IconX />`). */
+  startIcon?: IconSlot
+  /** Nombre Feather (string) o icono Tabler (`<IconX />`). */
+  endIcon?: IconSlot
   href?: string
   as?: React.ElementType
 }
@@ -33,20 +35,28 @@ export interface LinkButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorEl
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
   icon?: string | null
-  startIcon?: string | null
-  endIcon?: string | null
+  /** Nombre Feather (string) o icono Tabler (`<IconX />`). */
+  startIcon?: IconSlot
+  /** Nombre Feather (string) o icono Tabler (`<IconX />`). */
+  endIcon?: IconSlot
 }
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  icon: string
+  icon: IconSlot
   label: string
   variant?: SemanticTone
   size?: 'sm' | 'md' | 'lg'
   outline?: boolean
 }
 
+/** Icono de slot: nombre Feather (string) o elemento SVG (p. ej. `<IconRobot />` de @tabler/icons-react). */
+export type IconSlot = string | React.ReactElement | null
+
 export interface IconProps extends React.HTMLAttributes<HTMLElement> {
-  name: string
+  /** Nombre Feather. Requerido salvo que se pase `icon`. */
+  name?: string
+  /** Icono Tabler (u otro SVG con props size/stroke). */
+  icon?: React.ReactElement
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number
   'aria-label'?: string
 }

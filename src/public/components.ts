@@ -81,6 +81,7 @@ import type {
   HeaderProps,
   IconButtonProps,
   IconProps,
+  IconSlot,
   InputGroupControlProps,
   InputGroupProps,
   InputProps,

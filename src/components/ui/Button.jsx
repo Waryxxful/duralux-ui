@@ -1,6 +1,7 @@
 import { cx } from '../../utils/cx'
 import { resolveVariant } from './buttonVariants'
 import { isString } from '../../utils/typeGuards'
+import { renderIconSlot } from '../../utils/iconSlot'
 
 function blockDisabledEvent(event) {
   event.preventDefault()
@@ -16,8 +17,8 @@ function blockDisabledEvent(event) {
  *   size      — "sm" | "md" | "lg"
  *   loading   — muestra spinner y deshabilita
  *   icon      — feather class string shown before label (legacy; prefer startIcon)
- *   startIcon — bare feather name → leading icon
- *   endIcon   — bare feather name → trailing icon
+ *   startIcon — nombre Feather (string) o icono Tabler (`<IconX />`) al inicio
+ *   endIcon   — nombre Feather (string) o icono Tabler (`<IconX />`) al final
  *   as        — element type (default "button")
  */
 
@@ -94,12 +95,12 @@ export function Button({
       {loading
         ? <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
         : (startIcon
-            ? <i className={`feather-${startIcon} me-2`} aria-hidden />
+            ? renderIconSlot(startIcon, { className: 'me-2' })
             : icon && <i className={`${icon} me-2`} aria-hidden="true"></i>
           )
       }
       {children}
-      {!loading && endIcon && <i className={`feather-${endIcon} ms-2`} aria-hidden />}
+      {!loading && renderIconSlot(endIcon, { className: 'ms-2' })}
     </Tag>
   )
 }
@@ -117,7 +118,7 @@ export function LinkButton({ href, ...props }) {
  * IconButton — Button solo con icono, sin texto.
  *
  * Props:
- *   icon    — bare feather name (e.g. "edit")
+ *   icon    — nombre Feather (e.g. "edit") o icono Tabler (`<IconEdit />`)
  *   label   — REQUIRED; used as aria-label and title
  *   variant (default "light-brand", canónico del template), size, ...rest (outline deprecado e ignorado)
  */
@@ -133,7 +134,7 @@ export function IconButton({ icon, label, variant, size, outline, className = ''
       aria-label={label}
       title={label}
     >
-      <i className={`feather-${icon}`} aria-hidden />
+      {renderIconSlot(icon)}
     </button>
   )
 }
