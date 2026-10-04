@@ -282,7 +282,7 @@ export function DataTable<T extends object = AnyRow>(props: DataTableProps<T>) {
   const countLabel = searchState.active
     ? `${filteredCount} de ${remoteTotal ?? normalizedData.length} registros`
     : `${remoteTotal ?? filteredCount} registros`
-  const showSummary = (!virtualized && paging.totalPages > 1) || searchState.active
+  const showSummary = !showError && ((!virtualized && paging.totalPages > 1) || searchState.active)
   const announcement = [
     loading ? '' : `Registros visibles: ${remoteTotal ?? filteredCount}.`,
     !virtualized && paging.totalPages > 1 ? `Página actual: ${paging.page} de ${paging.totalPages}.` : '',
