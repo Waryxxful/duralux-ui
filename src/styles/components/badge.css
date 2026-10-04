@@ -1,0 +1,24 @@
+/* Badge: estado con tokens por tono. Suave = -soft/-text/-border (AA por tokens:check);
+   sólido = relleno status con texto inverso (AA verificado en test/Badge.refined.test.tsx). */
+.gcu-badge{display:inline-flex;align-items:center;gap:var(--gcu-space-1);padding:var(--gcu-space-0-5) var(--gcu-space-2);border:1px solid transparent;border-radius:var(--gcu-radius-sm);font-size:var(--gcu-font-size-2xs);line-height:var(--gcu-line-height-2xs);font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums;white-space:nowrap;vertical-align:middle}
+.gcu-badge--primary,.gcu-badge--secondary,.gcu-badge--success,.gcu-badge--danger,.gcu-badge--warning,.gcu-badge--info,.gcu-badge--teal,.gcu-badge--indigo,.gcu-badge--dark{--gcu-badge-solid-fg:var(--gcu-text-inverse)}
+.gcu-badge--primary{--gcu-badge-soft-bg:var(--gcu-primary-soft);--gcu-badge-soft-fg:var(--gcu-primary-text);--gcu-badge-soft-border:var(--gcu-primary-border);--gcu-badge-solid-bg:var(--gcu-status-primary)}
+.gcu-badge--secondary{--gcu-badge-soft-bg:var(--gcu-secondary-soft);--gcu-badge-soft-fg:var(--gcu-secondary-text);--gcu-badge-soft-border:var(--gcu-secondary-border);--gcu-badge-solid-bg:var(--gcu-status-secondary)}
+.gcu-badge--success{--gcu-badge-soft-bg:var(--gcu-success-soft);--gcu-badge-soft-fg:var(--gcu-success-text);--gcu-badge-soft-border:var(--gcu-success-border);--gcu-badge-solid-bg:var(--gcu-status-success)}
+.gcu-badge--danger{--gcu-badge-soft-bg:var(--gcu-danger-soft);--gcu-badge-soft-fg:var(--gcu-danger-text);--gcu-badge-soft-border:var(--gcu-danger-border);--gcu-badge-solid-bg:var(--gcu-status-danger)}
+.gcu-badge--warning{--gcu-badge-soft-bg:var(--gcu-warning-soft);--gcu-badge-soft-fg:var(--gcu-warning-text);--gcu-badge-soft-border:var(--gcu-warning-border);--gcu-badge-solid-bg:var(--gcu-status-warning)}
+.gcu-badge--info{--gcu-badge-soft-bg:var(--gcu-info-soft);--gcu-badge-soft-fg:var(--gcu-info-text);--gcu-badge-soft-border:var(--gcu-info-border);--gcu-badge-solid-bg:var(--gcu-status-info)}
+.gcu-badge--teal{--gcu-badge-soft-bg:var(--gcu-teal-soft);--gcu-badge-soft-fg:var(--gcu-teal-text);--gcu-badge-soft-border:var(--gcu-teal-border);--gcu-badge-solid-bg:var(--gcu-status-teal)}
+.gcu-badge--indigo{--gcu-badge-soft-bg:var(--gcu-indigo-soft);--gcu-badge-soft-fg:var(--gcu-indigo-text);--gcu-badge-soft-border:var(--gcu-indigo-border);--gcu-badge-solid-bg:var(--gcu-status-indigo)}
+.gcu-badge--dark{--gcu-badge-soft-bg:var(--gcu-secondary-soft);--gcu-badge-soft-fg:var(--gcu-text);--gcu-badge-soft-border:var(--gcu-secondary-border);--gcu-badge-solid-bg:var(--gcu-text)}
+.gcu-badge.gcu-badge--soft{background-color:var(--gcu-badge-soft-bg);color:var(--gcu-badge-soft-fg);border-color:var(--gcu-badge-soft-border)}
+.gcu-badge.gcu-badge--solid{background-color:var(--gcu-badge-solid-bg);color:var(--gcu-badge-solid-fg);border-color:var(--gcu-badge-solid-bg)}
+/* Chip neutro: visible sobre cards blancas y en oscuro sin override de tema. */
+.gcu-badge.gcu-badge--light{background-color:var(--gcu-surface-sunken);color:var(--gcu-text);border-color:var(--gcu-border-strong)}
+/* Punto de estado: el lado del punto lleva 2 px menos de padding (alineación óptica). */
+.gcu-badge--dot{padding-inline-start:calc(var(--gcu-space-2) - var(--gcu-space-0-5))}
+.gcu-badge__dot{flex:none;width:6px;height:6px;border-radius:var(--gcu-radius-full);background-color:currentColor}
+.gcu-badge--interactive{cursor:pointer;font-family:inherit;transition:transform var(--gcu-duration-instant) var(--gcu-ease-standard)}
+@media (hover:hover){.gcu-badge--interactive:hover{background-image:linear-gradient(color-mix(in srgb,currentColor 12%,transparent),color-mix(in srgb,currentColor 12%,transparent))}}
+.gcu-badge--interactive:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-badge--interactive:active{transform:scale(var(--gcu-press-scale))}

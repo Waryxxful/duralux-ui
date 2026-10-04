@@ -62,17 +62,4 @@
 	}
 }
 
-// Badge variant="light" uses these stable classes from the React runtime.
-.badge.gcu-badge--light {
-	color: $dark !important;
-	background-color: $gray-200 !important;
-	border: 1px solid $gray-500 !important;
-}
-.badge.gcu-badge--light:hover,
-.badge.gcu-badge--light:focus,
-.badge.gcu-badge--light:focus-visible,
-.badge.gcu-badge--light:active {
-	color: $dark !important;
-	background-color: $gray-300 !important;
-	border-color: $gray-600 !important;
-}
+// Badge variant="light" (chip neutro) vive en src/styles/components/badge.css con tokens.

@@ -301,11 +301,6 @@ $gcu-dark-palettes: (
 				}
 			}
 		}
-		.badge.gcu-badge--light {
-			color: $gray-200 !important;
-			background-color: $dark-theme-color-hover !important;
-			border-color: $dark-theme-color-border !important;
-		}
 		.daterangepicker,
 		.apexcharts-tooltip {
 			box-shadow: 0 4px 24px 0 rgb(4 0 40 / 80%);

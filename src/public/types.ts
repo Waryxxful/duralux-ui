@@ -65,7 +65,11 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLElement> {
   variant?: SemanticTone
   soft?: boolean
   pill?: boolean
+  /** Punto de estado decorativo antes del texto. */
+  dot?: boolean
   as?: React.ElementType
+  /** Tipo nativo cuando `as="button"`. */
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {

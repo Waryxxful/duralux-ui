@@ -241,11 +241,10 @@ describe('CSS theme contract', () => {
       ).toBeGreaterThanOrEqual(4.5)
     }
 
-    const lightBadge = ruleWithDeclarations(css, '.badge.gcu-badge--light', [
-      'color',
-      'background-color',
-    ])
-    expect(contrastRatio(lightBadge.color, lightBadge['background-color'])).toBeGreaterThanOrEqual(4.5)
+    // Corrección 2.3 (lote L3): el chip `variant="light"` dejó el SCSS con prioridad forzada;
+    // vive en src/styles/components/badge.css con tokens y su AA se verifica por tema en
+    // test/Badge.refined.test.tsx.
+    expect(css).not.toContain('.badge.gcu-badge--light')
   })
 
   test('keeps soft alerts on the Duralux v2 semantic hue', () => {
@@ -321,12 +320,7 @@ describe('CSS theme contract', () => {
 
     const solidDanger = ruleWithDeclarations(css, 'html.app-skin-dark .bg-danger', ['background-color'])
     expect(parseColor(solidDanger['background-color'])).toEqual(parseColor(solidFills.danger))
-
-    const lightChip = ruleWithDeclarations(css, 'html.app-skin-dark .badge.gcu-badge--light', [
-      'color',
-      'background-color',
-    ])
-    expect(contrastRatio(lightChip.color, lightChip['background-color'])).toBeGreaterThanOrEqual(4.5)
+    // Corrección 2.3 (lote L3): sin override oscuro del chip light; los tokens cambian por tema.
   })
 
   test('keeps React widget glue readable on solid and soft brand surfaces', () => {
