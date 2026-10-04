@@ -68,7 +68,7 @@ export const ChatBubble = /* @__PURE__ */ forwardRef<HTMLDivElement, ChatBubbleP
 
   if (system) {
     return (
-      <MessageBubble ref={ref} variant="system" className={cx('gcu-chat-message', 'gcu-chat-message--system', className)}>
+      <MessageBubble ref={ref} variant="system" className={cx('gcu-chat-message--system', className)}>
         {text}
       </MessageBubble>
     )

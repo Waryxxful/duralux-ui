@@ -65,6 +65,7 @@ button.gcu-chat-contact--selected:focus-visible{box-shadow:inset 3px 0 0 var(--g
 .gcu-chat-window__action:focus-visible,.gcu-chat-composer__action:focus-visible,.gcu-chat-composer__send:focus-visible,.gcu-chat-message__retry:focus-visible,.gcu-chat-sidebar__action:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
 .gcu-chat-window__body{display:flex;flex:1 1 auto;flex-direction:column;min-height:0}
 .gcu-chat-window__messages{container:gcu-chat-log / inline-size;flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-gutter:stable;padding:var(--gcu-space-4) var(--gcu-space-4) var(--gcu-space-6);background:var(--gcu-surface-subtle)}
+.gcu-chat-window__messages:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:-2px}
 .gcu-chat-window__skeleton{display:flex;flex-direction:column;gap:var(--gcu-space-3)}
 .gcu-chat-window__skeleton-bubble{width:55%;height:var(--gcu-space-10);border-radius:var(--gcu-radius-xl)}
 .gcu-chat-window__skeleton-bubble--outgoing{align-self:flex-end;width:40%}
@@ -96,7 +97,7 @@ button.gcu-chat-contact--selected:focus-visible{box-shadow:inset 3px 0 0 var(--g
 /* ── Mensaje con autor (ChatBubble) ─────────────────────────────────────── */
 .gcu-chat-message{display:flex;flex-direction:column;align-items:flex-start}
 .gcu-chat-message--outgoing{align-items:flex-end}
-.gcu-chat-message+.gcu-chat-message,.gcu-chat-typing,.gcu-chat-message+.gcu-message-row{margin-top:var(--gcu-space-4)}
+.gcu-chat-message+.gcu-chat-message,.gcu-chat-typing,.gcu-chat-message+.gcu-message-row,.gcu-message-row+.gcu-chat-message{margin-top:var(--gcu-space-4)}
 .gcu-chat-message+.gcu-chat-message--grouped{margin-top:var(--gcu-space-0-5)}
 .gcu-chat-message__head{display:flex;align-items:center;gap:var(--gcu-space-2);margin-bottom:var(--gcu-space-1)}
 .gcu-chat-message--outgoing .gcu-chat-message__head{flex-direction:row-reverse}

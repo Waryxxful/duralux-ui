@@ -148,6 +148,8 @@ const ChatWindowBase = /* @__PURE__ */ forwardRef<HTMLElement, ChatWindowProps<C
           aria-relevant="additions"
           aria-atomic="false"
           aria-busy={loading || undefined}
+          // El historial desplaza: con tabIndex se recorre con teclado (flechas, Re Pág/Av Pág).
+          tabIndex={0}
         >
           {loading ? (
             <div className="gcu-chat-window__skeleton" aria-hidden="true">

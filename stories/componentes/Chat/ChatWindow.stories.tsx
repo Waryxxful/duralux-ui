@@ -1,8 +1,12 @@
+import type * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ChatInputBar, ChatWindow } from '../../../src'
 import { ChatCompleto, Mensajes } from './chatFixtures'
 
 const CONTACTO = { name: 'Valentina Rojas', online: true, role: 'Cliente · Fibra 600' }
+
+/** ChatWindow suelta dentro de una card con alto fijo. */
+const enCard = (Story: () => React.ReactElement) => <div className="card mb-0 d-flex" style={{ height: 520 }}><Story /></div>
 
 const meta: Meta<typeof ChatWindow> = {
   title: 'Componentes/Chat/ChatWindow',
@@ -13,7 +17,6 @@ const meta: Meta<typeof ChatWindow> = {
     legacyChildren: false,
     loading: false,
   },
-  decorators: [(Story) => <div className="card mb-0 d-flex" style={{ height: 520 }}><Story /></div>],
   parameters: {
     docs: {
       description: {
@@ -26,6 +29,7 @@ export default meta
 type Story = StoryObj<typeof ChatWindow>
 
 export const Playground: Story = {
+  decorators: [enCard],
   args: {
     messages: <Mensajes />,
     composer: <ChatInputBar multiline maxLength={500} onSend={() => undefined} onAttach={() => undefined} />,
@@ -36,17 +40,18 @@ export const Playground: Story = {
 
 export const Conversacion: Story = {
   name: 'Caso real: dos columnas con `.gcu-chat`',
-  decorators: [(Story) => <Story />],
   render: () => <ChatCompleto />,
 }
 
 export const Vacio: Story = {
   name: 'Sin conversación seleccionada',
+  decorators: [enCard],
   args: { contact: null },
 }
 
 export const Cargando: Story = {
   name: 'Cargando historial',
+  decorators: [enCard],
   args: { loading: true, composer: <ChatInputBar onSend={() => undefined} disabled disabledReason="Espera a que cargue el historial." /> },
 }
 
