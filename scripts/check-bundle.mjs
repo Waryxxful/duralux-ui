@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url'
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 // Motores opcionales (charts y antd/dayjs): nunca deben aparecer en el bundle raíz.
 const CHART_ENGINE_PATTERN = /(?:^|[^A-Za-z0-9_])(?:apexcharts|react-apexcharts|recharts|antd|dayjs)(?:$|[^A-Za-z0-9_])/m
+// Huellas de TanStack Table/Virtual (nombres internos que sobreviven a la minificación como strings).
+const TANSTACK_PATTERN = /@tanstack\/|table\.getSortedRowModel|rowSortingFeature|virtual-core/
 const EXTERNAL_PACKAGES = [
   'react',
   'react-dom',
@@ -96,6 +98,10 @@ export async function runBundleGate({ distDir = join(ROOT, 'dist'), maxGzipBytes
   }
   if (CHART_ENGINE_PATTERN.test(result.code)) {
     throw new Error('Button consumer bundle contains a chart engine specifier.')
+  }
+  // DataTable usa TanStack (dependencia): una app que solo importa Button no debe arrastrarlo.
+  if (TANSTACK_PATTERN.test(result.code)) {
+    throw new Error('Button consumer bundle contains TanStack Table/Virtual code.')
   }
   return result
 }

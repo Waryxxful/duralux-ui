@@ -143,6 +143,8 @@ export type {
   DataTableAction,
   DataTableColumn,
   DataTableIdentityKey,
+  DataTableColumnVisibility,
+  DataTableBulkContext,
   DataTableKey,
   DataTableRowKey,
   EmptyStateProps,
