@@ -6,7 +6,8 @@
 
 // .form-control, .form-select, .form-label y .input-group-text viven en
 // src/styles/components/*.css con tokens --gcu-* (sin prioridad forzada).
-input:not(.form-control):not(.form-check-input),
+// Los inputs internos de antd (@duralux/ui/antd) quedan fuera: sus estilos usan :where() y perderían.
+input:not(.form-control):not(.form-check-input):where(:not([class^="ant-"], [class*=" ant-"], [class^="ant-"] *, [class*=" ant-"] *)),
 .custom-file,
 .custom-select {
 	color: $dark;

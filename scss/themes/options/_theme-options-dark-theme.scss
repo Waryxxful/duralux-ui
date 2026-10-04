@@ -67,7 +67,7 @@ $gcu-dark-palettes: (
 		h4,
 		h5,
 		h6,
-		input:not(.form-control):not(.form-check-input),
+		input:not(.form-control):not(.form-check-input):where(:not([class^="ant-"], [class*=" ant-"], [class^="ant-"] *, [class*=" ant-"] *)),
 		.btn,
 		.text-dark,
 		.user-name,
