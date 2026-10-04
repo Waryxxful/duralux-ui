@@ -421,12 +421,13 @@ test('ChatTypingIndicator usa clases para bounce y un estado accesible', () => {
   expect(container.querySelector('.chat-typing-dot')).not.toHaveAttribute('style')
 })
 
-test('el SCSS del typing declara keyframes y reduced-motion', () => {
-  const chatScss = readFileSync('scss/themes/applications/_chat.scss', 'utf8')
+// Corrección documentada (lote L7): las reglas del chat pasaron del SCSS a src/styles/components/chat.css.
+test('el CSS del typing declara keyframes y reduced-motion', () => {
+  const chatCss = readFileSync('src/styles/components/chat.css', 'utf8')
 
-  expect(chatScss).toMatch(/\.chat-typing-dot[\s\S]*animation: chat-typing-bounce/)
-  expect(chatScss).toContain('@keyframes chat-typing-bounce')
-  expect(chatScss).toMatch(/@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*\.chat-typing-dot[\s\S]*animation: none/)
+  expect(chatCss).toMatch(/\.chat-typing-dot[\s\S]*animation:\s*chat-typing-bounce/)
+  expect(chatCss).toContain('@keyframes chat-typing-bounce')
+  expect(chatCss).toMatch(/@media\s*\(prefers-reduced-motion:\s*reduce\)[\s\S]*\.chat-typing-dot[\s\S]*animation:\s*none/)
 })
 
 test('ChatBubble no depende de estilos inline para su ancho', () => {
@@ -467,8 +468,9 @@ test('el estado online usa un foreground local accesible', () => {
 
   expect(online).toHaveTextContent('En línea')
   expect(online).not.toHaveClass('text-success')
-  expect(readFileSync('scss/themes/applications/_chat.scss', 'utf8')).toMatch(
-    /\.chat-online-status[\s\S]*color:\s*\$dark/,
+  // Corrección documentada (lote L7): el color sale del token de texto en chat.css (sin $dark ni !important).
+  expect(readFileSync('src/styles/components/chat.css', 'utf8')).toMatch(
+    /\.chat-online-status\{[^}]*color:var\(--gcu-text\)/,
   )
 })
 
