@@ -1,0 +1,18 @@
+/* DescriptionList: pares etiqueta/valor. Una columna en contenedores angostos; las columnas pedidas
+   aparecen cuando el contenedor tiene espacio (2 desde 28rem, 3 desde 42rem). */
+.gcu-description-list__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--gcu-space-4) var(--gcu-space-6);margin:0}
+.gcu-description-list__item{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);min-width:0}
+.gcu-description-list__label{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium)}
+.gcu-description-list__value{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);overflow-wrap:anywhere}
+.gcu-description-list__value--empty{color:var(--gcu-muted)}
+.gcu-description-list__value--mono{font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs)}
+.gcu-description-list__skeleton{width:40%}
+
+@container (min-width: 28rem){
+  .gcu-description-list__grid--cols-2,.gcu-description-list__grid--cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gcu-description-list__item--span-2,.gcu-description-list__item--span-3{grid-column:span 2}
+}
+@container (min-width: 42rem){
+  .gcu-description-list__grid--cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gcu-description-list__grid--cols-3 .gcu-description-list__item--span-3{grid-column:span 3}
+}

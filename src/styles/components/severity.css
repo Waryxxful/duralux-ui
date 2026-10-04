@@ -1,0 +1,14 @@
+/* Severity: la forma comunica lo mismo que el color (rombo crítico, anillo advertencia, punto normal).
+   El marcador es un elemento gráfico (≥ 3:1 con status-*); el texto va en el color del tema. */
+.gcu-severity{--gcu-severity-size:var(--gcu-space-2);display:inline-flex;align-items:center;gap:var(--gcu-space-2);max-width:100%;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium);vertical-align:middle}
+.gcu-severity--sm{gap:var(--gcu-space-1);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-severity__marker{flex:none;box-sizing:border-box;width:var(--gcu-severity-size);height:var(--gcu-severity-size)}
+.gcu-severity__label{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Crítico: rombo sólido (cuadrado girado; algo menor para igualar el peso óptico del punto). */
+.gcu-severity--critical .gcu-severity__marker{width:calc(var(--gcu-severity-size) * .85);height:calc(var(--gcu-severity-size) * .85);margin-inline:calc(var(--gcu-severity-size) * .075);border-radius:var(--gcu-radius-xs);background-color:var(--gcu-status-danger);transform:rotate(45deg)}
+.gcu-severity--critical .gcu-severity__label{color:var(--gcu-danger-text)}
+/* Advertencia: anillo (borde sin relleno). */
+.gcu-severity--warning .gcu-severity__marker{border:2px solid var(--gcu-status-warning);border-radius:var(--gcu-radius-full)}
+/* Normal: punto sólido. */
+.gcu-severity--normal .gcu-severity__marker{border-radius:var(--gcu-radius-full);background-color:var(--gcu-status-success)}

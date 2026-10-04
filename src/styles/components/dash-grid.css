@@ -1,0 +1,18 @@
+/* DashGrid: grilla de 12 columnas (separación 24 px entre bloques). Colapsa por el ancho de la grilla,
+   no del viewport: bajo 36rem todo apila; de 36rem a 60rem las filas densas se reparten de a dos;
+   desde 60rem, la fila pedida. Cada celda es contenedor para las cards que lleva. */
+.gcu-dash-grid{display:flex;flex-direction:column;gap:var(--gcu-space-6);min-width:0}
+.gcu-dash-grid__row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gcu-space-6)}
+.gcu-dash-grid__cell{grid-column:span 12;min-width:0}
+.gcu-dash-grid__cell > *{height:100%}
+
+@container (min-width: 36rem){
+  .gcu-dash-grid__cell--3,.gcu-dash-grid__cell--6{grid-column:span 6}
+}
+@container (min-width: 60rem){
+  .gcu-dash-grid__cell--3{grid-column:span 3}
+  .gcu-dash-grid__cell--4{grid-column:span 4}
+  .gcu-dash-grid__cell--5{grid-column:span 5}
+  .gcu-dash-grid__cell--7{grid-column:span 7}
+  .gcu-dash-grid__cell--8{grid-column:span 8}
+}

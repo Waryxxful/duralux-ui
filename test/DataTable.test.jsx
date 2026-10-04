@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import { DataTable } from '../src/components/data/DataTable.jsx'
+import { DataTable } from '../src/components/data/DataTable'
 
 const columns = [{ key: 'name', label: 'Nombre' }]
 

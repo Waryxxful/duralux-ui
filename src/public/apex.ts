@@ -1,5 +1,9 @@
 // Componentes en TSX: se exportan tal cual (tipos y ref reales).
 export { ApexChart } from '../components/charts/ApexChart'
+export { Sparkline } from '../components/charts/Sparkline'
+export { TrendLine } from '../components/charts/TrendLine'
+export { Gauge } from '../components/charts/Gauge'
+export { Donut } from '../components/charts/Donut'
 export { ChartCard } from './chart-card'
 
 export type {
@@ -30,5 +34,11 @@ export type {
   ChartStateProps,
   ChartTheme,
   ChartThemeMode,
+  CompactChartTone,
+  SparklineProps,
+  TrendLineProps,
+  TrendLineSeries,
+  GaugeProps,
+  DonutProps,
 } from './chart-types'
 export type { ChartCardAction, ChartCardHeadingLevel, ChartCardProps } from './chart-card'

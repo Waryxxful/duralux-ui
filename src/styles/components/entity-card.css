@@ -1,0 +1,28 @@
+/* EntityCard: tarjeta de directorio. El enlace del título cubre la card (::after) y el pie queda encima
+   para sus acciones. Hover con elevación 2 solo con puntero; foco con el anillo del tema en la card. */
+.gcu-entity-card{position:relative;height:100%;margin-bottom:0}
+.gcu-entity-card__body{display:flex;flex-direction:column;gap:var(--gcu-space-4)}
+.gcu-entity-card__head{display:flex;align-items:center;gap:var(--gcu-space-3);min-width:0}
+.gcu-entity-card__mark{display:inline-flex;flex:none;align-items:center;justify-content:center;width:var(--gcu-control-h-lg);height:var(--gcu-control-h-lg);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface-sunken);color:var(--gcu-text);overflow:hidden}
+.gcu-entity-card__titles{min-width:0}
+.gcu-entity-card__title{margin:0;overflow:hidden;color:var(--gcu-text);font-size:var(--gcu-font-size-md);line-height:var(--gcu-line-height-md);font-weight:var(--gcu-font-weight-semibold);text-overflow:ellipsis;white-space:nowrap}
+.gcu-entity-card__subtitle{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);margin:var(--gcu-space-0-5) 0 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-entity-card__inactive{padding:0 var(--gcu-space-2);border:1px solid var(--gcu-border-strong);border-radius:var(--gcu-radius-sm);background-color:var(--gcu-surface-sunken);color:var(--gcu-text);font-weight:var(--gcu-font-weight-medium)}
+.gcu-entity-card__stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gcu-space-3);margin:0}
+.gcu-entity-card__stat{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);min-width:0}
+.gcu-entity-card__stat dt{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium)}
+.gcu-entity-card__stat dd{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-md);line-height:var(--gcu-line-height-md);font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums}
+.gcu-entity-card__chips{display:flex;flex-wrap:wrap;gap:var(--gcu-space-1)}
+.gcu-entity-card__footer{position:relative;z-index:1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--gcu-space-2)}
+
+.gcu-entity-card__link{padding:0;border:0;background:none;color:inherit;font:inherit;text-align:start;text-decoration:none;cursor:pointer}
+.gcu-entity-card__link::after{content:"";position:absolute;inset:0;border-radius:inherit}
+.gcu-entity-card__link:focus-visible{outline:0}
+.gcu-entity-card--interactive:has(.gcu-entity-card__link:focus-visible){box-shadow:var(--gcu-focus-ring)}
+.gcu-entity-card--interactive{transition:box-shadow var(--gcu-duration-fast) var(--gcu-ease-standard)}
+@media (hover:hover){.gcu-entity-card--interactive:hover{box-shadow:var(--gcu-shadow-2)}.gcu-entity-card--interactive:hover .gcu-entity-card__link{color:var(--gcu-primary-text)}}
+.gcu-entity-card--inactive .gcu-entity-card__head,.gcu-entity-card--inactive .gcu-entity-card__stats{opacity:.72}
+
+@container (min-width: 24rem){
+  .gcu-entity-card__stats{grid-template-columns:repeat(auto-fit,minmax(6rem,1fr))}
+}

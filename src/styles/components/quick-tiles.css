@@ -1,0 +1,21 @@
+/* QuickTiles: tiles de acción dentro de una card plana. Grilla por contenedor (1 → 2 → 3 → 4 columnas).
+   Hover instantáneo con puntero (Craft), presión 0,98 y anillo de foco del tema; deshabilitado con motivo. */
+.gcu-quick-tiles{margin-bottom:0}
+.gcu-quick-tiles__title{margin:0}
+.gcu-quick-tiles__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--gcu-space-2);margin:0;padding:0;list-style:none}
+.gcu-quick-tiles__item{display:flex;min-width:0}
+.gcu-quick-tiles__tile{display:flex;align-items:center;gap:var(--gcu-space-3);width:100%;min-height:var(--gcu-space-16);padding:var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface);color:var(--gcu-text);font:inherit;text-align:start;text-decoration:none;cursor:pointer;transition:transform var(--gcu-duration-instant) var(--gcu-ease-standard)}
+.gcu-quick-tiles .gcu-quick-tiles__icon{width:var(--gcu-control-h-md);height:var(--gcu-control-h-md);font-size:var(--gcu-font-size-md)}
+.gcu-quick-tiles__text{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);min-width:0}
+.gcu-quick-tiles__label{font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium)}
+.gcu-quick-tiles__description,.gcu-quick-tiles__reason{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+@media (hover:hover){.gcu-quick-tiles__tile:not(:disabled):hover{border-color:var(--gcu-border-strong);background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+.gcu-quick-tiles__tile:not(:disabled):active{transform:scale(var(--gcu-press-scale))}
+.gcu-quick-tiles__tile:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-quick-tiles__tile:disabled{cursor:not-allowed;background-color:var(--gcu-surface-subtle)}
+.gcu-quick-tiles__tile:disabled .gcu-quick-tiles__label{color:var(--gcu-muted)}
+@media (prefers-reduced-motion:reduce){.gcu-quick-tiles__tile:active{transform:none}}
+
+@container (min-width: 24rem){.gcu-quick-tiles__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container (min-width: 36rem){.gcu-quick-tiles__grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container (min-width: 48rem){.gcu-quick-tiles__grid{grid-template-columns:repeat(4,minmax(0,1fr))}}

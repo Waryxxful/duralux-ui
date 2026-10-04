@@ -1,0 +1,22 @@
+/* KpiCard: etiqueta, cifra tabular con unidad, variación, estado (Severity) y contexto.
+   Responde a su contenedor: angosta, la variación baja bajo la cifra; desde 20rem va al lado. */
+.gcu-stat__unit{margin-inline-start:var(--gcu-space-0-5);color:var(--gcu-muted);font-size:.6em;font-weight:var(--gcu-font-weight-medium);letter-spacing:var(--gcu-tracking-normal)}
+.gcu-kpi-card{position:relative;height:100%;margin-bottom:0}
+.gcu-kpi-card__body{display:flex;flex-direction:column;gap:var(--gcu-space-2)}
+.gcu-kpi-card__head{display:flex;align-items:center;gap:var(--gcu-space-2);min-width:0}
+.gcu-kpi-card .gcu-kpi-card__icon{width:var(--gcu-control-h-sm);height:var(--gcu-control-h-sm);font-size:var(--gcu-font-size-md)}
+.gcu-kpi-card__label{margin:0;min-width:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium);letter-spacing:var(--gcu-tracking-normal);text-wrap:balance}
+.gcu-kpi-card__row{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--gcu-space-1) var(--gcu-space-3)}
+.gcu-kpi-card__delta{flex-basis:100%}
+.gcu-kpi-card__status{margin:0}
+.gcu-kpi-card__chart{margin-top:var(--gcu-space-1);min-width:0}
+/* Fuera de meta: borde de inicio del tono (forma + el texto de status; nunca solo color). */
+.gcu-kpi-card--danger::before,.gcu-kpi-card--warning::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:3px;border-start-start-radius:inherit;border-end-start-radius:inherit;background-color:var(--gcu-kpi-card-accent);pointer-events:none}
+.gcu-kpi-card--danger{--gcu-kpi-card-accent:var(--gcu-status-danger)}
+.gcu-kpi-card--warning{--gcu-kpi-card-accent:var(--gcu-status-warning)}
+.gcu-kpi-card__footer{padding:var(--gcu-space-3) var(--gcu-space-4);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+
+@container (min-width: 20rem){
+  .gcu-kpi-card__delta{flex-basis:auto}
+  .gcu-kpi-card .gcu-stat__value{font-size:var(--gcu-font-size-2xl);line-height:var(--gcu-line-height-2xl);min-height:var(--gcu-line-height-2xl)}
+}

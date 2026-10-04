@@ -40,8 +40,9 @@ describe('public package contract', () => {
       'react-apexcharts': { optional: true },
       recharts: { optional: true },
     })
-    // npm elimina el campo cuando queda vacío; ausente equivale a sin dependencias de runtime.
-    expect(manifest.dependencies ?? {}).toEqual({})
+    // 2.5: las únicas dependencias de runtime son TanStack (headless, sin estilos). DataTable las usa;
+    // el gate de bundle verifica que una app que solo importa Button no las arrastre.
+    expect(Object.keys(manifest.dependencies ?? {}).sort()).toEqual(['@tanstack/react-table', '@tanstack/react-virtual'])
   })
 
   test('keeps the install lifecycle outside the package smoke gate', () => {

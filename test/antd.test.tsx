@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import { theme as antdTheme } from 'antd'
 import { describe, expect, test } from 'vitest'
 import { ThemeProvider } from '../src/theme/ThemeProvider'
@@ -25,6 +25,16 @@ describe('@duralux/ui/antd', () => {
       </ThemeProvider>,
     )
     expect(screen.getByPlaceholderText('Selecciona una fecha')).toBeInTheDocument()
+  })
+
+  test('sin ThemeProvider sigue a data-gcu-theme de <html> (satélite en el shell) y reacciona al cambio', async () => {
+    const Probe = () => <span data-testid="bg">{antdTheme.useToken().token.colorBgContainer}</span>
+    document.documentElement.setAttribute('data-gcu-theme', 'dark')
+    render(<DuraluxAntdProvider><Probe /></DuraluxAntdProvider>)
+    expect(screen.getByTestId('bg').textContent).toBe(antdConfigFor('dark').token.colorBgContainer)
+    await act(async () => { document.documentElement.setAttribute('data-gcu-theme', 'navy') })
+    expect(screen.getByTestId('bg').textContent).toBe('#0f172a')
+    document.documentElement.removeAttribute('data-gcu-theme')
   })
 
   test('RangePicker con placeholders Desde / Hasta', () => {

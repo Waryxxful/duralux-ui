@@ -45,6 +45,8 @@ export default defineConfig({
         'recharts',
         /^antd(\/|$)/,
         /^dayjs(\/|$)/,
+        // Dependencias (no peers): el bundler del consumidor las resuelve y descarta si no se usan.
+        /^@tanstack\/react-(table|virtual)(\/|$)/,
       ],
       output: {
         globals: {

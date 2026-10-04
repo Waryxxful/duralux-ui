@@ -1,0 +1,22 @@
+/* RankList: puesto · etiqueta · cifra tabular, y barra proporcional debajo (elemento gráfico ≥ 3:1).
+   La cifra en texto es la información; la barra acompaña. */
+.gcu-rank-list__list{display:flex;flex-direction:column;gap:var(--gcu-space-3);margin:0;padding:0;list-style:none}
+.gcu-rank-list__item{--gcu-rank-fill:var(--gcu-status-primary);display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:baseline;gap:var(--gcu-space-1) var(--gcu-space-3)}
+.gcu-rank-list__rank{min-width:2ch;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold);text-align:end}
+.gcu-rank-list__label{display:flex;flex-direction:column;min-width:0}
+.gcu-rank-list__name{overflow:hidden;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium);text-overflow:ellipsis;white-space:nowrap}
+.gcu-rank-list__meta{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-rank-list__value{color:var(--gcu-text);font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-semibold);white-space:nowrap;font-variant-numeric:tabular-nums}
+.gcu-rank-list__unit{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-regular)}
+.gcu-rank-list__bar{grid-column:2 / -1;height:var(--gcu-space-1);border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface-sunken);overflow:hidden}
+.gcu-rank-list__fill{display:block;height:100%;border-radius:inherit;background-color:var(--gcu-rank-fill)}
+.gcu-rank-list__item--secondary{--gcu-rank-fill:var(--gcu-status-secondary)}
+.gcu-rank-list__item--success{--gcu-rank-fill:var(--gcu-status-success)}
+.gcu-rank-list__item--danger{--gcu-rank-fill:var(--gcu-status-danger)}
+.gcu-rank-list__item--warning{--gcu-rank-fill:var(--gcu-status-warning)}
+.gcu-rank-list__item--info{--gcu-rank-fill:var(--gcu-status-info)}
+.gcu-rank-list__item--teal{--gcu-rank-fill:var(--gcu-status-teal)}
+.gcu-rank-list__item--indigo{--gcu-rank-fill:var(--gcu-status-indigo)}
+.gcu-rank-list__item--dark,.gcu-rank-list__item--neutral{--gcu-rank-fill:var(--gcu-text)}
+.gcu-rank-list__skeleton{width:100%}
+.gcu-rank-list__empty{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm)}
