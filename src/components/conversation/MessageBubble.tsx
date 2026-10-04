@@ -4,18 +4,18 @@ import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import type { ChatDeliveryStatus, MessageBubbleProps } from '../../public/types'
 
-const DELIVERY: Record<ChatDeliveryStatus, { icon: string; label: string }> = {
+const DELIVERY = {
   sending: { icon: 'feather-clock', label: 'Enviando' },
   sent: { icon: 'feather-check', label: 'Enviado' },
   delivered: { icon: 'feather-check-circle', label: 'Entregado' },
   read: { icon: 'feather-eye', label: 'Leído' },
   failed: { icon: 'feather-alert-circle', label: 'No se envió' },
-}
+} satisfies Record<ChatDeliveryStatus, { icon: string; label: string }>
 
 /** Estado de entrega: ícono decorativo + texto (oculto salvo en el error, que siempre se lee). */
-export function DeliveryStatusMark({ status }: { status?: ChatDeliveryStatus }) {
+function DeliveryStatusMark({ status }: { status?: ChatDeliveryStatus }) {
   if (!status) return null
-  const entry = DELIVERY[status]
+  const entry = Object.prototype.hasOwnProperty.call(DELIVERY, status) ? DELIVERY[status] : undefined
   if (!entry) {
     log.warn(`MessageBubble: estado de entrega desconocido "${String(status)}"; se omite.`)
     return null

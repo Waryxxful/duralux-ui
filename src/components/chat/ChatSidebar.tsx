@@ -2,8 +2,8 @@ import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react'
 import type * as React from 'react'
 import { cx } from '../../utils/cx'
 import { isFunction } from '../../utils/typeGuards'
-import { Avatar } from '../ui/Avatar'
-import { Badge } from '../ui/Badge'
+import { ContactItem, ContactSkeleton } from './ChatContactItem'
+import type { ContactItemLabels } from './ChatContactItem'
 import { EmptyState } from '../feedback/EmptyState'
 import type { ChatContact, ChatSidebarProps } from '../../public/types'
 import {
@@ -15,7 +15,6 @@ import {
 import type { NormalizedContact } from './chatModel'
 
 const EMPTY_CONTACTS: ReadonlyArray<ChatContact> = []
-const SKELETON_ROWS = [0, 1, 2, 3]
 
 function filterContacts<T>(contacts: NormalizedContact<T>[], query: string): NormalizedContact<T>[] {
   const normalizedQuery = normalizeSearchText(query).trim()
@@ -25,41 +24,6 @@ function filterContacts<T>(contacts: NormalizedContact<T>[], query: string): Nor
     normalizeSearchText(contact.name).includes(normalizedQuery)
     || normalizeSearchText(contact.preview).includes(normalizedQuery)
   ))
-}
-
-interface ContactVisualProps {
-  contact: NormalizedContact
-  description: string
-  descriptionId: string
-  nameId: string
-}
-
-function ContactVisual({ contact, description, descriptionId, nameId }: ContactVisualProps) {
-  return (
-    <>
-      <span className="gcu-chat-contact__avatar">
-        <Avatar src={contact.avatar} name={contact.name} size="md" />
-        {contact.online ? <span className="gcu-chat-presence" aria-hidden="true" /> : null}
-      </span>
-      <span className="gcu-chat-contact__body">
-        <span className="gcu-chat-contact__row">
-          <span id={nameId} className="gcu-chat-contact__name" title={contact.name}>{contact.name}</span>
-          {contact.time ? <span className="gcu-chat-contact__time">{contact.time}</span> : null}
-        </span>
-        <span className="gcu-chat-contact__row">
-          <span className="gcu-chat-contact__preview" title={contact.preview || undefined}>{contact.preview}</span>
-          {contact.unread > 0 ? (
-            <Badge pill className="gcu-chat-contact__unread" aria-hidden="true">
-              {contact.unread > 99 ? '99+' : contact.unread}
-            </Badge>
-          ) : null}
-        </span>
-      </span>
-      {description ? (
-        <span id={descriptionId} className="visually-hidden">{description}</span>
-      ) : null}
-    </>
-  )
 }
 
 /**
@@ -219,23 +183,15 @@ const ChatSidebarBase = /* @__PURE__ */ forwardRef<HTMLElement, ChatSidebarProps
   }
 
   const hasQuery = normalizeSearchText(searchQuery).trim() !== ''
+  const itemLabels: ContactItemLabels = {
+    unread: resolvedUnreadLabel,
+    online: resolvedOnlineLabel,
+    offline: resolvedOfflineLabel,
+    selected: resolvedSelectedLabel,
+  }
 
   function renderBody() {
-    if (loading) {
-      return (
-        <ul className="gcu-chat-contacts" aria-hidden="true">
-          {SKELETON_ROWS.map((row) => (
-            <li key={row} className="gcu-chat-contact gcu-chat-contact--skeleton">
-              <span className="gcu-skeleton gcu-chat-contact__skeleton-avatar" />
-              <span className="gcu-chat-contact__body">
-                <span className="gcu-skeleton gcu-chat-contact__skeleton-line" />
-                <span className="gcu-skeleton gcu-chat-contact__skeleton-line gcu-chat-contact__skeleton-line--short" />
-              </span>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    if (loading) return <ContactSkeleton />
 
     if (filteredContacts.length === 0) {
       return hasQuery ? (
@@ -262,65 +218,22 @@ const ChatSidebarBase = /* @__PURE__ */ forwardRef<HTMLElement, ChatSidebarProps
         role={canSelect ? 'listbox' : undefined}
         aria-label={resolvedListLabel}
       >
-        {filteredContacts.map((contact, index) => {
-          const isSelected = activeSelectedId !== undefined && contact.id === activeSelectedId
-          const itemDescriptionId = `${descriptionPrefix}-desc-${contact.key}`
-          const itemNameId = `${descriptionPrefix}-name-${contact.key}`
-          const description = [
-            contact.preview,
-            contact.time,
-            contact.unread > 0 ? `${contact.unread} ${resolvedUnreadLabel}` : null,
-            contact.online ? resolvedOnlineLabel : resolvedOfflineLabel,
-            isSelected ? resolvedSelectedLabel : null,
-          ].filter(Boolean).join(', ')
-          const itemClassName = cx(
-            'gcu-chat-contact',
-            isSelected && 'gcu-chat-contact--selected',
-            contact.unread > 0 && 'gcu-chat-contact--unread',
-          )
-
-          return (
-            <li key={contact.key} className="gcu-chat-contacts__item" role={canSelect ? 'presentation' : undefined}>
-              {canSelect ? (
-                <button
-                  ref={(node) => registerItem(contact.key, node)}
-                  type="button"
-                  role="option"
-                  tabIndex={contact.key === tabbableKey ? 0 : -1}
-                  className={itemClassName}
-                  aria-selected={isSelected}
-                  aria-current={isSelected ? 'true' : undefined}
-                  aria-labelledby={itemNameId}
-                  aria-describedby={itemDescriptionId}
-                  onClick={() => selectContact(contact)}
-                  onFocus={(event) => handleItemFocus(contact, event)}
-                  onKeyDown={(event) => handleKeyDown(event, index)}
-                >
-                  <ContactVisual
-                    contact={contact}
-                    description={description}
-                    descriptionId={itemDescriptionId}
-                    nameId={itemNameId}
-                  />
-                </button>
-              ) : (
-                <div
-                  role="group"
-                  className={cx(itemClassName, 'gcu-chat-contact--view')}
-                  aria-labelledby={itemNameId}
-                  aria-describedby={itemDescriptionId}
-                >
-                  <ContactVisual
-                    contact={contact}
-                    description={description}
-                    descriptionId={itemDescriptionId}
-                    nameId={itemNameId}
-                  />
-                </div>
-              )}
-            </li>
-          )
-        })}
+        {filteredContacts.map((contact, index) => (
+          <ContactItem
+            key={contact.key}
+            contact={contact}
+            index={index}
+            selectable={canSelect}
+            selected={activeSelectedId !== undefined && contact.id === activeSelectedId}
+            tabbable={contact.key === tabbableKey}
+            idPrefix={descriptionPrefix}
+            labels={itemLabels}
+            registerItem={registerItem}
+            onSelect={selectContact}
+            onItemFocus={handleItemFocus}
+            onItemKeyDown={handleKeyDown}
+          />
+        ))}
       </ul>
     )
   }

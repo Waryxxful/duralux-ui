@@ -39,6 +39,8 @@ export interface NormalizedContact<T = unknown> {
   key: string | number
   name: string
   avatar: string
+  /** true si el contacto trae foto propia; sin ella la UI usa iniciales. */
+  hasAvatar: boolean
   online: boolean
   preview: string
   time: string
@@ -46,34 +48,43 @@ export interface NormalizedContact<T = unknown> {
   role: string
 }
 
+/** Texto que llega de las apps: el contrato pide string o número, pero en runtime puede venir cualquier cosa. */
+type LooseText = string | number | null | undefined
+
+/** Contacto tal como lo pasan las apps: `key` y `role` son alias legados. */
+interface LooseContact extends ChatContact {
+  key?: string | number
+  role?: string | number
+}
+
 /** Lee una propiedad sin romper con getters hostiles (Proxy) ni valores nulos. */
-export function readProperty(value: unknown, key: string): unknown {
+export function readProperty<T extends object, K extends keyof T>(value: T | null | undefined, key: K): T[K] | undefined {
   if (value === null || value === undefined) return undefined
 
   try {
-    return (value as Record<string, unknown>)[key]
+    return value[key]
   } catch {
     return undefined
   }
 }
 
-export function normalizeDisplayText(value: unknown, fallback = ''): string {
+export function normalizeDisplayText(value: LooseText, fallback = ''): string {
   if (isString(value)) return value
   if (isFiniteNumber(value)) return String(value)
   return fallback
 }
 
-export function normalizeLabelText(value: unknown, fallback: string): string {
+export function normalizeLabelText(value: LooseText, fallback: string): string {
   const text = normalizeDisplayText(value).trim()
   return text || fallback
 }
 
-export function normalizeImageSource(value: unknown): string {
+export function normalizeImageSource(value: LooseText): string {
   const source = normalizeDisplayText(value).trim()
   return source || PLACEHOLDER_AVATAR
 }
 
-export function normalizeUnread(value: unknown): number {
+export function normalizeUnread(value: LooseText): number {
   const numericValue = isFiniteNumber(value)
     ? value
     : (isString(value) && value.trim() ? Number(value) : 0)
@@ -82,13 +93,13 @@ export function normalizeUnread(value: unknown): number {
   return Math.floor(numericValue)
 }
 
-export function normalizeIdentity(value: unknown, index: number): string | number {
+export function normalizeIdentity(value: LooseText, index: number): string | number {
   if (isString(value) && value.trim()) return value
   if (isFiniteNumber(value)) return value
   return `chat-contact-${index}`
 }
 
-export function resolveLabel(labels: ChatLabels | undefined | null, propLabel: unknown, key: ChatLabelKey): string {
+export function resolveLabel(labels: ChatLabels | undefined | null, propLabel: LooseText, key: ChatLabelKey): string {
   const label = labels && isObject(labels) ? readProperty(labels, key) : undefined
   const candidate = label ?? propLabel
 
@@ -110,7 +121,7 @@ export function customLabel(labels: ChatLabels | undefined | null, key: ChatLabe
   return undefined
 }
 
-export function normalizeSearchText(value: unknown): string {
+export function normalizeSearchText(value: LooseText): string {
   const text = normalizeDisplayText(value)
 
   try {
@@ -120,7 +131,7 @@ export function normalizeSearchText(value: unknown): string {
   }
 }
 
-export function isRenderableNode(value: unknown): boolean {
+export function isRenderableNode(value: React.ReactNode): boolean {
   if (value === null || value === undefined || isBoolean(value)) return true
   if (isString(value) || isFiniteNumber(value)) return true
   if (isArray(value)) {
@@ -138,7 +149,7 @@ export function isRenderableNode(value: unknown): boolean {
   }
 }
 
-export function normalizeContact<T = unknown>(item: T, index = 0): NormalizedContact<T> {
+export function normalizeContact<T extends LooseContact | null | undefined>(item: T, index = 0): NormalizedContact<T> {
   if (item === null || item === undefined || !isObject(item)) {
     const fallbackId = `chat-contact-${index}`
     return {
@@ -147,6 +158,7 @@ export function normalizeContact<T = unknown>(item: T, index = 0): NormalizedCon
       key: fallbackId,
       name: `Contacto ${index + 1}`,
       avatar: PLACEHOLDER_AVATAR,
+      hasAvatar: false,
       online: false,
       preview: '',
       time: '',
@@ -155,26 +167,28 @@ export function normalizeContact<T = unknown>(item: T, index = 0): NormalizedCon
     }
   }
 
-  const id = normalizeIdentity(readProperty(item, 'id') ?? readProperty(item, 'key'), index)
-  const nameCandidate = normalizeDisplayText(readProperty(item, 'name')).trim()
+  const source: LooseContact = item
+  const id = normalizeIdentity(readProperty(source, 'id') ?? readProperty(source, 'key'), index)
+  const nameCandidate = normalizeDisplayText(readProperty(source, 'name')).trim()
 
   return {
     raw: item,
     id,
     key: id,
     name: nameCandidate || `Contacto ${index + 1}`,
-    avatar: normalizeImageSource(readProperty(item, 'avatar')),
-    online: Boolean(readProperty(item, 'online')),
-    preview: normalizeDisplayText(readProperty(item, 'preview')),
-    time: normalizeDisplayText(readProperty(item, 'time')),
-    unread: normalizeUnread(readProperty(item, 'unread')),
-    role: normalizeDisplayText(readProperty(item, 'role')),
+    avatar: normalizeImageSource(readProperty(source, 'avatar')),
+    hasAvatar: normalizeDisplayText(readProperty(source, 'avatar')).trim() !== '',
+    online: Boolean(readProperty(source, 'online')),
+    preview: normalizeDisplayText(readProperty(source, 'preview')),
+    time: normalizeDisplayText(readProperty(source, 'time')),
+    unread: normalizeUnread(readProperty(source, 'unread')),
+    role: normalizeDisplayText(readProperty(source, 'role')),
   }
 }
 
-export function normalizeContacts<T extends ChatContact>(contacts: ReadonlyArray<T> | unknown): NormalizedContact<T>[] {
+export function normalizeContacts<T extends ChatContact>(contacts: ReadonlyArray<T> | null | undefined): NormalizedContact<T>[] {
   if (!isArray(contacts)) return []
-  return (contacts as T[]).map((item, index) => normalizeContact(item, index))
+  return contacts.map((item, index) => normalizeContact(item, index))
 }
 
 export function normalizeSlot(value: React.ReactNode): React.ReactNode {
@@ -201,12 +215,18 @@ export function normalizeLegacyChildren(children: React.ReactNode): React.ReactN
   }
 }
 
+/** Slots resueltos de ChatWindow. */
+export interface ChatSlots {
+  messages: React.ReactNode
+  composer: React.ReactNode
+}
+
 export function resolveChatSlots(
   children: React.ReactNode,
   messages: React.ReactNode,
   composer: React.ReactNode,
   legacyChildren = true,
-): { messages: React.ReactNode; composer: React.ReactNode } {
+): ChatSlots {
   if (messages !== undefined || composer !== undefined) {
     return {
       messages: normalizeSlot(messages),
@@ -239,9 +259,9 @@ function startOfDay(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
 }
 
-function safeToDate(value: unknown): Date | null {
+function safeToDate(value: EventDate | null | undefined): Date | null {
   try {
-    return toDate(value as EventDate)
+    return toDate(value)
   } catch {
     return null
   }

@@ -8,6 +8,7 @@ import {
   ChatTypingIndicator,
 } from '../src/components/chat/ChatBubble'
 import { formatChatDay, groupChatMessages } from '../src/components/chat/chatModel'
+import type { ChatMessage } from '../src/public/types'
 
 const NOW = new Date(2026, 9, 4, 12, 0)
 
@@ -110,7 +111,8 @@ describe('groupChatMessages', () => {
   })
 
   test('tolera entradas inválidas sin romper', () => {
-    expect(() => groupChatMessages(null as never)).not.toThrow()
-    expect(groupChatMessages([null as never, { id: 1, text: 'x' }]).filter((entry) => entry.type === 'message')).toHaveLength(2)
+    expect(() => groupChatMessages(null)).not.toThrow()
+    const conHuecos: ReadonlyArray<ChatMessage> = JSON.parse('[null, { "id": 1, "text": "x" }]')
+    expect(groupChatMessages(conHuecos).filter((entry) => entry.type === 'message')).toHaveLength(2)
   })
 })

@@ -117,7 +117,7 @@ const ChatWindowBase = /* @__PURE__ */ forwardRef<HTMLElement, ChatWindowProps<C
           />
         ) : null}
         <span className="gcu-chat-window__avatar">
-          <Avatar src={normalizedContact.avatar} name={normalizedContact.name} size="md" />
+          <Avatar src={normalizedContact.hasAvatar ? normalizedContact.avatar : null} name={normalizedContact.name} size="md" />
           {normalizedContact.online ? <span className="gcu-chat-presence" aria-hidden="true" /> : null}
         </span>
         <div className="gcu-chat-window__identity">

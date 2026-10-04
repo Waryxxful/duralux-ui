@@ -4,7 +4,7 @@
    el historial es su propio contenedor para el ancho de las burbujas. */
 
 /* ── Contenedor de dos columnas (opcional) ─────────────────────────────── */
-.gcu-chat{container:gcu-chat / inline-size;display:flex;min-width:0;min-height:0;background:var(--gcu-surface);color:var(--gcu-text)}
+.gcu-chat{container:gcu-chat / inline-size;display:flex;flex-direction:row;min-width:0;min-height:0;background:var(--gcu-surface);color:var(--gcu-text)}
 .gcu-chat>.gcu-chat-sidebar{flex:0 0 clamp(16rem,34%,22rem);max-width:none;border-inline-end:1px solid var(--gcu-border)}
 .gcu-chat>.gcu-chat-window{flex:1 1 0}
 @container gcu-chat (max-width:42rem){
@@ -126,7 +126,7 @@ button.gcu-chat-contact--selected:focus-visible{box-shadow:inset 3px 0 0 var(--g
 .gcu-chat-composer__actions{display:flex;gap:var(--gcu-space-1)}
 .gcu-chat-composer__field{flex:1 1 0;min-width:0}
 .gcu-chat-composer__input.form-control{min-height:calc(var(--gcu-space-10) + var(--gcu-space-1));padding-block:var(--gcu-space-3);border-radius:var(--gcu-radius-xl);line-height:var(--gcu-line-height-base)}
-textarea.gcu-chat-composer__input{display:block;resize:none;field-sizing:content;max-height:calc(var(--gcu-composer-rows,6) * var(--gcu-line-height-base) + var(--gcu-space-6));overflow-y:auto}
+textarea.gcu-chat-composer__input{display:block;resize:none;field-sizing:content;max-height:calc(6 * var(--gcu-line-height-base) + var(--gcu-space-6));overflow-y:auto}
 .gcu-chat-composer__action:disabled{color:var(--gcu-text-subtle);cursor:not-allowed}
 .gcu-chat-composer__send{display:inline-grid;flex:none;place-items:center;width:calc(var(--gcu-space-10) + var(--gcu-space-1));height:calc(var(--gcu-space-10) + var(--gcu-space-1));padding:0;border:0;border-radius:var(--gcu-radius-full);background:var(--gcu-primary);color:var(--gcu-on-primary);font-size:var(--gcu-font-size-md);cursor:pointer;touch-action:manipulation;transition:transform var(--gcu-duration-instant) var(--gcu-ease-standard)}
 @media (hover:hover){.gcu-chat-composer__send:hover:not(:disabled){background:color-mix(in srgb,var(--gcu-primary) 88%,black)}}

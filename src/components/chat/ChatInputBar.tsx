@@ -15,12 +15,12 @@ const DEFAULT_LABELS = {
 /** El contador de caracteres aparece desde este porcentaje del límite. */
 const COUNTER_THRESHOLD = 0.8
 
-const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
+const useIsomorphicLayoutEffect = globalThis.document ? useLayoutEffect : useEffect
 
 type FieldElement = HTMLInputElement | HTMLTextAreaElement
 
-function resolveLabel(labels: ChatInputBarProps['labels'], propLabel: unknown, key: keyof typeof DEFAULT_LABELS): string {
-  let label: unknown
+function resolveLabel(labels: ChatInputBarProps['labels'], propLabel: string | number | undefined, key: keyof typeof DEFAULT_LABELS): string {
+  let label: string | number | undefined
   if (labels && isObject(labels)) {
     try {
       label = labels[key]
@@ -40,7 +40,8 @@ function resolveLabel(labels: ChatInputBarProps['labels'], propLabel: unknown, k
 
 function supportsFieldSizing(): boolean {
   try {
-    return typeof CSS !== 'undefined' && isFunction(CSS.supports) && CSS.supports('field-sizing', 'content')
+    const css = globalThis.CSS
+    return Boolean(css && isFunction(css.supports) && css.supports('field-sizing', 'content'))
   } catch {
     return false
   }
@@ -80,7 +81,8 @@ export const ChatInputBar = /* @__PURE__ */ forwardRef<FieldElement, ChatInputBa
   const isControlled = value !== undefined
   const [innerText, setInnerText] = useState('')
   const text = isControlled ? (isString(value) ? value : '') : innerText
-  const fieldRef = useRef<FieldElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const composingRef = useRef(false)
   const compositionEndGuardRef = useRef(false)
   const compositionGuardTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -105,7 +107,7 @@ export const ChatInputBar = /* @__PURE__ */ forwardRef<FieldElement, ChatInputBa
   const showReason = isDisabled && disabledReason !== undefined && disabledReason !== null && disabledReason !== ''
   const describedBy = [showCounter ? counterId : null, showReason ? reasonId : null].filter(Boolean).join(' ') || undefined
 
-  useImperativeHandle(ref, () => fieldRef.current as FieldElement)
+  useImperativeHandle(ref, () => (multiline ? textareaRef.current : inputRef.current), [multiline])
 
   useEffect(() => {
     if (maxLength !== undefined && validMaxLength === undefined) {
@@ -121,7 +123,7 @@ export const ChatInputBar = /* @__PURE__ */ forwardRef<FieldElement, ChatInputBa
 
   // Autoexpansión: con `field-sizing: content` la resuelve el CSS; si no, se mide el scrollHeight.
   useIsomorphicLayoutEffect(() => {
-    const field = fieldRef.current
+    const field = textareaRef.current
     if (!multiline || !field || supportsFieldSizing()) return
     field.style.height = 'auto'
     field.style.height = `${field.scrollHeight}px`
@@ -150,7 +152,6 @@ export const ChatInputBar = /* @__PURE__ */ forwardRef<FieldElement, ChatInputBa
     if (
       composingRef.current
       || event.nativeEvent?.isComposing
-      || (event as unknown as { isComposing?: boolean }).isComposing
       || event.keyCode === 229
       || event.which === 229
     ) {
@@ -252,12 +253,12 @@ export const ChatInputBar = /* @__PURE__ */ forwardRef<FieldElement, ChatInputBa
         {multiline ? (
           <textarea
             {...fieldProps}
-            ref={fieldRef as React.Ref<HTMLTextAreaElement>}
+            ref={textareaRef}
             rows={1}
-            style={{ '--gcu-composer-rows': rows } as React.CSSProperties}
+            style={{ maxHeight: `calc(${rows} * var(--gcu-line-height-base) + var(--gcu-space-6))` }}
           />
         ) : (
-          <input {...fieldProps} ref={fieldRef as React.Ref<HTMLInputElement>} type="text" />
+          <input {...fieldProps} ref={inputRef} type="text" />
         )}
       </div>
       <button

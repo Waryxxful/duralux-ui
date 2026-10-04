@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import { toDate } from '../../utils/format'
-import { isFunction, isObject } from '../../utils/typeGuards'
+import { isFunction, isObject, isString } from '../../utils/typeGuards'
 import { Avatar } from '../ui/Avatar'
 import { MessageBubble } from '../conversation/MessageBubble'
 import type {
@@ -20,16 +20,23 @@ import {
   readProperty,
 } from './chatModel'
 
-const STATUSES: ReadonlyArray<ChatDeliveryStatus> = ['sending', 'sent', 'delivered', 'read', 'failed']
+const KNOWN_STATUSES = {
+  sending: true,
+  sent: true,
+  delivered: true,
+  read: true,
+  failed: true,
+} satisfies Record<ChatDeliveryStatus, true>
 
-function normalizeStatus(value: unknown): ChatDeliveryStatus | undefined {
-  return STATUSES.includes(value as ChatDeliveryStatus) ? (value as ChatDeliveryStatus) : undefined
+/** El tipo promete un estado conocido; en runtime puede llegar otra cosa y se descarta. */
+function normalizeStatus(value: ChatDeliveryStatus | undefined): ChatDeliveryStatus | undefined {
+  return isString(value) && Object.prototype.hasOwnProperty.call(KNOWN_STATUSES, value) ? value : undefined
 }
 
 function normalizeMessage(message: ChatMessage | null | undefined) {
-  const source = isObject(message) ? message : {}
+  const source: ChatMessage = isObject(message) ? message : {}
   const senderValue = readProperty(source, 'sender')
-  const sender = isObject(senderValue) ? senderValue : {}
+  const sender: NonNullable<ChatMessage['sender']> = isObject(senderValue) ? senderValue : {}
 
   return {
     text: normalizeDisplayText(readProperty(source, 'text')),
