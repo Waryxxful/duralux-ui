@@ -1,6 +1,6 @@
 import { AutoComplete as AntdAutoComplete, ColorPicker as AntdColorPicker, InputNumber, Mentions as AntdMentions, Slider } from 'antd'
 import type { AutoCompleteProps, ColorPickerProps, InputNumberProps, MentionsProps, SliderRangeProps } from 'antd'
-import { designTokens } from '../generated/tokens'
+import { duraluxColorPresets, formatNumberEsCL, parseNumberEsCL } from './defaults'
 import { log } from '../utils/log'
 import { isFiniteNumber, isString } from '../utils/typeGuards'
 
@@ -15,8 +15,8 @@ export interface RangeSliderProps extends Omit<SliderRangeProps, 'range' | 'aria
 
 const DEFAULT_HANDLE_LABELS: [string, string] = ['Mínimo', 'Máximo']
 
-function isValidPair(value: unknown, min: number, max: number): boolean {
-  return Array.isArray(value) && value.length === 2 && value.every(item => isFiniteNumber(item) && item >= min && item <= max)
+function isValidPair(value: readonly number[], min: number, max: number): boolean {
+  return value.length === 2 && value.every(item => isFiniteNumber(item) && item >= min && item <= max)
 }
 
 /** Slider de rango (mín./máx.) con escala 0–100 por defecto, valor en el tooltip y nombre accesible por manija. */
@@ -27,40 +27,13 @@ export function RangeSlider({ handleLabels, min = 0, max = 100, value, defaultVa
     labels = DEFAULT_HANDLE_LABELS
   }
   const initial = value ?? defaultValue
-  if (initial !== undefined && !isValidPair(initial, min, max)) {
+  if (Array.isArray(initial) && !isValidPair(initial, min, max)) {
     log.warn(`RangeSlider: valor fuera de rango o inválido (${JSON.stringify(initial)}); se espera [desde, hasta] entre ${min} y ${max}.`)
   }
   return <Slider range min={min} max={max} value={value} defaultValue={defaultValue ?? (value === undefined ? [min, max] : undefined)} ariaLabelForHandle={labels} {...props} />
 }
 
 // ── NumberInput (formato es-CL) ─────────────────────────────────────────────
-
-const THOUSANDS = /\B(?=(\d{3})+(?!\d))/g
-
-/** Formatea un número con separador de miles `.` y decimal `,` (es-CL). `1234567.5` → `1.234.567,5`. */
-export function formatNumberEsCL(value: number | string | null | undefined): string {
-  if (value === null || value === undefined || value === '') return ''
-  const raw = String(value)
-  if (raw === '-') return raw
-  if (!/^-?\d*(\.\d*)?$/.test(raw)) {
-    log.warn(`NumberInput: valor no numérico "${raw}"; se muestra vacío.`)
-    return ''
-  }
-  const [integer, decimals] = raw.split('.')
-  const grouped = integer.replace(THOUSANDS, '.')
-  return decimals === undefined ? grouped : `${grouped},${decimals}`
-}
-
-/** Inverso de `formatNumberEsCL`: `1.234.567,5` → `1234567.5`. Ignora sufijos y espacios. */
-export function parseNumberEsCL(text: string | undefined): string {
-  if (!text) return ''
-  const normalized = text.replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '')
-  if (normalized !== '' && normalized !== '-' && Number.isNaN(Number(normalized))) {
-    log.warn(`NumberInput: no se pudo interpretar "${text}" como número.`)
-    return ''
-  }
-  return normalized
-}
 
 export type NumberInputProps = InputNumberProps<number>
 
@@ -93,13 +66,6 @@ export function Mentions({ prefix = '@', notFoundContent = 'Sin coincidencias', 
 }
 
 // ── ColorPicker ─────────────────────────────────────────────────────────────
-
-const PALETTE_ORDER = ['primary', 'success', 'danger', 'warning', 'info', 'teal', 'indigo', 'slate'] as const
-
-/** Presets del ColorPicker: tono 500 de cada familia de la paleta de tokens. */
-export const duraluxColorPresets: NonNullable<ColorPickerProps['presets']> = [
-  { label: 'Paleta Duralux', colors: PALETTE_ORDER.map(name => designTokens.palette[name]['500']), defaultOpen: true },
-]
 
 /** ColorPicker con la paleta Duralux como presets. */
 export function ColorPicker({ presets = duraluxColorPresets, ...props }: ColorPickerProps) {

@@ -96,7 +96,7 @@ export const DentroDeUnModal: Story = {
 
 // ── 2.5.1: componentes ampliados ────────────────────────────────────────────
 
-const withTheme = (globals: Record<string, unknown>, node: React.ReactNode) => (
+const withTheme = (globals: { theme?: unknown }, node: React.ReactNode) => (
   <DuraluxAntdProvider theme={themeOf(String(globals.theme ?? 'light'))}>{node}</DuraluxAntdProvider>
 )
 
@@ -115,9 +115,14 @@ export const RangoDePuntaje: Story = {
 
 const MODULOS = ['Llamadas', 'Agentes', 'Tendencias', 'Campañas', 'Reportes', 'Usuarios'].map(title => ({ key: title.toLowerCase(), title }))
 
+function TransferDemo() {
+  const [targetKeys, setTargetKeys] = useState<React.Key[]>(['llamadas', 'agentes'])
+  return <Transfer dataSource={MODULOS} targetKeys={targetKeys} onChange={setTargetKeys} />
+}
+
 export const TransferDePermisos: Story = {
   name: 'Transfer',
-  render: (_args, { globals }) => withTheme(globals, <Transfer dataSource={MODULOS} defaultTargetKeys={['llamadas', 'agentes']} />),
+  render: (_args, { globals }) => withTheme(globals, <TransferDemo />),
 }
 
 const PERMISOS = [

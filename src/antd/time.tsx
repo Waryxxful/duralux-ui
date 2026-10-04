@@ -22,6 +22,6 @@ export function TimeRangePicker({ format = TIME_FORMAT, placeholder = ['Desde', 
  * Calendar con locale español aunque falte `DuraluxAntdProvider`; la semana parte el lunes
  * (dayjs `es`, que el provider carga).
  */
-export function Calendar({ locale = esES.Calendar, ...props }: CalendarProps) {
+export function Calendar({ locale = esES.DatePicker, ...props }: CalendarProps) {
   return <AntdCalendar locale={locale} {...props} />
 }

@@ -4,20 +4,19 @@ import { Children, cloneElement, isValidElement } from 'react'
 import type * as React from 'react'
 import { renderIconSlot } from '../utils/iconSlot'
 import { log } from '../utils/log'
+import { SPLITTER_PANEL_MIN } from './defaults'
 
 // ── Splitter ────────────────────────────────────────────────────────────────
 
 export type { SplitterProps, TourProps, TourStepProps }
 export type SplitterPanelProps = GetProps<typeof AntdSplitter.Panel>
-
-/** Ancho/alto mínimo por panel cuando no se indica `min`: evita paneles colapsados por arrastre. */
-export const SPLITTER_PANEL_MIN = 160
+type SplitterRootProps = GetProps<typeof AntdSplitter>
 
 /**
  * Splitter de antd con `min` = 160 px en cada `Splitter.Panel` que no lo declare.
  * antd lee las props de cada hijo, por eso el default se aplica aquí y no en el panel.
  */
-function SplitterRoot({ children, ...props }: SplitterProps) {
+export function Splitter({ children, ...props }: SplitterRootProps) {
   const panels = Children.map(children, child => {
     if (!isValidElement<SplitterPanelProps>(child)) return child
     if (child.type !== AntdSplitter.Panel) log.warn('Splitter: los hijos deben ser `Splitter.Panel`.')
@@ -26,7 +25,7 @@ function SplitterRoot({ children, ...props }: SplitterProps) {
   return <AntdSplitter {...props}>{panels}</AntdSplitter>
 }
 
-export const Splitter = Object.assign(SplitterRoot, { Panel: AntdSplitter.Panel })
+Splitter.Panel = AntdSplitter.Panel
 
 // ── Tour ────────────────────────────────────────────────────────────────────
 
@@ -50,23 +49,23 @@ export function Tour({ steps = [], ...props }: TourProps) {
 
 export type ImagePreviewProps = ImageProps
 
-const ACTION_LABELS: Record<string, string> = {
-  prev: 'Imagen anterior',
-  next: 'Imagen siguiente',
-  flipY: 'Voltear verticalmente',
-  flipX: 'Voltear horizontalmente',
-  rotateLeft: 'Girar a la izquierda',
-  rotateRight: 'Girar a la derecha',
-  zoomOut: 'Alejar',
-  zoomIn: 'Acercar',
-}
+const ACTION_LABELS = new Map([
+  ['prev', 'Imagen anterior'],
+  ['next', 'Imagen siguiente'],
+  ['flipY', 'Voltear verticalmente'],
+  ['flipX', 'Voltear horizontalmente'],
+  ['rotateLeft', 'Girar a la izquierda'],
+  ['rotateRight', 'Girar a la derecha'],
+  ['zoomOut', 'Alejar'],
+  ['zoomIn', 'Acercar'],
+])
 
 /** rc-image rotula los botones del visor con su tipo en inglés (`zoomIn`…); aquí van en español. */
 function translateActions(node: React.ReactElement<{ children?: React.ReactNode }>) {
   const buttons = Children.map(node.props.children, button => {
-    if (!isValidElement(button) || button.key === null) return button
-    const label = ACTION_LABELS[String(button.key)]
-    return label ? cloneElement(button as React.ReactElement<{ 'aria-label'?: string; title?: string }>, { 'aria-label': label, title: label }) : button
+    if (!isValidElement<{ 'aria-label'?: string; title?: string }>(button) || button.key === null) return button
+    const label = ACTION_LABELS.get(String(button.key))
+    return label ? cloneElement(button, { 'aria-label': label, title: label }) : button
   })
   return cloneElement(node, undefined, buttons)
 }
@@ -76,6 +75,7 @@ const DEFAULT_COVER = <span className="d-inline-flex align-items-center gap-1">{
 /** Image con visor (zoom, giro) y textos en español: «Ver» sobre la miniatura y botones rotulados. */
 export function ImagePreview({ preview = true, alt, ...props }: ImagePreviewProps) {
   if (!alt) log.warn('ImagePreview: falta `alt`; la imagen queda sin nombre accesible.')
-  const config = preview === false ? false : { cover: DEFAULT_COVER, actionsRender: translateActions, ...(preview === true ? {} : preview) }
-  return <Image alt={alt} preview={config} {...props} />
+  if (preview === false) return <Image alt={alt} preview={false} {...props} />
+  const custom = preview === true ? undefined : preview
+  return <Image alt={alt} preview={{ cover: DEFAULT_COVER, actionsRender: translateActions, ...custom }} {...props} />
 }
