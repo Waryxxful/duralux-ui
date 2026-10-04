@@ -1723,3 +1723,241 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   removeLabel?: string
   disabled?: boolean
 }
+
+// ── 2.8 IA agente y contenido ─────────────────────────────────────────────────
+
+/** Estado de un paso, herramienta o tarea de un agente. Siempre se muestra con texto e ícono, nunca solo color. */
+export type AgentStepStatus = 'queued' | 'running' | 'done' | 'failed'
+
+export interface ReasoningTraceProps extends Omit<React.HTMLAttributes<HTMLDetailsElement>, 'children' | 'onToggle'> {
+  /** Pasos del razonamiento, en orden. */
+  steps: ReadonlyArray<React.ReactNode>
+  /** Segundos que tardó en razonar (al terminar). Mientras `thinking`, se cuenta en vivo. */
+  seconds?: number
+  /** Está razonando: se abre, cuenta el tiempo y muestra un paso pendiente. */
+  thinking?: boolean
+  defaultOpen?: boolean
+  /** Resumen breve junto al tiempo («revisó 3 llamadas»). */
+  summary?: React.ReactNode
+  onOpenChange?: (open: boolean) => void
+}
+
+export interface AgentStep {
+  id: string
+  /** Nombre de la herramienta de dominio (se muestra en mono). Nunca un nombre de tabla o SP. */
+  tool: string
+  /** Qué hace el paso, en lenguaje de negocio. */
+  title: React.ReactNode
+  status: AgentStepStatus
+  seconds?: number
+  /** Argumentos de la llamada (se muestran como JSON; nunca se registran en logs). */
+  args?: Record<string, unknown>
+  result?: React.ReactNode
+  /** Llamadas que corrieron en paralelo dentro de este paso. */
+  parallel?: ReadonlyArray<AgentStep>
+}
+
+export interface AgentStepsProps extends Omit<React.HTMLAttributes<HTMLOListElement>, 'children'> {
+  steps: ReadonlyArray<AgentStep>
+  /** Oculta argumentos y resultados. */
+  compact?: boolean
+  /** Nombre accesible de la lista. Por defecto «Pasos del agente». */
+  label?: string
+}
+
+export interface ToolChipProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'onToggle'> {
+  tool: string
+  status: AgentStepStatus
+  seconds?: number
+  args?: Record<string, unknown>
+  result?: React.ReactNode
+  defaultOpen?: boolean
+}
+
+/** Intención que emite ApprovalCard: qué aprobó o rechazó la persona. El consumidor decide si ejecuta. */
+export interface ApprovalIntent {
+  id?: string
+  tool?: string
+  params?: Record<string, unknown>
+}
+
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected'
+
+export interface ApprovalCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title' | 'children'> {
+  /** Qué se va a hacer, con verbo: «Enviar correo de seguimiento a 12 clientes». */
+  title: React.ReactNode
+  description?: React.ReactNode
+  /** Detalle de lo que se hará (destinatarios, borrador, campos que cambian). */
+  children?: React.ReactNode
+  /** Identificador de la acción; viaja en la intención. */
+  intentId?: string
+  /** Herramienta que ejecutaría la acción (se muestra en mono). */
+  tool?: string
+  /** Parámetros de la acción: viajan en la intención y se muestran con `showParams`. Nunca se registran en logs. */
+  params?: Record<string, unknown>
+  showParams?: boolean
+  /** Quién preparó la acción. Por defecto «Asistente». */
+  drafter?: React.ReactNode
+  /** Emite la intención aprobada. El componente nunca ejecuta la acción. */
+  onApprove: (intent: ApprovalIntent) => void
+  /** Emite la intención rechazada. */
+  onReject: (intent: ApprovalIntent) => void
+  approveLabel?: string
+  rejectLabel?: string
+  /** Controlado: estado de la decisión. Sin él, la tarjeta recuerda la decisión tomada. */
+  status?: ApprovalStatus
+  /** Acción destructiva o irreversible: el botón de aprobar usa el tono de peligro. */
+  destructive?: boolean
+  /** Deshabilita la decisión y explica por qué. */
+  disabledReason?: React.ReactNode
+}
+
+export interface AgentTask {
+  id: string
+  title: React.ReactNode
+  /** Cifra breve de avance: «48/120 llamadas». */
+  metric?: React.ReactNode
+  status: AgentStepStatus
+  notes?: React.ReactNode
+}
+
+export interface TaskRowsProps extends Omit<React.HTMLAttributes<HTMLUListElement>, 'children'> {
+  tasks: ReadonlyArray<AgentTask>
+  compact?: boolean
+  label?: string
+  /** Texto cuando no hay tareas. */
+  empty?: React.ReactNode
+}
+
+export interface AgentPlanStep {
+  id: string
+  text: React.ReactNode
+  tool?: string
+}
+
+export interface AgentPlanProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title' | 'children' | 'onChange'> {
+  steps: ReadonlyArray<AgentPlanStep>
+  title?: React.ReactNode
+  /** Emite la intención de ejecutar los pasos (ya editados). El componente nunca ejecuta. */
+  onApprove: (steps: AgentPlanStep[]) => void
+  onReject?: () => void
+  /** Si existe, cada paso se puede quitar antes de aprobar. */
+  onChange?: (steps: AgentPlanStep[]) => void
+  /** El consumidor está ejecutando el plan aprobado: se bloquea la edición y la decisión. */
+  running?: boolean
+  approveLabel?: string
+}
+
+export interface StatusTrackerStage {
+  key: string
+  label: React.ReactNode
+}
+
+export interface StatusTrackerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  stages: ReadonlyArray<StatusTrackerStage>
+  /** Índice de la etapa en curso; igual a `stages.length` cuando terminó. */
+  current: number
+  /** La etapa en curso falló. */
+  failed?: boolean
+  /** Detalle de la etapa actual («Indexando 320 de 1.200 documentos»). */
+  detail?: React.ReactNode
+  /** Solo la frase de estado y una barra, sin la lista de etapas. */
+  minimal?: boolean
+  /** Nombre accesible del proceso. */
+  label: string
+}
+
+export interface WebResult {
+  title: string
+  domain: string
+  snippet?: React.ReactNode
+  href?: string
+  /** El asistente está leyendo este resultado. */
+  reading?: boolean
+}
+
+export interface WebResultsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  query: string
+  results: ReadonlyArray<WebResult>
+  /** Total de resultados encontrados (puede ser mayor que los recibidos). */
+  total?: number
+  compact?: boolean
+  /** Cuántos se muestran antes de «Ver más». Por defecto 3 (2 en compacto). */
+  initialCount?: number
+  /** Dónde buscó: «la web» o «la base de conocimiento». */
+  scope?: React.ReactNode
+}
+
+export interface InlineEditProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  original: string
+  suggestion: string
+  /** Qué se pidió: «Hacer más cordial». */
+  instruction?: React.ReactNode
+  /** Emite el texto aceptado. También Enter con el foco en la sugerencia. */
+  onAccept: (text: string) => void
+  /** Descarta la sugerencia. También Esc con el foco dentro. */
+  onReject: () => void
+  acceptLabel?: string
+  rejectLabel?: string
+  /** Enfoca la sugerencia al montarse para decidir con Enter/Esc. */
+  autoFocus?: boolean
+}
+
+export type DiffPartKind = 'same' | 'add' | 'del'
+
+export interface DiffPart {
+  text: string
+  kind: DiffPartKind
+}
+
+export interface DiffFile {
+  name: string
+  before: string
+  after: string
+}
+
+export interface DiffViewProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  files: ReadonlyArray<DiffFile>
+  /** Emite la decisión por archivo. Sin él, no hay botones de decisión. */
+  onDecide?: (name: string, accepted: boolean) => void
+  /** Controlado: decisión por nombre de archivo. */
+  decisions?: Record<string, boolean | undefined>
+  /** Solo el resumen (+/−) sin las líneas. */
+  summary?: boolean
+}
+
+export interface CodeBlockProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children' | 'onCopy'> {
+  code: string
+  filename?: string
+  language?: string
+  /** Números de línea. */
+  numbered?: boolean
+  /** Líneas visibles antes de «Mostrar más». Por defecto 12. */
+  maxLines?: number
+  /** Avisa si el código se copió (`true`) o falló (`false`). */
+  onCopy?: (ok: boolean) => void
+}
+
+export interface InsightDelta {
+  /** Texto de la variación con signo y unidad: «+4 pts». */
+  value: string
+  direction: 'up' | 'down'
+  /** La variación es buena para el negocio (define el tono, no la dirección). */
+  good: boolean
+}
+
+export interface InsightCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
+  label: React.ReactNode
+  value: React.ReactNode
+  delta?: InsightDelta
+  /** Serie breve para las barras de tendencia. */
+  series?: ReadonlyArray<number>
+  /** Descripción accesible de la serie: «Últimos 8 días, de 78 % a 86 %». */
+  seriesLabel?: string
+  /** Explicación generada por la IA de por qué cambió. */
+  note: React.ReactNode
+  /** Fuentes o citas de la explicación. Sin fuentes, la tarjeta lo dice. */
+  sources?: React.ReactNode
+  /** Acción siguiente (un Button). */
+  action?: React.ReactNode
+}
