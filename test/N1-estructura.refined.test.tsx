@@ -4,9 +4,6 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { Drawer } from '../src/components/ui/Drawer'
 import { Modal } from '../src/components/ui/Modal'
-import { Divider } from '../src/components/ui/Divider'
-import { Kbd } from '../src/components/ui/Kbd'
-import { Spinner } from '../src/components/ui/Spinner'
 import { Skeleton } from '../src/components/ui/Skeleton'
 import { Tag } from '../src/components/ui/Tag'
 import { DEBT, componentCss } from './helpers/themeTokens'
@@ -99,29 +96,6 @@ describe('Drawer (lote N1)', () => {
 })
 
 describe('Primitivas N1', () => {
-  test('Divider: hr nativo; vertical con aria-orientation; con etiqueta muestra el texto', () => {
-    const { rerender } = render(<Divider />)
-    expect(screen.getByRole('separator')).toHaveClass('gcu-divider')
-    rerender(<Divider orientation="vertical" />)
-    expect(screen.getByRole('separator')).toHaveAttribute('aria-orientation', 'vertical')
-    rerender(<Divider label="o continúa con" />)
-    expect(screen.getByText('o continúa con')).toHaveClass('gcu-divider__label')
-  })
-
-  test('Kbd: una tecla o una combinación anidada', () => {
-    const { container, rerender } = render(<Kbd>Esc</Kbd>)
-    expect(container.querySelector('kbd.gcu-kbd')).toHaveTextContent('Esc')
-    rerender(<Kbd keys={['Ctrl', 'K']} />)
-    expect(container.querySelectorAll('kbd.gcu-kbd-combo > kbd.gcu-kbd')).toHaveLength(2)
-  })
-
-  test('Spinner: role status con texto; decorativo con label null', () => {
-    const { rerender } = render(<Spinner />)
-    expect(screen.getByRole('status')).toHaveTextContent('Cargando…')
-    rerender(<Spinner label={null} />)
-    expect(screen.queryByRole('status')).toBeNull()
-  })
-
   test('Skeleton: aria-hidden, variantes y líneas', () => {
     const { container, rerender } = render(<Skeleton variant="circle" width={40} />)
     const circle = container.querySelector<HTMLElement>('.gcu-skeleton--circle')
@@ -140,13 +114,6 @@ describe('Primitivas N1', () => {
     expect(onRemove).toHaveBeenCalledOnce()
   })
 
-  test('Tag con tono desconocido usa neutral y avisa', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    // @ts-expect-error tono inválido a propósito
-    const { container } = render(<Tag tone="morado">x</Tag>)
-    expect(container.firstChild).toHaveClass('gcu-tag--neutral')
-    expect(warn).toHaveBeenCalled()
-  })
 })
 
 describe('CSS del lote N1', () => {

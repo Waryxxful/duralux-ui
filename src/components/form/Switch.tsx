@@ -38,7 +38,7 @@ export const Switch = /* @__PURE__ */ forwardRef<HTMLInputElement, SwitchProps>(
         id={id}
         type="checkbox"
         role="switch"
-        className="gcu-switch__input"
+        className="form-check-input gcu-switch__input"
         checked={checked}
         aria-checked={checked === undefined ? undefined : Boolean(checked)}
         aria-describedby={joinIds(ariaDescribedBy, descriptionId)}

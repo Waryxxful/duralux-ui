@@ -52,5 +52,5 @@ export const Angosto: Story = {
 
 export const Temas: Story = {
   name: 'Tres temas',
-  render: () => <TresTemas>{(tema) => <Accordion items={AYUDA.slice(0, 2).map((item) => ({ ...item, value: `${tema}-${item.value}` }))} defaultValue={[`${tema}-horario`]} />}</TresTemas>,
+  render: () => <TresTemas>{(tema) => <Accordion items={AYUDA.slice(0, 2).map((item) => ({ ...item, value: `${tema}-${item.value}`, title: <>{item.title} <span className="visually-hidden">({tema})</span></> }))} defaultValue={[`${tema}-horario`]} />}</TresTemas>,
 }

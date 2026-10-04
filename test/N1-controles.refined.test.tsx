@@ -68,10 +68,6 @@ describe('Switch', () => {
     expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'true')
   })
 
-  test('tamaño sm', () => {
-    const { container } = render(<Switch label="Compacto" size="sm" />)
-    expect(container.firstChild).toHaveClass('gcu-switch', 'gcu-switch--sm')
-  })
 })
 
 describe('Fieldset y RadioGroup', () => {

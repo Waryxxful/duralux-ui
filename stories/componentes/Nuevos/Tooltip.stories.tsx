@@ -27,11 +27,11 @@ type Story = StoryObj<typeof Tooltip>
 export const Playground: Story = {}
 
 export const Abierto: Story = {
-  name: 'Visible (posiciones)',
+  name: 'Visible (solo uno a la vez)',
   render: () => (
     <div className="d-flex flex-wrap gap-5 p-5 justify-content-center">
-      <Tooltip content="Arriba" defaultOpen><IconButton icon="arrow-up" label="Mover arriba" /></Tooltip>
-      <Tooltip content="Abajo" placement="bottom" defaultOpen><IconButton icon="arrow-down" label="Mover abajo" /></Tooltip>
+      <Tooltip content="Sube la prioridad del caso" defaultOpen><IconButton icon="arrow-up" label="Subir prioridad" /></Tooltip>
+      <Tooltip content="Baja la prioridad del caso" placement="bottom"><IconButton icon="arrow-down" label="Bajar prioridad" /></Tooltip>
     </div>
   ),
 }
