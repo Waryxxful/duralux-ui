@@ -111,3 +111,21 @@ Conceptos de [Craft](https://craft.gustavofior.com) incorporados al sistema. Val
 | [Radios anidados](https://craft.gustavofior.com/nested-border-radius) | Radio interior = radio exterior − separación: `max(0px, calc(<exterior> - <separación>))` | regla de componente |
 | [Fondo del documento](https://craft.gustavofior.com/html-background) | `html` pinta `--gcu-surface-subtle`; `color-scheme` por tema; `meta theme-color` sigue al tema resuelto | `base.css`, tokens, `applyThemeToDocument` |
 | [Contención del hover](https://craft.gustavofior.com/hover-restraint) | Lo frecuente es instantáneo: hover de botones, navegación, ítems de menú, pestañas y filas sin transición; los tooltips esperan 400–700 ms el primero y los vecinos aparecen al instante; modales (infrecuentes) sí animan | `button.css`, `base.css` |
+
+## 12. Responsivo por contenedor
+
+Skill `prefer-container-queries`, aplicada con CSS nativo (duralux no usa Tailwind).
+
+- Un componente reutilizable (card, formulario, bloque de métricas, lista, panel) responde a **su contenedor**: el raíz lleva `container-type: inline-size` (`.gcu-container`) y los hijos usan `@container (min-width: …)`. Una card en un sidebar tiene ~300 px aunque la pantalla sea grande.
+- Breakpoints de viewport solo para el layout de página: grilla general, presencia del sidebar, header, elementos fijos.
+- Tamaños de referencia en rem: 20rem, 24rem, 28rem, 32rem, 36rem, 42rem, 48rem. No traducir `md` (768 px de viewport) a 28rem a ciegas: probar redimensionando el contenedor.
+- `container-type: inline-size` ignora el ancho del contenido al dimensionarse: úsalo en raíces de bloque con ancho dado (celdas de grilla, cards), no en ítems flex sin ancho.
+- Prueba cada componente en su contexto más angosto (sidebar, drawer, celda chica).
+
+## 13. Visuales con WebGL
+
+Skill `webgl-components`. Cualquier visual con shaders (identidad del asistente de IA, orbes, superficies de vidrio) cumple:
+- Un solo contexto WebGL por documento; cada instancia es un canvas 2D que recibe el resultado. Un solo bucle `requestAnimationFrame`, a 30 fps como máximo, pausado fuera de pantalla (`IntersectionObserver`) y con la pestaña oculta.
+- `failIfMajorPerformanceCaveat: true`, manejo de pérdida de contexto y un **fallback DOM obligatorio** como prop (`fallback`), con `forceFallback` visible en Storybook.
+- `prefers-reduced-motion`: un cuadro fijo, sin bucle. Decorativo por defecto (`aria-hidden`); `role="img"` con etiqueta si comunica algo.
+- Variedad derivada de un hash estable del id de la entidad; nunca `Math.random()` al dibujar. `isolation: isolate` en el contenedor.

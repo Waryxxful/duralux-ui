@@ -26,4 +26,6 @@ Reglas obligatorias de IA:
 - `StreamingAnswer` anuncia con `aria-live="polite"` por bloques, no por token.
 - Nada de datos personales hacia logging.
 
-Cada bloque: TSX, CSS propio, tests de comportamiento, story en tres temas. Página de patrón **Asistente** (historial + hilo + compositor).
+Identidad visual del asistente (`AiAvatar`): CSS (gradiente + `.gcu-grain`) por defecto; si se agrega una variante WebGL, cumple `docs/REGLAS-DE-DISENO.md` §13 (skill `webgl-components`) con fallback obligatorio.
+
+Cada bloque: TSX, CSS propio, tests de comportamiento, story en tres temas, responsivo por contenedor (§12). Página de patrón **Asistente** (historial + hilo + compositor).

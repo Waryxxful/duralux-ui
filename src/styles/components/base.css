@@ -15,3 +15,11 @@ html{background-color:var(--gcu-surface-subtle)}
 
 /* Hover Restraint — lo que se recorre con el puntero muchas veces por minuto cambia al instante. */
 .nxl-navigation .nxl-link,.nxl-navigation .nxl-item,.dropdown-item,.list-group-item-action,.nav-tabs .nav-link,.table-hover > tbody > tr,.table-hover > tbody > tr > *{transition:none}
+
+/* Container queries — los componentes responden a su espacio, no al viewport (una card en un
+   sidebar tiene ~300px aunque la pantalla sea grande). Breakpoints de viewport solo para el layout
+   de página. Ojo: container-type:inline-size ignora el ancho del contenido al dimensionarse; usarlo
+   en raíces de bloque con ancho dado (celdas de grilla, cards), no en ítems flex sin ancho. */
+.gcu-container{container-type:inline-size}
+.gcu-cq-row{display:flex;flex-direction:column;gap:var(--gcu-space-3)}
+@container (min-width: 28rem){.gcu-cq-row{flex-direction:row}}

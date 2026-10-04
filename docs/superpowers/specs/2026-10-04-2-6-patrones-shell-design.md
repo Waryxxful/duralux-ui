@@ -1,5 +1,7 @@
 # 2.6 — Patrones de página, layout y shell (sub-spec + plan)
 
+Los patrones usan breakpoints de viewport solo para el layout de página; todo lo de adentro responde a su contenedor (§12).
+
 Deriva del spec maestro §6 (subproyecto 4) y §9 (shell). Receta: `docs/RECETA-COMPONENTE.md`.
 
 ## Layout y shell existentes (refinamiento)

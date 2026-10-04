@@ -59,3 +59,11 @@ describe('Craft — conceptos globales (craft.gustavofior.com)', () => {
     expect(read('src/styles/components/button.css')).toContain('.gcu-button__icon--end{margin-inline-end:-2px}')
   })
 })
+
+describe('Container queries (skill prefer-container-queries, CSS nativo)', () => {
+  test('utilidad de contenedor con nombre y tamaños de referencia en rem', () => {
+    const base = read('src/styles/components/base.css')
+    expect(base).toContain('.gcu-container{container-type:inline-size}')
+    expect(base).toMatch(/@container \(min-width: 28rem\)\{\.gcu-cq-row\{flex-direction:row\}\}/)
+  })
+})

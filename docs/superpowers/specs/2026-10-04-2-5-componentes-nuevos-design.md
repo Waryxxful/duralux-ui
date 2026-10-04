@@ -1,5 +1,7 @@
 # 2.5 — Componentes nuevos y DataTable sobre TanStack (sub-spec + plan)
 
+Todo componente nuevo es responsivo por contenedor (`docs/REGLAS-DE-DISENO.md` §12) y cumple los detalles de oficio (§11).
+
 Deriva del spec maestro §9 (subproyecto 3). Se porta el **comportamiento** y el patrón de `intouch-ui` (`/home/admincrm/intouch-ui/src/components`), nunca su estética Vireo: sin clases `ax-*` ni `itc-*`; todo con tokens `--gcu-*`, canon de clases Duralux y la receta `docs/RECETA-COMPONENTE.md`. Cada componente nace en TSX, con CSS propio, tests, story en tres temas y textos en español.
 
 ## Lotes
