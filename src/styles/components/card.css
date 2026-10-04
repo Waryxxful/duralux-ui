@@ -1,0 +1,22 @@
+/* Card: superficie con elevación 1; hover con elevación 2 solo si es interactiva y con puntero
+   real. En oscuro y navy la elevación la dan superficie y borde (tokens), no sombras fuertes. */
+.card{border-color:var(--gcu-border);box-shadow:var(--gcu-shadow-1)}
+.gcu-card .card-header{container-type:inline-size}
+.gcu-card__header{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-2);width:100%}
+.gcu-card__heading{min-width:0;max-width:100%}
+.gcu-card__title{text-wrap:balance}
+.gcu-card__subtitle{margin-top:var(--gcu-space-1);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-card .card-header-action{flex-wrap:wrap;justify-content:flex-start;gap:var(--gcu-space-1)}
+/* Contenedor ancho: título a la izquierda y acciones alineadas a la derecha en una fila. */
+@container (min-width:28rem){
+  .gcu-card__header{flex-direction:row;align-items:center;justify-content:space-between;gap:var(--gcu-space-4)}
+  .gcu-card .card-header-action{flex-wrap:nowrap;justify-content:flex-end;margin-inline-start:auto}
+}
+.gcu-card--interactive{cursor:pointer;transition:box-shadow var(--gcu-duration-fast) var(--gcu-ease-standard)}
+@media (hover:hover){.gcu-card--interactive:hover{box-shadow:var(--gcu-shadow-2)}}
+.gcu-card--interactive:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-card__skeleton{display:grid;gap:var(--gcu-space-2)}
+.gcu-card__skeleton .gcu-skeleton:nth-child(3n+2){width:82%}
+.gcu-card__skeleton .gcu-skeleton:nth-child(3n){width:64%}
+/* Media dentro de la card: radio interior = radio exterior − separación; contorno interior fino. */
+.gcu-card__media{display:block;width:100%;height:auto;border-radius:max(0px,calc(var(--gcu-radius) - var(--gcu-card-media-inset,0px)));outline:1px solid var(--gcu-image-outline,rgb(0 0 0 / 0.1));outline-offset:-1px}

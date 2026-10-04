@@ -6,7 +6,7 @@ export { Button, IconButton, LinkButton } from '../components/ui/Button'
 export { Icon } from '../components/ui/Icon'
 import { Alert as AlertRuntime } from '../components/ui/Alert'
 import { Modal as ModalRuntime } from '../components/ui/Modal'
-import { Card as CardRuntime } from '../components/ui/Card'
+export { Card } from '../components/ui/Card'
 import { StatsCard as StatsCardRuntime } from '../components/ui/StatsCard'
 import { MiniStatCard as MiniStatCardRuntime } from '../components/ui/MiniStatCard'
 import { ColoredStatCard as ColoredStatCardRuntime } from '../components/ui/ColoredStatCard'
@@ -142,7 +142,6 @@ function asGenericComponent<F>(runtime: React.ComponentType<any>): F {
   return runtime as F
 }
 
-export const Card = asComponent<CardProps>(CardRuntime)
 export const Alert = asComponent<AlertProps>(AlertRuntime)
 export const Modal = asComponent<ModalProps>(ModalRuntime)
 export const EmptyState = asComponent<EmptyStateProps>(EmptyStateRuntime)

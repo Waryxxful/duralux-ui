@@ -82,8 +82,15 @@ export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 't
   noPad?: boolean
   stretch?: boolean
   bodyClassName?: string
+  /** @deprecated usa `ref`. */
   elementRef?: React.Ref<HTMLDivElement>
+  /** Hover con elevación 2 y cursor de acción. */
+  interactive?: boolean
   loading?: boolean
+  /** `overlay` (default, CardLoader) o `skeleton` (filas skeleton en el cuerpo). */
+  loadingVariant?: 'overlay' | 'skeleton'
+  /** Filas del skeleton (1–12, default 3). */
+  skeletonRows?: number
   loadingLabel?: React.ReactNode
   onRefresh?: () => void
   onRemove?: () => void

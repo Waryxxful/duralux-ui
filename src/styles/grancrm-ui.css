@@ -5,6 +5,7 @@
 @import "./components/badge.css";
 @import "./components/avatar.css";
 @import "./components/progress.css";
+@import "./components/card.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
@@ -592,7 +593,6 @@ a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px
 .form-control:focus,.form-select:focus{border-color:var(--gcu-primary-border)}
 
 /* Superficies y elevación. */
-.card{border-color:var(--gcu-border);box-shadow:var(--gcu-shadow-1)}
 .dropdown-menu{border-color:var(--gcu-border);border-radius:var(--gcu-radius-lg);box-shadow:var(--gcu-shadow-3)}
 .dropdown-menu.show{animation:gcu-enter var(--gcu-duration-fast) var(--gcu-ease-enter)}
 .modal-content,.gcu-modal__content{border-color:var(--gcu-border);border-radius:var(--gcu-radius-xl);box-shadow:var(--gcu-shadow-4)}
@@ -602,7 +602,7 @@ a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px
 .form-check-input.is-invalid~.form-check-label,.was-validated .form-check-input:invalid~.form-check-label{color:var(--gcu-status-danger)}
 
 /* Hover solo con puntero real: en táctil el hover se queda "pegado". */
-@media (hover:hover){.card.gcu-card--interactive:hover{box-shadow:var(--gcu-shadow-2)}.dropdown-item:hover{background-color:var(--gcu-surface-subtle)}}
+@media (hover:hover){.dropdown-item:hover{background-color:var(--gcu-surface-subtle)}}
 
 /* Carga: skeleton en vez de spinner a pantalla completa. */
 .gcu-skeleton{display:block;min-height:12px;border-radius:var(--gcu-radius-sm);background:linear-gradient(90deg,var(--gcu-surface-sunken) 25%,var(--gcu-surface-subtle) 37%,var(--gcu-surface-sunken) 63%);background-size:400% 100%;animation:gcu-shimmer 1.4s var(--gcu-ease-standard) infinite}
