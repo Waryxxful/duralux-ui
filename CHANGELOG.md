@@ -2,6 +2,31 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## 2.3.0 — Formularios, feedback y presentación refinados
+
+Primeras tres tandas del refinamiento del núcleo (`docs/superpowers/specs/2026-10-04-2-3-refinamiento-nucleo-design.md`). Todos los componentes de estos lotes pasan a TSX con `forwardRef` (ref tipado), CSS propio con tokens en `styles/components/`, stories en tres temas y detalles de oficio Craft. La API no rompe: lo nuevo son props; lo reemplazado avisa con `deprecate()`.
+
+### Formularios
+Input, Textarea, Select, Checkbox, Radio, FileInput, InputGroup, FormField, SearchableSelect y MultiSelect.
+- Prop nueva `controlSize` (sm/md/lg). Deprecados: `invalid` (usa `aria-invalid`/error del campo), `icon`/`prefix` de Input y `hint` de FormField.
+- **Cambio visible:** FormField deja las columnas de Bootstrap y usa una grilla que se adapta a su contenedor (apila en angosto, fila desde 36rem).
+- Formularios en oscuro y navy desde tokens (vuelve el anillo de foco). FileInput legible en oscuro (DX-010). Selects sin estado ajustado en efectos (DX-017 parcial).
+
+### Feedback y capas
+Alert, Modal, Toast, Dropdown, ConfirmDialog, EmptyState, ErrorState, LoadingState y CardLoader.
+- Toast con `description`, duración según largo del texto y región «Notificaciones». EmptyState/ErrorState con acción secundaria, `compact` y reintento. LoadingState `variant="skeleton"`.
+- Dropdown abre en 100 ms sin transición en ítems; Modal anima la entrada. DX-019 (`<dialog>`): no aplica, documentado.
+
+### Presentación
+Badge, Avatar, AvatarGroup, Card, Progress, ProgressRing, Timeline, ActivityFeed, Tabs e Icon.
+- Badge con `dot`; Card con `interactive`, `loadingVariant="skeleton"` y etiquetas en español (DX-029); Tabs con patrón APG completo y sin `onChange` desde efectos (DX-016); Timeline/ActivityFeed con tiempo relativo («hace 5 minutos») y fecha completa en `title`.
+- Deprecados: `elementRef`, `headerRight`, `noPad` de Card; `iconBg` de Timeline.
+
+### Sistema
+- Detalles de oficio Craft y container queries (`docs/REGLAS-DE-DISENO.md` §11–§13).
+- Tree-shaking garantizado: componentes anotados como puros (Button solo pesa 3,7 KB gzip).
+- Deuda CSS en baja (presupuesto por archivo). react-doctor 71.
+
 ## 2.2.0 — antd tematizado y Button ejemplar
 
 ### Agregado
