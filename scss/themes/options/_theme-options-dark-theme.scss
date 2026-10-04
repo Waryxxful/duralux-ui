@@ -18,8 +18,6 @@ $gcu-dark-palettes: (
 		navigation-hover-color: #26272e,
 		navigation-border-color: #26272e,
 		header-brand-color: #131419,
-		radar-fill: #17181d,
-		radar-stroke: #3a3b42,
 		datepicker-muted: #8b8d98,
 		backdrop: #050506,
 		glow: radial-gradient(circle, #202126, #191a1e, #131419, #0a0b0d, #050506),
@@ -36,8 +34,6 @@ $gcu-dark-palettes: (
 		navigation-hover-color: #1c2438,
 		navigation-border-color: #1b2436,
 		header-brand-color: #0f172a,
-		radar-fill: #121a2e,
-		radar-stroke: #242f4a,
 		datepicker-muted: #536577,
 		backdrop: #000915,
 		glow: radial-gradient(circle, #1d2538, #181f31, #0f172a, #080f1f, #050a16),
@@ -250,17 +246,8 @@ $gcu-dark-palettes: (
 				}
 			}
 		}
-		.daterangepicker,
-		.apexcharts-tooltip {
+		.daterangepicker {
 			box-shadow: 0 4px 24px 0 rgb(4 0 40 / 80%);
-		}
-		.apexcharts-graphical {
-			.apexcharts-radar-series {
-				polygon {
-					fill: map-get($p, radar-fill);
-					stroke: map-get($p, radar-stroke);
-				}
-			}
 		}
 		.btn-close {
 			filter: invert(1);
@@ -427,29 +414,7 @@ $gcu-dark-palettes: (
 			}
 		}
 
-		/* <---------------! Apex Charts !---------------> */
-		.apexcharts-canvas {
-			.apexcharts-tooltip,
-			.apexcharts-xaxistooltip {
-				color: $white;
-				border-color: $dark-theme-color-border;
-				background-color: $dark-theme-color-dark;
-			}
-			.apexcharts-tooltip-title {
-				color: $white;
-				border-color: $dark-theme-color-border;
-				background-color: $dark-theme-color-darker;
-			}
-			.apexcharts-grid {
-				line {
-					stroke: $dark-theme-color-dark;
-				}
-			}
-			.apexcharts-xaxistooltip-bottom:after,
-			.apexcharts-xaxistooltip-bottom:before {
-				border-bottom-color: $dark-theme-color-border;
-			}
-		}
+		/* Apex Charts: tooltip, eje y radar viven en src/styles/components/chart.css (tokens). */
 
 		/* <---------------! Select2 !---------------> */
 		.select2-container--bootstrap-5 {

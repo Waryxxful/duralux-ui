@@ -11,5 +11,5 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["public-api.tsx", "no-root-charts.ts", "form-refs.tsx"]
+  "include": ["public-api.tsx", "no-root-charts.ts", "form-refs.tsx", "charts-api.tsx"]
 }

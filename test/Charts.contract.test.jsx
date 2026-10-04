@@ -42,18 +42,30 @@ vi.mock('react-apexcharts', () => ({
   ),
 }))
 
-import { ApexChart } from '../src/components/charts/ApexChart.jsx'
-import { AreaChartWidget } from '../src/components/charts/AreaChartWidget.jsx'
-import { BarChartWidget } from '../src/components/charts/BarChartWidget.jsx'
-import { ChartCard } from '../src/components/charts/ChartCard.jsx'
-import { LineChartWidget } from '../src/components/charts/LineChartWidget.jsx'
-import { PieChartWidget } from '../src/components/charts/PieChartWidget.jsx'
+import { ApexChart } from '../src/components/charts/ApexChart'
+import { AreaChartWidget } from '../src/components/charts/AreaChartWidget'
+import { BarChartWidget } from '../src/components/charts/BarChartWidget'
+import { ChartCard } from '../src/components/charts/ChartCard'
+import { LineChartWidget } from '../src/components/charts/LineChartWidget'
+import { PieChartWidget } from '../src/components/charts/PieChartWidget'
 import {
   ApexDataTable,
   PieDataTable,
   RechartsDataTable,
-} from '../src/components/charts/chartA11y.jsx'
+} from '../src/components/charts/chartA11y'
 import { CHART_DARK_PALETTE } from '../src/components/charts/chartPalette.js'
+
+// DX-031: ApexChart carga react-apexcharts de forma diferida y resuelve el tema en un
+// efecto. Las aserciones sobre sus opciones van dentro de la espera (sin tiempos fijos):
+// se reintentan hasta que el motor montó con el tema ya resuelto.
+async function waitForApexOptions(assertion, index = 0) {
+  let options
+  await waitFor(() => {
+    options = JSON.parse(screen.getAllByTestId('apex-chart')[index].dataset.options)
+    assertion(options)
+  })
+  return options
+}
 
 afterEach(() => {
   document.documentElement.classList.remove('app-skin-dark')
@@ -129,8 +141,7 @@ test('uses the literal accessible dark chart palette across Recharts and Apex', 
   expect(screen.getByTestId('tooltip')).toHaveAttribute('data-color', expectedText)
   expect(screen.getByTestId('tooltip')).toHaveAttribute('data-border', `1px solid ${expectedBorder}`)
 
-  const apexOptions = JSON.parse(screen.getByTestId('apex-chart').dataset.options)
-  expect(apexOptions.colors).toEqual(expectedSeries)
+  const apexOptions = await waitForApexOptions((options) => expect(options.colors).toEqual(expectedSeries))
   expect(apexOptions.chart.foreColor).toBe(expectedText)
   expect(apexOptions.grid.borderColor).toBe(expectedBorder)
   expect(apexOptions.xaxis.labels.style.colors).toBe(expectedMuted)
@@ -257,7 +268,8 @@ test('exposes an accessible name, description and tabular alternative', () => {
     />,
   )
 
-  const chart = screen.getByRole('img', { name: 'Ventas mensuales' })
+  // DX-004: la figura (no un role="img") lleva nombre y descripción.
+  const chart = screen.getByRole('figure', { name: 'Ventas mensuales' })
   expect(chart).toHaveAttribute('aria-describedby')
   expect(screen.getByText('Comparación de ventas por mes')).toBeInTheDocument()
   expect(screen.getByRole('table')).toHaveTextContent('Ventas')
@@ -276,10 +288,12 @@ test('keeps visual, table, live state and retry controls as sibling trees', asyn
     />,
   )
 
-  const visual = screen.getByRole('img', { name: 'Ventas' })
+  // DX-004: estados y reintento viven en la figura; nada queda bajo un role="img".
+  const figure = screen.getByRole('figure', { name: 'Ventas' })
   const status = screen.getByRole('status')
   expect(status.closest('[role="img"]')).toBeNull()
-  expect(visual).not.toContainElement(status)
+  expect(screen.queryByRole('img')).not.toBeInTheDocument()
+  expect(figure).toContainElement(status)
   expect(screen.queryByRole('table')).not.toBeInTheDocument()
 
   rerender(
@@ -329,7 +343,7 @@ test('accessibleTable={false} removes the alternative without removing the visua
     />,
   )
 
-  expect(screen.getByRole('img', { name: 'Ventas' })).toBeInTheDocument()
+  expect(screen.getByRole('figure', { name: 'Ventas' })).toBeInTheDocument()
   expect(screen.queryByRole('table')).not.toBeInTheDocument()
 })
 
@@ -344,7 +358,7 @@ test('associates a ChartCard title with the chart and keeps explicit fallback re
   )
 
   const heading = screen.getByRole('heading', { name: 'Embudo de ventas' })
-  const chart = screen.getByRole('img', { name: 'Embudo de ventas' })
+  const chart = screen.getByRole('figure', { name: 'Embudo de ventas' })
   expect(chart.getAttribute('aria-labelledby')).toContain(heading.id)
 
   rerender(
@@ -405,9 +419,7 @@ test('applies ambient Apex theme without mutating options and preserves caller p
     />,
   )
 
-  await waitFor(() => expect(screen.getByTestId('apex-chart')).toBeInTheDocument())
-  let resolved = JSON.parse(screen.getByTestId('apex-chart').dataset.options)
-  expect(resolved.theme.mode).toBe('dark')
+  let resolved = await waitForApexOptions((options) => expect(options.theme.mode).toBe('dark'))
   expect(resolved.theme.palette).toBe('palette2')
   expect(resolved.xaxis.labels.style.colors).toBe('#123456')
   expect(resolved.colors[0]).toBe('#8ea7ff')
@@ -421,9 +433,7 @@ test('applies ambient Apex theme without mutating options and preserves caller p
       ariaLabel="Ventas"
     />,
   )
-  await waitFor(() => expect(screen.getByTestId('apex-chart')).toBeInTheDocument())
-  resolved = JSON.parse(screen.getByTestId('apex-chart').dataset.options)
-  expect(resolved.theme.mode).toBe('light')
+  resolved = await waitForApexOptions((options) => expect(options.theme.mode).toBe('light'))
 })
 
 test('emits only valid Apex tooltip style fields while preserving caller options', async () => {
@@ -439,10 +449,7 @@ test('emits only valid Apex tooltip style fields while preserving caller options
   const originalOptions = structuredClone(options)
 
   render(<ApexChart options={options} series={[{ name: 'Ventas', data: [10] }]} />)
-  await waitFor(() => expect(screen.getByTestId('apex-chart')).toBeInTheDocument())
-
-  const resolved = JSON.parse(screen.getByTestId('apex-chart').dataset.options)
-  expect(resolved.tooltip.style).toEqual({ fontSize: '12px' })
+  await waitForApexOptions((resolved) => expect(resolved.tooltip.style).toEqual({ fontSize: '12px' }))
   expect(options).toEqual(originalOptions)
 })
 
@@ -459,12 +466,8 @@ test('resolves two local theme scopes independently', async () => {
   )
 
   await waitFor(() => expect(screen.getAllByTestId('apex-chart')).toHaveLength(2))
-  const charts = screen.getAllByTestId('apex-chart')
-  const lightOptions = JSON.parse(charts[0].dataset.options)
-  const darkOptions = JSON.parse(charts[1].dataset.options)
-
-  expect(lightOptions.theme.mode).toBe('light')
-  expect(darkOptions.theme.mode).toBe('dark')
+  const lightOptions = await waitForApexOptions((options) => expect(options.theme.mode).toBe('light'), 0)
+  const darkOptions = await waitForApexOptions((options) => expect(options.theme.mode).toBe('dark'), 1)
   expect(lightOptions.chart.foreColor).not.toBe(darkOptions.chart.foreColor)
 })
 
@@ -503,9 +506,7 @@ test('explicit Apex theme beats the nearest scope', async () => {
     </div>,
   )
 
-  await waitFor(() => expect(screen.getByTestId('apex-chart')).toBeInTheDocument())
-  const options = JSON.parse(screen.getByTestId('apex-chart').dataset.options)
-  expect(options.theme.mode).toBe('dark')
+  await waitForApexOptions((options) => expect(options.theme.mode).toBe('dark'))
 })
 
 test('tabular alternatives preserve captions, headers and x/y points', () => {

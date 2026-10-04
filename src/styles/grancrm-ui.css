@@ -29,6 +29,7 @@
 @import "./components/colored-stat-card.css";
 @import "./components/quick-link-grid.css";
 @import "./components/chart-metrics-footer.css";
+@import "./components/chart.css";
 @import "./components/connection-card.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
@@ -268,9 +269,6 @@ html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .card,html.app-skin-dark .
 
 
 @media (max-width:575.98px){.page-header{padding:0 20px!important}}
-/* Chart marks may use raw semantic variables, but their CSS-aware Recharts
-   scope maps them to foreground-safe roles for light and dark canvases. */
-.recharts-wrapper{--gcu-secondary:var(--gcu-status-secondary);--gcu-success:var(--gcu-status-success);--gcu-danger:var(--gcu-status-danger);--gcu-warning:var(--gcu-status-warning);--gcu-info:var(--gcu-status-info);--gcu-teal:var(--gcu-status-teal)}
 /* Shared solid-surface contract: readable content is always white over the
    deeper AA fills. Raw `.bg-*` remains available outside component APIs. */
 .progress-bar.bg-primary{background-color:#3454d1!important;color:#fff!important}.progress-bar.bg-secondary{background-color:#64748b!important;color:#fff!important}.progress-bar.bg-success{background-color:#108745!important;color:#fff!important}.progress-bar.bg-danger{background-color:#ce4444!important;color:#fff!important}.progress-bar.bg-warning{background-color:#a36813!important;color:#fff!important}.progress-bar.bg-info{background-color:#28837d!important;color:#fff!important}.progress-bar.bg-teal{background-color:#2f808d!important;color:#fff!important}.progress-bar.bg-indigo{background-color:#6610f2!important;color:#fff!important}.progress-bar.bg-dark{background-color:#283c50!important;color:#fff!important}.progress-bar.bg-darken{background-color:#001327!important;color:#fff!important}.progress-bar.bg-light{background-color:#eff0f6!important;color:#283c50!important}

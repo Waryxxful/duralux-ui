@@ -3,7 +3,7 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { expect, test } from 'vitest'
-import { ApexChart } from '../src/components/charts/ApexChart.jsx'
+import { ApexChart } from '../src/components/charts/ApexChart'
 
 test('imports the real Apex adapter without browser globals during SSR', () => {
   expect(globalThis.document).toBeUndefined()
