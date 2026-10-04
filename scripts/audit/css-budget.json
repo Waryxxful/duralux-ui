@@ -6,13 +6,13 @@
   },
   "src/styles/grancrm-ui.css": {
     "important": 102,
-    "darkSelectors": 16,
-    "hex": 47
+    "darkSelectors": 9,
+    "hex": 30
   },
   "src/components/charts/chartPalette.js": {
     "important": 0,
     "darkSelectors": 0,
-    "hex": 34
+    "hex": 10
   },
   "src/components/charts/chartTheme.js": {
     "important": 0,
@@ -35,8 +35,8 @@
     "hex": 0
   },
   "scss/themes/applications/_chat.scss": {
-    "important": 17,
-    "darkSelectors": 1,
+    "important": 15,
+    "darkSelectors": 0,
     "hex": 4
   },
   "scss/themes/applications/_email.scss": {
@@ -127,7 +127,7 @@
   "scss/themes/options/_theme-options-dark-theme.scss": {
     "important": 92,
     "darkSelectors": 3,
-    "hex": 51
+    "hex": 47
   },
   "scss/themes/options/_theme-options-header.scss": {
     "important": 4,

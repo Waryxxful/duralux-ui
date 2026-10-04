@@ -2,6 +2,34 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## 2.4.0 — Indicadores, tablas, gráficos y chat refinados
+
+Cierra el refinamiento del núcleo (lotes L4–L7). Mismas reglas que 2.3: TSX con `forwardRef`, CSS propio con tokens, stories en tres temas, API sin rupturas (props nuevas; lo reemplazado con `deprecate()`).
+
+### Indicadores
+StatsCard, MiniStatCard, ColoredStatCard, QuickLinkGrid, ChartMetricsFooter, ConnectionCard y GranCrmExtras (CardHeader, CardBody, CardFooter, StatusBadge, StatusButton, StatCard).
+- Props nuevas `delta` (variación con signo, unidad, flecha y texto; `goodWhen: 'down'` para TMO o abandono) y `context` (toda cifra con referencia). Estados de carga y vacío.
+- **Cambios visibles:** ColoredStatCard con rellenos más profundos (AA ~7:1) y grano; QuickLinkGrid en grilla CSS; números es-CL (2840 → 2.840). Deprecados `iconBg`/`trend` (StatsCard) y `bg`/`trend`/`trendUp` (ColoredStatCard).
+- DX-020 y DX-021 cerrados.
+
+### Tablas
+Table, ResponsiveTable (alias deprecado), Pagination y DataTableToolbar.
+- Props nuevas en Table: `columns[].numeric`, `density`, `stickyHeader` + `maxHeight`, `emptyState`, `loadingRows`. Pagination con `pageSize`/`totalItems` («11–20 de 248»).
+- **Cambios visibles en toda `.table` y `.pagination`:** celdas centradas verticalmente (DX-039), filas parejas en oscuro (DX-040), encabezado 11 px semibold con tracking, paginación con botones de 32 px separados.
+
+### Gráficos
+ApexChart, ChartCard y los widgets de Recharts.
+- Figura accesible con `<figure>`/`figcaption` y tabla de datos (DX-004); `ChartCard` con `headingLevel` (DX-006, por defecto h3); tipos públicos con nombre (DX-023); paleta, tooltip, ejes y leyenda (forma + texto) desde tokens; skeleton, vacío y error con reintento.
+- `ChartThemeMode` incluye `navy`. Deprecado `noPad` de ChartCard.
+
+### Chat
+MessageBubble, ChatBubble, ChatInputBar, ChatSidebar y ChatWindow.
+- `ChatDaySeparator`, `groupChatMessages`, `formatChatDay`; estado de entrega con ícono y texto; compositor `multiline` (Enter envía, Shift+Enter salta línea) con contador; lista seleccionable (`listbox`) con no leídos; `.gcu-chat` opcional que pasa a una columna en contenedores angostos.
+- DX-017 cerrado en ChatSidebar.
+
+### Sistema
+- react-doctor 77 (el gate ahora exige 75). Deuda CSS desde 2.1: `!important` 680 → 478, overrides de oscuro 181 → 14, hex 367 → 194.
+
 ## 2.3.1 — Chevron del select por tema
 
 - La flecha de `Select` vuelve a ser un chevron (2.3.0 la había cambiado por un triángulo relleno). Ahora se genera por tema desde los tokens (`--gcu-chevron`, `--gcu-chevron-danger`), así se ve en claro, oscuro y navy y en estado de error.
