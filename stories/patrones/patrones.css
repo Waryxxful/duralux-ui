@@ -1,0 +1,25 @@
+/* Estilos de las stories «Patrones/…». Solo tokens --gcu-*; tamaños de referencia en rem (§12). */
+
+/* Separación entre filas de bloques dentro de .main-content. */
+.sb-patron-stack{display:grid;gap:var(--gcu-space-6)}
+
+/* Página sin breadcrumbs: el theme deja colgando el borde derecho del h1 (PAGE-STRUCTURE §0). */
+.page-header.sb-patron-sin-miga .page-header-title h1{border-right:0}
+
+/* Bandeja: la lista se desplaza dentro de su card; el detalle queda fijo a su lado. */
+.sb-patron-bandeja__lista{max-block-size:min(40rem, 70vh)}
+
+/* Barra de filtros: controles de la misma altura en una fila que se parte en contenedores angostos. */
+.sb-patron-filtros{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2)}
+.sb-patron-filtros > *{flex:0 1 auto}
+
+/* Cabecera de una entidad: metadatos a la izquierda, cifra clave a la derecha. */
+.sb-patron-entidad{display:grid;gap:var(--gcu-space-6)}
+@container (min-width: 42rem){
+  .sb-patron-entidad{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+}
+
+/* Acceso: ancho de lectura del formulario. */
+.sb-patron-acceso{display:grid;gap:var(--gcu-space-5);max-inline-size:24rem;margin-inline:auto}
+.sb-patron-acceso__titulo{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-2xl);line-height:var(--gcu-line-height-2xl);font-weight:var(--gcu-font-weight-semibold);text-wrap:balance}
+.sb-patron-acceso__lead{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
