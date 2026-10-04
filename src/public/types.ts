@@ -1173,6 +1173,16 @@ export interface AuthLayoutProps {
   children?: React.ReactNode
   image?: string
   imageAlt?: string
+  /** Título de la pantalla de acceso (h1). */
+  title?: React.ReactNode
+  /** Texto bajo el título. */
+  description?: React.ReactNode
+  /** Error del formulario: se anuncia con `role="alert"`; el formulario lo referencia con `errorId`. */
+  error?: React.ReactNode
+  /** id del mensaje de error, para `aria-describedby` del formulario. */
+  errorId?: string
+  /** Pie bajo la tarjeta (enlaces de ayuda, versión). */
+  footer?: React.ReactNode
 }
 
 /** A page-header navigation item. `Breadcrumb` is retained as the concise public alias. */
@@ -1188,9 +1198,12 @@ export interface PageHeaderProps {
   title: React.ReactNode
   subtitle?: React.ReactNode
   breadcrumbs?: ReadonlyArray<PageHeaderBreadcrumb>
+  /** Acciones a la derecha (máximo una primaria). */
   actions?: React.ReactNode
   className?: string
   children?: React.ReactNode
+  /** Fija la barra al hacer scroll; la sombra aparece solo cuando queda pegada. Por defecto true. */
+  sticky?: boolean
 }
 
 // ── 2.5 · Lote N2: datos y composición ─────────────────────────────────────────
@@ -1722,4 +1735,74 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Nombre accesible del botón de quitar. Por defecto «Quitar {texto}». */
   removeLabel?: string
   disabled?: boolean
+}
+
+// ── 2.6 · Lote P1: shell y layout ──────────────────────────────────────────────
+
+export type ThemeToggleMode = 'light' | 'dark' | 'navy' | 'system'
+export type ThemeToggleResolved = 'light' | 'dark' | 'navy'
+
+export interface ThemeToggleProps {
+  /** Modo elegido; por defecto el del `ThemeProvider`. */
+  mode?: ThemeToggleMode
+  /** Tema aplicado (en `system`, el que decidió el sistema); por defecto el del `ThemeProvider`. */
+  resolved?: ThemeToggleResolved
+  /** Cambio de modo; por defecto `setMode` del `ThemeProvider`. */
+  onModeChange?: (mode: ThemeToggleMode) => void
+  /**
+   * Botón de dos estados (sol / luna) que usa `ShellHeader`: con `dark` y `onToggleDark` no se
+   * muestra el menú de cuatro modos.
+   */
+  dark?: boolean
+  onToggleDark?: () => void
+  align?: 'start' | 'end'
+  open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  /** Abre el menú al pasar el puntero (por defecto: escritorio con puntero fino). */
+  desktopHover?: boolean
+  className?: string
+}
+
+export interface CommandPaletteItem {
+  /** Identidad estable: se guarda en «Recientes». */
+  id: string
+  label: string
+  /** Grupo visible («Navegación», «Acciones»…). */
+  group?: string
+  /** Texto secundario bajo el nombre. */
+  description?: string
+  /** Sinónimos que también encuentran el comando. */
+  keywords?: ReadonlyArray<string>
+  /** Ícono Feather. */
+  icon?: string
+  /** Atajo propio del comando (se muestra con `Kbd`). */
+  shortcut?: ReadonlyArray<string>
+  /** Destino (http/https o ruta relativa): si no hay `onSelect`, se navega con `location.assign`. */
+  href?: string
+  disabled?: boolean
+  onSelect?: () => void
+}
+
+export interface CommandPaletteProps {
+  items: ReadonlyArray<CommandPaletteItem>
+  open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  /** Se llama con el comando elegido (además de su `onSelect`). */
+  onSelect?: (item: CommandPaletteItem) => void
+  /** Ctrl/Cmd + K abre y cierra la paleta. Por defecto true. */
+  hotkey?: boolean
+  /** Nombre accesible del diálogo. */
+  label?: string
+  placeholder?: string
+  /** Mensaje cuando no hay resultados; recibe la búsqueda. */
+  emptyMessage?: (query: string) => React.ReactNode
+  /** Clave de localStorage para «Recientes»; `null` los desactiva. */
+  recentsKey?: string | null
+  /** Máximo de recientes guardados. Por defecto 5. */
+  maxRecents?: number
+  /** Máximo de resultados mostrados al buscar. Por defecto 50. */
+  maxResults?: number
+  className?: string
 }

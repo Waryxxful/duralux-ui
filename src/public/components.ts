@@ -43,10 +43,8 @@ export { groupChatMessages, formatChatDay } from '../components/chat/chatModel'
 export { MessageBubble } from '../components/conversation/MessageBubble'
 import { DataTable as DataTableRuntime } from '../components/data/DataTable'
 import { AppLayout as AppLayoutRuntime } from '../components/layout/AppLayout'
-import { AuthLayout as AuthLayoutRuntime } from '../components/layout/AuthLayout'
 import { Header as HeaderRuntime } from '../components/layout/Header'
 import { Sidebar as SidebarRuntime } from '../components/layout/Sidebar'
-import { PageHeader as PageHeaderRuntime } from '../components/layout/PageHeader'
 import { Footer as FooterRuntime } from '../components/layout/Footer'
 export { AvatarGroup } from '../components/ui/AvatarGroup'
 // 2.5 · Lote N2: datos y composición (TSX, se exportan tal cual).
@@ -82,10 +80,14 @@ export { Switch } from '../components/form/Switch'
 export { Fieldset } from '../components/form/Fieldset'
 export { RadioGroup } from '../components/form/RadioGroup'
 export { ChoiceCard } from '../components/form/ChoiceCard'
+// 2.6 · Lote P1: shell y layout.
+export { PageHeader } from '../components/layout/PageHeader'
+export { AuthLayout } from '../components/layout/AuthLayout'
+export { ThemeToggle } from '../components/shell/ThemeToggle'
+export { CommandPalette } from '../components/shell/CommandPalette'
 import type {
   AlertProps,
   AppLayoutProps,
-  AuthLayoutProps,
   AvatarProps,
   BadgeProps,
   Breadcrumb,
@@ -107,8 +109,6 @@ import type {
   LoadingStateProps,
   ModalProps,
   ModalSize,
-  PageHeaderBreadcrumb,
-  PageHeaderProps,
   ProgressProps,
   ProgressRingProps,
   DataTableToolbarContext,
@@ -142,10 +142,8 @@ function asGenericComponent<F>(runtime: React.ComponentType<any>): F {
 
 export const DataTable = asGenericComponent<<T extends object = Record<string, string | number | boolean | null | undefined>>(props: DataTableProps<T>) => React.ReactElement>(DataTableRuntime)
 export const AppLayout = asComponent<AppLayoutProps>(AppLayoutRuntime)
-export const AuthLayout = asComponent<AuthLayoutProps>(AuthLayoutRuntime)
 export const Header = asComponent<HeaderProps>(HeaderRuntime)
 export const Sidebar = asComponent<SidebarProps>(SidebarRuntime)
-export const PageHeader = asComponent<PageHeaderProps>(PageHeaderRuntime)
 export const Footer = asComponent<FooterProps>(FooterRuntime)
 
 export type {
@@ -309,4 +307,9 @@ export type {
   SkeletonProps,
   TagTone,
   TagProps,
+  ThemeToggleMode,
+  ThemeToggleResolved,
+  ThemeToggleProps,
+  CommandPaletteItem,
+  CommandPaletteProps,
 } from './types'
