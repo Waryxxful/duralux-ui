@@ -1,0 +1,45 @@
+/* Piezas comunes de los indicadores (StatsCard, MiniStatCard, ColoredStatCard, QuickLinkGrid,
+   ChartMetricsFooter): ícono suave por tono, cifra tabular, etiqueta, contexto, variación y medidor.
+   Solo tokens: los mismos valores sirven en claro, oscuro, navy y dentro de un ThemeScope. */
+
+/* Ícono: clase propia (no .avatar-text, que el tema oscuro fuerza a un fondo sólido). */
+.gcu-stat__icon{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;width:var(--gcu-control-h-lg);height:var(--gcu-control-h-lg);border-radius:var(--gcu-radius-full);font-size:var(--gcu-font-size-lg);line-height:1}
+.gcu-stat__icon--primary{background-color:var(--gcu-primary-soft);color:var(--gcu-primary-text)}
+.gcu-stat__icon--secondary{background-color:var(--gcu-secondary-soft);color:var(--gcu-secondary-text)}
+.gcu-stat__icon--success{background-color:var(--gcu-success-soft);color:var(--gcu-success-text)}
+.gcu-stat__icon--danger{background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-stat__icon--warning{background-color:var(--gcu-warning-soft);color:var(--gcu-warning-text)}
+.gcu-stat__icon--info{background-color:var(--gcu-info-soft);color:var(--gcu-info-text)}
+.gcu-stat__icon--teal{background-color:var(--gcu-teal-soft);color:var(--gcu-teal-text)}
+.gcu-stat__icon--indigo{background-color:var(--gcu-indigo-soft);color:var(--gcu-indigo-text)}
+.gcu-stat__icon--dark,.gcu-stat__icon--neutral{background-color:var(--gcu-surface-sunken);color:var(--gcu-text)}
+
+/* Cifra: tabular (Craft «Tabular numbers»), sin 700 en interfaz; conserva su alto al cargar. */
+.gcu-stat__value{min-height:var(--gcu-line-height-xl);margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-xl);line-height:var(--gcu-line-height-xl);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-tight);font-variant-numeric:tabular-nums}
+.gcu-stat__skeleton{display:inline-block;width:6ch;height:.8em;vertical-align:middle}
+.gcu-stat__label{display:-webkit-box;margin:0;overflow:hidden;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium);letter-spacing:var(--gcu-tracking-normal);-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.gcu-stat__context{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+
+/* Variación: flecha + signo + unidad; el color solo acompaña (positivo, negativo o sin cambio). */
+.gcu-stat-delta{display:inline-flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-0-5) var(--gcu-space-2);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-stat-delta__value{display:inline-flex;align-items:center;gap:var(--gcu-space-0-5);padding:var(--gcu-space-0-5) var(--gcu-space-2);border-radius:var(--gcu-radius-sm);font-weight:var(--gcu-font-weight-medium);white-space:nowrap;font-variant-numeric:tabular-nums}
+.gcu-stat-delta__arrow{font-size:.9em}
+.gcu-stat-delta--positive .gcu-stat-delta__value{background-color:var(--gcu-success-soft);color:var(--gcu-success-text)}
+.gcu-stat-delta--negative .gcu-stat-delta__value{background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-stat-delta--neutral .gcu-stat-delta__value{background-color:var(--gcu-surface-sunken);color:var(--gcu-muted)}
+.gcu-stat-delta__label{color:var(--gcu-muted)}
+
+/* Medidor nativo (<progress>, DX-020): pista hundida y relleno de estado (AA como elemento gráfico). */
+.gcu-stat__meter{display:block;width:100%;height:var(--gcu-space-1);border:0;border-radius:var(--gcu-radius-full);overflow:hidden;background-color:var(--gcu-surface-sunken);color:var(--gcu-stat-meter-fill,var(--gcu-status-primary));-webkit-appearance:none;appearance:none}
+.gcu-stat__meter::-webkit-progress-bar{background-color:var(--gcu-surface-sunken)}
+.gcu-stat__meter::-webkit-progress-value{border-radius:var(--gcu-radius-full);background-color:var(--gcu-stat-meter-fill,var(--gcu-status-primary))}
+.gcu-stat__meter::-moz-progress-bar{border-radius:var(--gcu-radius-full);background-color:var(--gcu-stat-meter-fill,var(--gcu-status-primary))}
+.gcu-stat__meter--primary{--gcu-stat-meter-fill:var(--gcu-status-primary)}
+.gcu-stat__meter--secondary{--gcu-stat-meter-fill:var(--gcu-status-secondary)}
+.gcu-stat__meter--success{--gcu-stat-meter-fill:var(--gcu-status-success)}
+.gcu-stat__meter--danger{--gcu-stat-meter-fill:var(--gcu-status-danger)}
+.gcu-stat__meter--warning{--gcu-stat-meter-fill:var(--gcu-status-warning)}
+.gcu-stat__meter--info{--gcu-stat-meter-fill:var(--gcu-status-info)}
+.gcu-stat__meter--teal{--gcu-stat-meter-fill:var(--gcu-status-teal)}
+.gcu-stat__meter--indigo{--gcu-stat-meter-fill:var(--gcu-status-indigo)}
+.gcu-stat__meter--dark,.gcu-stat__meter--neutral{--gcu-stat-meter-fill:var(--gcu-text)}

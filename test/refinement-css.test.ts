@@ -65,11 +65,8 @@ describe('ColoredStatCard: contraste AA en claro y oscuro (verificación final 2
   })
 })
 
-describe('ColoredStatCard en oscuro', () => {
-  test('el avatar de vidrio conserva su fondo sombreado sobre el html.app-skin-dark .avatar-text del theme', () => {
-    expect(css).toMatch(/html\.app-skin-dark \.gcu-colored-stat \.avatar-text[^{]*\{[^}]*background-color:rgba\(0,19,39,\.14\)!important/)
-  })
-})
+// «ColoredStatCard en oscuro» se movió a test/indicadores-css.test.ts (lote L4): el vidrio ya no usa
+// .avatar-text, así que el html.app-skin-dark .avatar-text del tema no lo alcanza y no hace falta !important.
 
 describe('regresiones vistas en apps reales (DEV)', () => {
   test('tabular-nums no se aplica a toda la tabla (en Inter ensancha guiones y puntuación de emails)', () => {

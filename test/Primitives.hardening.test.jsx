@@ -77,10 +77,11 @@ test('StatsCard keeps progress output finite and exposed as progressbar semantic
     />,
   )
 
+  // DX-020 (lote L4): <progress> nativo en vez de role="progressbar"; valor y máximo van en value/max.
   const progress = screen.getByRole('progressbar', { name: 'Completion' })
-  expect(progress).toHaveAttribute('aria-valuenow', '0')
-  expect(progress).toHaveAttribute('aria-valuemax', '100')
-  expect(progress).toHaveStyle({ width: '0%' })
+  expect(progress.tagName).toBe('PROGRESS')
+  expect(progress).toHaveAttribute('value', '0')
+  expect(progress).toHaveAttribute('max', '100')
 })
 
 test('Input and Textarea hide decorative icons and do not leave class whitespace', () => {

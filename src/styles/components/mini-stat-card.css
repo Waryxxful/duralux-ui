@@ -1,0 +1,10 @@
+/* MiniStatCard: cifra compacta con borde punteado para grillas densas.
+   Angosta: centrada en columna. Desde 20rem: ícono a la izquierda y texto alineado al inicio. */
+.card.gcu-mini-stat{border-style:dashed;border-color:var(--gcu-border-strong)}
+.gcu-mini-stat .gcu-mini-stat__body{display:flex;flex-direction:column;align-items:center;gap:var(--gcu-space-2);padding:var(--gcu-space-4);text-align:center}
+.gcu-mini-stat__figures{display:flex;flex-direction:column;align-items:center;gap:var(--gcu-space-1);min-width:0;max-width:100%}
+
+@container (min-width: 20rem){
+  .gcu-mini-stat .gcu-mini-stat__body{flex-direction:row;align-items:center;gap:var(--gcu-space-4);padding:var(--gcu-space-5);text-align:start}
+  .gcu-mini-stat__figures{align-items:flex-start}
+}

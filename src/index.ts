@@ -2,8 +2,6 @@ export * from './public/components'
 
 export { ActivityFeed } from './components/ui/ActivityFeed'
 export type { ActivityFeedItem, ActivityFeedProps, ActivityFeedVariant } from './components/ui/ActivityFeed'
-export { ConnectionCard } from './components/ui/ConnectionCard'
-export type { ConnectionCardProps } from './components/ui/ConnectionCard'
 export { Toast } from './components/ui/Toast'
 export type { ToastProps, ToastVariant } from './components/ui/Toast'
 export { Dropdown, DropdownMenu } from './components/ui/Dropdown'
@@ -35,14 +33,6 @@ export {
   StatusBadge,
   StatusButton,
   StatCard,
-} from './components/shell/GranCrmExtras'
-export type {
-  CardHeaderProps,
-  CardBodyProps,
-  CardFooterProps,
-  StatusBadgeProps,
-  StatusButtonProps,
-  StatCardProps,
 } from './components/shell/GranCrmExtras'
 
 export * from './contract'

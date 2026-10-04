@@ -13,15 +13,16 @@ export { SearchableSelect } from '../components/form/SearchableSelect'
 export { Input } from '../components/form/Input'
 export { Select } from '../components/form/Select'
 export { Textarea } from '../components/form/Textarea'
+export { StatsCard } from '../components/ui/StatsCard'
+export { MiniStatCard } from '../components/ui/MiniStatCard'
+export { ColoredStatCard } from '../components/ui/ColoredStatCard'
+export { ChartMetricsFooter } from '../components/ui/ChartMetricsFooter'
+export { QuickLinkGrid } from '../components/ui/QuickLinkGrid'
+export { ConnectionCard } from '../components/ui/ConnectionCard'
 import { Icon as IconRuntime } from '../components/ui/Icon'
 import { Alert as AlertRuntime } from '../components/ui/Alert'
 import { Modal as ModalRuntime } from '../components/ui/Modal'
 import { Card as CardRuntime } from '../components/ui/Card'
-import { StatsCard as StatsCardRuntime } from '../components/ui/StatsCard'
-import { MiniStatCard as MiniStatCardRuntime } from '../components/ui/MiniStatCard'
-import { ColoredStatCard as ColoredStatCardRuntime } from '../components/ui/ColoredStatCard'
-import { ChartMetricsFooter as ChartMetricsFooterRuntime } from '../components/ui/ChartMetricsFooter'
-import { QuickLinkGrid as QuickLinkGridRuntime } from '../components/ui/QuickLinkGrid'
 import { Timeline as TimelineRuntime } from '../components/ui/Timeline'
 import { ProgressRing as ProgressRingRuntime } from '../components/ui/ProgressRing'
 import { Progress as ProgressRuntime } from '../components/ui/Progress'
@@ -63,7 +64,6 @@ import type {
   ChatTypingIndicatorProps,
   ChatWindowContact,
   ChatWindowProps,
-  ColoredStatCardProps,
   DataTableProps,
   DataTableAction,
   DataTableColumn,
@@ -79,7 +79,6 @@ import type {
   LinkButtonProps,
   LoadingStateProps,
   MessageBubbleProps,
-  MiniStatCardProps,
   ModalProps,
   ModalSize,
   PageHeaderBreadcrumb,
@@ -105,9 +104,6 @@ import type {
   AvatarGroupItem,
   FooterProps,
   FooterLink,
-  ChartMetricsFooterProps,
-  QuickLinkGridProps,
-  StatsCardProps,
   ThemeProviderProps,
   ApiFetchOptions,
 } from './types'
@@ -140,11 +136,6 @@ export const ChatBubble = asComponent<ChatBubbleProps>(ChatBubbleRuntime)
 export const ChatTypingIndicator = asComponent<ChatTypingIndicatorProps>(ChatTypingIndicatorRuntime)
 export const ChatInputBar = asComponent<ChatInputBarProps>(ChatInputBarRuntime)
 export const ChatWindow = asGenericComponent<<TContact extends import('./types').ChatWindowContact = import('./types').ChatWindowContact>(props: ChatWindowProps<TContact>) => React.ReactElement>(ChatWindowRuntime)
-export const StatsCard = asComponent<StatsCardProps>(StatsCardRuntime)
-export const MiniStatCard = asComponent<MiniStatCardProps>(MiniStatCardRuntime)
-export const ColoredStatCard = asComponent<ColoredStatCardProps>(ColoredStatCardRuntime)
-export const ChartMetricsFooter = asComponent<ChartMetricsFooterProps>(ChartMetricsFooterRuntime)
-export const QuickLinkGrid = asComponent<QuickLinkGridProps>(QuickLinkGridRuntime)
 export const Timeline = asComponent<TimelineProps>(TimelineRuntime)
 export const Tabs = asGenericComponent<<K extends string | number = string | number>(props: TabsProps<K>) => React.ReactElement>(TabsRuntime)
 export const DataTable = asGenericComponent<<T extends object = Record<string, string | number | boolean | null | undefined>>(props: DataTableProps<T>) => React.ReactElement>(DataTableRuntime)
@@ -241,6 +232,20 @@ export type {
   ChartMetricsFooterProps,
   QuickLinkGridProps,
   StatsCardProps,
+  StatsCardTrend,
+  StatsCardProgress,
+  IndicatorTone,
+  IndicatorDelta,
+  IndicatorIcon,
+  ChartMetric,
+  QuickLinkItem,
+  ConnectionCardProps,
+  CardHeaderProps,
+  CardBodyProps,
+  CardFooterProps,
+  StatusBadgeProps,
+  StatusButtonProps,
+  StatCardProps,
   ThemeProviderProps,
   ApiFetchOptions,
 } from './types'

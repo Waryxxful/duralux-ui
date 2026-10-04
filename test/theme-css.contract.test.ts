@@ -330,53 +330,15 @@ describe('CSS theme contract', () => {
   })
 
   test('keeps React widget glue readable on solid and soft brand surfaces', () => {
-    const widgetVariants = {
-      primary: '#3454d1',
-      secondary: '#64748b',
-      success: '#17c666',
-      danger: '#ea4d4d',
-      warning: '#ffa21d',
-      info: '#3dc7be',
-      teal: '#41b2c4',
-      indigo: '#6610f2',
-      dark: '#283c50',
-      light: '#eff0f6',
-      darken: '#001327',
-    } as const
-    const softForegrounds = {
-      primary: '#3454d1',
-      secondary: '#58667a',
-      success: '#0e7b3f',
-      danger: '#b23b3b',
-      warning: '#945e11',
-      info: '#257772',
-      teal: '#2a727d',
-      indigo: '#6610f2',
-      dark: '#283c50',
-    } as const
-
     const coloredStatSurfaces = {
       primary: '#3454d1', secondary: '#64748b', success: '#108745', danger: '#ce4444',
       warning: '#a36813', info: '#28837d', teal: '#2f808d', indigo: '#6610f2',
       dark: '#283c50', light: '#eff0f6', darken: '#001327',
     } as const
 
-    for (const [variant, background] of Object.entries(widgetVariants)) {
-      const card = ruleWithDeclarations(css, `.gcu-colored-stat.bg-${variant}`, ['background-color', 'color'])
-      // SAFETY: variant itera las claves de widgetVariants, que son las mismas de coloredStatSurfaces.
-      expect(parseColor(card['background-color']), `colored-stat ${variant} surface`).toEqual(
-        parseColor(coloredStatSurfaces[variant as keyof typeof coloredStatSurfaces]),
-      )
-      expect(parseColor(card.color), `colored-stat ${variant}`).toEqual(
-        parseColor(variant === 'light' ? '#283c50' : '#fff'),
-      )
-
-      const glass = ruleWithDeclarations(css, '.gcu-colored-stat__glass', ['color', 'background-color'])
-      const glassColor = parseColorWithAlpha(glass['background-color'])
-      // SAFETY: misma invariante de claves que arriba (widgetVariants ⊆ coloredStatSurfaces).
-      const glassSurface = compositeColor('#001327', coloredStatSurfaces[variant as keyof typeof coloredStatSurfaces], glassColor.alpha)
-      expect(contrastRatio(variant === 'light' ? '#283c50' : '#fff', glassSurface), `colored-stat glass ${variant}`).toBeGreaterThanOrEqual(4.5)
-    }
+    // Lote L4: el contrato AA de ColoredStatCard (relleno + vidrio con texto blanco) y de los íconos
+    // suaves de MiniStatCard/QuickLinkGrid/StatsCard se movió a test/indicadores-css.test.ts, que lo
+    // calcula desde los tokens del CSS por componente (las reglas Sass `_widgets-ui.scss` se borraron).
 
     // Avatars and visible progress labels are compact filled reading surfaces,
     // so their foreground must follow the same solid AA contract as buttons.
@@ -389,35 +351,6 @@ describe('CSS theme contract', () => {
       expect(parseColor(avatar['background-color']), `avatar ${variant}`).toEqual(parseColor(surface))
       expect(parseColor(avatar.color), `avatar foreground ${variant}`).toEqual(parseColor(expectedForeground))
     }
-
-    for (const [variant, foreground] of Object.entries(softForegrounds)) {
-      const soft = ruleWithDeclarations(css, `.gcu-mini-stat .avatar-text.bg-soft-${variant}`, [
-        'color',
-        'background-color',
-      ])
-      const softBackground = parseColorWithAlpha(soft['background-color'])
-      // SAFETY: variant is a known key in widgetVariants
-      const variantKey = variant as keyof typeof widgetVariants
-      const softSurface = compositeColor(
-        widgetVariants[variantKey],
-        '#ffffff',
-        softBackground.alpha,
-      )
-      expect(parseColor(soft.color)).toEqual(parseColor(foreground))
-
-      const darkSoft = ruleWithDeclarations(css, `html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-${variant}`, [
-        'color',
-        'background-color',
-      ])
-      const darkBackground = parseColorWithAlpha(darkSoft['background-color'])
-      const darkSurface = compositeColor(
-        widgetVariants[variantKey],
-        '#0f172a',
-        darkBackground.alpha,
-      )
-      expect(parseColor(darkSoft.color)).not.toEqual([255, 255, 255])
-      expect(contrastRatio(darkSoft.color, darkSurface), `dark soft widget ${variant}`).toBeGreaterThanOrEqual(4.5)
-    }
   })
 
   test('keeps Sass and runtime CSS free of unresolved helpers and icon-font drift', () => {
@@ -425,12 +358,9 @@ describe('CSS theme contract', () => {
     expect(runtimeCss).not.toMatch(/\b(?:shift-color|shade-color|tint-color|color-contrast|contrast-ratio)\(/)
     expect(css).not.toMatch(/bootstrap-icons/i)
     expect(runtimeCss).not.toMatch(/bootstrap-icons/i)
-    expect(runtimeCss).toContain('.gcu-colored-stat{color:#fff!important}')
     expect(runtimeCss).toContain('.gcu-alert--success{--gcu-alert-icon-fill:#108745;--gcu-alert-icon-foreground:#fff}')
     expect(runtimeCss).toContain('.progress-bar.bg-success,.gcu-avatar--semantic.gcu-avatar--success{background-color:#108745!important;color:#fff!important}')
-    expect(runtimeCss).toContain('.gcu-colored-stat.bg-success{background-color:#108745!important')
     expect(runtimeCss).toContain('color:#283c50!important')
-    expect(runtimeCss).toContain('color:var(--gcu-dark)!important')
     expect(runtimeCss).toContain('.gcu-btn--outline{background:transparent;color:var(--gcu-btn-outline-text,var(--gcu-btn-color))}')
     expect(readFileSync(resolve(repoRoot, 'scss/themes/components/_motion.scss'), 'utf8')).not.toContain('transition: all')
     expect(readFileSync(resolve(repoRoot, 'scss/themes/applications/_chat.scss'), 'utf8')).not.toContain('transition: all')

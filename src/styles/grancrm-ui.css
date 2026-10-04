@@ -7,6 +7,13 @@
 @import "./components/input-group.css";
 @import "./components/form-field.css";
 @import "./components/select.css";
+@import "./components/indicator.css";
+@import "./components/stats-card.css";
+@import "./components/mini-stat-card.css";
+@import "./components/colored-stat-card.css";
+@import "./components/quick-link-grid.css";
+@import "./components/chart-metrics-footer.css";
+@import "./components/connection-card.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
@@ -287,77 +294,6 @@ html.minimenu .nxl-navigation .navbar-content .nxl-caption label,html.minimenu .
   .nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow,.gcu-modules-menu{transition:none!important}
 }
 
-/* gcu-widgets-ui */
-/* ColoredStatCard / MiniStatCard / QuickLinkGrid / StatsCard — light + app-skin-dark.
-   Espejo de scss/themes/components/_widgets-ui.scss para la capa grancrm-ui
-   (remotes que importan solo este CSS). El theme.min.css del shell trae la
-   versión SCSS completa. */
-.gcu-colored-stat .fs-4,.gcu-colored-stat .fs-13,.gcu-colored-stat p{color:inherit}.gcu-colored-stat p{opacity:1!important}
-.gcu-colored-stat__glass,
-.gcu-colored-stat .avatar-text,
-.gcu-colored-stat .badge.bg-white,
-.gcu-colored-stat .badge.bg-opacity-25{
-  /* El vidrio se sombrea (no se aclara) en todos los temas: conserva el texto blanco en AA. */
-  background-color:rgba(0,19,39,.14)!important;
-  color:inherit!important;
-  border-color:transparent!important
-}
-.gcu-colored-stat__glass i,
-.gcu-colored-stat .avatar-text i,
-.gcu-colored-stat__glass [class^="feather-"],
-.gcu-colored-stat__glass [class*=" feather-"]{color:inherit!important}
-/* El theme oscuro pinta .avatar-text con fondo sólido (html.app-skin-dark, mayor especificidad):
-   se reafirma el vidrio sombreado para que el ícono siga sobre el color de la tarjeta. */
-html.app-skin-dark .gcu-colored-stat__glass,
-html.app-skin-dark .gcu-colored-stat .avatar-text,
-html.app-skin-dark .gcu-colored-stat .badge.bg-white,
-html.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25{
-  background-color:rgba(0,19,39,.14)!important;
-  color:inherit!important;
-  border-color:rgba(255,255,255,.22)!important
-}
-html.app-skin-dark .gcu-colored-stat__glass i,
-html.app-skin-dark .gcu-colored-stat .avatar-text i,
-.app-skin-dark .gcu-colored-stat__glass i,
-.app-skin-dark .gcu-colored-stat .avatar-text i{color:inherit!important}
-
-.gcu-colored-stat.bg-primary,.gcu-colored-stat.bg-secondary,.gcu-colored-stat.bg-indigo,.gcu-colored-stat.bg-dark{color:#fff!important}
-.gcu-colored-stat.bg-success,.gcu-colored-stat.bg-danger,.gcu-colored-stat.bg-warning,.gcu-colored-stat.bg-info,.gcu-colored-stat.bg-teal,.gcu-colored-stat.bg-light{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-darken{color:#fff!important}
-.gcu-colored-stat.bg-primary .gcu-colored-stat__glass,.gcu-colored-stat.bg-primary .badge.bg-white,.gcu-colored-stat.bg-primary .badge.bg-opacity-25,.gcu-colored-stat.bg-primary .avatar-text{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-secondary .gcu-colored-stat__glass,.gcu-colored-stat.bg-secondary .badge.bg-white,.gcu-colored-stat.bg-secondary .badge.bg-opacity-25,.gcu-colored-stat.bg-secondary .avatar-text{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-success .gcu-colored-stat__glass,.gcu-colored-stat.bg-success .badge.bg-white,.gcu-colored-stat.bg-success .badge.bg-opacity-25,.gcu-colored-stat.bg-success .avatar-text{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-danger .gcu-colored-stat__glass,.gcu-colored-stat.bg-danger .badge.bg-white,.gcu-colored-stat.bg-danger .badge.bg-opacity-25,.gcu-colored-stat.bg-danger .avatar-text{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-warning .gcu-colored-stat__glass,.gcu-colored-stat.bg-warning .badge.bg-white,.gcu-colored-stat.bg-warning .badge.bg-opacity-25,.gcu-colored-stat.bg-warning .avatar-text{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-info .gcu-colored-stat__glass,.gcu-colored-stat.bg-info .badge.bg-white,.gcu-colored-stat.bg-info .badge.bg-opacity-25,.gcu-colored-stat.bg-info .avatar-text{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-teal .gcu-colored-stat__glass,.gcu-colored-stat.bg-teal .badge.bg-white,.gcu-colored-stat.bg-teal .badge.bg-opacity-25,.gcu-colored-stat.bg-teal .avatar-text{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-indigo .gcu-colored-stat__glass,.gcu-colored-stat.bg-indigo .badge.bg-white,.gcu-colored-stat.bg-indigo .badge.bg-opacity-25,.gcu-colored-stat.bg-indigo .avatar-text{color:#fff!important}
-.gcu-colored-stat.bg-dark .gcu-colored-stat__glass,.gcu-colored-stat.bg-dark .badge.bg-white,.gcu-colored-stat.bg-dark .badge.bg-opacity-25,.gcu-colored-stat.bg-dark .avatar-text{color:#fff!important}
-.gcu-colored-stat.bg-light .gcu-colored-stat__glass,.gcu-colored-stat.bg-light .badge.bg-white,.gcu-colored-stat.bg-light .badge.bg-opacity-25,.gcu-colored-stat.bg-light .avatar-text{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-darken .gcu-colored-stat__glass,.gcu-colored-stat.bg-darken .badge.bg-white,.gcu-colored-stat.bg-darken .badge.bg-opacity-25,.gcu-colored-stat.bg-darken .avatar-text{color:#fff!important}
-.gcu-colored-stat.bg-primary .gcu-colored-stat__glass i,.gcu-colored-stat.bg-primary .avatar-text i,.gcu-colored-stat.bg-secondary .gcu-colored-stat__glass i,.gcu-colored-stat.bg-secondary .avatar-text i,.gcu-colored-stat.bg-success .gcu-colored-stat__glass i,.gcu-colored-stat.bg-success .avatar-text i,.gcu-colored-stat.bg-danger .gcu-colored-stat__glass i,.gcu-colored-stat.bg-danger .avatar-text i,.gcu-colored-stat.bg-warning .gcu-colored-stat__glass i,.gcu-colored-stat.bg-warning .avatar-text i,.gcu-colored-stat.bg-info .gcu-colored-stat__glass i,.gcu-colored-stat.bg-info .avatar-text i,.gcu-colored-stat.bg-teal .gcu-colored-stat__glass i,.gcu-colored-stat.bg-teal .avatar-text i,.gcu-colored-stat.bg-light .gcu-colored-stat__glass i,.gcu-colored-stat.bg-light .avatar-text i{color:var(--gcu-darken)!important}
-.gcu-colored-stat.bg-indigo .gcu-colored-stat__glass i,.gcu-colored-stat.bg-indigo .avatar-text i,.gcu-colored-stat.bg-dark .gcu-colored-stat__glass i,.gcu-colored-stat.bg-dark .avatar-text i,.gcu-colored-stat.bg-darken .gcu-colored-stat__glass i,.gcu-colored-stat.bg-darken .avatar-text i{color:#fff!important}
-.gcu-colored-stat.bg-primary,.gcu-colored-stat.bg-secondary,.gcu-colored-stat.bg-success,.gcu-colored-stat.bg-danger,.gcu-colored-stat.bg-warning,.gcu-colored-stat.bg-info,.gcu-colored-stat.bg-teal,.gcu-colored-stat.bg-light{--gcu-widget-glass-text:var(--gcu-darken)}.gcu-colored-stat.bg-indigo,.gcu-colored-stat.bg-dark,.gcu-colored-stat.bg-darken{--gcu-widget-glass-text:#fff}
-
-.gcu-mini-stat .avatar-text.bg-soft-primary,.gcu-quick-link .avatar-text.bg-soft-primary,.gcu-stats-card .avatar-text.bg-soft-primary{--gcu-widget-soft-rgb:var(--gcu-primary-rgb);background-color:rgba(var(--gcu-primary-rgb),.12)!important;color:var(--gcu-primary)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-secondary,.gcu-quick-link .avatar-text.bg-soft-secondary,.gcu-stats-card .avatar-text.bg-soft-secondary,.gcu-mini-stat .avatar-text.bg-soft-success,.gcu-quick-link .avatar-text.bg-soft-success,.gcu-stats-card .avatar-text.bg-soft-success,.gcu-mini-stat .avatar-text.bg-soft-danger,.gcu-quick-link .avatar-text.bg-soft-danger,.gcu-stats-card .avatar-text.bg-soft-danger,.gcu-mini-stat .avatar-text.bg-soft-warning,.gcu-quick-link .avatar-text.bg-soft-warning,.gcu-stats-card .avatar-text.bg-soft-warning,.gcu-mini-stat .avatar-text.bg-soft-info,.gcu-quick-link .avatar-text.bg-soft-info,.gcu-stats-card .avatar-text.bg-soft-info,.gcu-mini-stat .avatar-text.bg-soft-teal,.gcu-quick-link .avatar-text.bg-soft-teal,.gcu-stats-card .avatar-text.bg-soft-teal,.gcu-mini-stat .avatar-text.bg-soft-light,.gcu-quick-link .avatar-text.bg-soft-light,.gcu-stats-card .avatar-text.bg-soft-light{color:var(--gcu-dark)!important}
-.gcu-mini-stat .avatar-text.bg-soft-secondary,.gcu-quick-link .avatar-text.bg-soft-secondary,.gcu-stats-card .avatar-text.bg-soft-secondary{--gcu-widget-soft-rgb:var(--gcu-secondary-rgb);background-color:rgba(var(--gcu-secondary-rgb),.12)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-success,.gcu-quick-link .avatar-text.bg-soft-success,.gcu-stats-card .avatar-text.bg-soft-success{--gcu-widget-soft-rgb:var(--gcu-success-rgb);background-color:rgba(var(--gcu-success-rgb),.12)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-danger,.gcu-quick-link .avatar-text.bg-soft-danger,.gcu-stats-card .avatar-text.bg-soft-danger{--gcu-widget-soft-rgb:var(--gcu-danger-rgb);background-color:rgba(var(--gcu-danger-rgb),.12)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-warning,.gcu-quick-link .avatar-text.bg-soft-warning,.gcu-stats-card .avatar-text.bg-soft-warning{--gcu-widget-soft-rgb:var(--gcu-warning-rgb);background-color:rgba(var(--gcu-warning-rgb),.12)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-info,.gcu-quick-link .avatar-text.bg-soft-info,.gcu-stats-card .avatar-text.bg-soft-info{--gcu-widget-soft-rgb:var(--gcu-info-rgb);background-color:rgba(var(--gcu-info-rgb),.12)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-teal,.gcu-quick-link .avatar-text.bg-soft-teal,.gcu-stats-card .avatar-text.bg-soft-teal{--gcu-widget-soft-rgb:var(--gcu-teal-rgb);background-color:rgba(var(--gcu-teal-rgb),.12)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-indigo,.gcu-quick-link .avatar-text.bg-soft-indigo,.gcu-stats-card .avatar-text.bg-soft-indigo{--gcu-widget-soft-rgb:var(--gcu-indigo-rgb);background-color:rgba(var(--gcu-indigo-rgb),.12)!important;color:var(--gcu-indigo)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-dark,.gcu-quick-link .avatar-text.bg-soft-dark,.gcu-stats-card .avatar-text.bg-soft-dark{--gcu-widget-soft-rgb:var(--gcu-dark-rgb);background-color:rgba(var(--gcu-dark-rgb),.12)!important;color:var(--gcu-dark)!important;border-color:transparent!important}
-.gcu-mini-stat .avatar-text.bg-soft-light,.gcu-quick-link .avatar-text.bg-soft-light,.gcu-stats-card .avatar-text.bg-soft-light{--gcu-widget-soft-rgb:var(--gcu-light-rgb);background-color:rgba(var(--gcu-light-rgb),.12)!important;border-color:transparent!important}
-
-html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-secondary,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-teal,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-indigo,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-dark,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-dark,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-dark,html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-light,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-light,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-light,
-.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-secondary,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-teal,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-teal,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-teal,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-indigo,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-dark,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-dark,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-dark,.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-light,.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-light,.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-light{background-color:var(--gcu-surface-subtle)!important;color:#fff!important;border-color:transparent!important}
-html.app-skin-dark .gcu-mini-stat .fs-4,html.app-skin-dark .gcu-mini-stat .text-dark,html.app-skin-dark .gcu-quick-link .text-dark,html.app-skin-dark .gcu-stats-card .text-dark,html.app-skin-dark .gcu-stats-card .fs-4,
-.app-skin-dark .gcu-mini-stat .fs-4,.app-skin-dark .gcu-mini-stat .text-dark,.app-skin-dark .gcu-quick-link .text-dark,.app-skin-dark .gcu-stats-card .text-dark,.app-skin-dark .gcu-stats-card .fs-4{color:#fff!important}
-html.app-skin-dark .gcu-colored-stat .gcu-colored-stat__glass,html.app-skin-dark .gcu-colored-stat .badge.bg-white,html.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25,html.app-skin-dark .gcu-colored-stat .avatar-text,.app-skin-dark .gcu-colored-stat .gcu-colored-stat__glass,.app-skin-dark .gcu-colored-stat .badge.bg-white,.app-skin-dark .gcu-colored-stat .badge.bg-opacity-25,.app-skin-dark .gcu-colored-stat .avatar-text{color:var(--gcu-widget-glass-text,inherit)!important}
-html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"]{background-color:rgba(var(--gcu-widget-soft-rgb),.18)!important;color:#fff!important}
-/* /gcu-widgets-ui */
 
 /* Searchable select + DataTable toolbar primitives. */
 .data-table-toolbar{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--gcu-border);background:var(--gcu-surface)}
@@ -513,38 +449,12 @@ html.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
 .gcu-theme[data-gcu-theme="dark"] .card,.gcu-theme[data-gcu-theme="dark"] .modal-content,.gcu-theme[data-gcu-theme="dark"] .dropdown-menu,.gcu-theme[data-gcu-theme="dark"] .list-group-item,.gcu-theme[data-gcu-theme="navy"] .card,.gcu-theme[data-gcu-theme="navy"] .modal-content,.gcu-theme[data-gcu-theme="navy"] .dropdown-menu,.gcu-theme[data-gcu-theme="navy"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}.gcu-theme[data-gcu-theme="dark"] .table,.gcu-theme[data-gcu-theme="navy"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)}
 html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .card,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .modal-content,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .dropdown-menu,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)!important}
 
-/* Runtime glue is loaded after the SCSS theme. Keep its dark widget foregrounds
-   semantic instead of flattening every icon to white. */
-html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"]{background-color:color-mix(in srgb,currentColor 16%,var(--gcu-surface-subtle))!important;color:var(--gcu-text)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary{color:var(--gcu-status-primary)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success{color:var(--gcu-status-success)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger{color:var(--gcu-status-danger)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning{color:var(--gcu-status-warning)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info{color:var(--gcu-status-info)!important}
 
-.gcu-stats-card__footer{color:var(--gcu-text)!important}.app-skin-dark .gcu-alert__icon,[data-gcu-theme="dark"] .gcu-alert__icon{background:var(--gcu-alert-color)!important;color:var(--gcu-alert-icon-text)!important}
+.app-skin-dark .gcu-alert__icon,[data-gcu-theme="dark"] .gcu-alert__icon{background:var(--gcu-alert-color)!important;color:var(--gcu-alert-icon-text)!important}
 @media (max-width:575.98px){.page-header{padding:0 20px!important}}
 /* Chart marks may use raw semantic variables, but their CSS-aware Recharts
    scope maps them to foreground-safe roles for light and dark canvases. */
 .recharts-wrapper{--gcu-secondary:var(--gcu-status-secondary);--gcu-success:var(--gcu-status-success);--gcu-danger:var(--gcu-status-danger);--gcu-warning:var(--gcu-status-warning);--gcu-info:var(--gcu-status-info);--gcu-teal:var(--gcu-status-teal)}
-/* ColoredStatCard parity with the SCSS theme: its solid reading surfaces use
-   AA fills and one white foreground. This intentionally follows the existing
-   `.bg-*` class API while avoiding black text on bright status backgrounds. */
-.gcu-colored-stat{color:#fff!important}
-.gcu-colored-stat .fs-4,.gcu-colored-stat .fs-13,.gcu-colored-stat p{color:inherit!important}
-.gcu-colored-stat .gcu-colored-stat__glass,.gcu-colored-stat .avatar-text,.gcu-colored-stat .badge.bg-white,.gcu-colored-stat .badge.bg-opacity-25{background-color:rgba(0,19,39,.14)!important;color:inherit!important;border:1px solid rgba(255,255,255,.22)!important}
-.gcu-colored-stat.bg-primary{background-color:#3454d1!important;border-color:#3454d1!important}
-.gcu-colored-stat.bg-secondary{background-color:#64748b!important;border-color:#64748b!important}
-.gcu-colored-stat.bg-success{background-color:#108745!important;border-color:#108745!important}
-.gcu-colored-stat.bg-danger{background-color:#ce4444!important;border-color:#ce4444!important}
-.gcu-colored-stat.bg-warning{background-color:#a36813!important;border-color:#a36813!important}
-.gcu-colored-stat.bg-info{background-color:#28837d!important;border-color:#28837d!important}
-.gcu-colored-stat.bg-teal{background-color:#2f808d!important;border-color:#2f808d!important}
-.gcu-colored-stat.bg-indigo{background-color:#6610f2!important;border-color:#6610f2!important}
-.gcu-colored-stat.bg-dark{background-color:#283c50!important;border-color:#283c50!important}
-.gcu-colored-stat.bg-darken{background-color:#001327!important;border-color:#001327!important}
-.gcu-colored-stat.bg-light{background-color:#eff0f6!important;border-color:#eff0f6!important;color:#283c50!important}
-.gcu-colored-stat.bg-light .fs-4,.gcu-colored-stat.bg-light .fs-13,.gcu-colored-stat.bg-light p{color:#283c50!important}
-.gcu-colored-stat.bg-light .gcu-colored-stat__glass,.gcu-colored-stat.bg-light .avatar-text,.gcu-colored-stat.bg-light .badge.bg-white,.gcu-colored-stat.bg-light .badge.bg-opacity-25{background-color:rgba(0,19,39,.07)!important;border-color:rgba(0,19,39,.16)!important}
-/* Override the previous compatibility rules with the card-level foreground. */
-.gcu-colored-stat.bg-primary,.gcu-colored-stat.bg-secondary,.gcu-colored-stat.bg-success,.gcu-colored-stat.bg-danger,.gcu-colored-stat.bg-warning,.gcu-colored-stat.bg-info,.gcu-colored-stat.bg-teal,.gcu-colored-stat.bg-indigo,.gcu-colored-stat.bg-dark,.gcu-colored-stat.bg-darken{color:#fff!important}
-.gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass,.gcu-colored-stat:not(.bg-light) .avatar-text,.gcu-colored-stat:not(.bg-light) .badge.bg-white,.gcu-colored-stat:not(.bg-light) .badge.bg-opacity-25,.gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass i,.gcu-colored-stat:not(.bg-light) .avatar-text i{color:#fff!important}
-html.app-skin-dark .gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .avatar-text,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .badge.bg-white,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .badge.bg-opacity-25,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass i,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .avatar-text i{color:#fff!important}
 /* Shared solid-surface contract: readable content is always white over the
    deeper AA fills. Raw `.bg-*` remains available outside component APIs. */
 .progress-bar.bg-primary,.gcu-avatar--semantic.gcu-avatar--primary{background-color:#3454d1!important;color:#fff!important}.progress-bar.bg-secondary,.gcu-avatar--semantic.gcu-avatar--secondary{background-color:#64748b!important;color:#fff!important}.progress-bar.bg-success,.gcu-avatar--semantic.gcu-avatar--success{background-color:#108745!important;color:#fff!important}.progress-bar.bg-danger,.gcu-avatar--semantic.gcu-avatar--danger{background-color:#ce4444!important;color:#fff!important}.progress-bar.bg-warning,.gcu-avatar--semantic.gcu-avatar--warning{background-color:#a36813!important;color:#fff!important}.progress-bar.bg-info,.gcu-avatar--semantic.gcu-avatar--info{background-color:#28837d!important;color:#fff!important}.progress-bar.bg-teal,.gcu-avatar--semantic.gcu-avatar--teal{background-color:#2f808d!important;color:#fff!important}.progress-bar.bg-indigo,.gcu-avatar--semantic.gcu-avatar--indigo{background-color:#6610f2!important;color:#fff!important}.progress-bar.bg-dark,.gcu-avatar--semantic.gcu-avatar--dark{background-color:#283c50!important;color:#fff!important}.progress-bar.bg-darken,.gcu-avatar--semantic.gcu-avatar--darken{background-color:#001327!important;color:#fff!important}.progress-bar.bg-light,.gcu-avatar--semantic.gcu-avatar--light{background-color:#eff0f6!important;color:#283c50!important}

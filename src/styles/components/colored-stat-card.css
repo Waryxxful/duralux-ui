@@ -1,0 +1,33 @@
+/* ColoredStatCard: superficie de color con grano (.gcu-grain) y un único texto blanco.
+   Rellenos profundos de la paleta (≈ 7:1 con blanco) que no cambian entre claro, oscuro y navy.
+   No usa .card / .bg-* / .avatar-text / .badge: el tema y Bootstrap les imponen prioridad forzada. */
+.gcu-colored-stat{--gcu-colored-stat-fill:var(--gcu-primary-600);margin-bottom:var(--gcu-space-6);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-colored-stat-fill);color:var(--gcu-on-darken);box-shadow:var(--gcu-shadow-1)}
+.gcu-colored-stat--primary{--gcu-colored-stat-fill:var(--gcu-primary-600)}
+.gcu-colored-stat--secondary{--gcu-colored-stat-fill:var(--gcu-slate-600)}
+.gcu-colored-stat--success{--gcu-colored-stat-fill:var(--gcu-success-800)}
+.gcu-colored-stat--danger{--gcu-colored-stat-fill:var(--gcu-danger-700)}
+.gcu-colored-stat--warning{--gcu-colored-stat-fill:var(--gcu-warning-800)}
+.gcu-colored-stat--info{--gcu-colored-stat-fill:var(--gcu-info-800)}
+.gcu-colored-stat--teal{--gcu-colored-stat-fill:var(--gcu-teal-800)}
+.gcu-colored-stat--indigo{--gcu-colored-stat-fill:var(--gcu-indigo-600)}
+.gcu-colored-stat--dark{--gcu-colored-stat-fill:var(--gcu-slate-800)}
+
+.gcu-colored-stat__body{display:flex;flex-direction:column;gap:var(--gcu-space-3);padding:var(--gcu-space-5)}
+.gcu-colored-stat__main{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--gcu-space-3)}
+.gcu-colored-stat__figures{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);min-width:0}
+.gcu-colored-stat .gcu-stat__value,.gcu-colored-stat .gcu-stat__label,.gcu-colored-stat .gcu-stat__context,.gcu-colored-stat .gcu-stat-delta__label{color:inherit}
+.gcu-colored-stat__meta{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-2)}
+.gcu-colored-stat__chart{margin-top:auto}
+
+/* Vidrio: se sombrea (nunca se aclara) para que el blanco siga en AA sobre cualquier relleno. */
+.gcu-colored-stat__glass{border:1px solid color-mix(in srgb,currentColor 22%,transparent);background-color:rgba(var(--gcu-darken-rgb),.14);color:inherit}
+.gcu-colored-stat__icon{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;width:var(--gcu-control-h-md);height:var(--gcu-control-h-md);border-radius:var(--gcu-radius-full);font-size:var(--gcu-font-size-md);line-height:1}
+.gcu-colored-stat .gcu-stat-delta{padding:var(--gcu-space-0-5) var(--gcu-space-2);border-radius:var(--gcu-radius-sm)}
+.gcu-colored-stat .gcu-stat-delta__value{padding:0;background-color:transparent;color:inherit}
+
+@container (min-width: 20rem){
+  .gcu-colored-stat__body{padding:var(--gcu-space-6)}
+  .gcu-colored-stat .gcu-stat__value{font-size:var(--gcu-font-size-2xl);line-height:var(--gcu-line-height-2xl);min-height:var(--gcu-line-height-2xl)}
+  .gcu-colored-stat__icon{width:var(--gcu-space-12);height:var(--gcu-space-12);font-size:var(--gcu-font-size-xl)}
+  .gcu-colored-stat__meta{flex-direction:row;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-3)}
+}
