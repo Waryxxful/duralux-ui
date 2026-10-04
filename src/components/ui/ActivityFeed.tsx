@@ -1,53 +1,42 @@
-import React from 'react';
-import { cx } from '../../utils/cx';
+import { forwardRef } from 'react'
+import { cx } from '../../utils/cx'
+import { isArray, isString } from '../../utils/typeGuards'
+import type { ActivityFeedProps } from '../../public/types'
+import { EventTime } from './internal/EventTime'
+import { resolveTone } from './internal/tones'
+
+export type { ActivityFeedItem, ActivityFeedProps, ActivityFeedVariant } from '../../public/types'
 
 /**
- * ActivityFeed — feed de log/eventos con riel de color por tipo de evento.
+ * ActivityFeed — feed de eventos con riel y punto de color por tipo de evento.
  *
- * Estructura basada en duralux-admin/widgets-lists.html:
- *   ul.list-unstyled.mb-0.activity-feed-1 > li.feed-item.feed-item-{variant}
- * El riel de color es CSS puro (::before/::after) — ya está compilado en
- * scss/themes/widgets/_widgets-lists.scss y se mantiene con la adaptación
- * GranCRM del theme.
+ * - items: [{ key, variant, title, description, date | time, extra }]
+ * - date: «hace 5 minutos» con la fecha completa (dd-mm-aaaa HH:mm) en `title`; `time` es texto legado.
+ * - now: instante de referencia del tiempo relativo (tests, capturas).
+ * Tokens por tema (sin overrides oscuros); en contenedores angostos la hora pasa bajo el título.
  */
-export type ActivityFeedVariant = 'primary' | 'success' | 'danger' | 'warning' | 'info';
-
-export interface ActivityFeedItem {
-  key: string | number;
-  variant: ActivityFeedVariant;
-  title: React.ReactNode;
-  description?: React.ReactNode;
-  time?: React.ReactNode;
-  /** Slot final (badges, acciones, avatares agrupados, etc.) */
-  extra?: React.ReactNode;
-}
-
-export interface ActivityFeedProps {
-  items: ActivityFeedItem[];
-  className?: string;
-}
-
-export function ActivityFeed({ items, className }: ActivityFeedProps) {
+export const ActivityFeed = forwardRef<HTMLUListElement, ActivityFeedProps>(function ActivityFeed(
+  { items, className, now },
+  ref,
+) {
+  const list = isArray(items) ? items : []
   return (
-    <ul className={cx('list-unstyled mb-0 activity-feed-1', className)}>
-      {items.map((item) => (
-        <li key={item.key} className={`feed-item feed-item-${item.variant}`}>
-          <div className="d-flex gap-4 justify-content-between">
-            <div>
-              <div className="mb-2 text-truncate-1-line">
-                <span className="fw-semibold text-dark">{item.title}</span>
+    <ul ref={ref} className={cx('gcu-activity-feed', 'list-unstyled', 'mb-0', className)}>
+      {list.map((item) => {
+        const { tone } = resolveTone(item.variant, 'ActivityFeed')
+        return (
+          <li key={item.key} className={cx('gcu-activity-feed__item', `gcu-activity-feed__item--${tone}`)}>
+            <div className="gcu-activity-feed__body">
+              <div className="gcu-activity-feed__main">
+                <div className="gcu-activity-feed__title" title={isString(item.title) ? item.title : undefined}>{item.title}</div>
+                {item.description != null && <p className="gcu-activity-feed__description">{item.description}</p>}
+                {item.extra}
               </div>
-              {item.description != null && (
-                <p className="fs-12 text-muted mb-2 text-truncate-2-line">{item.description}</p>
-              )}
-              {item.extra}
+              <EventTime className="gcu-activity-feed__time" date={item.date} now={now} fallback={item.time} />
             </div>
-            {item.time != null && (
-              <div className="fs-10 fw-medium text-uppercase text-muted text-nowrap">{item.time}</div>
-            )}
-          </div>
-        </li>
-      ))}
+          </li>
+        )
+      })}
     </ul>
-  );
-}
+  )
+})

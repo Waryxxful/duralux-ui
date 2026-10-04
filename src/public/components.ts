@@ -12,7 +12,7 @@ import { MiniStatCard as MiniStatCardRuntime } from '../components/ui/MiniStatCa
 import { ColoredStatCard as ColoredStatCardRuntime } from '../components/ui/ColoredStatCard'
 import { ChartMetricsFooter as ChartMetricsFooterRuntime } from '../components/ui/ChartMetricsFooter'
 import { QuickLinkGrid as QuickLinkGridRuntime } from '../components/ui/QuickLinkGrid'
-import { Timeline as TimelineRuntime } from '../components/ui/Timeline'
+export { Timeline } from '../components/ui/Timeline'
 export { ProgressRing } from '../components/ui/ProgressRing'
 export { Progress } from '../components/ui/Progress'
 export { Tabs } from '../components/ui/Tabs'
@@ -169,7 +169,6 @@ export const MiniStatCard = asComponent<MiniStatCardProps>(MiniStatCardRuntime)
 export const ColoredStatCard = asComponent<ColoredStatCardProps>(ColoredStatCardRuntime)
 export const ChartMetricsFooter = asComponent<ChartMetricsFooterProps>(ChartMetricsFooterRuntime)
 export const QuickLinkGrid = asComponent<QuickLinkGridProps>(QuickLinkGridRuntime)
-export const Timeline = asComponent<TimelineProps>(TimelineRuntime)
 export const DataTable = asGenericComponent<<T extends object = Record<string, string | number | boolean | null | undefined>>(props: DataTableProps<T>) => React.ReactElement>(DataTableRuntime)
 export const Table = asGenericComponent<<T = unknown>(props: TableProps<T>) => React.ReactElement>(TableRuntime)
 export const ResponsiveTable = asGenericComponent<<T = unknown>(props: ResponsiveTableProps<T>) => React.ReactElement>(ResponsiveTableRuntime)

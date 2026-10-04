@@ -1,0 +1,25 @@
+/* ActivityFeed: riel continuo y punto de estado por tono (tokens status, sin hex ni overrides
+   oscuros). Angosto = hora bajo el título; ancho = hora a la derecha, cifras tabulares. */
+.gcu-activity-feed{container-type:inline-size;padding:0}
+.gcu-activity-feed__item{position:relative;padding-inline-start:var(--gcu-space-6);padding-bottom:var(--gcu-space-5)}
+.gcu-activity-feed__item:last-child{padding-bottom:0}
+.gcu-activity-feed__item::before{content:"";position:absolute;top:var(--gcu-space-2);bottom:calc(var(--gcu-space-2) * -1);inset-inline-start:calc(var(--gcu-space-1) + 1px);width:1px;background-color:var(--gcu-border)}
+.gcu-activity-feed__item:last-child::before{display:none}
+.gcu-activity-feed__item::after{content:"";position:absolute;top:var(--gcu-space-1);inset-inline-start:0;width:10px;height:10px;border:2px solid var(--gcu-feed-tone);border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface)}
+.gcu-activity-feed__item--primary{--gcu-feed-tone:var(--gcu-status-primary)}
+.gcu-activity-feed__item--secondary,.gcu-activity-feed__item--dark,.gcu-activity-feed__item--light{--gcu-feed-tone:var(--gcu-status-secondary)}
+.gcu-activity-feed__item--success{--gcu-feed-tone:var(--gcu-status-success)}
+.gcu-activity-feed__item--danger{--gcu-feed-tone:var(--gcu-status-danger)}
+.gcu-activity-feed__item--warning{--gcu-feed-tone:var(--gcu-status-warning)}
+.gcu-activity-feed__item--info{--gcu-feed-tone:var(--gcu-status-info)}
+.gcu-activity-feed__item--teal{--gcu-feed-tone:var(--gcu-status-teal)}
+.gcu-activity-feed__item--indigo{--gcu-feed-tone:var(--gcu-status-indigo)}
+.gcu-activity-feed__body{display:flex;flex-direction:column;gap:var(--gcu-space-1)}
+.gcu-activity-feed__main{min-width:0}
+.gcu-activity-feed__title{overflow:hidden;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-semibold);text-overflow:ellipsis;white-space:nowrap}
+.gcu-activity-feed__description{display:-webkit-box;margin:var(--gcu-space-1) 0 var(--gcu-space-2);overflow:hidden;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.gcu-activity-feed .gcu-event-time{font-variant-numeric:tabular-nums}
+@container (min-width:28rem){
+  .gcu-activity-feed__body{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:var(--gcu-space-4)}
+  .gcu-activity-feed__time{flex:none}
+}

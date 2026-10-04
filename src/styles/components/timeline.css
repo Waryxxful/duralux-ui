@@ -1,0 +1,24 @@
+/* Timeline: marcador suave por tono unido por un riel; hora con cifras tabulares.
+   Responde a su contenedor: angosto = hora bajo el título; ancho = hora a la derecha. */
+.gcu-timeline{container-type:inline-size;display:grid;gap:var(--gcu-space-4);padding:0}
+.gcu-timeline__item{position:relative;display:flex;gap:var(--gcu-space-3)}
+.gcu-timeline__item:not(:last-child)::before{content:"";position:absolute;top:calc(var(--gcu-control-h-xs) + var(--gcu-space-1));bottom:calc(var(--gcu-space-4) * -1 + var(--gcu-space-1));inset-inline-start:calc(var(--gcu-control-h-xs) / 2);width:1px;background-color:var(--gcu-border)}
+.gcu-timeline__marker{flex:none;display:inline-flex;align-items:center;justify-content:center;width:var(--gcu-control-h-xs);height:var(--gcu-control-h-xs);border:1px solid var(--gcu-tl-border);border-radius:var(--gcu-radius-full);background-color:var(--gcu-tl-soft);color:var(--gcu-tl-text);font-size:var(--gcu-font-size-sm);line-height:1}
+.gcu-timeline__marker--primary{--gcu-tl-soft:var(--gcu-primary-soft);--gcu-tl-text:var(--gcu-primary-text);--gcu-tl-border:var(--gcu-primary-border)}
+.gcu-timeline__marker--secondary,.gcu-timeline__marker--dark,.gcu-timeline__marker--light{--gcu-tl-soft:var(--gcu-secondary-soft);--gcu-tl-text:var(--gcu-secondary-text);--gcu-tl-border:var(--gcu-secondary-border)}
+.gcu-timeline__marker--success{--gcu-tl-soft:var(--gcu-success-soft);--gcu-tl-text:var(--gcu-success-text);--gcu-tl-border:var(--gcu-success-border)}
+.gcu-timeline__marker--danger{--gcu-tl-soft:var(--gcu-danger-soft);--gcu-tl-text:var(--gcu-danger-text);--gcu-tl-border:var(--gcu-danger-border)}
+.gcu-timeline__marker--warning{--gcu-tl-soft:var(--gcu-warning-soft);--gcu-tl-text:var(--gcu-warning-text);--gcu-tl-border:var(--gcu-warning-border)}
+.gcu-timeline__marker--info{--gcu-tl-soft:var(--gcu-info-soft);--gcu-tl-text:var(--gcu-info-text);--gcu-tl-border:var(--gcu-info-border)}
+.gcu-timeline__marker--teal{--gcu-tl-soft:var(--gcu-teal-soft);--gcu-tl-text:var(--gcu-teal-text);--gcu-tl-border:var(--gcu-teal-border)}
+.gcu-timeline__marker--indigo{--gcu-tl-soft:var(--gcu-indigo-soft);--gcu-tl-text:var(--gcu-indigo-text);--gcu-tl-border:var(--gcu-indigo-border)}
+.gcu-timeline__body{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--gcu-space-1)}
+.gcu-timeline__main{min-width:0}
+.gcu-timeline__title{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-timeline__description{margin:var(--gcu-space-0-5) 0 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-timeline__user{display:flex;align-items:center;gap:var(--gcu-space-2);margin-top:var(--gcu-space-1);color:var(--gcu-muted);font-size:var(--gcu-font-size-2xs)}
+.gcu-event-time{color:var(--gcu-muted);font-size:var(--gcu-font-size-2xs);line-height:var(--gcu-line-height-2xs);font-variant-numeric:tabular-nums;white-space:nowrap}
+@container (min-width:28rem){
+  .gcu-timeline__body{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:var(--gcu-space-3)}
+  .gcu-timeline__time{flex:none;padding-top:var(--gcu-space-0-5)}
+}
