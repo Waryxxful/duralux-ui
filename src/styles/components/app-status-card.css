@@ -1,0 +1,18 @@
+/* AppStatusCard: ícono · nombre y descripción · estado (Severity + detalle) · acción.
+   Angosta: el estado y la acción bajan bajo el nombre; desde 28rem, una sola fila. */
+.gcu-app-status{border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface)}
+.gcu-app-status--caido{border-color:var(--gcu-danger-border)}
+.gcu-app-status__inner{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:var(--gcu-space-2) var(--gcu-space-3);padding:var(--gcu-space-3)}
+.gcu-app-status__icon{display:inline-flex;align-items:center;justify-content:center;width:var(--gcu-control-h-lg);height:var(--gcu-control-h-lg);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface-sunken);color:var(--gcu-text);font-size:var(--gcu-font-size-lg)}
+.gcu-app-status__text{min-width:0}
+.gcu-app-status__name{margin:0;overflow:hidden;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-semibold);text-overflow:ellipsis;white-space:nowrap}
+.gcu-app-status__description{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-app-status__state{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-0-5);grid-column:1 / -1}
+.gcu-app-status__detail{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-app-status__action{grid-column:1 / -1}
+
+@container (min-width: 28rem){
+  .gcu-app-status__inner{grid-template-columns:auto minmax(0,1fr) auto auto;gap:var(--gcu-space-4);padding:var(--gcu-space-4)}
+  .gcu-app-status__state{grid-column:auto;align-items:flex-end;text-align:end}
+  .gcu-app-status__action{grid-column:auto}
+}

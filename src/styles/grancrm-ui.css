@@ -41,6 +41,11 @@
 @import "./components/list.css";
 @import "./components/bulk-bar.css";
 @import "./components/active-filters.css";
+@import "./components/entity-card.css";
+@import "./components/rank-list.css";
+@import "./components/quick-tiles.css";
+@import "./components/process-steps.css";
+@import "./components/app-status-card.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */

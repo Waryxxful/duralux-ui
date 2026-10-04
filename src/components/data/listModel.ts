@@ -40,5 +40,6 @@ export function typeaheadIndex(items: ReadonlyArray<ListItem>, from: number, que
 /** Nueva selección tras activar `id`: en simple reemplaza; en múltiple alterna. */
 export function toggleSelection(current: ReadonlyArray<ListId>, id: ListId, mode: 'single' | 'multiple'): ListId[] {
   if (mode === 'single') return [id]
-  return current.includes(id) ? current.filter((value) => value !== id) : [...current, id]
+  const without = current.filter((value) => value !== id)
+  return without.length === current.length ? [...current, id] : without
 }

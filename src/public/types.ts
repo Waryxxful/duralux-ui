@@ -1428,7 +1428,7 @@ export interface ProcessStep {
   status?: ProcessStepStatus
 }
 
-export interface ProcessStepsProps extends Omit<React.HTMLAttributes<HTMLOListElement>, 'children'> {
+export interface ProcessStepsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   steps: ReadonlyArray<ProcessStep>
   /** Índice del paso en curso. */
   current?: number

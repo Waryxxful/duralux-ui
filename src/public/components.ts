@@ -60,6 +60,11 @@ export { StatGroup } from '../components/data/StatGroup'
 export { List } from '../components/data/List'
 export { BulkBar } from '../components/data/BulkBar'
 export { ActiveFilters } from '../components/data/ActiveFilters'
+export { EntityCard } from '../components/composition/EntityCard'
+export { RankList } from '../components/composition/RankList'
+export { QuickTiles } from '../components/composition/QuickTiles'
+export { ProcessSteps } from '../components/composition/ProcessSteps'
+export { AppStatusCard } from '../components/composition/AppStatusCard'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -247,4 +252,15 @@ export type {
   BulkBarProps,
   ActiveFilter,
   ActiveFiltersProps,
+  EntityCardProps,
+  EntityCardStat,
+  RankListItem,
+  RankListProps,
+  QuickTile,
+  QuickTilesProps,
+  ProcessStep,
+  ProcessStepStatus,
+  ProcessStepsProps,
+  AppStatus,
+  AppStatusCardProps,
 } from './types'

@@ -65,6 +65,7 @@ export const List = /* @__PURE__ */ forwardRef<HTMLElement, ListProps>(function 
   const selectable = selectionMode === 'single' || selectionMode === 'multiple'
   const [innerSelection, setInnerSelection] = useState<ListId[]>(() => [...(defaultSelectedIds ?? [])])
   const selection: ReadonlyArray<ListId> = selectedIds ?? innerSelection
+  const selectedSet = new Set<ListId>(selection)
   const [activeIndex, setActiveIndex] = useState(-1)
   const optionRefs = useRef(new Map<ListId, HTMLLIElement>())
   const typeahead = useRef({ query: '', at: 0 })
@@ -109,8 +110,9 @@ export const List = /* @__PURE__ */ forwardRef<HTMLElement, ListProps>(function 
       default: {
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a' && selectionMode === 'multiple') {
           event.preventDefault()
-          const enabled = list.filter((item) => !item.disabled).map((item) => item.id)
-          commit(enabled.every((id) => selection.includes(id)) ? [] : enabled)
+          const enabled: ListId[] = []
+          for (const item of list) if (!item.disabled) enabled.push(item.id)
+          commit(enabled.every((id) => selectedSet.has(id)) ? [] : enabled)
           return
         }
         if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
@@ -178,7 +180,7 @@ export const List = /* @__PURE__ */ forwardRef<HTMLElement, ListProps>(function 
 
   const tabStop = activeIndex >= 0 && list[activeIndex] && !list[activeIndex].disabled
     ? activeIndex
-    : Math.max(0, list.findIndex((item) => selection.includes(item.id) && !item.disabled), firstEnabledIndex(list))
+    : Math.max(0, list.findIndex((item) => selectedSet.has(item.id) && !item.disabled), firstEnabledIndex(list))
 
   return (
     <ul
@@ -191,7 +193,7 @@ export const List = /* @__PURE__ */ forwardRef<HTMLElement, ListProps>(function 
       onKeyDown={handleKeyDown}
     >
       {list.map((item, index) => {
-        const selected = selection.includes(item.id)
+        const selected = selectedSet.has(item.id)
         return (
           <li
             key={item.id}
