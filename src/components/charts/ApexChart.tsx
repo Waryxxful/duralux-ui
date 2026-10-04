@@ -1,23 +1,32 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type * as React from 'react'
 import { ApexDataTable, ChartFrame } from './chartA11y'
 import { readChartDataValue, resolveChartAlternative } from './chartA11yModel'
 import { useClientReady, usePrefersReducedMotion } from './chartMotion'
+import { loadApexChartComponent } from './apexLoader'
 import {
   buildApexOptions,
   getApexOptionThemeMode,
   useChartTheme,
 } from './chartTheme'
+import { log } from '../../utils/log'
 import { isArray, isFunction, isObject } from '../../utils/typeGuards'
+import type { ApexChartOptions, ApexChartProps, ApexChartSeries } from '../../public/chart-types'
 
-let apexChartModulePromise
-const EMPTY_OPTIONS = Object.freeze({})
-
-function loadApexChartComponent() {
-  apexChartModulePromise ??= import('react-apexcharts').then(({ default: component }) => component)
-  return apexChartModulePromise
+/** Props que recibe el componente de react-apexcharts. */
+interface ApexEngineProps {
+  type: string
+  options: ApexChartOptions
+  series: ApexChartSeries
+  height: number | string
+  width: number | string
 }
+type ApexEngine = React.ComponentType<ApexEngineProps>
 
-function hasApexData(series) {
+const EMPTY_OPTIONS: ApexChartOptions = Object.freeze({})
+const LOAD_ERROR = 'No se pudo cargar el gráfico'
+
+function hasApexData(series: ApexChartSeries): boolean {
   if (!isArray(series)) return false
 
   const length = readChartDataValue(series, 'length')
@@ -41,34 +50,38 @@ function hasApexData(series) {
   return false
 }
 
-function ApexVisual({ type, options, series, height, width }) {
-  // ReactApexChart and ApexCharts are browser-only at paint time. Keeping the
-  // import and the initial snapshot client-only makes SSR and the first
-  // hydrated render identical.
+interface ApexVisualProps extends ApexEngineProps {
+  onLoadError: (error: Error) => void
+}
+
+function ApexVisual({ type, options, series, height, width, onLoadError }: ApexVisualProps) {
+  // ReactApexChart y ApexCharts solo pintan en el navegador. La importación y
+  // el primer cuadro quedan del lado cliente: SSR e hidratación coinciden.
   const clientMounted = useClientReady()
-  const [ApexChartComponent, setApexChartComponent] = useState(null)
+  const [ApexChartComponent, setApexChartComponent] = useState<ApexEngine | null>(null)
 
   useEffect(() => {
     let cancelled = false
 
     loadApexChartComponent().then((component) => {
-      if (!cancelled && isFunction(component)) {
-        setApexChartComponent(() => component)
-      }
+      if (cancelled) return
+      if (isFunction(component) || isObject(component)) setApexChartComponent(() => component)
+      else onLoadError(new Error('react-apexcharts no exporta un componente'))
+    }, (cause) => {
+      if (!cancelled) onLoadError(cause instanceof Error ? cause : new Error(String(cause)))
     })
 
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [onLoadError])
 
   if (!clientMounted || !ApexChartComponent) {
     return (
       <div
-        className="chart-frame__visual-placeholder"
+        className="chart-frame__visual-placeholder gcu-chart__placeholder"
         data-chart-ssr-placeholder="true"
         aria-hidden="true"
-        style={{ height, width }}
       />
     )
   }
@@ -85,15 +98,16 @@ function ApexVisual({ type, options, series, height, width }) {
 }
 
 /**
- * Small, theme-aware ApexCharts adapter.
+ * ApexChart — adaptador de ApexCharts con el tema del sistema.
  *
- * `options` remains the escape hatch used by existing consumers. Defaults are
- * merged into a fresh object and every explicit option from the caller wins.
- * `theme` accepts `light`/`dark` (or Apex's theme object); `ariaLabel`,
- * `title`, `description`, `fallback` and the state props are shared with the
- * Recharts widgets.
+ * - options: escape hatch hacia Apex; se fusiona sobre los valores del tema y lo explícito gana.
+ * - theme: `light` / `dark` / `navy` u objeto de tema de Apex; si se omite, sigue al ámbito más cercano.
+ * - Figura accesible (DX-004): nombre por `ariaLabel`, `title` o el título del ChartCard; tabla de datos oculta.
+ * - Estados: loading (skeleton), empty (EmptyState), error (ErrorState con reintento); si el motor no carga,
+ *   muestra el error y lo registra con `log.error`.
+ * Estilos: src/styles/components/chart.css.
  */
-export function ApexChart({
+export const ApexChart = /* @__PURE__ */ forwardRef<HTMLElement, ApexChartProps>(function ApexChart({
   type = 'line',
   options = EMPTY_OPTIONS,
   series,
@@ -117,11 +131,16 @@ export function ApexChart({
   errorMessage,
   className,
   style,
-}) {
-  const normalizedSeries = Array.isArray(series) ? series : []
+}, ref) {
+  const normalizedSeries: ApexChartSeries = Array.isArray(series) ? series : []
   const reducedMotion = usePrefersReducedMotion()
-  const themeScopeRef = useRef(null)
+  const themeScopeRef = useRef<HTMLElement | null>(null)
   const ambientTheme = useChartTheme(theme, themeScopeRef)
+  const [loadError, setLoadError] = useState<Error | null>(null)
+  const handleLoadError = useCallback((cause: Error) => {
+    log.error('ApexChart: no se pudo cargar react-apexcharts (¿falta el peer opcional?).', cause)
+    setLoadError(cause)
+  }, [])
   const resolvedOptions = useMemo(
     () => buildApexOptions({
       options,
@@ -135,8 +154,7 @@ export function ApexChart({
     [ambientTheme, height, options, reducedMotion, theme, type, width],
   )
   const hasData = hasApexData(normalizedSeries)
-  // Preserve the legacy blank canvas when `series` is omitted. An explicitly
-  // supplied empty series opts into the composable empty state.
+  // Sin `series` se conserva el lienzo en blanco histórico; una serie vacía explícita pide el estado vacío.
   const shouldRenderEmpty = empty === undefined ? series !== undefined && !hasData : empty
   const alternative = resolveChartAlternative(
     accessibleTable,
@@ -145,9 +163,11 @@ export function ApexChart({
   const resolvedSsrFallback = ssrFallback !== undefined
     ? ssrFallback
     : <p className="chart-frame__ssr-fallback">El gráfico se cargará en el navegador.</p>
+  const retryLoad = () => setLoadError(null)
 
   return (
     <ChartFrame
+      ref={ref}
       ariaLabel={ariaLabel}
       title={title}
       description={description}
@@ -156,7 +176,7 @@ export function ApexChart({
       ssrFallback={resolvedSsrFallback}
       loading={loading}
       empty={shouldRenderEmpty}
-      error={error}
+      error={error ?? (loadError ? { title: LOAD_ERROR, message: loadError.message, onRetry: retryLoad } : undefined)}
       onRetry={onRetry}
       loadingMessage={loadingMessage}
       emptyTitle={emptyTitle}
@@ -165,6 +185,8 @@ export function ApexChart({
       errorMessage={errorMessage}
       className={className}
       style={style}
+      height={height}
+      kind="apex"
       themeScopeRef={themeScopeRef}
     >
       <ApexVisual
@@ -173,7 +195,8 @@ export function ApexChart({
         series={normalizedSeries}
         height={height}
         width={width}
+        onLoadError={handleLoadError}
       />
     </ChartFrame>
   )
-}
+})

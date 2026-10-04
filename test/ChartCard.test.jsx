@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { expect, test, vi } from 'vitest'
-import { ChartCard } from '../src/components/charts/ChartCard.jsx'
+import { ChartCard } from '../src/components/charts/ChartCard'
 
 test('invokes a chart action and closes its React-owned menu', async () => {
   const user = userEvent.setup()

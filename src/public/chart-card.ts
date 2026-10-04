@@ -1,7 +1,3 @@
-import type * as React from 'react'
-import { ChartCard as ChartCardRuntime } from '../components/charts/ChartCard'
-import type { ChartCardProps } from './chart-types'
+export { ChartCard } from '../components/charts/ChartCard'
 
-export const ChartCard: React.FC<ChartCardProps> = ChartCardRuntime
-
-export type { ChartCardAction, ChartCardProps } from './chart-types'
+export type { ChartCardAction, ChartCardHeadingLevel, ChartCardProps } from './chart-types'

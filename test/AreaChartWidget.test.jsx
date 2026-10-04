@@ -12,7 +12,7 @@ vi.mock('recharts', () => ({
   Legend: () => null,
 }))
 
-import { AreaChartWidget } from '../src/components/charts/AreaChartWidget.jsx'
+import { AreaChartWidget } from '../src/components/charts/AreaChartWidget'
 
 test('uses safe instance-unique gradient IDs for matching series keys', () => {
   const series = [{ key: 'net / sales', color: '#3455db' }]

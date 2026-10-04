@@ -1,4 +1,12 @@
-import { tokens } from '../../tokens'
+import { designTokens, tokens } from '../../tokens'
+
+// Colores por tema desde tokens/tokens.json (DTCG). ApexCharts necesita valores literales;
+// la serie de cada tema son los roles `status-*` (contraste de marca gráfica ≥ 3:1).
+const LIGHT = designTokens.themes.light.colors
+const DARK = designTokens.themes.dark.colors
+const NAVY = designTokens.themes.navy.colors
+const SERIES_ROLES = ['primary', 'success', 'warning', 'danger', 'info', 'indigo', 'secondary']
+const seriesFrom = (colors) => Object.freeze(SERIES_ROLES.map((role) => colors[`status-${role}`]))
 
 // Keep the fallback values in one place. The CSS variable is resolved by the
 // host theme, while the token value keeps charts usable before the stylesheet
@@ -11,25 +19,9 @@ function chartColor(name, fallback = tokens.colors[name]) {
 // resolve the CSS-aware variant at paint time, which also follows dark scopes.
 // Graphic marks need 3:1 contrast against the light canvas. These are
 // same-hue accessible fills, not the raw semantic colors used for decoration.
-export const CHART_PALETTE = Object.freeze([
-  tokens.colors.primary,
-  '#108745',
-  '#a36813',
-  '#ce4444',
-  '#28837d',
-  tokens.colors.indigo,
-  tokens.colors.secondary,
-])
+export const CHART_PALETTE = seriesFrom(LIGHT)
 
-export const CHART_DARK_PALETTE = Object.freeze([
-  '#8ea7ff',
-  '#55e899',
-  '#ffd166',
-  '#ff7a8a',
-  '#5fd7ff',
-  '#b39aff',
-  '#c4cedd',
-])
+export const CHART_DARK_PALETTE = seriesFrom(DARK)
 
 // Recharts resolves CSS variables at paint time. The wrapper maps the raw
 // semantic names to foreground-safe chart roles without changing this public
@@ -44,16 +36,13 @@ export const CHART_CSS_PALETTE = Object.freeze([
   chartColor('secondary'),
 ])
 
-// Alias kept deliberately close to the Apex/Recharts vocabulary.
-export const CHART_COLORS = CHART_PALETTE
-
 const LIGHT_CHART_THEME = Object.freeze({
   mode: 'light',
   background: chartColor('canvas', tokens.colors.canvas),
-  surface: chartColor('surface', '#fff'),
-  surfaceSubtle: chartColor('surface-subtle', '#f3f4f6'),
+  surface: chartColor('surface', LIGHT.surface),
+  surfaceSubtle: chartColor('surface-subtle', LIGHT['surface-subtle']),
   text: chartColor('text', tokens.colors.dark),
-  muted: chartColor('muted', '#4b5563'),
+  muted: chartColor('muted', LIGHT.muted),
   border: chartColor('border', tokens.colors.border),
   primary: chartColor('primary'),
   series: CHART_CSS_PALETTE,
@@ -62,11 +51,13 @@ const LIGHT_CHART_THEME = Object.freeze({
 
 // Paleta negro/gris (intouch-logo-demo.html) — background/surface siguen la
 // misma jerarquía que tokens.dark/tokens.nav (page vs card).
+// Texto, apagado y borde conservan la paleta oscura histórica de los gráficos (las apps la
+// usan y los tests de contraste la fijan); las superficies salen de tokens.
 const DARK_CHART_THEME = Object.freeze({
   mode: 'dark',
-  background: '#0e0f12',
-  surface: '#17181d',
-  surfaceSubtle: '#0e0f12',
+  background: DARK['surface-subtle'],
+  surface: DARK.surface,
+  surfaceSubtle: DARK['surface-subtle'],
   text: '#f5f7ff',
   muted: '#8b8d98',
   border: '#3a3b42',
@@ -77,9 +68,10 @@ const DARK_CHART_THEME = Object.freeze({
 
 // Navy: misma serie que el oscuro; superficies y bordes del tema navy.
 const NAVY_SURFACES = Object.freeze({
-  background: '#121a2d',
+  background: NAVY['surface-subtle'],
+  // Superficie de card navy de la plantilla (un paso sobre el lienzo).
   surface: '#1d2a45',
-  surfaceSubtle: '#121a2d',
+  surfaceSubtle: NAVY['surface-subtle'],
   muted: '#b8c4dc',
   border: '#68799c',
 })
@@ -98,8 +90,8 @@ export function getChartTheme(mode = 'light') {
 // than CSS variables. These values mirror the light/dark semantic CSS scope.
 export const APEX_CHART_THEME = Object.freeze({
   light: Object.freeze({
-    background: '#fff',
-    surface: '#fff',
+    background: LIGHT.surface,
+    surface: LIGHT.surface,
     surfaceSubtle: tokens.colors.canvas,
     text: tokens.colors.dark,
     muted: tokens.colors.secondary,
@@ -108,9 +100,9 @@ export const APEX_CHART_THEME = Object.freeze({
     shadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
   }),
   dark: Object.freeze({
-    background: '#0e0f12',
-    surface: '#17181d',
-    surfaceSubtle: '#0e0f12',
+    background: DARK['surface-subtle'],
+    surface: DARK.surface,
+    surfaceSubtle: DARK['surface-subtle'],
     text: '#f5f7ff',
     muted: '#8b8d98',
     border: '#3a3b42',
@@ -135,8 +127,6 @@ export function getChartTooltipStyle(theme = CHART_THEME) {
     fontSize: 12,
   }
 }
-
-export const CHART_TOOLTIP_STYLE = Object.freeze(getChartTooltipStyle(CHART_THEME))
 
 export function getChartColor(color, index = 0, theme = CHART_THEME) {
   if (color !== undefined && color !== null) return color

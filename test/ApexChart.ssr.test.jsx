@@ -4,7 +4,7 @@ import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { expect, test, vi } from 'vitest'
 
-import { ApexChart } from '../src/components/charts/ApexChart.jsx'
+import { ApexChart } from '../src/components/charts/ApexChart'
 
 test('is safe to render on the server without browser globals', () => {
   expect(() => renderToString(
@@ -23,7 +23,9 @@ test('is safe to render on the server without browser globals', () => {
       series={[{ name: 'Ventas', data: [10] }]}
     />,
   )
-  expect(html).toContain('role="img"')
+  // DX-004: figura con nombre en vez de role="img".
+  expect(html).toContain('<figure')
+  expect(html).not.toContain('role="img"')
   expect(html).toContain('aria-label="Ventas"')
   expect(html).toContain('data-chart-ssr-placeholder="true"')
   expect(html).toContain('El gráfico se cargará en el navegador.')

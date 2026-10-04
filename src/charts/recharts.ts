@@ -8,9 +8,13 @@ export {
 export type {
   AreaChartWidgetProps,
   BarChartWidgetProps,
+  CartesianChartProps,
   ChartCardAction,
+  ChartCardHeadingLevel,
   ChartCardProps,
   ChartDatum,
+  ChartDatumRecord,
+  ChartDatumValue,
   ChartError,
   ChartErrorObject,
   ChartSeries,

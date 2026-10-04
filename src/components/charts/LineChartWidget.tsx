@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { forwardRef, useRef } from 'react'
 import {
   ResponsiveContainer, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -9,16 +9,19 @@ import { usePrefersReducedMotion } from './chartMotion'
 import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalette'
 import { useChartTheme } from './chartTheme'
 import { ChartLegend } from './ChartLegend'
+import { ChartTooltip } from './ChartTooltip'
+import { AXIS_TICK_FONT_SIZE, CARTESIAN_MARGIN, ENTER_ANIMATION_MS, Y_AXIS_WIDTH, formatAxisTick, keepSeriesOrder, normalizeSeries } from './rechartsShared'
+import type { LineChartWidgetProps } from '../../public/chart-types'
 
 /**
- * LineChartWidget — gráfico de líneas estilo Duralux.
+ * LineChartWidget — gráfico de líneas con el tema del sistema.
  *
- * Props:
- *   data    — [{ name, ...series }]
- *   series  — [{ key, color, label, dashed }]
- *   height  — número de px (default 260)
+ * - data: [{ name, ...series }]; series: [{ key, color?, label?, dashed? }]; height en px (260).
+ * - Figura accesible (DX-004) con tabla de datos oculta; leyenda con forma + texto (línea punteada si `dashed`).
+ * - Grilla horizontal sutil, ejes en `--gcu-muted`, tooltip elevado con cifras tabulares.
+ * - Estados loading / empty / error; animación de entrada que respeta reduced-motion.
  */
-export function LineChartWidget({
+export const LineChartWidget = /* @__PURE__ */ forwardRef<HTMLElement, LineChartWidgetProps>(function LineChartWidget({
   data,
   series = [],
   height = 260,
@@ -39,13 +42,14 @@ export function LineChartWidget({
   errorMessage,
   className,
   style,
-}) {
+}, ref) {
   const normalizedData = normalizeCartesianData(data)
-  const normalizedSeries = Array.isArray(series) ? series.filter(Boolean) : []
+  const normalizedSeries = normalizeSeries(series)
   const reducedMotion = usePrefersReducedMotion()
-  const themeScopeRef = useRef(null)
+  const themeScopeRef = useRef<HTMLElement | null>(null)
   const resolvedTheme = getChartTheme(useChartTheme(theme, themeScopeRef))
   const hasData = normalizedData.length > 0 && normalizedSeries.length > 0
+  // Sin `data` se conserva el lienzo en blanco histórico; data={[]} pide el estado vacío.
   const shouldRenderEmpty = empty === undefined ? data !== undefined && !hasData : empty
   const alternative = resolveChartAlternative(
     accessibleTable,
@@ -54,6 +58,7 @@ export function LineChartWidget({
 
   return (
     <ChartFrame
+      ref={ref}
       ariaLabel={ariaLabel}
       title={title}
       description={description}
@@ -70,15 +75,24 @@ export function LineChartWidget({
       errorMessage={errorMessage}
       className={className}
       style={style}
+      height={height}
+      kind="line"
       themeScopeRef={themeScopeRef}
     >
       <ResponsiveContainer width="100%" height={height}>
-        <LineChart data={normalizedData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke={resolvedTheme.border} />
-          <XAxis dataKey="name" tick={{ fontSize: 11, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fontSize: 11, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} />
-          <Tooltip contentStyle={{ ...getChartTooltipStyle(resolvedTheme) }} isAnimationActive={!reducedMotion} />
-          {normalizedSeries.length > 1 && <Legend wrapperStyle={{ fontSize: 12, color: resolvedTheme.text }} content={<ChartLegend theme={resolvedTheme} />} />}
+        <LineChart data={normalizedData} margin={CARTESIAN_MARGIN}>
+          <CartesianGrid vertical={false} stroke={resolvedTheme.border} />
+          <XAxis dataKey="name" tick={{ fontSize: AXIS_TICK_FONT_SIZE, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fontSize: AXIS_TICK_FONT_SIZE, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} width={Y_AXIS_WIDTH} tickFormatter={formatAxisTick} />
+          <Tooltip
+            content={<ChartTooltip mark="line" />}
+            contentStyle={getChartTooltipStyle(resolvedTheme)}
+            cursor={{ stroke: resolvedTheme.border }}
+            isAnimationActive={!reducedMotion}
+          />
+          {normalizedSeries.length > 1 && (
+            <Legend wrapperStyle={{ color: resolvedTheme.text }} itemSorter={keepSeriesOrder} content={<ChartLegend mark="line" />} />
+          )}
           {normalizedSeries.map((s, index) => (
             <Line
               key={s.key}
@@ -89,12 +103,14 @@ export function LineChartWidget({
               strokeWidth={2}
               strokeDasharray={s.dashed ? '5 5' : undefined}
               dot={false}
-              activeDot={{ r: 5 }}
+              activeDot={{ r: 4, strokeWidth: 2 }}
               isAnimationActive={!reducedMotion}
+              animationDuration={ENTER_ANIMATION_MS}
+              animationEasing="ease-out"
             />
           ))}
         </LineChart>
       </ResponsiveContainer>
     </ChartFrame>
   )
-}
+})

@@ -1,0 +1,70 @@
+/* Gráficos (ApexChart, Area/Bar/Line/PieChartWidget, ChartCard): figura accesible, estados,
+   leyenda con forma + texto, tooltip elevado con cifras tabulares, ejes en --gcu-muted y
+   grilla sutil en --gcu-border. Solo tokens: cada tema (claro, oscuro, navy) los redefine.
+   La figura es contenedor de consultas: se adapta a su celda, no al viewport. */
+.gcu-chart{width:100%;min-width:0;margin:0}
+/* Entrada: opacidad + 4 px con --gcu-ease-enter; con reduced-motion la duración es 0 (tokens). */
+.gcu-chart .chart-frame__visual{position:relative;animation:gcu-enter var(--gcu-duration-slow) var(--gcu-ease-enter)}
+.gcu-chart__placeholder{display:block;width:100%;height:var(--gcu-chart-height,16rem)}
+.gcu-chart__fallback{color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+
+/* Estados: ocupan el alto del lienzo, así no hay salto de layout al llegar los datos. */
+.gcu-chart__state{display:flex;min-height:var(--gcu-chart-height,16rem);flex-direction:column;align-items:stretch;justify-content:center}
+.gcu-chart__skeleton{display:flex;height:var(--gcu-chart-height,16rem);align-items:flex-end;gap:var(--gcu-space-3);padding:var(--gcu-space-4) var(--gcu-space-2) 0;border-bottom:1px solid var(--gcu-border)}
+.gcu-chart__skeleton-bar{flex:1 1 0;min-height:0;border-radius:var(--gcu-radius-sm) var(--gcu-radius-sm) 0 0}
+
+/* Ejes y grilla de Recharts: el CSS gana a los atributos de presentación del SVG. */
+.gcu-chart .recharts-cartesian-axis-tick-value{fill:var(--gcu-muted);font-size:var(--gcu-font-size-2xs);font-variant-numeric:tabular-nums}
+.gcu-chart .recharts-cartesian-grid line{stroke:var(--gcu-border)}
+/* Las marcas pueden usar los colores semánticos crudos; dentro del lienzo se mapean a los roles
+   de estado con contraste de marca gráfica en claro y oscuro. */
+.recharts-wrapper{--gcu-secondary:var(--gcu-status-secondary);--gcu-success:var(--gcu-status-success);--gcu-danger:var(--gcu-status-danger);--gcu-warning:var(--gcu-status-warning);--gcu-info:var(--gcu-status-info);--gcu-teal:var(--gcu-status-teal)}
+/* Capa de teclado de Recharts (svg enfocable): anillo de foco del sistema en el lienzo. */
+.gcu-chart .recharts-surface:focus{outline:0}
+.gcu-chart .recharts-wrapper:has(.recharts-surface:focus-visible){border-radius:var(--gcu-radius-md);box-shadow:var(--gcu-focus-ring)}
+
+/* Leyenda: la serie se reconoce por forma + texto; el color va solo en la marca. */
+.gcu-chart-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--gcu-space-1) var(--gcu-space-4);margin:0;padding:var(--gcu-space-2) 0 0;list-style:none;color:var(--gcu-text);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-chart-legend__item{display:inline-flex;align-items:center;gap:calc(var(--gcu-space-1) * 1.5);min-width:0}
+.gcu-chart-legend__label{overflow-wrap:anywhere}
+.gcu-chart-legend__mark{flex:none;display:inline-block;width:10px;height:10px;border-radius:var(--gcu-radius-xs);background:currentColor}
+.gcu-chart-legend__mark--circle{border-radius:var(--gcu-radius-full)}
+.gcu-chart-legend__mark--line{width:16px;height:0;border-top:2px solid currentColor;border-radius:0;background:none}
+.gcu-chart-legend__mark--dashed{border-top-style:dashed}
+
+/* Tooltip de Recharts: superficie elevada, borde fino y cifras tabulares alineadas. */
+.gcu-chart-tooltip{min-width:9rem;max-width:16rem;padding:var(--gcu-space-2) var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background:var(--gcu-surface-raised);color:var(--gcu-text);box-shadow:var(--gcu-shadow-3);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-chart-tooltip__label{margin:0 0 var(--gcu-space-1);color:var(--gcu-muted);font-weight:var(--gcu-font-weight-medium)}
+.gcu-chart-tooltip__list{display:grid;gap:var(--gcu-space-1);margin:0;padding:0;list-style:none}
+.gcu-chart-tooltip__row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--gcu-space-2)}
+.gcu-chart-tooltip__name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gcu-chart-tooltip__value{font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums;text-align:end}
+
+/* Tooltip de ApexCharts (su hoja se inyecta en runtime después de esta: el selector suma una
+   clase para ganar sin prioridad forzada). Aplica también a Apex usado fuera del wrapper. */
+.apexcharts-canvas .apexcharts-tooltip:is(.apexcharts-theme-light,.apexcharts-theme-dark){border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background:var(--gcu-surface-raised);color:var(--gcu-text);box-shadow:var(--gcu-shadow-3);font-variant-numeric:tabular-nums}
+.apexcharts-canvas .apexcharts-tooltip:is(.apexcharts-theme-light,.apexcharts-theme-dark) .apexcharts-tooltip-title{border-bottom:1px solid var(--gcu-border);background:var(--gcu-surface-subtle);color:var(--gcu-text)}
+.apexcharts-canvas .apexcharts-xaxistooltip:is(.apexcharts-theme-light,.apexcharts-theme-dark){border:1px solid var(--gcu-border);background:var(--gcu-surface-raised);color:var(--gcu-text);font-variant-numeric:tabular-nums}
+.apexcharts-canvas .apexcharts-xaxistooltip-bottom:is(.apexcharts-theme-light,.apexcharts-theme-dark)::before{border-bottom-color:var(--gcu-border)}
+.apexcharts-canvas .apexcharts-xaxistooltip-bottom:is(.apexcharts-theme-light,.apexcharts-theme-dark)::after{border-bottom-color:var(--gcu-surface-raised)}
+.apexcharts-canvas .apexcharts-radar-series polygon{fill:var(--gcu-surface);stroke:var(--gcu-border)}
+
+/* ChartCard: título y acciones en una fila; el título no cambia de tamaño con su nivel. */
+.gcu-chart-card__header{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--gcu-space-3)}
+.gcu-chart-card__head{min-width:0}
+/* Gana a `.card .card-header .card-title` del tema (color fijo y peso 700): token por tema y 600. */
+.gcu-chart-card .card-header .gcu-chart-card__title.card-title{color:var(--gcu-text);font-weight:var(--gcu-font-weight-semibold);text-wrap:balance}
+.gcu-chart-card__subtitle{margin:var(--gcu-space-1) 0 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+/* Borde de cabecera y menú con tokens (el tema fija el borde en el documento, no en un ThemeScope local). */
+.gcu-chart-card .card-header{border-bottom-color:var(--gcu-border)}
+/* Menú de acciones: botón de ícono de 32 px; hover instantáneo y solo con puntero (Craft). */
+.gcu-chart-card__menu{display:inline-grid;flex:none;width:var(--gcu-control-h-sm);height:var(--gcu-control-h-sm);place-items:center;padding:0;border:0;border-radius:var(--gcu-radius-md);background:transparent;color:var(--gcu-muted);font-size:var(--gcu-font-size-md);line-height:1}
+@media (hover:hover){.gcu-chart-card__menu:hover{background:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+.gcu-chart-card__menu.show{background:var(--gcu-surface-subtle);color:var(--gcu-text)}
+.gcu-chart-card__menu:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+
+/* Contenedor ancho: ejes y leyenda con un paso más de tamaño. */
+@container (min-width:28rem){
+  .gcu-chart .recharts-cartesian-axis-tick-value{font-size:var(--gcu-font-size-xs)}
+  .gcu-chart__skeleton{gap:var(--gcu-space-4)}
+}

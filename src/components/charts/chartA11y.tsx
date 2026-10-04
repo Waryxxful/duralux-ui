@@ -1,4 +1,5 @@
-import React, { useId } from 'react'
+import { forwardRef, useCallback, useId } from 'react'
+import type * as React from 'react'
 import { useClientReady } from './chartMotion'
 import { EmptyState } from '../feedback/EmptyState'
 import { ErrorState } from '../feedback/ErrorState'
@@ -18,7 +19,60 @@ import {
   tableCaption,
   useChartCardTitleId,
 } from './chartA11yModel'
-import { isArray, isObject } from '../../utils/typeGuards'
+import { isArray, isFiniteNumber, isFunction, isNonEmptyString, isObject } from '../../utils/typeGuards'
+import { cx } from '../../utils/cx'
+import type { ApexChartOptions, ApexChartSeries, ChartDatum, ChartError, ChartSeries, PieChartDatum } from '../../public/chart-types'
+
+type ChartStateName = 'loading' | 'error' | 'empty'
+
+interface ChartStateProps {
+  state: ChartStateName | null
+  fallback?: React.ReactNode
+  loadingMessage?: React.ReactNode
+  emptyTitle?: React.ReactNode
+  emptyMessage?: React.ReactNode
+  error?: ChartError
+  errorTitle?: React.ReactNode
+  errorMessage?: React.ReactNode
+  onRetry?: () => void
+}
+
+interface DataTableProps {
+  title?: React.ReactNode
+}
+
+interface RechartsDataTableProps extends DataTableProps {
+  data?: ReadonlyArray<ChartDatum | number | string>
+  series?: ReadonlyArray<ChartSeries | string>
+}
+
+interface PieDataTableProps extends DataTableProps {
+  data?: ReadonlyArray<PieChartDatum | number>
+}
+
+interface ApexDataTableProps extends DataTableProps {
+  series?: ApexChartSeries | ReadonlyArray<unknown>
+  options?: ApexChartOptions
+}
+
+export interface ChartFrameProps extends Omit<ChartStateProps, 'state'> {
+  children?: React.ReactNode
+  ariaLabel?: string
+  title?: React.ReactNode
+  description?: React.ReactNode
+  /** Alternativa textual (tabla de datos); `false` la omite. */
+  alternative?: React.ReactNode
+  ssrFallback?: React.ReactNode
+  loading?: boolean
+  empty?: boolean
+  className?: string
+  style?: React.CSSProperties
+  /** Alto del lienzo: los estados lo conservan (sin salto de layout). */
+  height?: number | string
+  /** Motor o tipo de gráfico, para estilos (`gcu-chart--line`, `--apex`…). */
+  kind?: string
+  themeScopeRef?: React.MutableRefObject<HTMLElement | null>
+}
 
 function useChartA11yIds() {
   const reactId = safeIdPart(useId())
@@ -37,9 +91,31 @@ function useTableA11yIds(prefix) {
   }
 }
 
+const SKELETON_BARS = [0.55, 0.8, 0.45, 0.7, 0.9, 0.6, 0.75]
+
 /**
- * Shared state renderer. The wrapper is deliberately rendered outside the
- * visual role=img so live regions and retry controls stay operable.
+ * Esqueleto con la forma de un gráfico: barras de alturas fijas (posicionales,
+ * nunca se reordenan) que ocupan el alto del lienzo para que no haya salto
+ * de layout al llegar los datos. El shimmer respeta reduced-motion (tokens).
+ */
+function ChartSkeleton() {
+  return (
+    <div className="gcu-chart__skeleton" aria-hidden="true">
+      {SKELETON_BARS.map((ratio) => (
+        <span
+          key={`chart-skeleton-${ratio}`}
+          className="gcu-skeleton gcu-chart__skeleton-bar"
+          style={{ height: `${Math.round(ratio * 100)}%` }}
+        />
+      ))}
+    </div>
+  )
+}
+
+/**
+ * Estados compartidos (carga, error, vacío) con los componentes de feedback:
+ * skeleton dentro de una región `status`, ErrorState (alerta + reintento) y
+ * EmptyState. Viven dentro de la figura, nunca dentro de un `role="img"`.
  */
 export function ChartState({
   state,
@@ -51,19 +127,15 @@ export function ChartState({
   errorTitle,
   errorMessage,
   onRetry,
-}) {
+}: ChartStateProps) {
   if (state === 'loading') {
     const message = hasValue(loadingMessage) ? loadingMessage : 'Cargando...'
     return (
-      <div className="chart-frame__state chart-frame__state--loading" role="status" aria-live="polite">
+      <div className="chart-frame__state gcu-chart__state gcu-chart__state--loading" role="status" aria-live="polite">
         {fallback !== undefined ? fallback : (
           <>
-            <div
-              className="spinner-border text-primary mb-3"
-              aria-hidden="true"
-              style={{ width: '2.5rem', height: '2.5rem' }}
-            />
-            {message && <p className="text-muted">{message}</p>}
+            <ChartSkeleton />
+            <span className="visually-hidden">{message}</span>
           </>
         )}
       </div>
@@ -72,7 +144,7 @@ export function ChartState({
 
   if (state === 'error') {
     return (
-      <div className="chart-frame__state chart-frame__state--error">
+      <div className="chart-frame__state gcu-chart__state gcu-chart__state--error">
         {fallback !== undefined ? (
           <div role="alert" aria-live="assertive" aria-atomic="true">{fallback}</div>
         ) : (
@@ -80,6 +152,7 @@ export function ChartState({
             title={chartErrorTitle(error, errorTitle)}
             message={chartErrorMessage(error, errorMessage)}
             onRetry={chartRetryHandler(error, onRetry)}
+            compact
           />
         )}
       </div>
@@ -88,9 +161,14 @@ export function ChartState({
 
   if (state === 'empty') {
     return (
-      <div className="chart-frame__state chart-frame__state--empty" role="status" aria-live="polite">
+      <div className="chart-frame__state gcu-chart__state gcu-chart__state--empty" role="status" aria-live="polite">
         {fallback !== undefined ? fallback : (
-          <EmptyState title={emptyTitle} message={emptyMessage} />
+          <EmptyState
+            icon="bar-chart-2"
+            title={hasValue(emptyTitle) ? emptyTitle : 'Sin datos para graficar'}
+            message={hasValue(emptyMessage) ? emptyMessage : 'Cuando haya datos en el periodo, el gráfico aparecerá aquí.'}
+            compact
+          />
         )}
       </div>
     )
@@ -156,7 +234,7 @@ function rechartsColumns(rows, series) {
   }))
 }
 
-export function RechartsDataTable({ data = [], series = [], title = 'Datos del gráfico' }) {
+export function RechartsDataTable({ data = [], series = [], title = 'Datos del gráfico' }: RechartsDataTableProps) {
   const rows = isArray(data) ? data : []
   const { tableId, categoryHeaderId } = useTableA11yIds('recharts')
   if (!rows.length) return null
@@ -213,7 +291,7 @@ function pieTableRows(rows) {
   })
 }
 
-export function PieDataTable({ data = [], title = 'Datos del gráfico' }) {
+export function PieDataTable({ data = [], title = 'Datos del gráfico' }: PieDataTableProps) {
   const rows = isArray(data) ? data : []
   const { tableId, categoryHeaderId } = useTableA11yIds('pie')
   if (!rows.length) return null
@@ -333,7 +411,7 @@ function uniqueColumnLabels(datasets) {
   })
 }
 
-export function ApexDataTable({ series = [], options = {}, title = 'Datos del gráfico' }) {
+export function ApexDataTable({ series = [], options = {}, title = 'Datos del gráfico' }: ApexDataTableProps) {
   const datasets = normalizeApexSeries(series)
   const rows = apexRows(series, options)
   const { tableId, categoryHeaderId } = useTableA11yIds('apex')
@@ -373,13 +451,17 @@ export function ApexDataTable({ series = [], options = {}, title = 'Datos del gr
 }
 
 /**
- * Common semantic frame for every chart implementation.
+ * Marco semántico común de todos los gráficos (DX-004).
  *
- * Only the visual chart lives below role=img. Tables, live regions and retry
- * controls are siblings, because role=img flattens its descendants in the
- * accessibility tree.
+ * `<figure>` con nombre (aria-label, título propio o el título del ChartCard)
+ * y descripción. El lienzo de Apex/Recharts ya no vive dentro de un
+ * `role="img"`: sus controles enfocables (leyenda, barra de herramientas,
+ * capa de teclado de Recharts) quedan operables y no hay interactivo anidado.
+ * La alternativa textual (tabla de datos) va en la misma figura, oculta a la
+ * vista y disponible para lectores de pantalla; los estados de carga, vacío y
+ * error reemplazan al lienzo con su mismo alto (sin salto de layout).
  */
-export function ChartFrame({
+export const ChartFrame = /* @__PURE__ */ forwardRef<HTMLElement, ChartFrameProps>(function ChartFrame({
   children,
   ariaLabel,
   title,
@@ -398,8 +480,10 @@ export function ChartFrame({
   errorMessage,
   className,
   style,
+  height,
+  kind,
   themeScopeRef,
-}) {
+}, ref) {
   const ids = useChartA11yIds()
   const cardTitleId = useChartCardTitleId()
   const clientMounted = useClientReady()
@@ -408,58 +492,62 @@ export function ChartFrame({
   const ownTitleId = hasTitle ? ids.titleId : undefined
   const labelledBy = hasAriaLabel ? undefined : ownTitleId || cardTitleId || undefined
   const describedBy = hasValue(description) ? ids.descriptionId : undefined
-  const state = loading ? 'loading' : error ? 'error' : empty ? 'empty' : null
+  const state: ChartStateName | null = loading ? 'loading' : error ? 'error' : empty ? 'empty' : null
   const useSsrFallback = !state && ssrFallback !== undefined && !clientMounted
   const hasAlternative = alternative !== undefined && alternative !== null && alternative !== false
+  const setRefs = useCallback((node: HTMLElement | null) => {
+    if (themeScopeRef) themeScopeRef.current = node
+    if (isFunction<typeof ref, (value: HTMLElement | null) => void>(ref)) ref(node)
+    else if (ref) ref.current = node
+  }, [ref, themeScopeRef])
+
+  const visualHeight = isFiniteNumber(height) ? `${height}px` : (isNonEmptyString(height) ? height : undefined)
 
   return (
-    <div
-      ref={themeScopeRef}
-      className={className}
-      style={style}
+    <figure
+      ref={setRefs}
+      className={cx('gcu-chart', 'gcu-container', kind && `gcu-chart--${kind}`, className)}
+      // SAFETY: CSSProperties no declara custom properties; `--gcu-chart-height` es una cadena CSS válida.
+      style={visualHeight ? ({ '--gcu-chart-height': visualHeight, ...style } as React.CSSProperties) : style}
       data-chart-frame="true"
+      data-chart-state={state ?? undefined}
+      aria-label={hasAriaLabel ? ariaLabel : (labelledBy ? undefined : 'Gráfico')}
+      aria-labelledby={labelledBy}
+      aria-describedby={describedBy}
       aria-busy={loading || undefined}
     >
-      {hasTitle && !hasAriaLabel && (
-        <span id={ownTitleId} className="visually-hidden">{title}</span>
-      )}
-
-      <div
-        className="chart-frame__visual"
-        role="img"
-        aria-label={hasAriaLabel ? ariaLabel : (labelledBy ? undefined : 'Gráfico')}
-        aria-labelledby={labelledBy}
-        aria-describedby={describedBy}
-      >
-        {state || useSsrFallback ? (
+      <div className="chart-frame__visual">
+        {state ? (
+          <ChartState
+            state={state}
+            fallback={fallback}
+            loadingMessage={loadingMessage}
+            emptyTitle={emptyTitle}
+            emptyMessage={emptyMessage}
+            error={error}
+            errorTitle={errorTitle}
+            errorMessage={errorMessage}
+            onRetry={onRetry}
+          />
+        ) : useSsrFallback ? (
           <span
-            className="chart-frame__visual-placeholder"
-            data-chart-ssr-placeholder={useSsrFallback || undefined}
+            className="chart-frame__visual-placeholder gcu-chart__placeholder"
+            data-chart-ssr-placeholder="true"
             aria-hidden="true"
           />
         ) : children}
       </div>
 
-      {state && (
-        <ChartState
-          state={state}
-          fallback={fallback}
-          loadingMessage={loadingMessage}
-          emptyTitle={emptyTitle}
-          emptyMessage={emptyMessage}
-          error={error}
-          errorTitle={errorTitle}
-          errorMessage={errorMessage}
-          onRetry={onRetry}
-        />
-      )}
-
       {!state && useSsrFallback && (
-        <div className="chart-frame__fallback">{ssrFallback}</div>
+        <div className="chart-frame__fallback gcu-chart__fallback">{ssrFallback}</div>
       )}
 
-      {hasValue(description) && (
-        <span id={ids.descriptionId} className="visually-hidden">{description}</span>
+      {(hasTitle || hasValue(description)) && (
+        <figcaption className="visually-hidden">
+          {hasTitle && <span id={ownTitleId}>{title}</span>}
+          {hasTitle && hasValue(description) && ' '}
+          {hasValue(description) && <span id={ids.descriptionId}>{description}</span>}
+        </figcaption>
       )}
 
       {!state && hasAlternative && (
@@ -467,6 +555,6 @@ export function ChartFrame({
           {alternative}
         </div>
       )}
-    </div>
+    </figure>
   )
-}
+})

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { forwardRef, useRef } from 'react'
 import {
   ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend,
 } from 'recharts'
@@ -8,29 +8,32 @@ import { usePrefersReducedMotion } from './chartMotion'
 import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalette'
 import { useChartTheme } from './chartTheme'
 import { ChartLegend } from './ChartLegend'
+import { ChartTooltip } from './ChartTooltip'
+import { ENTER_ANIMATION_MS, keepSeriesOrder } from './rechartsShared'
 import { isArray, isFiniteNumber, isObject, isString } from '../../utils/typeGuards'
+import type { PieChartDatum, PieChartWidgetProps } from '../../public/chart-types'
 
-function normalizePieEntry(entry) {
+function normalizePieEntry(entry: PieChartDatum): PieChartDatum {
   if (!entry || !isObject(entry) || isArray(entry)) return entry
   const value = readChartDataValue(entry, 'value')
   const y = readChartDataValue(entry, 'y')
   if (value !== undefined || y === undefined) return entry
 
-  const normalized = {}
+  const normalized: PieChartDatum = {}
   try {
     Object.keys(entry).forEach((key) => {
       const candidate = readChartDataValue(entry, key)
       if (candidate !== undefined) normalized[key] = candidate
     })
   } catch {
-    // The table and visual can still render the safe x/y point below.
+    // La tabla y el lienzo igual pueden dibujar el punto x/y seguro de abajo.
   }
   normalized.name = readChartDataValue(entry, 'name') ?? readChartDataValue(entry, 'x')
   normalized.value = y
   return normalized
 }
 
-function pieEntryIdentity(entry) {
+function pieEntryIdentity(entry: PieChartDatum): string {
   const candidate = readChartDataValue(entry, 'id')
     ?? readChartDataValue(entry, 'name')
     ?? readChartDataValue(entry, 'label')
@@ -41,8 +44,8 @@ function pieEntryIdentity(entry) {
     : 'slice'
 }
 
-function keyedPieEntries(entries) {
-  const occurrences = new Map()
+function keyedPieEntries(entries: PieChartDatum[]) {
+  const occurrences = new Map<string, number>()
   return entries.map((entry, colorIndex) => {
     const identity = pieEntryIdentity(entry)
     const occurrence = (occurrences.get(identity) ?? 0) + 1
@@ -52,15 +55,13 @@ function keyedPieEntries(entries) {
 }
 
 /**
- * PieChartWidget — gráfico de torta/donut estilo Duralux.
+ * PieChartWidget — gráfico de torta o anillo con el tema del sistema.
  *
- * Props:
- *   data     — [{ name, value, color }]
- *   donut    — boolean (default true — anillo)
- *   height   — número de px (default 260)
- *   legend   — mostrar leyenda (default true)
+ * - data: [{ name, value, color? }] (también acepta { x, y }); donut (true); height en px (260); legend (true).
+ * - Figura accesible (DX-004) con tabla de datos oculta; leyenda con forma + texto.
+ * - Tooltip elevado con cifras tabulares; estados loading / empty / error; entrada que respeta reduced-motion.
  */
-export function PieChartWidget({
+export const PieChartWidget = /* @__PURE__ */ forwardRef<HTMLElement, PieChartWidgetProps>(function PieChartWidget({
   data,
   donut = true,
   height = 260,
@@ -82,12 +83,12 @@ export function PieChartWidget({
   errorMessage,
   className,
   style,
-}) {
+}, ref) {
   const normalizedData = Array.isArray(data) ? data.map(normalizePieEntry) : []
   const keyedData = keyedPieEntries(normalizedData)
-  const innerRadius = donut ? '55%' : '0%'
+  const innerRadius = donut ? '58%' : '0%'
   const reducedMotion = usePrefersReducedMotion()
-  const themeScopeRef = useRef(null)
+  const themeScopeRef = useRef<HTMLElement | null>(null)
   const resolvedTheme = getChartTheme(useChartTheme(theme, themeScopeRef))
   const shouldRenderEmpty = empty === undefined ? data !== undefined && normalizedData.length === 0 : empty
   const alternative = resolveChartAlternative(
@@ -97,6 +98,7 @@ export function PieChartWidget({
 
   return (
     <ChartFrame
+      ref={ref}
       ariaLabel={ariaLabel}
       title={title}
       description={description}
@@ -113,6 +115,8 @@ export function PieChartWidget({
       errorMessage={errorMessage}
       className={className}
       style={style}
+      height={height}
+      kind="pie"
       themeScopeRef={themeScopeRef}
     >
       <ResponsiveContainer width="100%" height={height}>
@@ -123,9 +127,14 @@ export function PieChartWidget({
             cy="50%"
             innerRadius={innerRadius}
             outerRadius="80%"
-            paddingAngle={3}
+            paddingAngle={2}
+            cornerRadius={donut ? 4 : 0}
+            stroke={resolvedTheme.surface}
+            strokeWidth={2}
             dataKey="value"
             isAnimationActive={!reducedMotion}
+            animationDuration={ENTER_ANIMATION_MS}
+            animationEasing="ease-out"
           >
             {keyedData.map(({ entry, colorIndex, key }) => (
               <Cell
@@ -134,12 +143,16 @@ export function PieChartWidget({
               />
             ))}
           </Pie>
-          <Tooltip contentStyle={{ ...getChartTooltipStyle(resolvedTheme) }} isAnimationActive={!reducedMotion} />
+          <Tooltip
+            content={<ChartTooltip mark="circle" />}
+            contentStyle={getChartTooltipStyle(resolvedTheme)}
+            isAnimationActive={!reducedMotion}
+          />
           {legend && (
-            <Legend wrapperStyle={{ fontSize: 12, color: resolvedTheme.text }} content={<ChartLegend theme={resolvedTheme} />} />
+            <Legend wrapperStyle={{ color: resolvedTheme.text }} itemSorter={keepSeriesOrder} content={<ChartLegend mark="circle" />} />
           )}
         </PieChart>
       </ResponsiveContainer>
     </ChartFrame>
   )
-}
+})

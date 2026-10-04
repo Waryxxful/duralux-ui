@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import { isArray, isFunction, isNonEmptyString, isObject, isString } from '../../utils/typeGuards'
+import { isArray, isFunction, isObject, isString } from '../../utils/typeGuards'
 
 export const ChartCardTitleContext = createContext(null)
 
