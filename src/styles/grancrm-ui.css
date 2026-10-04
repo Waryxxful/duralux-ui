@@ -28,6 +28,7 @@
 @import "./components/mini-stat-card.css";
 @import "./components/colored-stat-card.css";
 @import "./components/quick-link-grid.css";
+@import "./components/chat.css";
 @import "./components/chart-metrics-footer.css";
 @import "./components/connection-card.css";
 
@@ -88,12 +89,12 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 .gcu-close{display:grid;width:28px;height:28px;padding:0;place-items:center;border:0;border-radius:4px;background:transparent;color:var(--gcu-muted);font:400 22px/1 sans-serif;cursor:pointer}.gcu-close:hover{background:var(--gcu-surface-subtle);color:var(--gcu-text)}
 
 
-.gcu-message-row{display:flex;width:100%;font-family:var(--gcu-font)}.gcu-message-row--incoming{justify-content:flex-start}.gcu-message-row--outgoing{justify-content:flex-end}.gcu-message-bubble{box-sizing:border-box;max-width:min(75%,680px);padding:10px 13px;border:1px solid var(--gcu-border);border-radius:12px;background:#e2e8f0;color:#0f172a;font-size:13px;line-height:1.5;box-shadow:0 1px 2px rgba(15,23,42,.06)}.gcu-message-bubble--incoming{border-color:#93c5fd;background:#dbeafe;color:#1e3a8a}.gcu-message-bubble--outgoing{border-color:var(--gcu-primary);background:var(--gcu-primary);color:#fff}.gcu-message-bubble--highlighted{box-shadow:0 0 0 2px var(--gcu-warning),0 8px 22px rgba(15,23,42,.12)}.gcu-message-bubble__header{margin-bottom:4px;color:inherit;font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;opacity:.88}.gcu-message-bubble__meta{margin-top:4px;color:inherit;font-size:10px;opacity:.86}.gcu-message-system{display:inline-block;padding:5px 10px;border:1px solid #cbd5e1;border-radius:999px;background:#f1f5f9;color:#475569;font:600 11px var(--gcu-font)}.gcu-badge--light{border:1px solid #94a3b8!important;background:#e2e8f0!important;color:#0f172a!important;font-weight:700}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble,.app-skin-dark .gcu-theme .gcu-message-bubble{background:var(--gcu-surface);border-color:var(--gcu-border-strong);color:#e2e8f0}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble--incoming,.app-skin-dark .gcu-theme .gcu-message-bubble--incoming{background:#1d4ed8;border-color:#3b82f6;color:#fff}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble--outgoing,.app-skin-dark .gcu-theme .gcu-message-bubble--outgoing{background:var(--gcu-primary);border-color:var(--gcu-primary);color:#fff}.gcu-theme[data-gcu-theme=dark] .gcu-message-system,.app-skin-dark .gcu-theme .gcu-message-system{background:var(--gcu-surface-sunken);border-color:var(--gcu-border-strong);color:var(--gcu-muted)}.gcu-theme[data-gcu-theme=dark] .gcu-badge--light,.app-skin-dark .gcu-theme .gcu-badge--light{border-color:var(--gcu-border-strong)!important;background:var(--gcu-surface)!important;color:#e2e8f0!important}
+.gcu-badge--light{border:1px solid #94a3b8!important;background:#e2e8f0!important;color:#0f172a!important;font-weight:700}.gcu-theme[data-gcu-theme=dark] .gcu-badge--light,.app-skin-dark .gcu-theme .gcu-badge--light{border-color:var(--gcu-border-strong)!important;background:var(--gcu-surface)!important;color:#e2e8f0!important}
 
 .gcu-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 
 
-@media (max-width:575px){.gcu-page-header{align-items:flex-start;flex-direction:column}.gcu-page-header__actions{width:100%;margin-left:0}.gcu-message-bubble{max-width:88%}.page-header{padding:0 20px!important}}
+@media (max-width:575px){.gcu-page-header{align-items:flex-start;flex-direction:column}.gcu-page-header__actions{width:100%;margin-left:0}.page-header{padding:0 20px!important}}
 
 .page-header-right-items-wrapper {
   overflow: visible;
@@ -255,10 +256,6 @@ html.minimenu .nxl-navigation .navbar-content .nxl-caption label,html.minimenu .
 .text-primary{color:var(--gcu-primary-text)!important}.text-success{color:var(--gcu-status-success)!important}.text-danger{color:var(--gcu-status-danger)!important}.text-warning{color:var(--gcu-status-warning)!important}.text-info{color:var(--gcu-status-info)!important}.text-teal{color:var(--gcu-status-teal)!important}.text-indigo{color:var(--gcu-status-indigo)!important}
 
 
-
-/* Portal-safe message surfaces: ThemeProvider applies its class to <html>,
-   while local ThemeScope propagates data-gcu-theme onto the portal entry. */
-.app-skin-dark .gcu-message-bubble,[data-gcu-theme="dark"] .gcu-message-bubble{background:var(--gcu-surface);border-color:var(--gcu-border);color:var(--gcu-text)}.app-skin-dark .gcu-message-bubble--incoming,[data-gcu-theme="dark"] .gcu-message-bubble--incoming{background:#1d4ed8;border-color:#3b82f6;color:#fff}.app-skin-dark .gcu-message-system,[data-gcu-theme="dark"] .gcu-message-system{background:var(--gcu-surface-sunken);border-color:var(--gcu-border);color:var(--gcu-muted)}
 
 /* The SCSS dark selector is document-rooted. These package primitives form a
    usable local dark scope, and the explicit-light block wins over root dark

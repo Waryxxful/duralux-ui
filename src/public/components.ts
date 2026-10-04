@@ -35,12 +35,13 @@ export { Timeline } from '../components/ui/Timeline'
 export { ProgressRing } from '../components/ui/ProgressRing'
 export { Progress } from '../components/ui/Progress'
 export { Tabs } from '../components/ui/Tabs'
+export { ChatBubble, ChatTypingIndicator, ChatDaySeparator } from '../components/chat/ChatBubble'
+export { ChatInputBar } from '../components/chat/ChatInputBar'
+export { ChatSidebar } from '../components/chat/ChatSidebar'
+export { ChatWindow } from '../components/chat/ChatWindow'
+export { groupChatMessages, formatChatDay } from '../components/chat/chatModel'
+export { MessageBubble } from '../components/conversation/MessageBubble'
 import { DataTable as DataTableRuntime } from '../components/data/DataTable'
-import { ChatSidebar as ChatSidebarRuntime } from '../components/chat/ChatSidebar'
-import { ChatBubble as ChatBubbleRuntime, ChatTypingIndicator as ChatTypingIndicatorRuntime } from '../components/chat/ChatBubble'
-import { ChatInputBar as ChatInputBarRuntime } from '../components/chat/ChatInputBar'
-import { ChatWindow as ChatWindowRuntime } from '../components/chat/ChatWindow'
-import { MessageBubble as MessageBubbleRuntime } from '../components/conversation/MessageBubble'
 import { AppLayout as AppLayoutRuntime } from '../components/layout/AppLayout'
 import { AuthLayout as AuthLayoutRuntime } from '../components/layout/AuthLayout'
 import { Header as HeaderRuntime } from '../components/layout/Header'
@@ -57,13 +58,6 @@ import type {
   Breadcrumb,
   ButtonProps,
   CardProps,
-  ChatBubbleProps,
-  ChatContact,
-  ChatInputBarProps,
-  ChatSidebarProps,
-  ChatTypingIndicatorProps,
-  ChatWindowContact,
-  ChatWindowProps,
   DataTableProps,
   DataTableAction,
   DataTableColumn,
@@ -78,7 +72,6 @@ import type {
   IconSlot,
   LinkButtonProps,
   LoadingStateProps,
-  MessageBubbleProps,
   ModalProps,
   ModalSize,
   PageHeaderBreadcrumb,
@@ -114,12 +107,6 @@ function asGenericComponent<F>(runtime: React.ComponentType<any>): F {
   return runtime as F
 }
 
-export const MessageBubble = asComponent<MessageBubbleProps>(MessageBubbleRuntime)
-export const ChatSidebar = asGenericComponent<<TContact extends import('./types').ChatContact = import('./types').ChatContact>(props: ChatSidebarProps<TContact>) => React.ReactElement>(ChatSidebarRuntime)
-export const ChatBubble = asComponent<ChatBubbleProps>(ChatBubbleRuntime)
-export const ChatTypingIndicator = asComponent<ChatTypingIndicatorProps>(ChatTypingIndicatorRuntime)
-export const ChatInputBar = asComponent<ChatInputBarProps>(ChatInputBarRuntime)
-export const ChatWindow = asGenericComponent<<TContact extends import('./types').ChatWindowContact = import('./types').ChatWindowContact>(props: ChatWindowProps<TContact>) => React.ReactElement>(ChatWindowRuntime)
 export const DataTable = asGenericComponent<<T extends object = Record<string, string | number | boolean | null | undefined>>(props: DataTableProps<T>) => React.ReactElement>(DataTableRuntime)
 export const AppLayout = asComponent<AppLayoutProps>(AppLayoutRuntime)
 export const AuthLayout = asComponent<AuthLayoutProps>(AuthLayoutRuntime)
@@ -145,6 +132,11 @@ export type {
   ChatTypingIndicatorProps,
   ChatWindowContact,
   ChatWindowProps,
+  ChatDaySeparatorProps,
+  ChatDeliveryStatus,
+  ChatMessage,
+  ChatLabels,
+  ChatTimelineEntry,
   CheckboxProps,
   ColoredStatCardProps,
   DataTableProps,

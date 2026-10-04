@@ -3,153 +3,9 @@
 <--! Chat !-->
 <--!----------------------------------------------------------------!-->
 */
-.chat-sidebar__search {
-	min-width: 0;
-}
-
-.chat-sidebar__body,
-.chat-window__body {
-	min-height: 0;
-}
-
-.chat-sidebar__body {
-	overflow-y: auto;
-	flex: 1 1 auto;
-}
-
-.chat-sidebar__items {
-	margin: 0;
-	padding: 0;
-}
-
-.chat-sidebar__contact {
-	width: 100%;
-	min-width: 0;
-	min-height: 44px;
-	color: inherit;
-	font: inherit;
-	text-align: left;
-	cursor: pointer;
-	background-color: transparent;
-	border-top: 0;
-	border-right: 0;
-	border-left: 0;
-	touch-action: manipulation;
-	transition: background-color 150ms ease;
-
-	&:not(.chat-sidebar__contact--view):hover {
-		background-color: lighten($gray-100, 1);
-	}
-
-	&:focus-visible {
-		z-index: 1;
-		outline: 2px solid $primary;
-		outline-offset: -2px;
-	}
-
-}
-
-.chat-sidebar__contact--view {
-	cursor: default;
-}
-
-.chat-sidebar__action,
-.chat-input-bar__action,
-.chat-window__action {
-	width: 44px;
-	height: 44px;
-	min-width: 44px;
-	min-height: 44px;
-	max-width: 44px;
-	max-height: 44px;
-	flex: 0 0 44px;
-	touch-action: manipulation;
-}
-
-.chat-input-bar__action:disabled {
-	cursor: not-allowed;
-}
-
-.chat-input-bar__field {
-	min-width: 0;
-}
-
-.chat-input-bar__field .form-control {
-	min-height: 44px;
-}
-
-.chat-window {
-	min-height: 0;
-}
-
-.chat-window__messages {
-	min-height: 0;
-	overflow-y: auto;
-	flex: 1 1 auto;
-}
-
-.chat-window-empty {
-	background-color: $gray-100;
-}
-
-.chat-window-empty__icon {
-	display: inline-block;
-	font-size: 3rem;
-}
-
-.chat-online-status {
-	color: $dark !important;
-	font-weight: 600;
-}
-
-html.app-skin-dark .chat-online-status {
-	color: $dark-theme-color !important;
-}
-
-.chat-bubble-content {
-	max-width: 60%;
-}
-
-.chat-typing-dot {
-	display: inline-block;
-	width: 6px;
-	height: 6px;
-	animation: chat-typing-bounce 1.2s infinite;
-}
-
-.chat-typing-dot:nth-child(1) {
-	animation-delay: 0s;
-}
-
-.chat-typing-dot:nth-child(2) {
-	animation-delay: 0.2s;
-}
-
-.chat-typing-dot:nth-child(3) {
-	animation-delay: 0.4s;
-}
-
-@keyframes chat-typing-bounce {
-	0%,
-	60%,
-	100% {
-		transform: translateY(0);
-	}
-
-	30% {
-		transform: translateY(-4px);
-	}
-}
-
-.chat-sidebar__contact:focus-visible,
-.chat-sidebar__action:focus-visible,
-.chat-input-bar__action:focus-visible,
-.chat-input-bar input:focus-visible,
-.chat-window__action:focus-visible {
-	outline: 2px solid $primary;
-	outline-offset: 2px;
-}
-
+/* Las reglas de ChatSidebar, ChatWindow, ChatInputBar, ChatBubble y ChatTypingIndicator viven en
+   src/styles/components/chat.css (tokens, sin overrides de tema). Aquí queda solo la plantilla Duralux
+   legada (ajustes del chat, llamadas y animaciones de la plantilla). */
 .chatting-setting {
 	.chatting-setting-tabs {
 		a {
@@ -358,7 +214,6 @@ html.app-skin-dark .chat-online-status {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.chat-typing-dot,
 	.text.typing .wave .dot {
 		-webkit-animation: none !important;
 		-moz-animation: none !important;
@@ -366,7 +221,6 @@ html.app-skin-dark .chat-online-status {
 		animation: none !important;
 	}
 
-	.chat-sidebar__contact,
 	.calling-modal-screen .chat-calling-text-message-sidebar,
 	.chat-calling-info .timetracker,
 	.chat-calling-info .ringing {
