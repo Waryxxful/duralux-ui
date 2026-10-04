@@ -44,7 +44,7 @@ react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 pá
 | DX-016 | P2 | react | `setState` síncrono en efecto y estado empujado al padre vía efecto | `src/components/ui/Tabs.jsx:106`, `:129` | 2 | abierto |
 | DX-017 | P2 | react | Estado ajustado tras cambio de prop (×5) | `ChatSidebar.jsx:140`, `SearchableSelect.jsx:83`, `selectCoreModel.jsx:237-238`, `navigationCore.tsx:428` | 2 | abierto |
 | DX-018 | P3 | react | Key por índice | `src/components/charts/ChartLegend.jsx:11` | 2 | no aplica: el índice solo desempata series con la misma clave |
-| DX-019 | P2 | react | Modal propio en vez de `<dialog>` | `src/components/ui/Modal.jsx:487` | 2 | abierto |
+| DX-019 | P2 | react | Modal propio en vez de `<dialog>` | `src/components/ui/Modal.jsx:487` | 2 | no aplica (2.3, L2): se conserva el patrón APG completo en `Modal.tsx`. jsdom no implementa `showModal()` (no se podría verificar foco atrapado, retorno de foco, Esc y bloqueo de scroll que cubren `Modal.test` y `AppLayout.test`) y la pila global entre bundles (Esc solo en el superior, traspaso de foco, fondo `inert` por capa) difiere del top layer nativo |
 | DX-020 | P3 | react | `role` en vez de elemento HTML | `src/components/ui/StatsCard.jsx:73` | 2 | abierto |
 | DX-021 | P3 | react | Exports no-componente en archivos de componente (fast refresh) | `ThemeProvider.tsx:111-112`, `ThemeBoundaryContext.tsx:11`, `Sidebar.jsx:47`, `GranCrmExtras.tsx:104`, `ShellNav.tsx:74` | 1 (theme) / 2 (resto) | parcial: tema cerrado en 2.1; Sidebar/GranCrmExtras/ShellNav en subproyecto 2 |
 | DX-022 | P3 | mantenibilidad | 13 funciones de alta complejidad; `DataTable` y `ShellHeader` demasiado grandes | react-doctor (lista en baseline) | 2 / 3 | abierto |

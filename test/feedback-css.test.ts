@@ -28,6 +28,11 @@ describe('Alert', () => {
     }
   })
 
+  test('el tono por defecto no tiene especificidad: los suaves no caen todos en info', () => {
+    expect(css.alert).toMatch(/:where\(\.gcu-alert,\.alert\[class\*="alert-soft-"\]\)\{--gcu-alert-soft:var\(--gcu-info-soft\)/)
+    expect(css.alert).not.toMatch(/(^|\n)\.gcu-alert,\.alert\[class\*="alert-soft-"\]\{--gcu-alert-soft/)
+  })
+
   test('las clases canónicas alert-soft-*-message siguen funcionando sin el componente', () => {
     expect(css.alert).toContain('.alert-soft-warning-message')
   })
@@ -84,6 +89,8 @@ describe('Estados vacío, error y carga', () => {
     expect(css['feedback-state']).toMatch(/\.gcu-state__title\{[^}]*text-wrap:balance/)
     expect(css['feedback-state']).toMatch(/\.gcu-state__message\{[^}]*max-width:/)
     expect(css['feedback-state']).toMatch(/\.gcu-state--error \.gcu-state__icon\{[^}]*var\(--gcu-danger-soft\)/)
+    // Las reglas .gcu-state heredadas (40 px, opacidad) salieron de grancrm-ui.css.
+    expect(glue).not.toContain('.gcu-state{')
   })
 
   test('card-loader cubre la card con la superficie del tema, sin override oscuro en SCSS', () => {

@@ -112,6 +112,9 @@ function acquireViewport(): HTMLElement | null {
     element.id = VIEWPORT_ID;
     element.className = 'gcu-toast-viewport';
     element.setAttribute('data-gcu-toast-owned', 'true');
+    // Región con nombre: los toasts quedan dentro de un landmark y se pueden encontrar con lector de pantalla.
+    element.setAttribute('role', 'region');
+    element.setAttribute('aria-label', 'Notificaciones');
     document.body.appendChild(element);
     state = undefined;
     createdByThisRegistry = true;

@@ -28,7 +28,7 @@ const meta: Meta<typeof Dropdown> = {
           <button type="button" className="dropdown-item"><i className="feather-copy" aria-hidden="true" />Duplicar campaña</button>
           <button type="button" className="dropdown-item"><i className="feather-download" aria-hidden="true" />Exportar reporte</button>
           <div className="dropdown-divider" />
-          <button type="button" className="dropdown-item text-danger"><i className="feather-trash-2" aria-hidden="true" />Eliminar campaña</button>
+          <button type="button" className="dropdown-item gcu-dropdown-item--danger"><i className="feather-trash-2" aria-hidden="true" />Eliminar campaña</button>
         </DropdownMenu>
       </Dropdown>
     </div>

@@ -7,6 +7,8 @@
 .dropdown-item:focus,.dropdown-item:focus-visible{background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}
 .dropdown-item.active,.dropdown-item:active{background-color:var(--gcu-primary-soft);color:var(--gcu-primary-text)}
 .dropdown-item.disabled,.dropdown-item:disabled{color:var(--gcu-muted)}
+.gcu-dropdown-item--danger,.gcu-dropdown-item--danger:focus{color:var(--gcu-status-danger)}
+@media (hover:hover){.gcu-dropdown-item--danger:hover{color:var(--gcu-status-danger)}}
 .dropdown-header{color:var(--gcu-muted)}
 .dropdown-divider{border-color:var(--gcu-border)}
 @media (hover:hover){.dropdown-item:hover{background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}}

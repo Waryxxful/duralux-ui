@@ -1,7 +1,9 @@
 /* Alert y clases canónicas .alert-soft-{tono}-message.
    Superficie suave del tono, texto --gcu-{tono}-text (AA verificado por tokens:check en los 3 temas)
    e ícono sólido --gcu-{tono} con --gcu-on-{tono}. Los tokens cambian por tema: sin overrides de oscuro. */
-.gcu-alert,.alert[class*="alert-soft-"]{--gcu-alert-soft:var(--gcu-info-soft);--gcu-alert-border:var(--gcu-info-border);--gcu-alert-text:var(--gcu-info-text);--gcu-alert-fill:var(--gcu-info);--gcu-alert-on-fill:var(--gcu-on-info);border:1px solid var(--gcu-alert-border);border-radius:var(--gcu-radius-md);background-color:var(--gcu-alert-soft);color:var(--gcu-alert-text)}
+/* Tono por defecto sin especificidad (:where) para que cada .gcu-alert--{tono} / .alert-soft-{tono}-message lo reemplace. */
+:where(.gcu-alert,.alert[class*="alert-soft-"]){--gcu-alert-soft:var(--gcu-info-soft);--gcu-alert-border:var(--gcu-info-border);--gcu-alert-text:var(--gcu-info-text);--gcu-alert-fill:var(--gcu-info);--gcu-alert-on-fill:var(--gcu-on-info)}
+.gcu-alert,.alert[class*="alert-soft-"]{border:1px solid var(--gcu-alert-border);border-radius:var(--gcu-radius-md);background-color:var(--gcu-alert-soft);color:var(--gcu-alert-text)}
 .gcu-alert{position:relative;display:flex;align-items:flex-start;gap:var(--gcu-space-3);padding:var(--gcu-space-3) var(--gcu-space-4);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
 .gcu-alert--primary,.alert-soft-primary-message{--gcu-alert-soft:var(--gcu-primary-soft);--gcu-alert-border:var(--gcu-primary-border);--gcu-alert-text:var(--gcu-primary-text);--gcu-alert-fill:var(--gcu-primary);--gcu-alert-on-fill:var(--gcu-on-primary)}
 .gcu-alert--secondary,.alert-soft-secondary-message{--gcu-alert-soft:var(--gcu-secondary-soft);--gcu-alert-border:var(--gcu-secondary-border);--gcu-alert-text:var(--gcu-secondary-text);--gcu-alert-fill:var(--gcu-secondary);--gcu-alert-on-fill:var(--gcu-on-secondary)}
