@@ -15,7 +15,7 @@ import { IndicatorContext, IndicatorDeltaChip, IndicatorGlyph, IndicatorValue } 
  * - chart: mini gráfico opcional al pie.
  * Estilos: src/styles/components/colored-stat-card.css e indicator.css.
  */
-export const ColoredStatCard = forwardRef<HTMLDivElement, ColoredStatCardProps>(function ColoredStatCard({
+export const ColoredStatCard = /* @__PURE__ */ forwardRef<HTMLDivElement, ColoredStatCardProps>(function ColoredStatCard({
   icon,
   value,
   label,

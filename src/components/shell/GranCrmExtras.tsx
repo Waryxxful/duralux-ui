@@ -21,7 +21,7 @@ import { statCardDelta, statCardIcon, statCardTone, statusBadgeClassName } from 
 // ── CardHeader / CardBody / CardFooter ────────────────────────────────────────
 
 /** Encabezado de card: `.card-header` con título (h2 visual h5) y acciones a la derecha. */
-export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(function CardHeader(
+export const CardHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, CardHeaderProps>(function CardHeader(
   { title, actions, className, children, ...rest },
   ref,
 ) {
@@ -34,18 +34,18 @@ export const CardHeader = forwardRef<HTMLDivElement, CardHeaderProps>(function C
   return <div {...rest} ref={ref} className={cx('card-header', className)}>{content}</div>
 })
 
-export const CardBody = forwardRef<HTMLDivElement, CardBodyProps>(function CardBody({ className, ...rest }, ref) {
+export const CardBody = /* @__PURE__ */ forwardRef<HTMLDivElement, CardBodyProps>(function CardBody({ className, ...rest }, ref) {
   return <div {...rest} ref={ref} className={cx('card-body', className)} />
 })
 
-export const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(function CardFooter({ className, ...rest }, ref) {
+export const CardFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, CardFooterProps>(function CardFooter({ className, ...rest }, ref) {
   return <div {...rest} ref={ref} className={cx('card-footer', className)} />
 })
 
 // ── StatusBadge / StatusButton ────────────────────────────────────────────────
 
 /** Badge de estado (texto obligatorio vía `label` o hijos: el estado nunca va solo en color). */
-export const StatusBadge = forwardRef<HTMLSpanElement, StatusBadgeProps>(function StatusBadge(
+export const StatusBadge = /* @__PURE__ */ forwardRef<HTMLSpanElement, StatusBadgeProps>(function StatusBadge(
   { status, label, soft, className, children, ...rest },
   ref,
 ) {
@@ -56,7 +56,7 @@ export const StatusBadge = forwardRef<HTMLSpanElement, StatusBadgeProps>(functio
   )
 })
 
-export const StatusButton = forwardRef<HTMLButtonElement, StatusButtonProps>(function StatusButton(
+export const StatusButton = /* @__PURE__ */ forwardRef<HTMLButtonElement, StatusButtonProps>(function StatusButton(
   { status, label, soft, className, children, type = 'button', ...rest },
   ref,
 ) {
@@ -79,7 +79,7 @@ export const StatusButton = forwardRef<HTMLButtonElement, StatusButtonProps>(fun
  * StatCard — firma GranCRM (`title`, `variant`, `change`) sobre StatsCard, que es la fuente de verdad
  * del DOM. `change.value` es un porcentaje: se muestra con signo, `%` y flecha.
  */
-export const StatCard = forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
+export const StatCard = /* @__PURE__ */ forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
   { title, value, icon, variant = 'primary', change, footer, ...rest },
   ref,
 ) {

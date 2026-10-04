@@ -6,11 +6,11 @@ import type { IndicatorIcon } from '../../../public/types'
 import type { FormattedDelta } from './indicator'
 import { formatIndicatorValue, isEmptyIndicatorValue, isIconClass } from './indicator'
 
-const ARROW: Record<FormattedDelta['direction'], string> = {
+const ARROW = {
   up: 'feather-arrow-up-right',
   down: 'feather-arrow-down-right',
   flat: 'feather-minus',
-}
+} satisfies Record<FormattedDelta['direction'], string>
 
 /** Glifo del indicador: clase completa (`feather-users`), nombre Feather o SVG Tabler. Siempre decorativo. */
 export function IndicatorGlyph({ icon }: { icon: IndicatorIcon | null | undefined }) {
@@ -42,7 +42,7 @@ export function IndicatorDeltaChip({ delta, label, className }: IndicatorDeltaCh
 }
 
 /** Skeleton de la cifra: conserva la altura de la línea para que la tarjeta no salte al cargar. */
-export function IndicatorSkeleton({ className }: { className?: string }) {
+function IndicatorSkeleton({ className }: { className?: string }) {
   return (
     <>
       <span className={cx('gcu-skeleton', 'gcu-stat__skeleton', className)} aria-hidden="true" />

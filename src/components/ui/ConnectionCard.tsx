@@ -14,7 +14,7 @@ import type { ConnectionCardProps } from '../../public/types'
  * - Responde a su contenedor: en celdas angostas la descripción ocupa dos líneas en vez de truncarse.
  * Estilos: src/styles/components/connection-card.css (el switch usa form-check.css).
  */
-export const ConnectionCard = forwardRef<HTMLDivElement, ConnectionCardProps>(function ConnectionCard({
+export const ConnectionCard = /* @__PURE__ */ forwardRef<HTMLDivElement, ConnectionCardProps>(function ConnectionCard({
   icon,
   title,
   description,

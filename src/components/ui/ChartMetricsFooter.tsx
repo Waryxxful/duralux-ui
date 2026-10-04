@@ -30,7 +30,7 @@ function metricEntries(metrics: ChartMetricsFooterProps['metrics']) {
  * - Responde a su contenedor: en una fila con separadores desde 28rem; en dos columnas si es angosto.
  * Estilos: src/styles/components/chart-metrics-footer.css e indicator.css.
  */
-export const ChartMetricsFooter = forwardRef<HTMLDivElement, ChartMetricsFooterProps>(function ChartMetricsFooter({
+export const ChartMetricsFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, ChartMetricsFooterProps>(function ChartMetricsFooter({
   metrics = [],
   loading = false,
   className,

@@ -8,22 +8,20 @@ import type { IndicatorDelta, IndicatorTone } from '../../../public/types'
 import { log } from '../../../utils/log'
 import { isFiniteNumber, isString } from '../../../utils/typeGuards'
 
-export const INDICATOR_TONES: ReadonlyArray<IndicatorTone> = [
+const TONE_SET = /* @__PURE__ */ new Set<string>([
   'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'teal', 'indigo', 'dark', 'neutral',
-]
-
-const TONE_SET = new Set<string>(INDICATOR_TONES)
+] satisfies ReadonlyArray<IndicatorTone>)
 /** Alias de clases legadas que no son tonos: `gray-200` era el fondo neutro por defecto. */
-const TONE_ALIASES: Record<string, IndicatorTone> = {
-  'gray-200': 'neutral', gray: 'neutral', light: 'neutral', brand: 'primary', darken: 'dark',
-}
+const TONE_ALIASES = /* @__PURE__ */ new Map<string, IndicatorTone>([
+  ['gray-200', 'neutral'], ['gray', 'neutral'], ['light', 'neutral'], ['brand', 'primary'], ['darken', 'dark'],
+])
 
 /** Signo menos tipográfico (U+2212): mismo ancho que «+» en cifras tabulares. */
 const MINUS = '−'
 /** Espacio duro entre cifra y unidad («84 %»): la unidad nunca queda sola en otra línea. */
 const NBSP = ' '
 
-export function isTone(value: unknown): value is IndicatorTone {
+export function isTone(value: string | null | undefined): value is IndicatorTone {
   return isString(value) && TONE_SET.has(value)
 }
 
@@ -31,18 +29,24 @@ export function isTone(value: unknown): value is IndicatorTone {
  * Traduce lo que llegue (tono, `bg-soft-info text-info`, `bg-primary`, `light-warning`) a un tono.
  * Devuelve `null` si no reconoce nada: el llamador decide el fallback y lo registra.
  */
-export function toneFromLegacy(value: unknown): IndicatorTone | null {
+export function toneFromLegacy(value: string | null | undefined): IndicatorTone | null {
   if (!isString(value) || value.trim() === '') return null
   for (const token of value.trim().split(/\s+/)) {
     const name = token.replace(/^(bg-soft-|bg-|text-|light-)/, '')
-    if (TONE_SET.has(name)) return name as IndicatorTone
-    if (name in TONE_ALIASES) return TONE_ALIASES[name]
+    if (isTone(name)) return name
+    const alias = TONE_ALIASES.get(name)
+    if (alias) return alias
   }
   return null
 }
 
 /** Tono final de un componente: el explícito gana; si no, el legado; si no, el por defecto. */
-export function resolveTone(component: string, tone: unknown, legacy: unknown, fallback: IndicatorTone): IndicatorTone {
+export function resolveTone(
+  component: string,
+  tone: string | null | undefined,
+  legacy: string | null | undefined,
+  fallback: IndicatorTone,
+): IndicatorTone {
   if (tone !== undefined && tone !== null) {
     if (isTone(tone)) return tone
     log.warn(`${component}: tono desconocido "${String(tone)}"; se usa "${fallback}".`)
@@ -55,7 +59,7 @@ export function resolveTone(component: string, tone: unknown, legacy: unknown, f
   return fallback
 }
 
-const numberFormats = new Map<number, Intl.NumberFormat>()
+const numberFormats = /* @__PURE__ */ new Map<number, Intl.NumberFormat>()
 
 /** Número en es-CL: punto de miles y coma decimal (2.840 · 4,3). */
 export function formatIndicatorNumber(value: number, fractionDigits?: number): string {
@@ -91,7 +95,7 @@ export interface FormattedDelta {
   spoken: string
 }
 
-const SPOKEN: Record<DeltaDirection, string> = { up: 'Sube', down: 'Baja', flat: 'Sin cambio' }
+const SPOKEN = { up: 'Sube', down: 'Baja', flat: 'Sin cambio' } satisfies Record<DeltaDirection, string>
 
 function withUnit(number: string, unit: string | undefined): string {
   if (!unit) return number
@@ -125,7 +129,7 @@ export function formatDelta(component: string, delta: IndicatorDelta | undefined
  * Tendencia legada (`{ value: '36,8%', up: true }` o `trend` + `trendUp`): el texto ya viene
  * formateado; solo se le antepone el signo si no lo trae, para que la variación nunca dependa del color.
  */
-export function formatLegacyTrend(value: unknown, up: boolean | undefined): FormattedDelta | null {
+export function formatLegacyTrend(value: string | number | null | undefined, up: boolean | undefined): FormattedDelta | null {
   if (value === undefined || value === null || value === '') return null
   const raw = String(value).trim()
   const direction: DeltaDirection = up === false ? 'down' : 'up'

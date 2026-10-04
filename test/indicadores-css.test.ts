@@ -28,13 +28,16 @@ function token(name: string): string {
   return match[1].trim()
 }
 
-function hexToRgb(hex: string): [number, number, number] {
+type Rgb = [number, number, number]
+
+function hexToRgb(hex: string): Rgb {
   const value = hex.replace('#', '')
   const full = value.length === 3 ? value.split('').map(c => c + c).join('') : value
-  return [0, 2, 4].map(i => parseInt(full.slice(i, i + 2), 16)) as [number, number, number]
+  const channel = (i: number) => parseInt(full.slice(i, i + 2), 16)
+  return [channel(0), channel(2), channel(4)]
 }
 
-function luminance([r, g, b]: [number, number, number]): number {
+function luminance([r, g, b]: Rgb): number {
   const [lr, lg, lb] = [r, g, b].map(v => {
     const c = v / 255
     return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
@@ -42,13 +45,14 @@ function luminance([r, g, b]: [number, number, number]): number {
   return 0.2126 * lr + 0.7152 * lg + 0.0722 * lb
 }
 
-function contrast(a: [number, number, number], b: [number, number, number]): number {
+function contrast(a: Rgb, b: Rgb): number {
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x)
   return (hi + 0.05) / (lo + 0.05)
 }
 
-function composite(top: [number, number, number], bottom: [number, number, number], alpha: number): [number, number, number] {
-  return top.map((channel, i) => Math.round(channel * alpha + bottom[i] * (1 - alpha))) as [number, number, number]
+function composite(top: Rgb, bottom: Rgb, alpha: number): Rgb {
+  const mix = (i: number) => Math.round(top[i] * alpha + bottom[i] * (1 - alpha))
+  return [mix(0), mix(1), mix(2)]
 }
 
 const tones = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'teal', 'indigo', 'dark']
@@ -101,7 +105,7 @@ describe('ColoredStatCard: contraste AA en claro, oscuro y navy (movido desde th
     for (const tone of tones) {
       const match = colored.match(new RegExp(`\\.gcu-colored-stat--${tone}\\{--gcu-colored-stat-fill:var\\(--gcu-([a-z0-9-]+)\\)\\}`))
       expect(match, `relleno ${tone}`).not.toBeNull()
-      const fillToken = match![1]
+      const fillToken = match?.[1] ?? ''
       // El paso de paleta no se redefine en oscuro ni navy: el relleno (y su contraste) es el mismo.
       expect(themedBlocks, `--gcu-${fillToken} no debe cambiar por tema`).not.toContain(`--gcu-${fillToken}:`)
       const fill = hexToRgb(token(fillToken))
@@ -112,11 +116,12 @@ describe('ColoredStatCard: contraste AA en claro, oscuro y navy (movido desde th
   test('el vidrio se sombrea con darken (nunca se aclara) y conserva AA con blanco en cada tono', () => {
     const glass = colored.match(/\.gcu-colored-stat__glass\{[^}]*background-color:rgba\(var\(--gcu-darken-rgb\),(\.\d+)\)/)
     expect(glass).not.toBeNull()
-    const alpha = Number(glass![1])
-    const darken = token('darken-rgb').split(',').map(Number) as [number, number, number]
+    const alpha = Number(glass?.[1])
+    const [r, g, b] = token('darken-rgb').split(',').map(Number)
+    const darken: Rgb = [r, g, b]
     const white = hexToRgb(token('on-darken'))
     for (const tone of tones) {
-      const fillToken = colored.match(new RegExp(`\\.gcu-colored-stat--${tone}\\{--gcu-colored-stat-fill:var\\(--gcu-([a-z0-9-]+)\\)`))![1]
+      const fillToken = colored.match(new RegExp(`\\.gcu-colored-stat--${tone}\\{--gcu-colored-stat-fill:var\\(--gcu-([a-z0-9-]+)\\)`))?.[1] ?? ''
       const surface = composite(darken, hexToRgb(token(fillToken)), alpha)
       expect(contrast(white, surface), `vidrio ${tone}`).toBeGreaterThanOrEqual(4.5)
     }

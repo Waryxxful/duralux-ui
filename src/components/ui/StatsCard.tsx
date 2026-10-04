@@ -20,7 +20,7 @@ const LEGACY_DEFAULT_ICON_BG = 'bg-gray-200'
  * - Responde a su contenedor (`.gcu-container`): en una celda angosta la variación baja bajo la cifra.
  * Estilos: src/styles/components/stats-card.css e indicator.css.
  */
-export const StatsCard = forwardRef<HTMLDivElement, StatsCardProps>(function StatsCard({
+export const StatsCard = /* @__PURE__ */ forwardRef<HTMLDivElement, StatsCardProps>(function StatsCard({
   icon,
   iconBg,
   tone,

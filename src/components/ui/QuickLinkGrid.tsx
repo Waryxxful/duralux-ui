@@ -27,7 +27,7 @@ function quickLinkEntries(items: QuickLinkGridProps['items']) {
   })
 }
 
-function resolveColumns(columns: unknown): number {
+function resolveColumns(columns: number | undefined): number {
   if (columns === undefined) return DEFAULT_COLUMNS
   if (isFiniteNumber(columns) && columns >= 1) return Math.min(MAX_COLUMNS, Math.floor(columns))
   log.warn(`QuickLinkGrid: columns debe ser un entero entre 1 y ${MAX_COLUMNS} (recibido: ${String(columns)}); se usan ${DEFAULT_COLUMNS}.`)
@@ -60,7 +60,7 @@ function QuickLinkContent({ item }: { item: QuickLinkItem }) {
  *   Responde a su contenedor (`@container`), no al viewport.
  * Estilos: src/styles/components/quick-link-grid.css e indicator.css.
  */
-export const QuickLinkGrid = forwardRef<HTMLDivElement, QuickLinkGridProps>(function QuickLinkGrid({
+export const QuickLinkGrid = /* @__PURE__ */ forwardRef<HTMLDivElement, QuickLinkGridProps>(function QuickLinkGrid({
   items = [],
   columns,
   className,
@@ -68,6 +68,7 @@ export const QuickLinkGrid = forwardRef<HTMLDivElement, QuickLinkGridProps>(func
   ...rest
 }, ref) {
   const resolvedColumns = resolveColumns(columns)
+  // SAFETY: React.CSSProperties no tipa custom properties; '--gcu-quick-links-columns' es un string válido en style.
   const gridStyle = { ...style, '--gcu-quick-links-columns': String(resolvedColumns) } as React.CSSProperties
 
   return (

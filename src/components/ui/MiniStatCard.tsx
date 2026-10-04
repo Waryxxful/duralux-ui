@@ -12,7 +12,7 @@ import { IndicatorContext, IndicatorDeltaChip, IndicatorGlyph, IndicatorValue } 
  * - Responde a su contenedor: centrada en celdas angostas; ícono a la izquierda desde 20rem.
  * Estilos: src/styles/components/mini-stat-card.css e indicator.css.
  */
-export const MiniStatCard = forwardRef<HTMLDivElement, MiniStatCardProps>(function MiniStatCard({
+export const MiniStatCard = /* @__PURE__ */ forwardRef<HTMLDivElement, MiniStatCardProps>(function MiniStatCard({
   icon,
   value,
   label,
