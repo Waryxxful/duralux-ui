@@ -4,8 +4,8 @@ import { createSafeDomId, readProperty, safeString, warnOnce } from '../tableMod
 import { cx } from '../../../utils/cx'
 import { isFiniteNumber, isFunction, isString } from '../../../utils/typeGuards'
 import type { KeyLike } from '../../../public/types'
-import { RowActionButton } from './dataTableActions'
-import type { NormalizedRowAction } from './dataTableActions'
+import { RowActionButton } from './RowActionButton'
+import type { NormalizedRowAction } from './dataTableActionsModel'
 import { columnReactKey } from './dataTableModel'
 import type { DataTableColumnInfo, DataTableEntry, WarningsRef } from './dataTableModel'
 
@@ -44,14 +44,16 @@ interface DataTableCellProps<T> {
  * Celda memoizada: seleccionar una fila no vuelve a llamar a los `render` de las columnas
  * (la fila cambia de clase; sus celdas conservan las mismas props).
  */
-const DataTableCell = /* @__PURE__ */ memo(function DataTableCell<T>({ entry, column, pageRowIndex }: DataTableCellProps<T>) {
+const DataTableCellBase = function DataTableCell<T>({ entry, column, pageRowIndex }: DataTableCellProps<T>) {
   const value = readProperty(entry.row, column.key)
   return (
     <td className={column.numeric ? 'text-end' : undefined}>
       {isFunction(column.render) ? column.render(entry.row, value, pageRowIndex) : value}
     </td>
   )
-})
+}
+// SAFETY: memo conserva el componente; solo se restituye el genérico que React.memo no propaga.
+const DataTableCell = /* @__PURE__ */ memo(DataTableCellBase) as typeof DataTableCellBase
 
 export interface DataTableRowProps<T> {
   entry: DataTableEntry<T>
@@ -72,7 +74,7 @@ export interface DataTableRowProps<T> {
 }
 
 /** Fila de DataTable: checkbox con nombre propio, celdas memoizadas y acciones. */
-export const DataTableRow = /* @__PURE__ */ memo(function DataTableRow<T>({
+const DataTableRowBase = function DataTableRow<T>({
   entry,
   displayIndex,
   pageRowIndex,
@@ -116,4 +118,8 @@ export const DataTableRow = /* @__PURE__ */ memo(function DataTableRow<T>({
       ) : null}
     </tr>
   )
-})
+}
+
+export const DataTableRow =
+  // SAFETY: memo conserva el componente; solo se restituye el genérico que React.memo no propaga.
+  /* @__PURE__ */ memo(DataTableRowBase) as typeof DataTableRowBase

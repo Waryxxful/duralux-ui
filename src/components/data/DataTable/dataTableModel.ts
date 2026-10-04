@@ -7,7 +7,7 @@ import {
   rowSortingFeature,
   tableFeatures,
 } from '@tanstack/react-table'
-import type { ColumnDef, Row, SortingState } from '@tanstack/react-table'
+import type { ColumnDef, ColumnVisibilityState, Row, SortingState } from '@tanstack/react-table'
 import type * as React from 'react'
 import { readProperty, safeString, toSafeDomSegment, warnOnce } from '../tableModel'
 import { isFiniteNumber, isString } from '../../../utils/typeGuards'
@@ -93,7 +93,7 @@ function plainText(value: React.ReactNode, fallback: string): string {
   return fallback
 }
 
-interface PublicColumnShape<T> {
+interface PublicColumnInput<T> {
   key?: KeyLike
   label?: React.ReactNode
   header?: React.ReactNode
@@ -105,7 +105,7 @@ interface PublicColumnShape<T> {
 }
 
 /** Normaliza las columnas públicas (defensivo: columnas inválidas se omiten con aviso). */
-export function normalizeColumns<T, C extends PublicColumnShape<T>>(
+export function normalizeColumns<T, C extends PublicColumnInput<T>>(
   columns: ReadonlyArray<C>,
   warningsRef: WarningsRef,
 ): DataTableColumnInfo<T>[] {
@@ -162,8 +162,8 @@ export function createColumnDefs<T>(
 export function toTableVisibility<T>(
   infos: ReadonlyArray<DataTableColumnInfo<T>>,
   visibility: DataTableColumnVisibility,
-): Record<string, boolean> {
-  const state: Record<string, boolean> = {}
+): ColumnVisibilityState {
+  const state: ColumnVisibilityState = {}
   infos.forEach((info) => {
     state[info.id] = !info.hideable || visibility[info.visibilityKey] !== false
   })
@@ -173,9 +173,9 @@ export function toTableVisibility<T>(
 /** Estado de TanStack → visibilidad pública. */
 export function fromTableVisibility<T>(
   infos: ReadonlyArray<DataTableColumnInfo<T>>,
-  state: Readonly<Record<string, boolean>>,
+  state: Readonly<ColumnVisibilityState>,
 ): DataTableColumnVisibility {
-  const visibility: Record<string, boolean> = {}
+  const visibility: ColumnVisibilityState = {}
   infos.forEach((info) => {
     visibility[info.visibilityKey] = state[info.id] !== false
   })

@@ -20,8 +20,8 @@ import { EMPTY_ARRAY } from '../dataTableToolbarModel'
 import { cx } from '../../../utils/cx'
 import { log } from '../../../utils/log'
 import { isArray, isFiniteNumber, isFunction, isString } from '../../../utils/typeGuards'
-import type { DataTableProps, DataTableToolbarContext, TableColumn } from '../../../public/types'
-import { normalizeAction } from './dataTableActions'
+import type { DataTableProps, DataTableToolbarContext, KeyLike, TableColumn } from '../../../public/types'
+import { normalizeAction } from './dataTableActionsModel'
 import {
   createColumnDefs,
   dataTableFeatures,
@@ -53,8 +53,8 @@ function defaultGetRowLabel<T>(row: T, index: number): string {
 }
 
 /** Recorre el orden visible y avisa si un `rowKey` función devuelve otra clave para la misma fila. */
-function useStableRowKeyCheck<T>(
-  rowKey: DataTableProps<AnyRow>['rowKey'],
+function useStableRowKeyCheck<T extends object>(
+  rowKey: string | ((row: T, index: number) => KeyLike | undefined),
   displayRows: ReadonlyArray<DataTableEntry<T>>,
   warningsRef: React.MutableRefObject<Set<string>>,
 ) {
@@ -153,7 +153,7 @@ export function DataTable<T extends object = AnyRow>(props: DataTableProps<T>) {
     defaultColumnVisibility,
     onColumnVisibilityChange: isFunction(onColumnVisibilityChange) ? onColumnVisibilityChange : undefined,
   })
-  const [sorting, setSorting] = useState<SortingState>(EMPTY_ARRAY as SortingState)
+  const [sorting, setSorting] = useState<SortingState>(() => [])
   const onSortingChange = useCallback((updater: Updater<SortingState>) => {
     setSorting(previous => (isFunction<Updater<SortingState>, (old: SortingState) => SortingState>(updater) ? updater(previous) : updater))
   }, [])

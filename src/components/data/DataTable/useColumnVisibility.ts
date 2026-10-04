@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import type { Updater, VisibilityState } from '@tanstack/react-table'
+import type { Updater, ColumnVisibilityState } from '@tanstack/react-table'
 import { log } from '../../../utils/log'
 import { isFunction } from '../../../utils/typeGuards'
 import type { DataTableColumnVisibility } from '../../../public/types'
@@ -17,8 +17,8 @@ export interface ColumnVisibilityOptions<T> {
 
 export interface ColumnVisibility<T> {
   /** Estado para TanStack (por id de columna). */
-  tableVisibility: VisibilityState
-  onTableVisibilityChange: (updater: Updater<VisibilityState>) => void
+  tableVisibility: ColumnVisibilityState
+  onTableVisibilityChange: (updater: Updater<ColumnVisibilityState>) => void
   /** Columnas visibles en orden (referencia estable mientras la visibilidad no cambie). */
   visibleColumns: DataTableColumnInfo<T>[]
 }
@@ -39,8 +39,8 @@ export function useColumnVisibility<T>(options: ColumnVisibilityOptions<T>): Col
     [columns, tableVisibility],
   )
 
-  const onTableVisibilityChange = useCallback((updater: Updater<VisibilityState>) => {
-    const nextState = isFunction<Updater<VisibilityState>, (old: VisibilityState) => VisibilityState>(updater)
+  const onTableVisibilityChange = useCallback((updater: Updater<ColumnVisibilityState>) => {
+    const nextState = isFunction<Updater<ColumnVisibilityState>, (old: ColumnVisibilityState) => ColumnVisibilityState>(updater)
       ? updater(tableVisibility)
       : updater
     if (columns.length > 0 && columns.every(column => nextState[column.id] === false)) {

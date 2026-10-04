@@ -48,13 +48,21 @@ export function useDataTableSelection<T>(
     })
   ), [lookup])
 
+  // Último callback del padre: un callback en línea no reejecuta la poda ni invalida `commit`.
+  const listenerRef = useRef(onSelectionChange)
+  useEffect(() => {
+    listenerRef.current = onSelectionChange
+  }, [onSelectionChange])
+
   const commit = useCallback((next: ReadonlySet<KeyLike>) => {
     selectedRef.current = next
     setSelected(next)
-    if (isFunction(onSelectionChange)) onSelectionChange(publicKeys(next))
-  }, [onSelectionChange, publicKeys])
+    const listener = listenerRef.current
+    if (isFunction(listener)) listener(publicKeys(next))
+  }, [publicKeys])
 
-  // Filas que ya no están en `data` dejan de estar seleccionadas (y se informa el cambio).
+  // Filas que ya no están en `data` dejan de estar seleccionadas (y se informa el cambio):
+  // es parte del contrato público (`onSelectionChange` refleja siempre la selección real).
   useEffect(() => {
     const current = selectedRef.current
     const next = new Set(Array.from(current).filter(identity => lookup.byIdentity.has(identity)))

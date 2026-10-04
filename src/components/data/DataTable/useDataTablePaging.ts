@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { clampPage, normalizePageSize } from '../dataTablePaginationModel'
 import { normalizePageSizeOptions } from '../dataTableToolbarModel'
 import { log } from '../../../utils/log'
@@ -33,21 +33,16 @@ export function useDataTablePaging(options: DataTablePagingOptions): DataTablePa
   const { pageSize, pageSizeOptions, onPageSizeChange, rowCount, remoteTotal } = options
   const requestedPageSize = normalizePageSize(pageSize)
   const controlled = isFunction(onPageSizeChange)
-  const [internalPageSize, setInternalPageSize] = useState(requestedPageSize)
-  const pageSizePropRef = useRef(requestedPageSize)
-  const effectivePageSize = controlled ? requestedPageSize : internalPageSize
+  // Elección interna atada a la prop vigente: si `pageSize` cambia, la prop vuelve a mandar sin efectos.
+  const [choice, setChoice] = useState<{ forProp: number, value: number } | null>(null)
+  const effectivePageSize = controlled || choice === null || choice.forProp !== requestedPageSize
+    ? requestedPageSize
+    : choice.value
   const normalizedOptions: number[] = useMemo(
     () => normalizePageSizeOptions(pageSizeOptions, effectivePageSize),
     [pageSizeOptions, effectivePageSize],
   )
   const [page, setPageState] = useState(1)
-
-  // La prop `pageSize` manda cuando cambia, aunque la tabla no esté controlada.
-  useEffect(() => {
-    if (pageSizePropRef.current === requestedPageSize) return
-    pageSizePropRef.current = requestedPageSize
-    if (!controlled) setInternalPageSize(requestedPageSize)
-  }, [controlled, requestedPageSize])
 
   const total = remoteTotal ?? rowCount
   const totalPages = Math.ceil(total / effectivePageSize)
@@ -70,10 +65,10 @@ export function useDataTablePaging(options: DataTablePagingOptions): DataTablePa
       log.warn(`DataTable: ${normalized} filas por página no está entre las opciones; se ignora.`)
       return
     }
-    if (!controlled) setInternalPageSize(normalized)
+    if (!controlled) setChoice({ forProp: requestedPageSize, value: normalized })
     onPageSizeChange?.(normalized)
     setPageState(1)
-  }, [controlled, normalizedOptions, onPageSizeChange])
+  }, [controlled, normalizedOptions, onPageSizeChange, requestedPageSize])
 
   return {
     pageSize: effectivePageSize,
