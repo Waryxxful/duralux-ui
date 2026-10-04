@@ -45,7 +45,11 @@ export function NumberInput({ formatter, parser, ...props }: NumberInputProps) {
   return (
     <InputNumber<number>
       formatter={formatter ?? ((value, info) => (info.userTyping ? info.input : formatNumberEsCL(value)))}
-      parser={parser ?? (text => Number(parseNumberEsCL(text)))}
+      parser={parser ?? (text => {
+        // Vacío → undefined: antd lo entrega como `null` en onChange (campo limpio, no `0`).
+        const parsed = parseNumberEsCL(text)
+        return parsed === '' ? undefined : Number(parsed)
+      })}
       {...props}
     />
   )

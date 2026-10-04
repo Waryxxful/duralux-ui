@@ -50,8 +50,6 @@ export function Tour({ steps = [], ...props }: TourProps) {
 export type ImagePreviewProps = ImageProps
 
 const ACTION_LABELS = new Map([
-  ['prev', 'Imagen anterior'],
-  ['next', 'Imagen siguiente'],
   ['flipY', 'Voltear verticalmente'],
   ['flipX', 'Voltear horizontalmente'],
   ['rotateLeft', 'Girar a la izquierda'],
