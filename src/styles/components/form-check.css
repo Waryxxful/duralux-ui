@@ -1,0 +1,14 @@
+/* Checkbox, Radio y cualquier .form-check de las apps (incluido .form-switch).
+   El borde usa --gcu-text-subtle: contraste ≥ 3:1 con la superficie en los tres temas.
+   Cambios de hover y foco instantáneos. */
+.form-check-input{border-color:var(--gcu-text-subtle);background-color:var(--gcu-surface-raised);transition:none}
+.form-check-input:checked,.form-check-input[type="checkbox"]:indeterminate{border-color:var(--gcu-primary);background-color:var(--gcu-primary)}
+.form-check-input:focus{border-color:var(--gcu-primary);outline:0;box-shadow:none}
+.form-check-input:focus-visible{box-shadow:var(--gcu-focus-ring)}
+@media (hover:hover){.form-check-input:hover:not(:disabled):not(:checked){border-color:var(--gcu-primary)}}
+.form-check-input.is-invalid{border-color:var(--gcu-status-danger)}
+.form-check-input.is-invalid:checked{background-color:var(--gcu-status-danger)}
+.form-check-input:disabled{background-color:var(--gcu-surface-sunken);cursor:not-allowed}
+.form-check-input:disabled~.form-check-label{color:var(--gcu-muted);cursor:not-allowed;opacity:1}
+.form-check-label{color:var(--gcu-text);cursor:pointer}
+.form-check-input.is-invalid~.form-check-label,.was-validated .form-check-input:invalid~.form-check-label{color:var(--gcu-status-danger)}

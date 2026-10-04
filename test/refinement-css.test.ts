@@ -18,12 +18,7 @@ describe('refinamiento visual 2.1 (grancrm-ui.css)', () => {
 
   test('foco: anillo único con offset, solo en :focus-visible', () => {
     expect(refinement).toMatch(/\.btn:focus-visible[^{]*\{[^}]*box-shadow:var\(--gcu-focus-ring\)/)
-    expect(refinement).toMatch(/\.form-control:focus-visible/)
     expect(css).toContain('--gcu-focus-ring-color:')
-  })
-
-  test('controles y botones comparten alturas 32/36/40', () => {
-    expect(rule('.form-control,.form-select')).toContain('min-height:var(--gcu-control-h-md)')
   })
 
 
@@ -51,10 +46,6 @@ describe('refinamiento visual 2.1 (grancrm-ui.css)', () => {
     expect(rule('.gcu-scroll')).toContain('scrollbar-gutter:stable')
   })
 
-  test('feedback inválido sigue el tema (danger legible en oscuro/navy)', () => {
-    expect(rule('.invalid-feedback')).toContain('color:var(--gcu-status-danger)')
-  })
-
   test('hover solo en dispositivos con puntero', () => {
     expect(refinement).toContain('@media (hover:hover)')
   })
@@ -71,12 +62,6 @@ describe('ColoredStatCard: contraste AA en claro y oscuro (verificación final 2
 
   test('la meta de la burbuja saliente conserva AA sobre primary', () => {
     expect(css).not.toMatch(/\.gcu-message-bubble__meta\{[^}]*opacity:\.72/)
-  })
-})
-
-describe('validación legible en todos los temas', () => {
-  test('la etiqueta de un checkbox o radio inválido usa el danger del tema', () => {
-    expect(refinement).toMatch(/\.form-check-input\.is-invalid~\.form-check-label[^{]*\{color:var\(--gcu-status-danger\)/)
   })
 })
 

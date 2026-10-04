@@ -3,6 +3,16 @@ import { Avatar as AvatarRuntime } from '../components/ui/Avatar'
 import { Badge as BadgeRuntime } from '../components/ui/Badge'
 // Componentes ya en TSX: se exportan tal cual (tipos y ref reales).
 export { Button, IconButton, LinkButton } from '../components/ui/Button'
+export { Checkbox } from '../components/form/Checkbox'
+export { FileInput } from '../components/form/FileInput'
+export { FormField } from '../components/form/FormField'
+export { InputGroup } from '../components/form/InputGroup'
+export { MultiSelect } from '../components/form/MultiSelect'
+export { Radio } from '../components/form/Radio'
+export { SearchableSelect } from '../components/form/SearchableSelect'
+export { Input } from '../components/form/Input'
+export { Select } from '../components/form/Select'
+export { Textarea } from '../components/form/Textarea'
 import { Icon as IconRuntime } from '../components/ui/Icon'
 import { Alert as AlertRuntime } from '../components/ui/Alert'
 import { Modal as ModalRuntime } from '../components/ui/Modal'
@@ -19,16 +29,6 @@ import { Tabs as TabsRuntime } from '../components/ui/Tabs'
 import { EmptyState as EmptyStateRuntime } from '../components/feedback/EmptyState'
 import { ErrorState as ErrorStateRuntime } from '../components/feedback/ErrorState'
 import { LoadingState as LoadingStateRuntime } from '../components/feedback/LoadingState'
-import { FormField as FormFieldRuntime } from '../components/form/FormField'
-import { Input as InputRuntime } from '../components/form/Input'
-import { Select as SelectRuntime } from '../components/form/Select'
-import { Textarea as TextareaRuntime } from '../components/form/Textarea'
-import { Checkbox as CheckboxRuntime } from '../components/form/Checkbox'
-import { Radio as RadioRuntime } from '../components/form/Radio'
-import { FileInput as FileInputRuntime } from '../components/form/FileInput'
-import { InputGroup as InputGroupRuntime } from '../components/form/InputGroup'
-import { SearchableSelect as SearchableSelectRuntime } from '../components/form/SearchableSelect'
-import { MultiSelect as MultiSelectRuntime } from '../components/form/MultiSelect'
 import { DataTable as DataTableRuntime } from '../components/data/DataTable'
 import { Table as TableRuntime } from '../components/data/Table'
 import { Pagination as PaginationRuntime } from '../components/data/Pagination'
@@ -63,7 +63,6 @@ import type {
   ChatTypingIndicatorProps,
   ChatWindowContact,
   ChatWindowProps,
-  CheckboxProps,
   ColoredStatCardProps,
   DataTableProps,
   DataTableAction,
@@ -73,26 +72,10 @@ import type {
   DataTableRowKey,
   EmptyStateProps,
   ErrorStateProps,
-  FileInputProps,
-  FormFieldProps,
   HeaderProps,
   IconButtonProps,
   IconProps,
   IconSlot,
-  InputGroupControlProps,
-  InputGroupProps,
-  InputProps,
-  MultiSelectProps,
-  SearchableSelectProps,
-  SearchableSelectOption,
-  SelectOption,
-  SelectOptionInput,
-  SelectOptionLabelResolver,
-  SelectOptionRenderer,
-  SelectOptionTextRenderer,
-  SelectOptionValueResolver,
-  SelectText,
-  SelectValue,
   LinkButtonProps,
   LoadingStateProps,
   MessageBubbleProps,
@@ -104,11 +87,9 @@ import type {
   PaginationProps,
   ProgressProps,
   ProgressRingProps,
-  RadioProps,
   ResponsiveTableProps,
   DataTableToolbarProps,
   DataTableToolbarContext,
-  SelectProps,
   SidebarProps,
   TableColumn,
   TableProps,
@@ -118,7 +99,6 @@ import type {
   TabItem,
   TabKey,
   TabsProps,
-  TextareaProps,
   TimelineProps,
   CardLoaderProps,
   AvatarGroupProps,
@@ -153,16 +133,6 @@ export const ErrorState = asComponent<ErrorStateProps>(ErrorStateRuntime)
 export const LoadingState = asComponent<LoadingStateProps>(LoadingStateRuntime)
 export const Progress = asComponent<ProgressProps>(ProgressRuntime)
 export const ProgressRing = asComponent<ProgressRingProps>(ProgressRingRuntime)
-export const Checkbox = asComponent<CheckboxProps>(CheckboxRuntime)
-export const Radio = asComponent<RadioProps>(RadioRuntime)
-export const FileInput = asComponent<FileInputProps>(FileInputRuntime)
-export const InputGroup = asComponent<InputGroupProps>(InputGroupRuntime)
-export const SearchableSelect = asGenericComponent<<TOption = import('./types').SelectOptionInput>(props: SearchableSelectProps<TOption>) => React.ReactElement | null>(SearchableSelectRuntime)
-export const MultiSelect = asGenericComponent<<TOption = import('./types').SelectOptionInput>(props: MultiSelectProps<TOption>) => React.ReactElement | null>(MultiSelectRuntime)
-export const FormField = asComponent<FormFieldProps>(FormFieldRuntime)
-export const Input = asComponent<InputProps>(InputRuntime)
-export const Select = asComponent<SelectProps>(SelectRuntime)
-export const Textarea = asComponent<TextareaProps>(TextareaRuntime)
 export const Pagination = asComponent<PaginationProps>(PaginationRuntime)
 export const MessageBubble = asComponent<MessageBubbleProps>(MessageBubbleRuntime)
 export const ChatSidebar = asGenericComponent<<TContact extends import('./types').ChatContact = import('./types').ChatContact>(props: ChatSidebarProps<TContact>) => React.ReactElement>(ChatSidebarRuntime)
@@ -191,6 +161,7 @@ export const AvatarGroup = asComponent<AvatarGroupProps>(AvatarGroupRuntime)
 export const CardLoader = asComponent<CardLoaderProps>(CardLoaderRuntime)
 
 export type {
+  ControlSize,
   AlertProps,
   AppLayoutProps,
   AuthLayoutProps,

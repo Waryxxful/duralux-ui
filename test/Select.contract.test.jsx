@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
-import { Select } from '../src/components/form/Select.jsx'
+import { Select } from '../src/components/form/Select'
 
 test('renders a disabled placeholder and honors disabled object options', () => {
   render(

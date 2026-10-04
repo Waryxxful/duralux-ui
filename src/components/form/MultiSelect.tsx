@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { forwardRef, useMemo, useState } from 'react'
+import type * as React from 'react'
 import { HiddenValues } from './internal/selectCore'
 import {
   EMPTY_OPTIONS,
@@ -13,11 +14,14 @@ import {
   valueToken,
 } from './internal/selectCoreModel'
 import { isArray, isFiniteNumber, isFunction } from '../../utils/typeGuards'
+import { log } from '../../utils/log'
+import type { MultiSelectProps, SelectOptionInput, SelectValue } from '../../public/types'
+import { mergeRefs } from './internal/fieldState'
 
 const EMPTY_VALUES = Object.freeze([])
 const MAX_VALUE_COUNT = 10000
 
-function normalizeValues(values) {
+function normalizeValues<T>(values: T): SelectValue[] {
   try {
     if (!isArray(values)) return []
   } catch {
@@ -33,7 +37,7 @@ function normalizeValues(values) {
   }
 
   const seen = new Set()
-  const normalized = []
+  const normalized: SelectValue[] = []
   for (let index = 0; index < length; index += 1) {
     let value
     try {
@@ -50,7 +54,7 @@ function normalizeValues(values) {
   return normalized
 }
 
-function normalizeMax(max) {
+function normalizeMax(max: number | string | null | undefined): number {
   if (max === undefined || max === null || max === '') return Infinity
   let numeric
   try {
@@ -61,8 +65,15 @@ function normalizeMax(max) {
   return isFiniteNumber(numeric) ? Math.max(0, Math.floor(numeric)) : Infinity
 }
 
-/** Accessible searchable multi-select with removable value chips. */
-export function MultiSelect({
+/**
+ * MultiSelect — combobox APG multiselección con chips removibles.
+ *
+ * - La lista queda abierta al elegir; Retroceso con la búsqueda vacía quita el último chip.
+ * - max: tope de selección; muestra el contador «n de max» con cifras tabulares.
+ * - Valores que ya no están en `options` o exceden `max` se descartan en render (DX-017), sin callback.
+ * - El ref apunta al `<input role="combobox">`.
+ */
+const MultiSelectBase = forwardRef<HTMLInputElement, MultiSelectProps>(function MultiSelect({
   options = EMPTY_OPTIONS,
   value,
   defaultValue = EMPTY_VALUES,
@@ -91,7 +102,7 @@ export function MultiSelect({
   onCompositionStart,
   onCompositionEnd,
   ...inputProps
-}) {
+}, ref) {
   const normalized = useMemo(
     () => normalizeOptions(options, { getOptionValue, getOptionLabel }),
     [getOptionLabel, getOptionValue, options],
@@ -102,26 +113,21 @@ export function MultiSelect({
   )
   const controlled = value !== undefined
   const [internalValues, setInternalValues] = useState(() => normalizeValues(defaultValue))
+  const selectionLimit = normalizeMax(max)
   const selectedValues = useMemo(
-    () => normalizeValues(controlled ? value : internalValues)
-      .filter(valueItem => optionByToken.has(valueToken(valueItem))),
-    [controlled, internalValues, optionByToken, value],
+    () => {
+      const known = normalizeValues(controlled ? value : internalValues)
+        .filter(valueItem => optionByToken.has(valueToken(valueItem)))
+      // El valor controlado es del consumidor: solo se recorta el estado interno.
+      return controlled ? known : known.slice(0, selectionLimit)
+    },
+    [controlled, internalValues, optionByToken, selectionLimit, value],
   )
   const selectedTokens = useMemo(
     () => new Set(selectedValues.map(valueItem => valueToken(valueItem))),
     [selectedValues],
   )
   const [query, setQuery] = useState('')
-  const selectionLimit = normalizeMax(max)
-
-  useEffect(() => {
-    if (controlled) return
-    const next = internalValues
-      .filter(valueItem => optionByToken.has(valueToken(valueItem)))
-      .slice(0, selectionLimit)
-    if (next.length === internalValues.length && next.every((item, index) => Object.is(item, internalValues[index]))) return
-    setInternalValues(next)
-  }, [controlled, internalValues, optionByToken, selectionLimit])
 
   function emit(nextValues) {
     const normalizedNext = normalizeValues(nextValues).slice(0, selectionLimit)
@@ -157,6 +163,7 @@ export function MultiSelect({
     isSelected,
     closeOnSelect: false,
   })
+  const setInputRef = useMemo(() => mergeRefs<HTMLInputElement>(core.inputRef, ref), [core.inputRef, ref])
   const inputId = id || `${core.prefix}-input`
   const listboxId = `${core.prefix}-listbox`
   const activeId = core.open && core.activeOption
@@ -178,8 +185,8 @@ export function MultiSelect({
           renderValue(option?.raw, option ?? { value: valueItem, label: safeString(valueItem) }),
           fallback,
         )
-      } catch {
-        // Fall back to a stable text value.
+      } catch (error) {
+        log.warn('renderValue de MultiSelect lanzó un error; el chip muestra el label.', error)
       }
     }
     return fallback
@@ -213,7 +220,7 @@ export function MultiSelect({
       <div className="gcu-select__control">
         <input
           {...inputProps}
-          ref={core.inputRef}
+          ref={setInputRef}
           id={inputId}
           type="text"
           role="combobox"
@@ -277,6 +284,11 @@ export function MultiSelect({
           <i className="feather-chevron-down" aria-hidden="true" />
         </button>
       </div>
+      {Number.isFinite(selectionLimit) ? (
+        <div className="gcu-multiselect__meta">
+          <span className="gcu-multiselect__count">{selectedValues.length} de {selectionLimit}</span>
+        </div>
+      ) : null}
       <HiddenValues name={name} values={selectedValues} disabled={disabled} />
       {core.open ? (
         <div id={listboxId} className="gcu-select__listbox" role="listbox" aria-multiselectable="true">
@@ -313,6 +325,13 @@ export function MultiSelect({
       ) : null}
     </div>
   )
-}
+})
 
+type MultiSelectComponent = (<TOption = SelectOptionInput>(
+  props: MultiSelectProps<TOption> & React.RefAttributes<HTMLInputElement>,
+) => React.ReactElement | null) & { duraluxFormControl?: boolean; displayName?: string }
+
+export const MultiSelect =
+  // SAFETY: forwardRef borra el genérico TOption; la implementación solo lee `options` como datos opacos.
+  MultiSelectBase as MultiSelectComponent
 MultiSelect.duraluxFormControl = true

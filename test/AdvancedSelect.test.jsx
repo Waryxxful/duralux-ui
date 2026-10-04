@@ -3,11 +3,11 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { renderToString } from 'react-dom/server'
 import { describe, expect, test, vi } from 'vitest'
-import { FormField } from '../src/components/form/FormField.jsx'
-import { InputGroup } from '../src/components/form/InputGroup.jsx'
-import { MultiSelect } from '../src/components/form/MultiSelect.jsx'
-import { SearchableSelect } from '../src/components/form/SearchableSelect.jsx'
-import { Select } from '../src/components/form/Select.jsx'
+import { FormField } from '../src/components/form/FormField'
+import { InputGroup } from '../src/components/form/InputGroup'
+import { MultiSelect } from '../src/components/form/MultiSelect'
+import { SearchableSelect } from '../src/components/form/SearchableSelect'
+import { Select } from '../src/components/form/Select'
 
 const OPTIONS = [
   { value: 1, label: 'México', icon: 'feather-flag' },

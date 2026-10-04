@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { forwardRef, useCallback, useMemo, useState } from 'react'
+import type * as React from 'react'
 import { HiddenValues } from './internal/selectCore'
 import {
   EMPTY_OPTIONS,
@@ -11,29 +12,36 @@ import {
   valueToken,
 } from './internal/selectCoreModel'
 import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
+import { log } from '../../utils/log'
+import type { SearchableSelectProps, SelectOptionInput } from '../../public/types'
+import { mergeRefs } from './internal/fieldState'
 
-function hasValue(value) {
+function hasValue<T>(value: T): boolean {
   return isString(value) || isFiniteNumber(value)
 }
 
-function renderSelected(option, renderValue) {
+function renderSelected(option, renderValue): string {
   if (!option) return ''
   if (isFunction(renderValue)) {
     try {
       const rendered = renderValue(option.raw, option)
       if (isString(rendered) || isFiniteNumber(rendered)) return safeString(rendered)
-    } catch {
-      // Fall through to the option label.
+    } catch (error) {
+      log.warn('renderValue de SearchableSelect lanzó un error; se muestra el label.', error)
     }
   }
   return optionText(option)
 }
 
 /**
- * Accessible, dependency-free searchable single select.
- * `value` makes it controlled; otherwise `defaultValue` seeds local state.
+ * SearchableSelect — combobox APG con filtro, sin dependencias.
+ *
+ * - `value` lo vuelve controlado; si no, `defaultValue` siembra el estado local.
+ * - Teclado: flechas, Inicio/Fin, Enter elige, Escape cierra y devuelve el foco.
+ * - Si la opción elegida desaparece de `options`, deja de mostrarse y de enviarse (derivado en render, DX-017).
+ * - El ref apunta al `<input role="combobox">`.
  */
-export function SearchableSelect({
+const SearchableSelectBase = forwardRef<HTMLInputElement, SearchableSelectProps>(function SearchableSelect({
   options = EMPTY_OPTIONS,
   value,
   defaultValue,
@@ -61,7 +69,7 @@ export function SearchableSelect({
   onCompositionStart,
   onCompositionEnd,
   ...inputProps
-}) {
+}, ref) {
   const normalized = useMemo(
     () => normalizeOptions(options, { getOptionValue, getOptionLabel }),
     [getOptionLabel, getOptionValue, options],
@@ -71,17 +79,11 @@ export function SearchableSelect({
     [normalized],
   )
   const controlled = value !== undefined
-  const [internalValue, setInternalValue] = useState(defaultValue)
+  const [internalValue, setInternalValue] = useState<SearchableSelectProps['value']>(defaultValue)
   const selectedValue = controlled ? value : internalValue
   const selected = hasValue(selectedValue) ? optionByToken.get(valueToken(selectedValue)) : undefined
   const [query, setQuery] = useState('')
   const resetQuery = useCallback(() => setQuery(''), [])
-
-  useEffect(() => {
-    if (controlled || !hasValue(internalValue)) return
-    if (optionByToken.has(valueToken(internalValue))) return
-    setInternalValue(undefined)
-  }, [controlled, internalValue, optionByToken])
 
   const isSelected = useCallback(
     candidate => hasValue(selectedValue) && valueToken(candidate) === valueToken(selectedValue),
@@ -102,6 +104,7 @@ export function SearchableSelect({
     closeOnSelect: true,
     onClose: resetQuery,
   })
+  const setInputRef = useMemo(() => mergeRefs<HTMLInputElement>(core.inputRef, ref), [core.inputRef, ref])
   const inputId = id || `${core.prefix}-input`
   const listboxId = `${core.prefix}-listbox`
   const displayValue = core.open ? query : renderSelected(selected, renderValue)
@@ -110,7 +113,7 @@ export function SearchableSelect({
     ? safeOptionId(core.prefix, core.activeOption.token)
     : undefined
 
-  function clear(event) {
+  function clear(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault()
     event.stopPropagation()
     if (disabled || !hasSelection) return
@@ -130,7 +133,7 @@ export function SearchableSelect({
       <div className="gcu-select__control">
         <input
           {...inputProps}
-          ref={core.inputRef}
+          ref={setInputRef}
           id={inputId}
           type="text"
           role="combobox"
@@ -224,6 +227,13 @@ export function SearchableSelect({
       ) : null}
     </div>
   )
-}
+})
 
+type SearchableSelectComponent = (<TOption = SelectOptionInput>(
+  props: SearchableSelectProps<TOption> & React.RefAttributes<HTMLInputElement>,
+) => React.ReactElement | null) & { duraluxFormControl?: boolean; displayName?: string }
+
+export const SearchableSelect =
+  // SAFETY: forwardRef borra el genérico TOption; la implementación solo lee `options` como datos opacos.
+  SearchableSelectBase as SearchableSelectComponent
 SearchableSelect.duraluxFormControl = true

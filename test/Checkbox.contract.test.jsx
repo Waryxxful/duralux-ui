@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
-import { Checkbox } from '../src/components/form/Checkbox.jsx'
+import { Checkbox } from '../src/components/form/Checkbox'
 
 test('sets aria-invalid when error is truthy', () => {
   const { rerender } = render(<Checkbox label="Acepto" error />)

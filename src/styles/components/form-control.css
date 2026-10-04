@@ -1,0 +1,40 @@
+/* Input, Textarea, Select nativo, FileInput y cualquier .form-control/.form-select de las apps.
+   Superficie, borde, texto y foco salen de tokens: cambian solos en claro, oscuro, navy y ThemeScope.
+   Alturas 32/36/40 alineadas con los botones. Hover y foco frecuentes: cambios instantáneos, sin transición. */
+.form-control,.form-select{min-height:var(--gcu-control-h-md);padding-top:7px;padding-bottom:7px;padding-inline-start:var(--gcu-space-4);border-color:var(--gcu-border-strong);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface);color:var(--gcu-text);line-height:20px;transition:none}
+.form-control{padding-inline-end:var(--gcu-space-4)}
+textarea.form-control{min-height:calc(var(--gcu-control-h-md) * 2);resize:vertical}
+.form-control-sm,.form-select-sm,.input-group-sm>.form-control,.input-group-sm>.form-select,.input-group-sm>.input-group-text{min-height:var(--gcu-control-h-sm);padding-top:5px;padding-bottom:5px;line-height:20px}
+.form-control-lg,.form-select-lg,.input-group-lg>.form-control,.input-group-lg>.form-select,.input-group-lg>.input-group-text{min-height:var(--gcu-control-h-lg);padding-top:9px;padding-bottom:9px;line-height:20px}
+.form-control::placeholder{color:var(--gcu-text-subtle);opacity:1}
+.form-control[type="number"],.form-control.gcu-tabular{font-variant-numeric:tabular-nums}
+.form-select option{background-color:var(--gcu-surface);color:var(--gcu-text)}
+
+/* Hover solo con puntero real: el borde se refuerza, sin mover el layout. */
+@media (hover:hover){.form-control:hover:not(:disabled):not([readonly]):not(:focus),.form-select:hover:not(:disabled):not(:focus){border-color:var(--gcu-text-subtle)}}
+
+/* Foco: borde primario y un solo anillo, solo con teclado (en campos de texto el navegador lo marca siempre). */
+.form-control:focus,.form-select:focus{border-color:var(--gcu-primary);background-color:var(--gcu-surface);color:var(--gcu-text);outline:0;box-shadow:none}
+.form-control:focus-visible,.form-select:focus-visible{box-shadow:var(--gcu-focus-ring)}
+
+/* Error: borde de peligro también con foco; el anillo sigue siendo el de foco. */
+.form-control.is-invalid,.form-select.is-invalid{border-color:var(--gcu-status-danger)}
+.form-control.is-invalid:focus,.form-select.is-invalid:focus{border-color:var(--gcu-status-danger);box-shadow:none}
+.form-control.is-invalid:focus-visible,.form-select.is-invalid:focus-visible{box-shadow:var(--gcu-focus-ring)}
+
+/* Deshabilitado: superficie hundida y texto atenuado. Solo lectura: se lee como dato, no como campo vacío. */
+.form-control:disabled,.form-select:disabled{border-color:var(--gcu-border);background-color:var(--gcu-surface-sunken);color:var(--gcu-muted);cursor:not-allowed;opacity:1}
+.form-control[readonly]{border-color:var(--gcu-border);background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}
+
+/* FileInput: el botón nativo usa la superficie del tema, no el gris claro de Bootstrap (DX-010). */
+.form-control::file-selector-button{border-color:var(--gcu-border-strong);background-color:var(--gcu-surface-sunken);color:var(--gcu-text);font-weight:var(--gcu-font-weight-medium);transition:none}
+@media (hover:hover){.form-control:hover:not(:disabled):not([readonly])::file-selector-button{background-color:var(--gcu-surface-subtle)}}
+.gcu-file-input{padding-top:0;padding-bottom:0;line-height:calc(var(--gcu-control-h-md) - 2px)}
+.gcu-file-input::file-selector-button{padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;height:calc(var(--gcu-control-h-md) - 2px)}
+.gcu-file-input.form-control-sm{line-height:calc(var(--gcu-control-h-sm) - 2px)}
+.gcu-file-input.form-control-sm::file-selector-button{height:calc(var(--gcu-control-h-sm) - 2px)}
+.gcu-file-input.form-control-lg{line-height:calc(var(--gcu-control-h-lg) - 2px)}
+.gcu-file-input.form-control-lg::file-selector-button{height:calc(var(--gcu-control-h-lg) - 2px)}
+
+/* iOS: 16 px evita el zoom automático al enfocar. */
+@media (max-width:575.98px){.form-control,.form-select,textarea.form-control{font-size:var(--gcu-font-size-md)}}

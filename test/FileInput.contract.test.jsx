@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
-import { FileInput } from '../src/components/form/FileInput.jsx'
+import { FileInput } from '../src/components/form/FileInput'
 
 test('uses a caller ID for both the input and label and links help text', () => {
   render(

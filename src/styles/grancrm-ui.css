@@ -1,6 +1,11 @@
 @import "./feather-icons.css";
 /* CSS por componente (design system 2.x): reglas con tokens, sin prioridad forzada ni overrides de tema. */
 @import "./components/button.css";
+@import "./components/form-control.css";
+@import "./components/form-check.css";
+@import "./components/input-group.css";
+@import "./components/form-field.css";
+@import "./components/select.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
@@ -32,7 +37,7 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 
 .gcu-btn{--gcu-btn-color:var(--gcu-primary);--gcu-btn-text:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:7px 14px;border:1px solid var(--gcu-btn-color);border-radius:5px;background:var(--gcu-btn-color);color:var(--gcu-btn-text);font:600 13px/1.25 var(--gcu-font);text-decoration:none;cursor:pointer;transition:background-color .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease,filter .3s ease}
 .gcu-btn:hover:not(:disabled){filter:brightness(.94);color:var(--gcu-btn-text)}.gcu-btn:active:not(:disabled){transform:scale(.97)}
-.gcu-btn:focus-visible,.gcu-control:focus-visible,.gcu-check__input:focus-visible,.gcu-pagination__button:focus-visible,.gcu-close:focus-visible{outline:0;box-shadow:0 0 0 3px var(--gcu-focus)}
+.gcu-btn:focus-visible,.gcu-pagination__button:focus-visible,.gcu-close:focus-visible{outline:0;box-shadow:0 0 0 3px var(--gcu-focus)}
 .gcu-btn:disabled,.gcu-btn[aria-disabled="true"]{opacity:.6;cursor:not-allowed}
 .gcu-btn--secondary{--gcu-btn-color:var(--gcu-secondary);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--success{--gcu-btn-color:var(--gcu-success);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--danger{--gcu-btn-color:var(--gcu-danger);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}
 .gcu-btn--warning{--gcu-btn-color:var(--gcu-warning);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--info{--gcu-btn-color:var(--gcu-info);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--teal{--gcu-btn-color:var(--gcu-teal);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--indigo{--gcu-btn-color:var(--gcu-indigo);--gcu-btn-outline-text:var(--gcu-indigo)}.gcu-btn--dark{--gcu-btn-color:var(--gcu-dark);--gcu-btn-outline-text:var(--gcu-dark)}
@@ -43,7 +48,7 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 .gcu-btn--icon{width:36px;padding:0}.gcu-btn--icon.gcu-btn--sm{width:30px}.gcu-btn--icon.gcu-btn--lg{width:44px}.gcu-btn__icon{flex:none}
 .gcu-spinner{display:inline-block;width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:gcu-spin .65s linear infinite;vertical-align:-.125em}.gcu-spinner--lg{width:36px;height:36px;border-width:3px;color:var(--gcu-primary)}
 @keyframes gcu-spin{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.gcu-spinner{animation:none}.gcu-btn{transition:none}.gcu-btn:active:not(:disabled){transform:none}.gcu-control,.gcu-progress__bar,.gcu-toast__close{transition:none}.gcu-progress__bar--animated{animation:none}}
+@media (prefers-reduced-motion:reduce){.gcu-spinner{animation:none}.gcu-btn{transition:none}.gcu-btn:active:not(:disabled){transform:none}.gcu-progress__bar,.gcu-toast__close{transition:none}.gcu-progress__bar--animated{animation:none}}
 
 .gcu-badge{--gcu-badge-color:var(--gcu-primary);--gcu-badge-text:#fff;display:inline-flex;align-items:center;padding:4px 8px;border-radius:4px;background:var(--gcu-badge-color);color:var(--gcu-badge-text);font:600 11px/1 var(--gcu-font);white-space:nowrap}
 .gcu-badge--secondary{--gcu-badge-color:var(--gcu-secondary)}.gcu-badge--success{--gcu-badge-color:var(--gcu-success);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--danger{--gcu-badge-color:var(--gcu-danger);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--warning{--gcu-badge-color:var(--gcu-warning);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--info{--gcu-badge-color:var(--gcu-info);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--teal{--gcu-badge-color:var(--gcu-teal);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--indigo{--gcu-badge-color:var(--gcu-indigo)}.gcu-badge--dark{--gcu-badge-color:var(--gcu-dark)}
@@ -62,14 +67,6 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 .gcu-page-header__title{margin:0;font-size:18px;font-weight:700}.gcu-page-header__subtitle{margin:4px 0 0;color:var(--gcu-muted);font-size:12px}.gcu-page-header__actions{display:flex;align-items:center;gap:8px;margin-left:auto}
 .gcu-breadcrumb{margin-bottom:4px}.gcu-breadcrumb__list{display:flex;flex-wrap:wrap;gap:0;margin:0;padding:0;list-style:none;font-size:11px}.gcu-breadcrumb__item+ .gcu-breadcrumb__item:before{content:"/";padding:0 7px;color:var(--gcu-muted)}.gcu-breadcrumb a{color:var(--gcu-primary);text-decoration:none}.gcu-breadcrumb__item--active{color:var(--gcu-muted)}
 
-.gcu-field{margin-bottom:16px;font-family:var(--gcu-font)}.gcu-field__label{display:block;margin-bottom:6px;color:var(--gcu-text);font-size:13px;font-weight:600}.gcu-field__required{margin-left:3px;color:var(--gcu-danger)}
-.gcu-field__help,.gcu-field__error{margin-top:5px;font-size:11px}.gcu-field__help{color:var(--gcu-muted)}.gcu-field__error{color:var(--gcu-danger)}
-.gcu-control{box-sizing:border-box;display:block;width:100%;min-height:38px;padding:8px 11px;border:1px solid var(--gcu-border);border-radius:5px;background:var(--gcu-surface);color:var(--gcu-text);font:400 13px/1.4 var(--gcu-font);transition:border-color .15s,box-shadow .15s}
-.gcu-control::placeholder{color:var(--gcu-muted);opacity:.75}.gcu-control:focus{border-color:var(--gcu-primary);outline:0;box-shadow:0 0 0 3px var(--gcu-focus)}.gcu-control:disabled{background:var(--gcu-surface-subtle);opacity:.7}.gcu-control--invalid{border-color:var(--gcu-danger)}
-.gcu-select{appearance:auto}.gcu-textarea{min-height:82px;resize:vertical}.gcu-file-input{padding:6px}
-.gcu-input-group{display:flex;width:100%}.gcu-input-group>.gcu-control{min-width:0;border-radius:0}.gcu-input-group>:first-child{border-radius:5px 0 0 5px}.gcu-input-group>:last-child{border-radius:0 5px 5px 0}
-.gcu-input-group__addon{display:flex;align-items:center;padding:8px 11px;border:1px solid var(--gcu-border);background:var(--gcu-surface-subtle);color:var(--gcu-muted);font:400 13px var(--gcu-font)}
-.gcu-check{display:flex;align-items:center;gap:7px;font-family:var(--gcu-font)}.gcu-check__input{width:16px;height:16px;margin:0;accent-color:var(--gcu-primary)}.gcu-check__label{color:var(--gcu-text);font-size:13px;cursor:pointer}
 
 .gcu-alert{--gcu-alert-color:var(--gcu-info);--gcu-alert-text:var(--gcu-darken);--gcu-alert-icon-text:var(--gcu-darken);position:relative;display:flex;align-items:flex-start;gap:8px;padding:11px 14px;border:1px solid color-mix(in srgb,var(--gcu-alert-color) 30%,transparent);border-radius:5px;background:color-mix(in srgb,var(--gcu-alert-color) 10%,var(--gcu-surface));color:var(--gcu-alert-text);font:400 13px/1.45 var(--gcu-font)}
 .gcu-alert--primary{--gcu-alert-color:var(--gcu-primary);--gcu-alert-icon-text:#fff}.gcu-alert--secondary{--gcu-alert-color:var(--gcu-secondary);--gcu-alert-icon-text:#fff}.gcu-alert--success{--gcu-alert-color:var(--gcu-success)}.gcu-alert--danger{--gcu-alert-color:var(--gcu-danger)}.gcu-alert--warning{--gcu-alert-color:var(--gcu-warning)}.gcu-alert--info{--gcu-alert-color:var(--gcu-info)}.gcu-alert--teal{--gcu-alert-color:var(--gcu-teal)}.gcu-alert--indigo{--gcu-alert-color:var(--gcu-indigo);--gcu-alert-icon-text:#fff}.gcu-alert--light{--gcu-alert-color:var(--gcu-light)}.gcu-alert--dark{--gcu-alert-color:var(--gcu-dark);--gcu-alert-icon-text:#fff}.gcu-alert__icon{display:grid;place-items:center;background:var(--gcu-alert-color);color:var(--gcu-alert-icon-text);margin-top:2px}.gcu-alert--dismissible{padding-right:38px}.gcu-alert .gcu-close{position:absolute;top:6px;right:6px}
@@ -362,34 +359,11 @@ html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-
 /* /gcu-widgets-ui */
 
 /* Searchable select + DataTable toolbar primitives. */
-.gcu-select{position:relative;width:100%}
-.gcu-select__control{position:relative;display:flex;align-items:center}
-.gcu-select--open .gcu-select__toggle i{transform:rotate(180deg)}
-.gcu-multiselect{width:100%}
-.gcu-select__input{padding-right:64px!important}
-.gcu-select__toggle,.gcu-select__clear{position:absolute;top:50%;translate:0 -50%;display:inline-grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:4px;background:transparent;color:var(--gcu-text);font:inherit}
-.gcu-select__toggle{right:2px}
-.gcu-select__clear{right:36px;font-size:20px;line-height:1}
-.gcu-select__toggle:focus-visible,.gcu-select__clear:focus-visible,.gcu-multiselect__chip button:focus-visible{outline:2px solid var(--gcu-primary);outline-offset:1px}
-.gcu-select__listbox{position:absolute;inset:calc(100% + 4px) 0 auto;z-index:1050;max-height:280px;overflow:auto;padding:4px;border:1px solid var(--gcu-control-border,#7f8999);border-radius:6px;background:var(--gcu-surface);box-shadow:var(--gcu-shadow)}
-.gcu-select__option{display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 10px;border-radius:4px;color:var(--gcu-text);cursor:pointer}
-.gcu-select__option.is-active{outline:2px solid var(--gcu-primary);outline-offset:-2px;background:var(--gcu-surface-subtle)}
-.gcu-select__option.is-selected{font-weight:600;background:color-mix(in srgb,var(--gcu-primary) 12%,var(--gcu-surface))}
-.gcu-select__option.is-disabled{cursor:not-allowed;opacity:.55}
-.gcu-select__color{width:10px;height:10px;flex:0 0 10px;border:1px solid currentColor;border-radius:50%}
-.gcu-select__avatar{width:28px;height:28px;flex:0 0 28px;object-fit:cover;border-radius:50%}
-.gcu-select__label{min-width:0;overflow-wrap:anywhere}
-.gcu-select__empty{padding:12px;color:var(--gcu-muted);text-align:center}
-.gcu-select.is-disabled{opacity:.72}
-.gcu-multiselect__values{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
-.gcu-multiselect__chip{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:3px 4px 3px 10px;border:1px solid var(--gcu-border);border-radius:999px;background:var(--gcu-surface-subtle);color:var(--gcu-text)}
-.gcu-multiselect__chip button{display:inline-grid;place-items:center;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;font:inherit;font-size:18px}
 .data-table-toolbar{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--gcu-border);background:var(--gcu-surface)}
 .data-table-toolbar__search,.data-table-toolbar__page-size{display:grid;gap:4px}
 .data-table-toolbar__search{flex:1 1 240px;max-width:420px}
 .data-table-toolbar__page-size{flex:0 0 auto}
 .data-table-toolbar label{color:var(--gcu-text);font-size:12px;font-weight:600}
-[data-gcu-theme="dark"] .gcu-select__listbox,.app-skin-dark .gcu-select__listbox{--gcu-control-border:#68799c}
 @media (max-width:575.98px){.data-table-toolbar__search{max-width:none}.data-table-toolbar>*{width:100%}}
 
 /* Keep the remote page-header padding after the desktop rule in this file. */
@@ -513,7 +487,7 @@ html.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
 /* Final reduced-motion contract for remotes that load only this glue file. */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-  .gcu-btn,.gcu-control,.gcu-progress__bar,.gcu-toast__close,.gcu-link-button,.gcu-modules-menu,.nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow{transition:none!important}
+  .gcu-btn,.gcu-progress__bar,.gcu-toast__close,.gcu-link-button,.gcu-modules-menu,.nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow{transition:none!important}
   .gcu-spinner,.gcu-progress__bar--animated,.gcu-toast,.gcu-toast--closing{animation:none!important}
 }
 
@@ -535,15 +509,15 @@ html.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
 /* The SCSS dark selector is document-rooted. These package primitives form a
    usable local dark scope, and the explicit-light block wins over root dark
    declarations for nested previews and portals. */
-.gcu-theme[data-gcu-theme="dark"] .card,.gcu-theme[data-gcu-theme="dark"] .modal-content,.gcu-theme[data-gcu-theme="dark"] .dropdown-menu,.gcu-theme[data-gcu-theme="dark"] .list-group-item,.gcu-theme[data-gcu-theme="navy"] .card,.gcu-theme[data-gcu-theme="navy"] .modal-content,.gcu-theme[data-gcu-theme="navy"] .dropdown-menu,.gcu-theme[data-gcu-theme="navy"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}.gcu-theme[data-gcu-theme="dark"] .form-control,.gcu-theme[data-gcu-theme="dark"] .form-select,.gcu-theme[data-gcu-theme="dark"] .input-group-text,.gcu-theme[data-gcu-theme="navy"] .form-control,.gcu-theme[data-gcu-theme="navy"] .form-select,.gcu-theme[data-gcu-theme="navy"] .input-group-text{background-color:var(--gcu-surface-subtle)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}.gcu-theme[data-gcu-theme="dark"] .table,.gcu-theme[data-gcu-theme="navy"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)}
-html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .card,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .modal-content,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .dropdown-menu,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .form-control,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .form-select,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .input-group-text{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)!important}
+.gcu-theme[data-gcu-theme="dark"] .card,.gcu-theme[data-gcu-theme="dark"] .modal-content,.gcu-theme[data-gcu-theme="dark"] .dropdown-menu,.gcu-theme[data-gcu-theme="dark"] .list-group-item,.gcu-theme[data-gcu-theme="navy"] .card,.gcu-theme[data-gcu-theme="navy"] .modal-content,.gcu-theme[data-gcu-theme="navy"] .dropdown-menu,.gcu-theme[data-gcu-theme="navy"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}.gcu-theme[data-gcu-theme="dark"] .table,.gcu-theme[data-gcu-theme="navy"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)}
+html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .card,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .modal-content,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .dropdown-menu,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)!important}
 
 /* Runtime glue is loaded after the SCSS theme. Keep its dark widget foregrounds
    semantic instead of flattening every icon to white. */
 html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"]{background-color:color-mix(in srgb,currentColor 16%,var(--gcu-surface-subtle))!important;color:var(--gcu-text)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-primary,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-primary{color:var(--gcu-status-primary)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-success,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-success,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-success{color:var(--gcu-status-success)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-danger,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-danger{color:var(--gcu-status-danger)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-warning,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-warning{color:var(--gcu-status-warning)!important}html.app-skin-dark .gcu-mini-stat .avatar-text.bg-soft-info,html.app-skin-dark .gcu-quick-link .avatar-text.bg-soft-info,html.app-skin-dark .gcu-stats-card .avatar-text.bg-soft-info{color:var(--gcu-status-info)!important}
 
 .gcu-stats-card__footer{color:var(--gcu-text)!important}.app-skin-dark .gcu-alert__icon,[data-gcu-theme="dark"] .gcu-alert__icon{background:var(--gcu-alert-color)!important;color:var(--gcu-alert-icon-text)!important}
-@media (max-width:575.98px){.gcu-control,.gcu-input-group__addon{font-size:16px}.form-control,.form-select,textarea.form-control{font-size:16px}.page-header{padding:0 20px!important}}
+@media (max-width:575.98px){.page-header{padding:0 20px!important}}
 /* Chart marks may use raw semantic variables, but their CSS-aware Recharts
    scope maps them to foreground-safe roles for light and dark canvases. */
 .recharts-wrapper{--gcu-secondary:var(--gcu-status-secondary);--gcu-success:var(--gcu-status-success);--gcu-danger:var(--gcu-status-danger);--gcu-warning:var(--gcu-status-warning);--gcu-info:var(--gcu-status-info);--gcu-teal:var(--gcu-status-teal)}
@@ -589,17 +563,9 @@ h1,h2,h3,.h1,.h2,.h3{letter-spacing:var(--gcu-tracking-tight);text-wrap:balance}
 /* Solo cifras: en Inter, tnum también ensancha guiones y puntuación (emails, IDs con texto). */
 .gcu-tabular,[data-numeric],td.text-end,th.text-end{font-variant-numeric:tabular-nums}
 
-/* Controles y botones: misma altura por tamaño (32/36/40) para que se alineen en una fila. */
-.form-control,.form-select{min-height:var(--gcu-control-h-md);padding-top:7px;padding-bottom:7px;border-radius:var(--gcu-radius-md);line-height:20px}
-textarea.form-control{min-height:calc(var(--gcu-control-h-md) * 2)}
-.input-group-text{min-height:var(--gcu-control-h-md);border-radius:var(--gcu-radius-md)}
-.form-control-sm,.form-select-sm,.input-group-sm>.form-control,.input-group-sm>.form-select,.input-group-sm>.input-group-text{min-height:var(--gcu-control-h-sm);padding-top:5px;padding-bottom:5px;line-height:20px}
-.form-control-lg,.form-select-lg,.input-group-lg>.form-control,.input-group-lg>.form-select,.input-group-lg>.input-group-text{min-height:var(--gcu-control-h-lg);padding-top:9px;padding-bottom:9px;line-height:20px}
-
 /* Foco: un solo anillo, solo con teclado. */
-.btn:focus-visible,.gcu-btn:focus-visible,.form-control:focus-visible,.form-select:focus-visible,.form-check-input:focus-visible,.nav-link:focus-visible,.dropdown-item:focus-visible,.page-link:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.btn:focus-visible,.gcu-btn:focus-visible,.nav-link:focus-visible,.dropdown-item:focus-visible,.page-link:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
 a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px;border-radius:var(--gcu-radius-xs)}
-.form-control:focus,.form-select:focus{border-color:var(--gcu-primary-border)}
 
 /* Superficies y elevación. */
 .card{border-color:var(--gcu-border);box-shadow:var(--gcu-shadow-1)}
@@ -608,8 +574,6 @@ a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px
 .modal-content,.gcu-modal__content{border-color:var(--gcu-border);border-radius:var(--gcu-radius-xl);box-shadow:var(--gcu-shadow-4)}
 .gcu-modal__dialog{animation:gcu-enter var(--gcu-duration-base) var(--gcu-ease-enter)}
 .badge{border-radius:var(--gcu-radius-sm)}
-.invalid-feedback{color:var(--gcu-status-danger)}
-.form-check-input.is-invalid~.form-check-label,.was-validated .form-check-input:invalid~.form-check-label{color:var(--gcu-status-danger)}
 
 /* Hover solo con puntero real: en táctil el hover se queda "pegado". */
 @media (hover:hover){.card.gcu-card--interactive:hover{box-shadow:var(--gcu-shadow-2)}.dropdown-item:hover{background-color:var(--gcu-surface-subtle)}}

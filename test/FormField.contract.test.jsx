@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { expect, test, vi } from 'vitest'
-import { FormField } from '../src/components/form/FormField.jsx'
-import { InputGroup } from '../src/components/form/InputGroup.jsx'
+import { FormField } from '../src/components/form/FormField'
+import { InputGroup } from '../src/components/form/InputGroup'
 
 test('clones one control to associate its label and error semantics', () => {
   render(

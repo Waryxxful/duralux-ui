@@ -4,11 +4,11 @@
 <--!----------------------------------------------------------------!-->
 */
 
-input,
+// .form-control, .form-select, .form-label y .input-group-text viven en
+// src/styles/components/*.css con tokens --gcu-* (sin prioridad forzada).
+input:not(.form-control):not(.form-check-input),
 .custom-file,
-.custom-select,
-.form-select,
-.form-control {
+.custom-select {
 	color: $dark;
 	padding: 12px 15px;
 	border-color: $border-color;
@@ -16,49 +16,22 @@ input,
 	&.active,
 	&.focus,
 	&:active,
-	&:focus,
-	&:active,
 	&:focus {
 		outline: 0;
 		color: $dark;
-		border-color: $primary !important;
-		box-shadow: none !important;
+		border-color: $primary;
 	}
 	&::placeholder {
-		color: $gray-500 !important;
+		color: $gray-500;
 	}
-	&::-ms-placeholder {
-		color: $gray-500 !important;
-	}
-	&::-moz-placeholder {
-		color: $gray-500 !important;
-	}
-	&::-webkit-placeholder {
-		color: $gray-500 !important;
-	}
-}
-.form-label,
-.col-form-label {
-	color: $dark !important;
-	font-size: $font-12 !important;
-	font-weight: $font-600 !important;
 }
 .form-select {
-	color: $dark;
 	background-size: 10px;
 	filter: invert(0);
 	.form-select-sm,
 	&.form-select-sm {
 		background-size: 6px;
 	}
-}
-.input-group-text {
-	color: $dark;
-	padding: 0 15px;
-	font-weight: $font-600;
-	border-radius: $radius-sm;
-	border-color: $border-color;
-	background-color: darken($gray-100, 1);
 }
 input[type="search"]::-webkit-search-cancel-button {
 	display: none;

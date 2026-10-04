@@ -11,10 +11,10 @@ import { ProgressRing } from '../src/components/ui/ProgressRing.jsx'
 import { StatsCard } from '../src/components/ui/StatsCard.jsx'
 import { Tabs } from '../src/components/ui/Tabs.jsx'
 import { Toast } from '../src/components/ui/Toast.tsx'
-import { FormField } from '../src/components/form/FormField.jsx'
-import { Input } from '../src/components/form/Input.jsx'
-import { Select } from '../src/components/form/Select.jsx'
-import { Textarea } from '../src/components/form/Textarea.jsx'
+import { FormField } from '../src/components/form/FormField'
+import { Input } from '../src/components/form/Input'
+import { Select } from '../src/components/form/Select'
+import { Textarea } from '../src/components/form/Textarea'
 
 test('Progress merges caller styles when height is supplied', () => {
   render(
