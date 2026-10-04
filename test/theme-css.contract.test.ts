@@ -467,33 +467,31 @@ describe('CSS theme contract', () => {
     const solidSuccess = ruleWithDeclarations(css, '.badge.bg-success', ['color'])
     expect(parseColor(solidSuccess.color)).toEqual(parseColor('#fff'))
 
-    const table = ruleWithDeclarations(css, '.table-responsive .table', ['color'])
-    expect(parseColor(table.color)).toEqual(parseColor('#58667a'))
+    // Corrección documentada (lote L5, DX-039/DX-040): las reglas de .table salieron del tema Sass
+    // a src/styles/components/table.css. Mismos roles: celdas en --gcu-muted (#58667a en claro, el
+    // brand-body de Duralux) y encabezado en --gcu-text (#283c50), ahora también en oscuro y navy.
+    const tableCss = readFileSync(resolve(repoRoot, 'src/styles/components/table.css'), 'utf8')
+    const table = ruleWithDeclarations(tableCss, '.table', ['--bs-table-color'])
+    expect(table['--bs-table-color']).toBe('var(--gcu-muted)')
+    expect(runtimeCss).toMatch(/--gcu-muted:#58667a/)
 
-    const tableHead = ruleWithDeclarations(css, '.table-responsive .table thead th', ['color'])
-    expect(parseColor(tableHead.color)).toEqual(parseColor('#283c50'))
+    const tableHead = ruleWithDeclarations(tableCss, '.table>thead>tr>th', ['color'])
+    expect(tableHead.color).toBe('var(--gcu-text)')
+    expect(runtimeCss).toMatch(/--gcu-text:#283c50/)
 
     const brandUtility = ruleWithDeclarations(css, '.bg-success', ['background-color'])
     expect(parseColor(brandUtility['background-color'])).toEqual(parseColor('#17c666'))
   })
 
-  test('keeps dark table stripes distinct from action controls', () => {
-    const stripe = ruleWithDeclarations(
-      css,
-      'html.app-skin-dark .table > tbody > tr:nth-of-type(odd) > *',
-      ['--bs-table-accent-bg'],
-    )
-    const hover = ruleWithDeclarations(
-      css,
-      'html.app-skin-dark .table > tbody > tr:hover > *',
-      ['--bs-table-accent-bg'],
-    )
-
-    expect(parseColor(stripe['--bs-table-accent-bg'])).toEqual(parseColor('#17181d'))
-    expect(parseColor(hover['--bs-table-accent-bg'])).toEqual(parseColor('#26272e'))
-    expect(
-      contrastRatio(stripe['--bs-table-accent-bg'], hover['--bs-table-accent-bg']),
-    ).toBeGreaterThanOrEqual(1.18)
+  test('keeps dark table rows uniform: no zebra stripe, hover from tokens (DX-040)', () => {
+    // Corrección documentada (lote L5, DX-040): el oscuro pintaba las filas impares con texto blanco
+    // y fondo propio y dejaba las pares atenuadas (regla heredada de table-striped). Ahora ninguna
+    // regla del tema toca las filas de .table; el hover sale de --bs-table-hover-bg con tokens.
+    expect(css).not.toMatch(/html\.app-skin-dark[^{]*\.table > tbody > tr:nth-of-type\(odd\)/)
+    expect(css).not.toMatch(/html\.app-skin-dark[^{]*\.table > tbody > tr:hover > \*/)
+    const tableCss = readFileSync(resolve(repoRoot, 'src/styles/components/table.css'), 'utf8')
+    const table = ruleWithDeclarations(tableCss, '.table', ['--bs-table-hover-bg'])
+    expect(table['--bs-table-hover-bg']).toBe('var(--gcu-table-row-hover)')
   })
 
   test('hides ShellNav caption spans in collapsed minimenu and restores them on hover and mobile', () => {

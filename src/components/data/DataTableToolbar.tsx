@@ -1,13 +1,25 @@
-import { useId, useMemo, useState } from 'react'
+import { forwardRef, useId, useMemo, useState } from 'react'
+import type * as React from 'react'
 import {
   EMPTY_ARRAY,
   normalizePageSize,
   normalizePageSizeOptions,
   normalizeText,
 } from './dataTableToolbarModel'
+import { cx } from '../../utils/cx'
+import { log } from '../../utils/log'
 import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
+import type { DataTableToolbarProps } from '../../public/types'
 
-export function DataTableToolbar({
+/**
+ * DataTableToolbar — barra sobre una tabla: búsqueda (landmark `search`), filas por página y
+ * acciones propias (`children`) en una misma fila con controles de igual altura.
+ *
+ * - Controlada (`searchValue`, `pageSize` + `onPageSizeChange`) o no controlada.
+ * - Responde a su contenedor (container query): en menos de 36rem cada bloque ocupa el ancho.
+ * - Sin búsqueda, sin selector de filas y sin acciones no se renderiza.
+ */
+export const DataTableToolbar = /* @__PURE__ */ forwardRef<HTMLDivElement, DataTableToolbarProps>(function DataTableToolbar({
   searchable = true,
   searchValue,
   defaultSearchValue = '',
@@ -22,20 +34,16 @@ export function DataTableToolbar({
   pageSizeId,
   className,
   children,
-}) {
+}, ref) {
   const generatedSearchId = useId()
   const generatedPageSizeId = useId()
   const resolvedSearchId = searchId || `duralux-data-search-${generatedSearchId}`
   const resolvedPageSizeId = pageSizeId || `duralux-data-page-size-${generatedPageSizeId}`
   const [internalSearch, setInternalSearch] = useState(() => normalizeText(defaultSearchValue))
-  const [internalPageSize, setInternalPageSize] = useState(
-    () => normalizePageSize(pageSize) ?? 10,
-  )
+  const [internalPageSize, setInternalPageSize] = useState(() => normalizePageSize(pageSize) ?? 10)
   const controlledSearch = searchValue !== undefined
-  const visibleSearch = controlledSearch
-    ? normalizeText(searchValue)
-    : internalSearch
-  const normalizedOptions = useMemo(
+  const visibleSearch = controlledSearch ? normalizeText(searchValue) : internalSearch
+  const normalizedOptions: number[] = useMemo(
     () => normalizePageSizeOptions(pageSizeOptions, pageSize),
     [pageSizeOptions, pageSize],
   )
@@ -45,36 +53,35 @@ export function DataTableToolbar({
   const normalizedPageSize = normalizePageSize(pageSize)
   const visiblePageSize = controlledPageSize
     ? (normalizedPageSize ?? normalizedOptions[0] ?? 10)
-    : (normalizedOptions.includes(internalPageSize)
-      ? internalPageSize
-      : normalizedOptions[0] ?? internalPageSize)
+    : (normalizedOptions.includes(internalPageSize) ? internalPageSize : normalizedOptions[0] ?? internalPageSize)
   const safeSearchLabel = normalizeText(searchLabel) || 'Buscar registros'
   const safeSearchPlaceholder = normalizeText(searchPlaceholder) || 'Buscar...'
   const safePageSizeLabel = normalizeText(pageSizeLabel) || 'Filas por página'
 
   if (!hasSearch && !hasPageSize && children === undefined) return null
 
-  const handleSearchChange = event => {
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextValue = event.currentTarget.value
     if (!controlledSearch) setInternalSearch(nextValue)
     if (isFunction(onSearchChange)) onSearchChange(nextValue)
   }
 
-  const handlePageSizeChange = event => {
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const nextValue = Number(event.currentTarget.value)
-    if (!isFiniteNumber(nextValue)) return
-    const nextPageSize = normalizePageSize(nextValue)
-    if (nextPageSize === null) return
+    const nextPageSize = isFiniteNumber(nextValue) ? normalizePageSize(nextValue) : null
+    if (nextPageSize === null) {
+      log.warn(`DataTableToolbar: tamaño de página inválido (${event.currentTarget.value}); se ignora.`)
+      return
+    }
     if (!controlledPageSize) setInternalPageSize(nextPageSize)
     if (isFunction(onPageSizeChange)) onPageSizeChange(nextPageSize)
   }
 
   return (
-    <div className={['data-table-toolbar', isString(className) ? className : '']
-      .filter(Boolean)
-      .join(' ')}>
+    <div ref={ref} className={cx('data-table-toolbar', 'gcu-table-toolbar', isString(className) && className)}>
       {hasSearch ? (
-        <div className="data-table-toolbar__search">
+        // role="search" y no <search>: React 18 no reconoce la etiqueta y los navegadores soportados aún no la mapean.
+        <div className="data-table-toolbar__search" role="search" aria-label={safeSearchLabel}>
           <label htmlFor={resolvedSearchId}>{safeSearchLabel}</label>
           <input
             id={resolvedSearchId}
@@ -105,7 +112,7 @@ export function DataTableToolbar({
         </div>
       ) : null}
 
-      {children}
+      {children !== undefined ? <div className="gcu-table-toolbar__actions">{children}</div> : null}
     </div>
   )
-}
+})

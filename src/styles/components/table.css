@@ -1,0 +1,51 @@
+/* Table, ResponsiveTable, DataTableToolbar y cualquier .table de las apps (DataTable incluido).
+   Bootstrap pinta las celdas desde --bs-table-*: aquí se alimentan de tokens, así claro, oscuro y
+   navy salen solos. Sin rayado ni overrides de tema (DX-040): todas las filas leen igual. */
+.table{--gcu-table-row-h:var(--gcu-space-12);--gcu-table-cell-py:var(--gcu-space-2);--gcu-table-cell-px:var(--gcu-space-4);--gcu-table-edge:var(--gcu-space-6);--gcu-table-row-hover:color-mix(in srgb,var(--gcu-text) 6%,transparent);--bs-table-color:var(--gcu-muted);--bs-table-bg:transparent;--bs-table-border-color:var(--gcu-border);--bs-table-accent-bg:transparent;--bs-table-hover-color:var(--gcu-text);--bs-table-hover-bg:var(--gcu-table-row-hover);--bs-table-active-color:var(--gcu-text);--bs-table-active-bg:var(--gcu-table-row-hover);color:var(--bs-table-color);border-color:var(--bs-table-border-color);vertical-align:middle}
+/* DX-039: vertical-align:middle va en .table (no solo bajo .table-responsive): texto y controles comparten eje. */
+.table>:not(caption)>*>*{padding:var(--gcu-table-cell-py) var(--gcu-table-cell-px);border-bottom-color:var(--bs-table-border-color)}
+/* Alineación con el padding de la card (25px): la primera y la última columna respiran igual que su título. */
+.table>:not(caption)>*>:first-child{padding-inline-start:var(--gcu-table-edge)}
+.table>:not(caption)>*>:last-child{padding-inline-end:var(--gcu-table-edge)}
+/* Encabezado: mayúsculas pequeñas con tracking de mayúsculas (Craft) y peso 600, nunca 700. */
+.table>thead>tr>th,.table>tfoot>tr>th{padding-block:var(--gcu-space-3);color:var(--gcu-text);font-size:var(--gcu-font-size-2xs);line-height:var(--gcu-line-height-2xs);font-weight:var(--gcu-font-weight-semibold);text-transform:uppercase;letter-spacing:var(--gcu-tracking-caps);white-space:nowrap}
+/* Filas de altura consistente (height en una celda es su mínimo): con texto o con botones miden lo mismo. */
+.table>tbody>tr>*{height:var(--gcu-table-row-h)}
+.gcu-table--compact{--gcu-table-row-h:var(--gcu-space-10);--gcu-table-cell-py:var(--gcu-space-1)}
+.gcu-table--comfortable{--gcu-table-row-h:calc(var(--gcu-space-12) + var(--gcu-space-2));--gcu-table-cell-py:var(--gcu-space-3)}
+.table-light{--bs-table-bg:var(--gcu-surface-sunken);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border)}
+/* Dentro de su contenedor (cards): celdas en una línea y sin borde doble contra el borde de la card. */
+.table-responsive .table{margin-bottom:0}
+.table-responsive .table td{white-space:nowrap}
+.table-responsive .table>tbody>tr:last-child>*{border-bottom-color:transparent}
+/* DataTable autoWidth: la tabla se ajusta a su contenido en vez del 100 % del contenedor. */
+.table-auto-width{width:auto}
+
+/* Estados dentro de la tabla: vacío (EmptyState) y carga (skeleton por fila). No reaccionan al hover. */
+.table>tbody>tr.gcu-table__state-row>td{height:auto;white-space:normal}
+.table>tbody>tr.gcu-table__status-row>td{height:0;padding:0;border-bottom-width:0}
+.table-hover>tbody>tr.gcu-table__state-row:hover>*,.table-hover>tbody>tr.gcu-table__status-row:hover>*,.table-hover>tbody>tr.gcu-table__skeleton-row:hover>*{--bs-table-accent-bg:transparent;color:inherit}
+.gcu-table__skeleton{max-width:12rem}
+.text-end>.gcu-table__skeleton{margin-inline-start:auto}
+
+/* Celdas de acciones: el hover y el foco de los botones de la última fila no se recortan. */
+.gcu-table-actions-cell,.table td.gcu-table-actions-cell{overflow:visible}
+.gcu-table-actions{overflow:visible;padding-block:var(--gcu-space-0-5)}
+
+/* Scroll horizontal dentro del contenedor, nunca de la página. */
+.gcu-table-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+/* Encabezado fijo: el contenedor desplaza en vertical (.gcu-scroll) y la sombra aparece solo con scroll. */
+.gcu-table-scroll--sticky{max-height:min(32rem,70vh)}
+.gcu-table-scroll--sticky>.table>thead>tr>th{position:sticky;top:0;z-index:1;background-color:var(--gcu-surface);box-shadow:inset 0 -1px 0 var(--bs-table-border-color)}
+.gcu-table-scroll--sticky[data-scrolled="true"]>.table>thead>tr>th{box-shadow:inset 0 -1px 0 var(--bs-table-border-color),0 6px 6px -6px var(--gcu-overlay)}
+
+/* DataTableToolbar: búsqueda, filas por página y acciones en una fila; responde a su contenedor. */
+.data-table-toolbar{container-type:inline-size;display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:var(--gcu-space-3);padding:var(--gcu-space-3) var(--gcu-space-6);border-bottom:1px solid var(--gcu-border);background:var(--gcu-surface)}
+.data-table-toolbar__search,.data-table-toolbar__page-size{display:grid;gap:var(--gcu-space-1)}
+.data-table-toolbar__search{flex:1 1 15rem;max-width:26rem}
+.data-table-toolbar__page-size{flex:0 0 auto}
+.data-table-toolbar label{color:var(--gcu-text);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-medium)}
+.gcu-table-toolbar__actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);margin-inline-start:auto}
+@container (max-width: 36rem){.data-table-toolbar__search,.data-table-toolbar__page-size,.gcu-table-toolbar__actions{flex:1 1 100%;max-width:none}.gcu-table-toolbar__actions{margin-inline-start:0}}
+/* El contenedor con desborde recibe foco de teclado (para desplazarlo con flechas): anillo interior. */
+.gcu-table-scroll:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:-2px}
