@@ -1,11 +1,8 @@
 import type * as React from 'react'
 import { Avatar as AvatarRuntime } from '../components/ui/Avatar'
 import { Badge as BadgeRuntime } from '../components/ui/Badge'
-import {
-  Button as ButtonRuntime,
-  IconButton as IconButtonRuntime,
-  LinkButton as LinkButtonRuntime,
-} from '../components/ui/Button'
+// Componentes ya en TSX: se exportan tal cual (tipos y ref reales).
+export { Button, IconButton, LinkButton } from '../components/ui/Button'
 import { Icon as IconRuntime } from '../components/ui/Icon'
 import { Alert as AlertRuntime } from '../components/ui/Alert'
 import { Modal as ModalRuntime } from '../components/ui/Modal'
@@ -145,9 +142,6 @@ function asGenericComponent<F>(runtime: React.ComponentType<any>): F {
   return runtime as F
 }
 
-export const Button = asComponent<ButtonProps>(ButtonRuntime)
-export const LinkButton = asComponent<LinkButtonProps>(LinkButtonRuntime)
-export const IconButton = asComponent<IconButtonProps>(IconButtonRuntime)
 export const Icon = asComponent<IconProps>(IconRuntime)
 export const Badge = asComponent<BadgeProps>(BadgeRuntime)
 export const Card = asComponent<CardProps>(CardRuntime)

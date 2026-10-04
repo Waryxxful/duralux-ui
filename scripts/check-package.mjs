@@ -72,8 +72,9 @@ export function validatePackageManifest(manifest) {
   if (!manifest || typeof manifest !== 'object') {
     throw new Error('package.json must contain an object manifest.')
   }
-  if (manifest.version !== '2.1.0') {
-    throw new Error(`Expected package version 2.1.0, received ${manifest.version}.`)
+  // Serie 2.x: cada entrega sube la minor (MF distingue copias por versión).
+  if (!/^2\.\d+\.\d+$/.test(String(manifest.version))) {
+    throw new Error(`Expected a 2.x package version, received ${manifest.version}.`)
   }
 
   assertEqual(manifest.main, './dist/index.cjs', 'package main')

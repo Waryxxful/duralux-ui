@@ -1,0 +1,13 @@
+/* Button, LinkButton, IconButton y cualquier .btn de las apps.
+   Alturas 32/36/40 alineadas con inputs; la presión y el foco vienen de tokens. */
+.btn:not(.btn-link){min-height:var(--gcu-control-h-md);padding-top:0;padding-bottom:0}
+.btn{border-radius:var(--gcu-radius-md);transition:color var(--gcu-duration-fast) var(--gcu-ease-standard),background-color var(--gcu-duration-fast) var(--gcu-ease-standard),border-color var(--gcu-duration-fast) var(--gcu-ease-standard),box-shadow var(--gcu-duration-fast) var(--gcu-ease-standard),transform var(--gcu-duration-instant) var(--gcu-ease-standard)}
+.btn-sm:not(.btn-link){min-height:var(--gcu-control-h-sm)}
+.btn-lg:not(.btn-link){min-height:var(--gcu-control-h-lg)}
+.btn-icon{min-width:var(--gcu-control-h-md);min-height:var(--gcu-control-h-md);padding:0}
+.btn-icon.btn-sm{min-width:var(--gcu-control-h-sm);min-height:var(--gcu-control-h-sm)}
+/* Tablas densas: los iconos de acción no deben inflar la fila. */
+.table .btn-icon{min-width:var(--gcu-control-h-xs);min-height:var(--gcu-control-h-xs)}
+.btn:active:not(:disabled):not(.disabled){transform:scale(var(--gcu-press-scale))}
+.btn[aria-busy="true"]{cursor:progress}
+@media (prefers-reduced-motion:reduce){.btn:active:not(:disabled):not(.disabled){transform:none}}

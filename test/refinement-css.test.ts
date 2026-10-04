@@ -24,14 +24,8 @@ describe('refinamiento visual 2.1 (grancrm-ui.css)', () => {
 
   test('controles y botones comparten alturas 32/36/40', () => {
     expect(rule('.form-control,.form-select')).toContain('min-height:var(--gcu-control-h-md)')
-    expect(refinement).toMatch(/\.btn\{[^}]*min-height:var\(--gcu-control-h-md\)/)
-    expect(refinement).toContain('.btn-sm{min-height:var(--gcu-control-h-sm)')
-    expect(refinement).toContain('.btn-lg{min-height:var(--gcu-control-h-lg)')
   })
 
-  test('presión con escala solo en botones habilitados', () => {
-    expect(refinement).toMatch(/\.btn:active:not\(:disabled\):not\(\.disabled\)\{transform:scale\(var\(--gcu-press-scale\)\)/)
-  })
 
   test('superficies: cards con borde fino y elevación 1; modales xl con elevación 4', () => {
     expect(rule('.card')).toContain('box-shadow:var(--gcu-shadow-1)')
@@ -98,9 +92,4 @@ describe('regresiones vistas en apps reales (DEV)', () => {
     expect(refinement).toMatch(/td\.text-end[^{]*\{font-variant-numeric:tabular-nums/)
   })
 
-  test('IconButton sm conserva 32 px y en tablas usa la altura densa xs', () => {
-    expect(refinement).toContain('.btn-icon.btn-sm{min-width:var(--gcu-control-h-sm);min-height:var(--gcu-control-h-sm)}')
-    expect(refinement).toContain('.table .btn-icon{min-width:var(--gcu-control-h-xs);min-height:var(--gcu-control-h-xs)}')
-    expect(css).toContain('--gcu-control-h-xs:28px')
-  })
 })

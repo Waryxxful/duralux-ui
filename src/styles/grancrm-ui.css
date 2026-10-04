@@ -1,4 +1,6 @@
 @import "./feather-icons.css";
+/* CSS por componente (design system 2.x): reglas con tokens, sin prioridad forzada ni overrides de tema. */
+@import "./components/button.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
@@ -591,16 +593,8 @@ h1,h2,h3,.h1,.h2,.h3{letter-spacing:var(--gcu-tracking-tight);text-wrap:balance}
 .form-control,.form-select{min-height:var(--gcu-control-h-md);padding-top:7px;padding-bottom:7px;border-radius:var(--gcu-radius-md);line-height:20px}
 textarea.form-control{min-height:calc(var(--gcu-control-h-md) * 2)}
 .input-group-text{min-height:var(--gcu-control-h-md);border-radius:var(--gcu-radius-md)}
-.btn{min-height:var(--gcu-control-h-md);padding-top:0;padding-bottom:0;border-radius:var(--gcu-radius-md);transition:color var(--gcu-duration-fast) var(--gcu-ease-standard),background-color var(--gcu-duration-fast) var(--gcu-ease-standard),border-color var(--gcu-duration-fast) var(--gcu-ease-standard),box-shadow var(--gcu-duration-fast) var(--gcu-ease-standard),transform var(--gcu-duration-instant) var(--gcu-ease-standard)}
-.btn-sm{min-height:var(--gcu-control-h-sm)}
 .form-control-sm,.form-select-sm,.input-group-sm>.form-control,.input-group-sm>.form-select,.input-group-sm>.input-group-text{min-height:var(--gcu-control-h-sm);padding-top:5px;padding-bottom:5px;line-height:20px}
 .form-control-lg,.form-select-lg,.input-group-lg>.form-control,.input-group-lg>.form-select,.input-group-lg>.input-group-text{min-height:var(--gcu-control-h-lg);padding-top:9px;padding-bottom:9px;line-height:20px}
-.btn-lg{min-height:var(--gcu-control-h-lg)}
-.btn-icon{min-width:var(--gcu-control-h-md);min-height:var(--gcu-control-h-md);padding:0;border-radius:var(--gcu-radius-md)}
-.btn-icon.btn-sm{min-width:var(--gcu-control-h-sm);min-height:var(--gcu-control-h-sm)}
-.table .btn-icon{min-width:var(--gcu-control-h-xs);min-height:var(--gcu-control-h-xs)}
-.btn:active:not(:disabled):not(.disabled){transform:scale(var(--gcu-press-scale))}
-.btn[aria-busy="true"],.gcu-btn[aria-busy="true"]{cursor:progress}
 
 /* Foco: un solo anillo, solo con teclado. */
 .btn:focus-visible,.gcu-btn:focus-visible,.form-control:focus-visible,.form-select:focus-visible,.form-check-input:focus-visible,.nav-link:focus-visible,.dropdown-item:focus-visible,.page-link:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
@@ -634,5 +628,5 @@ a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px
 @keyframes gcu-exit{from{opacity:1;transform:none}to{opacity:0;transform:translateY(4px)}}
 @keyframes gcu-shimmer{from{background-position:100% 50%}to{background-position:0 50%}}
 
-@media (prefers-reduced-motion:reduce){.gcu-skeleton{animation:none}.dropdown-menu.show,.gcu-modal__dialog{animation:none}.btn:active:not(:disabled):not(.disabled){transform:none}:root{--duration-fast:0ms;--duration-press:0ms;--duration-ui:0ms;--duration-panel:0ms}}
+@media (prefers-reduced-motion:reduce){.gcu-skeleton{animation:none}.dropdown-menu.show,.gcu-modal__dialog{animation:none}:root{--duration-fast:0ms;--duration-press:0ms;--duration-ui:0ms;--duration-panel:0ms}}
 /* END REFINEMENT 2.1 */

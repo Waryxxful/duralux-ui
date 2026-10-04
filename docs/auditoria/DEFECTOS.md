@@ -61,6 +61,8 @@ react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 pá
 | DX-033 | P3 | theme | `setMode` no valida: un consumidor JS con `setMode('sepia')` deja `data-gcu-theme="sepia"` | `src/theme/ThemeProvider.tsx:53` | 2 | abierto |
 | DX-034 | P3 | icons | `Icon` con `icon` descarta `style` y `...rest` | `src/components/ui/Icon.jsx:25` | 2 | abierto |
 | DX-035 | P3 | a11y | `renderIconSlot` pisa el `aria-label` propio del elemento con `aria-hidden` | `src/utils/iconSlot.jsx:24-29` | 2 | abierto |
-| DX-036 | P3 | styles | La capa de refinamiento quita padding vertical a todo `.btn` (afecta `.btn-link` en línea y botones de dos líneas) | `src/styles/grancrm-ui.css` (REFINEMENT 2.1) | 2 | abierto |
+| DX-036 | P3 | styles | La capa de refinamiento quita padding vertical a todo `.btn` (afecta `.btn-link` en línea y botones de dos líneas) | `src/styles/grancrm-ui.css` (REFINEMENT 2.1) | 2 | cerrado 2.3 (`.btn:not(.btn-link)` en `components/button.css`) |
 | DX-037 | P3 | tests | Los tests de cascada de ThemeScope × tema de html × reduced-motion verifican texto, no la cascada medida en navegador | `test/tokens-generator.test.ts`, `test/refinement-css.test.ts` | 2 | abierto |
 | DX-038 | P3 | theme | Navy Sass agrega un atributo de especificidad: un override de app con el selector del oscuro pierde en navy (alternativa `:where()`) | `_theme-options-dark-theme.scss` | 2 | abierto |
+| DX-039 | P2 | tablas | Celdas de `.table` con texto alineado arriba y controles centrados en la misma fila | story Componentes/Acciones/Button › Acciones en tabla densa | 2 (tablas) | abierto |
+| DX-040 | P2 | tablas | En oscuro, filas pares de `.table` con texto atenuado (regla de tema heredada de striped) | misma story, tema oscuro | 2 (tablas) | abierto |

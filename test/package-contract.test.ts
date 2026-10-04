@@ -13,7 +13,7 @@ const manifest = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
 
 describe('public package contract', () => {
   test('declares the 2.0 multi-entry package shape without chart engines in root', () => {
-    expect(manifest.version).toBe('2.1.0')
+    expect(manifest.version).toMatch(/^2\.\d+\.\d+$/)
     expect(manifest.exports['.']).toEqual({
       types: './dist/index.d.ts',
       import: './dist/index.js',
