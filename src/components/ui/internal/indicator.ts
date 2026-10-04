@@ -169,5 +169,7 @@ export type HeadingTag = (typeof HEADING_TAGS)[number]
 
 /** Etiqueta del encabezado para `headingLevel` (1–6); fuera de rango usa `fallback`. */
 export function headingTag(level: number | undefined, fallback: HeadingTag = 'h3'): HeadingTag {
-  return (isFiniteNumber(level) ? HEADING_TAGS[level - 1] : undefined) ?? fallback
+  const tag = isFiniteNumber(level) ? HEADING_TAGS[level - 1] : undefined
+  if (!tag && level !== undefined) log.warn(`headingLevel ${String(level)} no es un nivel de encabezado válido (1–6); se usa ${fallback}.`)
+  return tag ?? fallback
 }
