@@ -453,8 +453,25 @@ export type DataTableColumn<
     header?: React.ReactNode
     sortable?: boolean
     render?: (row: T, value: T[P], rowIndex: number) => React.ReactNode
+    /** Columna numérica: encabezado y celdas a la derecha con números tabulares. */
+    numeric?: boolean
+    /** Ancho del encabezado (número en px o largo CSS). */
+    width?: number | string
+    /** `false` la deja fuera del menú «Columnas» (siempre visible). */
+    hideable?: boolean
   }
 }[K]
+
+/** Visibilidad por columna (clave = `String(column.key)`); `false` la oculta. */
+export type DataTableColumnVisibility = Readonly<Partial<Record<string, boolean>>>
+
+/** Contexto del slot de acciones masivas. */
+export interface DataTableBulkContext {
+  /** Cantidad de filas seleccionadas (incluye las ocultas por la búsqueda). */
+  count: number
+  /** Deselecciona todo. */
+  clearSelection: () => void
+}
 
 export interface DataTableAction<T extends object = Record<string, string | number | boolean | null | undefined>> {
   label?: React.ReactNode
@@ -474,6 +491,8 @@ export interface DataTableToolbarContext {
   pageSize: number
   pageSizeOptions: ReadonlyArray<number>
   onPageSizeChange: (pageSize: number) => void
+  /** Menú «Columnas» listo para ubicar en una barra propia (null si la tabla no lo ofrece). */
+  columnMenu?: React.ReactNode
 }
 
 export interface DataTableToolbarProps {
@@ -538,6 +557,32 @@ export type DataTableProps<T extends object = Record<string, string | number | b
   manualFiltering?: boolean
   'aria-label'?: string
   'aria-labelledby'?: string
+  /** Densidad de filas (igual que Table): `compact` 40 px, `comfortable` 56 px; sin valor, 48 px. */
+  density?: TableDensity
+  /** Encabezado fijo dentro del contenedor, con sombra solo al hacer scroll. */
+  stickyHeader?: boolean
+  /** Alto máximo del contenedor con `stickyHeader` o `virtualized` (px o largo CSS). */
+  maxHeight?: number | string
+  /** Reemplaza el estado vacío por defecto (EmptyState con `emptyMessage`). */
+  emptyState?: React.ReactNode
+  /** Filas de skeleton mientras `loading` (por defecto 5). */
+  loadingRows?: number
+  /** Error al cargar: se muestra ErrorState en el cuerpo de la tabla. */
+  error?: ErrorStateProps['error']
+  /** Reintento del ErrorState. */
+  onRetry?: () => void
+  /** Visibilidad controlada de columnas; activa el menú «Columnas». */
+  columnVisibility?: DataTableColumnVisibility
+  /** Visibilidad inicial (no controlada); activa el menú «Columnas». */
+  defaultColumnVisibility?: DataTableColumnVisibility
+  /** Cambio de visibilidad desde el menú «Columnas»; también lo activa. */
+  onColumnVisibilityChange?: (visibility: DataTableColumnVisibility) => void
+  /** Muestra el menú «Columnas» aunque no se pase visibilidad. */
+  columnMenu?: boolean
+  /** Acciones masivas sobre la selección: aparecen en una barra cuando hay filas seleccionadas. */
+  renderBulkActions?: (selectedRows: T[], context: DataTableBulkContext) => React.ReactNode
+  /** Virtualiza las filas (sin paginación) con @tanstack/react-virtual, cargado bajo demanda. Pensado para más de 500 filas. */
+  virtualized?: boolean
 } & ('id' extends DataTableIdentityKey<T>
   ? unknown
   : { rowKey: DataTableIdentityKey<T> | ((row: T, index: number) => KeyLike | undefined) })

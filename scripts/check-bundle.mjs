@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url'
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 // Motores opcionales (charts y antd/dayjs): nunca deben aparecer en el bundle raíz.
 const CHART_ENGINE_PATTERN = /(?:^|[^A-Za-z0-9_])(?:apexcharts|react-apexcharts|recharts|antd|dayjs)(?:$|[^A-Za-z0-9_])/m
+// Huellas de TanStack Table/Virtual (nombres internos que sobreviven a la minificación como strings).
+const TANSTACK_PATTERN = /@tanstack\/|table\.getSortedRowModel|rowSortingFeature|virtual-core/
 const EXTERNAL_PACKAGES = [
   'react',
   'react-dom',
@@ -97,11 +99,24 @@ export async function runBundleGate({ distDir = join(ROOT, 'dist'), maxGzipBytes
   if (CHART_ENGINE_PATTERN.test(result.code)) {
     throw new Error('Button consumer bundle contains a chart engine specifier.')
   }
+  // DataTable usa TanStack (dependencia): una app que solo importa Button no debe arrastrarlo.
+  if (TANSTACK_PATTERN.test(result.code)) {
+    throw new Error('Button consumer bundle contains TanStack Table/Virtual code.')
+  }
   return result
 }
 
+// Un import() de un chunk propio hace que el Vite del consumidor lo envuelva con su helper de precarga
+// (base "/"); dentro del chunk compartido por Module Federation rompe el CSS de los remotos (visto en DEV).
+function assertNoPreloadHelper() {
+  const code = readFileSync(join(ROOT, 'dist/index.js'), 'utf8')
+  if (/import\(\s*["']\.\.?\//.test(code)) {
+    throw new Error('dist/index.js contains a dynamic import() of an internal chunk.')
+  }
+}
+
 if (resolve(process.argv[1] ?? '') === resolve(fileURLToPath(import.meta.url))) {
-  runBundleGate()
+  Promise.resolve().then(assertNoPreloadHelper).then(runBundleGate)
     .then(({ gzipBytes }) => console.log(`bundle gate: OK (${gzipBytes} gzip bytes for Button consumer)`))
     .catch((error) => {
       console.error(`bundle gate: ${error instanceof Error ? error.message : String(error)}`)

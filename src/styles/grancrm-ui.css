@@ -22,6 +22,7 @@
 @import "./components/timeline.css";
 @import "./components/activity-feed.css";
 @import "./components/table.css";
+@import "./components/data-table.css";
 @import "./components/pagination.css";
 @import "./components/indicator.css";
 @import "./components/stats-card.css";

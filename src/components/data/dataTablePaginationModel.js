@@ -1,4 +1,4 @@
-import { isArray, isFiniteNumber, isFunction, isObject, isString } from '../../utils/typeGuards'
+import { isArray, isFiniteNumber, isFunction, isObject } from '../../utils/typeGuards'
 import { readProperty, safeString } from './tableModel'
 
 export function normalizeSearchValue(value) {
@@ -23,15 +23,6 @@ export function sameSelection(left, right) {
     if (!right.has(value)) return false
   }
   return true
-}
-
-export function isSortableKey(key) {
-  return (isString(key) && key.length > 0) || isFiniteNumber(key)
-}
-
-export function sortableColumn(column) {
-  return Boolean(readProperty(column, 'sortable'))
-    && isSortableKey(readProperty(column, 'key'))
 }
 
 export function defaultFilterResolver(row) {
@@ -87,30 +78,4 @@ export function matchesFilter(
     }
     return false
   }
-}
-
-export function sortEntries(
-  entries,
-  sortKey,
-  sortDir,
-) {
-  if (!isSortableKey(sortKey)) return entries
-
-  return [...entries].sort((a, b) => {
-    const aVal = readProperty(a.row, sortKey)
-    const bVal = readProperty(b.row, sortKey)
-
-    if (aVal === bVal) return 0
-    if (aVal === null || aVal === undefined) return 1
-    if (bVal === null || bVal === undefined) return -1
-
-    if (isFiniteNumber(aVal) && isFiniteNumber(bVal)) {
-      return sortDir === 'asc' ? aVal - bVal : bVal - aVal
-    }
-
-    const aStr = safeString(aVal).toLowerCase()
-    const bStr = safeString(bVal).toLowerCase()
-    const comparison = aStr.localeCompare(bStr)
-    return sortDir === 'asc' ? comparison : -comparison
-  })
 }
