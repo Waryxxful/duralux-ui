@@ -2,6 +2,10 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## 2.3.1 — Chevron del select por tema
+
+- La flecha de `Select` vuelve a ser un chevron (2.3.0 la había cambiado por un triángulo relleno). Ahora se genera por tema desde los tokens (`--gcu-chevron`, `--gcu-chevron-danger`), así se ve en claro, oscuro y navy y en estado de error.
+
 ## 2.3.0 — Formularios, feedback y presentación refinados
 
 Primeras tres tandas del refinamiento del núcleo (`docs/superpowers/specs/2026-10-04-2-3-refinamiento-nucleo-design.md`). Todos los componentes de estos lotes pasan a TSX con `forwardRef` (ref tipado), CSS propio con tokens en `styles/components/`, stories en tres temas y detalles de oficio Craft. La API no rompe: lo nuevo son props; lo reemplazado avisa con `deprecate()`.

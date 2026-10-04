@@ -90,3 +90,18 @@ describe('móvil', () => {
     expect(css).toMatch(/@media \(max-width:575\.98px\)\{\.form-control,\.form-select\{font-size:16px\}\}/)
   })
 })
+
+describe('chevron del select por tema', () => {
+  test('el generador emite un chevron SVG con el color del tema y su variante de error', async () => {
+    const { readTokens, renderGeneratedCss } = await import('../scripts/generate-tokens.mjs')
+    const block = renderGeneratedCss(readTokens(process.cwd()))
+    expect(block).toMatch(/--gcu-chevron:url\("data:image\/svg\+xml,[^"]*stroke='%2358667a'/)
+    expect(block).toMatch(/--gcu-chevron-danger:url\("data:image\/svg\+xml,[^"]*stroke='%23/)
+  })
+
+  test('form-select usa el chevron del tema (no triángulos dibujados con gradientes)', () => {
+    const css = readFileSync(resolve(process.cwd(), 'src/styles/components/form-control.css'), 'utf8')
+    expect(css).toMatch(/\.form-select\{background-image:var\(--gcu-chevron\)/)
+    expect(css).not.toMatch(/\.form-select[^{]*\{background-image:linear-gradient/)
+  })
+})

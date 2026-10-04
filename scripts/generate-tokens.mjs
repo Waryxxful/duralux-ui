@@ -146,6 +146,10 @@ function themeDeclarations(tokens, theme) {
     d.push(`--gcu-${tone}-text:var(--gcu-status-${tone})`)
   }
   d.push(`--gcu-selection:${r.selection}`)
+  // Chevron de selects con el color del tema (Bootstrap trae el SVG con color fijo).
+  const chevron = color => `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='${color.replace('#', '%23')}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e")`
+  d.push(`--gcu-chevron:${chevron(r.muted)}`)
+  d.push(`--gcu-chevron-danger:${chevron(r['status-danger'])}`)
   for (const [k, value] of Object.entries(r.shadow)) d.push(`--gcu-shadow-${k}:${value}`)
   // Compatibilidad: --gcu-shadow (único) = nivel 1.
   d.push('--gcu-shadow:var(--gcu-shadow-1)')
