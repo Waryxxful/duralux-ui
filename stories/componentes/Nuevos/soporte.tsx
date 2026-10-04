@@ -1,7 +1,4 @@
-import type * as React from 'react'
 import type { Decorator } from '@storybook/react-vite'
-
-export { TresTemas } from '../Graficos/TresTemas'
 
 /**
  * Ancho de la story (`parameters.maxWidth`, por defecto 420 px) y un h2 oculto: los componentes
@@ -15,15 +12,6 @@ export const conAncho = (porDefecto: number | 'none' = 420): Decorator => (Story
     </div>
   </section>
 )
-
-/** Rejilla simple para mostrar variantes una al lado de la otra. */
-export function Fila({ children, min = '16rem' }: { children: React.ReactNode; min?: string }) {
-  return (
-    <div className="d-grid gap-3" style={{ gridTemplateColumns: `repeat(auto-fit, minmax(${min}, 1fr))` }}>
-      {children}
-    </div>
-  )
-}
 
 export const HORAS = ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00']
 export const NIVEL_SERVICIO = [78, 81, 79, 84, 86, 85, 83, 86]

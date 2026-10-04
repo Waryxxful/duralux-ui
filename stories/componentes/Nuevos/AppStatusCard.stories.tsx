@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { AppStatusCard, Button } from '../../../src'
-import { conAncho, Fila, TresTemas } from './soporte'
+import { conAncho } from './soporte'
+import { Fila } from './Fila'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const meta: Meta<typeof AppStatusCard> = {
   title: 'Componentes/Nuevos/AppStatusCard',

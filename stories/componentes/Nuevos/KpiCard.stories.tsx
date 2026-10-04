@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { KpiCard } from '../../../src'
 import { Sparkline } from '../../../src/charts/apex'
-import { conAncho, Fila, HORAS, NIVEL_SERVICIO, TresTemas } from './soporte'
+import { conAncho, HORAS, NIVEL_SERVICIO } from './soporte'
+import { Fila } from './Fila'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const meta: Meta<typeof KpiCard> = {
   title: 'Componentes/Nuevos/KpiCard',

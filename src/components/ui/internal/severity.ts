@@ -12,10 +12,11 @@ export const SEVERITY_LABEL = {
   normal: 'Normal',
 } satisfies Record<SeverityLevel, string>
 
-const SEVERITY_LEVELS = /* @__PURE__ */ new Set<string>(Object.keys(SEVERITY_LABEL))
+const SEVERITY_LEVELS = ['critical', 'warning', 'normal'] as const satisfies ReadonlyArray<SeverityLevel>
 
-export function isSeverityLevel(value: unknown): value is SeverityLevel {
-  return typeof value === 'string' && SEVERITY_LEVELS.has(value)
+/** Nivel conocido o `undefined` (consumidores JS pueden pasar cualquier texto). */
+export function toSeverityLevel(value: string | undefined): SeverityLevel | undefined {
+  return SEVERITY_LEVELS.find((item) => item === value)
 }
 
 /**

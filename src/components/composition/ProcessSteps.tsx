@@ -12,7 +12,7 @@ const STATUS_TEXT = {
   todo: 'Pendiente',
 } satisfies Record<ProcessStepStatus, string>
 
-const STATUS_ICON: Partial<Record<ProcessStepStatus, string>> = { done: 'feather-check', failed: 'feather-x' }
+const STATUS_ICON = { done: 'feather-check', failed: 'feather-x', current: null, todo: null } satisfies Record<ProcessStepStatus, string | null>
 
 function statusOf(step: ProcessStep, index: number, current: number, failed: boolean): ProcessStepStatus {
   if (step.status) return step.status

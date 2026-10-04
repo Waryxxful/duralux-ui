@@ -3,7 +3,7 @@ import { cx } from '../../utils/cx'
 import { isArray, isFunction, isString } from '../../utils/typeGuards'
 import type { EntityCardProps, EntityCardStat } from '../../public/types'
 import { Avatar } from '../ui/Avatar'
-import { formatIndicatorValue, hasIndicatorContent } from '../ui/internal/indicator'
+import { formatIndicatorValue, hasIndicatorContent, headingTag } from '../ui/internal/indicator'
 
 function statKey(stat: EntityCardStat, seen: Map<string, number>): string {
   const base = stat.id !== undefined ? `id:${String(stat.id)}` : isString(stat.label) ? `label:${stat.label}` : 'stat'
@@ -38,7 +38,7 @@ export const EntityCard = /* @__PURE__ */ forwardRef<HTMLElement, EntityCardProp
   className,
   ...rest
 }, ref) {
-  const Heading = `h${headingLevel}` as 'h3'
+  const Heading = headingTag(headingLevel, 'h3')
   const interactive = Boolean(href) || isFunction(onClick)
   const statList = isArray(stats) ? stats : []
   const seen = new Map<string, number>()

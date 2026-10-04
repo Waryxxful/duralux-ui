@@ -3,7 +3,7 @@ import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import { isArray, isString } from '../../utils/typeGuards'
 import type { StatGroupItem, StatGroupProps } from '../../public/types'
-import { formatDelta, hasIndicatorContent, resolveTone, warnMissingContext } from '../ui/internal/indicator'
+import { formatDelta, hasIndicatorContent, headingTag, resolveTone, warnMissingContext } from '../ui/internal/indicator'
 import { IndicatorContext, IndicatorDeltaChip, IndicatorGlyph, IndicatorValue } from '../ui/internal/IndicatorParts'
 
 function statKey(item: StatGroupItem, seen: Map<string, number>): string {
@@ -60,7 +60,7 @@ export const StatGroup = /* @__PURE__ */ forwardRef<HTMLElement, StatGroupProps>
     log.warn(`StatGroup: agrupa de 2 a 4 métricas (recibidas: ${list.length}). Para una sola cifra usa KpiCard.`)
   }
   const seen = new Map<string, number>()
-  const Heading = `h${headingLevel}` as 'h3'
+  const Heading = headingTag(headingLevel, 'h3')
   const hasTitle = hasIndicatorContent(title)
 
   return (

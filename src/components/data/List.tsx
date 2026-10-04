@@ -131,10 +131,14 @@ export const List = /* @__PURE__ */ forwardRef<HTMLElement, ListProps>(function 
   }
 
   const rootClass = cx('gcu-list', `gcu-list--${density}`, 'list-group', 'list-group-flush', className)
+  // SAFETY: el ref público es HTMLElement; la raíz es <ul> (lista) y <ul>/<div> son HTMLElement.
+  const listRef = ref as React.Ref<HTMLUListElement>
+  // SAFETY: en el estado vacío la raíz es un <div>, también HTMLElement.
+  const emptyRef = ref as React.Ref<HTMLDivElement>
 
   if (loading) {
     return (
-      <ul {...rest} ref={ref as React.Ref<HTMLUListElement>} className={rootClass} aria-busy="true" aria-label={label ?? rest['aria-label']}>
+      <ul {...rest} ref={listRef} className={rootClass} aria-busy="true" aria-label={label ?? rest['aria-label']}>
         {SKELETON_ROWS.map((row) => (
           <li key={`skeleton-${row}`} className="list-group-item gcu-list__item" aria-hidden="true">
             <span className="gcu-skeleton gcu-skeleton--circle gcu-list__skeleton-avatar" />
@@ -148,7 +152,7 @@ export const List = /* @__PURE__ */ forwardRef<HTMLElement, ListProps>(function 
 
   if (list.length === 0) {
     return (
-      <div {...rest} ref={ref as React.Ref<HTMLDivElement>} className={cx('gcu-list', 'gcu-list--empty', className)}>
+      <div {...rest} ref={emptyRef} className={cx('gcu-list', 'gcu-list--empty', className)}>
         <EmptyList empty={empty} />
       </div>
     )
@@ -156,7 +160,7 @@ export const List = /* @__PURE__ */ forwardRef<HTMLElement, ListProps>(function 
 
   if (!selectable) {
     return (
-      <ul {...rest} ref={ref as React.Ref<HTMLUListElement>} className={rootClass} aria-label={label ?? rest['aria-label']}>
+      <ul {...rest} ref={listRef} className={rootClass} aria-label={label ?? rest['aria-label']}>
         {list.map((item) => {
           let body: React.ReactNode = <ItemBody item={item} />
           if (item.href && !item.disabled) {
@@ -185,7 +189,7 @@ export const List = /* @__PURE__ */ forwardRef<HTMLElement, ListProps>(function 
   return (
     <ul
       {...rest}
-      ref={ref as React.Ref<HTMLUListElement>}
+      ref={listRef}
       role="listbox"
       aria-label={label ?? rest['aria-label']}
       aria-multiselectable={selectionMode === 'multiple' || undefined}

@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import { cx } from '../../utils/cx'
 import type { KpiCardProps } from '../../public/types'
-import { formatDelta, hasIndicatorContent, resolveTone, warnMissingContext } from '../ui/internal/indicator'
+import { formatDelta, hasIndicatorContent, headingTag, resolveTone, warnMissingContext } from '../ui/internal/indicator'
 import { Severity } from '../ui/Severity'
 import { IndicatorContext, IndicatorDeltaChip, IndicatorGlyph, IndicatorValue } from '../ui/internal/IndicatorParts'
 
@@ -38,7 +38,7 @@ export const KpiCard = /* @__PURE__ */ forwardRef<HTMLDivElement, KpiCardProps>(
   const formattedDelta = formatDelta('KpiCard', delta)
   const hasChart = hasIndicatorContent(chart)
   warnMissingContext('KpiCard', label, Boolean(formattedDelta) || hasIndicatorContent(context) || hasChart)
-  const Heading = `h${headingLevel}` as 'h3'
+  const Heading = headingTag(headingLevel, 'h3')
   const alert = resolvedTone === 'danger' || resolvedTone === 'warning'
 
   return (

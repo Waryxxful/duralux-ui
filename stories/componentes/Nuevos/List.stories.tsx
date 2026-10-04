@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Avatar, Badge, BulkBar, Button, List } from '../../../src'
-import { conAncho, TresTemas } from './soporte'
+import { conAncho } from './soporte'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const items = [
   { id: 1, title: 'Ana Torres', meta: 'Ventas · 128 llamadas', leading: <Avatar name="Ana Torres" size="sm" />, trailing: <Badge variant="success" soft>Disponible</Badge>, textValue: 'Ana Torres' },

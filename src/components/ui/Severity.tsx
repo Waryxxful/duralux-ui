@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import type { SeverityProps } from '../../public/types'
-import { SEVERITY_LABEL, isSeverityLevel } from './internal/severity'
+import { SEVERITY_LABEL, toSeverityLevel } from './internal/severity'
 
 /**
  * Severity — marcador de severidad cuya forma dice lo mismo que el color:
@@ -20,7 +20,7 @@ export const Severity = /* @__PURE__ */ forwardRef<HTMLSpanElement, SeverityProp
   className,
   ...rest
 }, ref) {
-  const resolvedLevel = isSeverityLevel(level) ? level : 'normal'
+  const resolvedLevel = toSeverityLevel(level) ?? 'normal'
   if (resolvedLevel !== level) log.warn(`Severity: nivel desconocido "${String(level)}"; se usa "normal".`)
   const levelName = SEVERITY_LABEL[resolvedLevel]
   const markerOnly = label === false

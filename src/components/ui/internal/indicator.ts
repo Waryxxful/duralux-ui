@@ -163,3 +163,11 @@ export function warnMissingContext(component: string, label: React.ReactNode, ha
 export function isIconClass(icon: string): boolean {
   return /^(feather-|bi[- ]|ti[- ]|fa[- ])/.test(icon) || icon.includes(' ')
 }
+
+const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const
+export type HeadingTag = (typeof HEADING_TAGS)[number]
+
+/** Etiqueta del encabezado para `headingLevel` (1–6); fuera de rango usa `fallback`. */
+export function headingTag(level: number | undefined, fallback: HeadingTag = 'h3'): HeadingTag {
+  return (isFiniteNumber(level) ? HEADING_TAGS[level - 1] : undefined) ?? fallback
+}

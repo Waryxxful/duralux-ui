@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Donut, Gauge, Sparkline, TrendLine } from '../../../src/charts/apex'
-import { conAncho, Fila, HORAS, LLAMADAS, NIVEL_SERVICIO, TresTemas } from './soporte'
+import { conAncho, HORAS, LLAMADAS, NIVEL_SERVICIO } from './soporte'
+import { Fila } from './Fila'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const meta: Meta<typeof Sparkline> = {
   title: 'Componentes/Nuevos/Gráficos compactos',

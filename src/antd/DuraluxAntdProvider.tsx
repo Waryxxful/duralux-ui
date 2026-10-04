@@ -19,7 +19,7 @@ function subscribeDocumentTheme(onChange: () => void) {
 }
 const readDocumentTheme = () => document.documentElement.getAttribute('data-gcu-theme') ?? undefined
 
-const THEMES: ReadonlySet<string> = new Set<ResolvedTheme>(['light', 'dark', 'navy'])
+const THEMES = ['light', 'dark', 'navy'] as const satisfies ReadonlyArray<ResolvedTheme>
 
 export interface DuraluxAntdProviderProps {
   children: React.ReactNode
@@ -35,11 +35,10 @@ export function DuraluxAntdProvider({ children, theme }: DuraluxAntdProviderProp
   const ambient = useThemeOptional()?.resolved
   const boundary = useThemeBoundaryMode()
   const documentTheme = useSyncExternalStore(subscribeDocumentTheme, readDocumentTheme, () => undefined)
-  let resolved = (theme ?? boundary ?? ambient ?? documentTheme ?? 'light') as ResolvedTheme
-  if (!THEMES.has(resolved)) {
-    log.warn(`DuraluxAntdProvider: tema desconocido "${String(resolved)}"; se usa light.`)
-    resolved = 'light'
-  }
+  const requested = theme ?? boundary ?? ambient ?? documentTheme ?? 'light'
+  const known = THEMES.find((item) => item === requested)
+  if (!known) log.warn(`DuraluxAntdProvider: tema desconocido "${String(requested)}"; se usa light.`)
+  const resolved = known ?? 'light'
   const config = useMemo(() => antdConfigFor(resolved), [resolved])
   return (
     <ConfigProvider theme={config} locale={esES} componentSize="middle">

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Person } from '../../../src'
-import { conAncho, TresTemas } from './soporte'
+import { conAncho } from './soporte'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const meta: Meta<typeof Person> = {
   title: 'Componentes/Nuevos/Person',

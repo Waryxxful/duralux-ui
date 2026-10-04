@@ -6,11 +6,11 @@ import { Severity } from '../ui/Severity'
 import { hasIndicatorContent } from '../ui/internal/indicator'
 import { IndicatorGlyph } from '../ui/internal/IndicatorParts'
 
-const STATUS: Record<AppStatus, { text: string; level: SeverityLevel }> = {
+const STATUS = {
   activo: { text: 'Operativa', level: 'normal' },
   montaje: { text: 'En montaje', level: 'warning' },
   caido: { text: 'Caída', level: 'critical' },
-}
+} satisfies Record<AppStatus, { text: string; level: SeverityLevel }>
 
 /**
  * AppStatusCard — estado de una app conectada del ecosistema (contrato `AppManifestEntry.estado`).

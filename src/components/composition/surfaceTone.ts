@@ -2,11 +2,12 @@
 import type { ColorSurfaceTone } from '../../public/types'
 import { log } from '../../utils/log'
 
-const SURFACE_TONES = /* @__PURE__ */ new Set<string>(['primary', 'indigo', 'dark', 'danger', 'success', 'info', 'teal'] satisfies ColorSurfaceTone[])
+const SURFACE_TONES = ['primary', 'indigo', 'dark', 'danger', 'success', 'info', 'teal'] as const satisfies ReadonlyArray<ColorSurfaceTone>
 
 export function resolveSurfaceTone(component: string, tone: string | undefined): ColorSurfaceTone {
   if (tone === undefined) return 'primary'
-  if (SURFACE_TONES.has(tone)) return tone as ColorSurfaceTone
+  const known = SURFACE_TONES.find((item) => item === tone)
+  if (known) return known
   log.warn(`${component}: tono de superficie desconocido "${String(tone)}"; se usa "primary".`)
   return 'primary'
 }

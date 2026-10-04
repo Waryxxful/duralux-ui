@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Score, ScoreHero } from '../../../src'
-import { conAncho, TresTemas } from './soporte'
+import { conAncho } from './soporte'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const meta: Meta<typeof Score> = {
   title: 'Componentes/Nuevos/Score',

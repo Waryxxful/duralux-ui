@@ -2,7 +2,7 @@ import { forwardRef, useId } from 'react'
 import { cx } from '../../utils/cx'
 import { isArray, isString } from '../../utils/typeGuards'
 import type { WelcomeBandProps, WelcomeBandStat } from '../../public/types'
-import { formatIndicatorValue, hasIndicatorContent } from '../ui/internal/indicator'
+import { formatIndicatorValue, hasIndicatorContent, headingTag } from '../ui/internal/indicator'
 import { resolveSurfaceTone } from './surfaceTone'
 
 function statKey(stat: WelcomeBandStat, seen: Map<string, number>): string {
@@ -37,7 +37,7 @@ export const WelcomeBand = /* @__PURE__ */ forwardRef<HTMLElement, WelcomeBandPr
 }, ref) {
   const titleId = `gcu-welcome-band-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
   const resolvedTone = resolveSurfaceTone('WelcomeBand', tone)
-  const Heading = `h${headingLevel}` as 'h2'
+  const Heading = headingTag(headingLevel, 'h2')
   const statList = isArray(stats) ? stats : []
   const seen = new Map<string, number>()
 

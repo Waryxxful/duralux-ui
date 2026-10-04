@@ -1,4 +1,4 @@
-import { Children, forwardRef } from 'react'
+import { Children, forwardRef, isValidElement } from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import { isArray } from '../../utils/typeGuards'
@@ -28,7 +28,7 @@ const DashGridRow = /* @__PURE__ */ forwardRef<HTMLDivElement, DashGridRowProps>
       {cells.map((child, index) => {
         const span = spans[index] ?? 12
         // La key del hijo ya es única (Children.toArray la asigna); la celda solo la envuelve.
-        const key = typeof child === 'object' && child !== null && 'key' in child && child.key !== null ? child.key : `cell-${span}`
+        const key = isValidElement(child) && child.key !== null ? child.key : `cell-${span}`
         return (
           <div key={key} className={cx('gcu-dash-grid__cell', 'gcu-container', `gcu-dash-grid__cell--${span}`)}>
             {child}

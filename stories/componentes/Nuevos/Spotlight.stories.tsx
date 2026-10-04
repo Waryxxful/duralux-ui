@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Spotlight } from '../../../src'
 import { Sparkline } from '../../../src/charts/apex'
-import { conAncho, HORAS, NIVEL_SERVICIO, TresTemas } from './soporte'
+import { conAncho, HORAS, NIVEL_SERVICIO } from './soporte'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const meta: Meta<typeof Spotlight> = {
   title: 'Componentes/Nuevos/Spotlight',

@@ -15,10 +15,11 @@ import type { ChartTheme, CompactChartTone } from '../../public/chart-types'
 
 export type CompactMode = 'light' | 'dark' | 'navy'
 
-const TONES = /* @__PURE__ */ new Set<string>(['primary', 'success', 'warning', 'danger', 'info', 'indigo', 'teal', 'secondary'] satisfies CompactChartTone[])
+const TONES = ['primary', 'success', 'warning', 'danger', 'info', 'indigo', 'teal', 'secondary'] as const satisfies ReadonlyArray<CompactChartTone>
 
 /** Colores del tema que necesitan los gráficos compactos, como literales. */
 export function compactColors(mode: CompactMode) {
+  // SAFETY: los tres temas generan las mismas claves de color (tokens.json); se indexan por nombre `status-*`.
   const colors = designTokens.themes[mode].colors as Record<string, string>
   return {
     tone: (tone: CompactChartTone) => colors[`status-${tone}`],
@@ -32,7 +33,8 @@ export function compactColors(mode: CompactMode) {
 
 export function resolveCompactTone(component: string, tone: string | undefined): CompactChartTone {
   if (tone === undefined) return 'primary'
-  if (TONES.has(tone)) return tone as CompactChartTone
+  const known = TONES.find((item) => item === tone)
+  if (known) return known
   log.warn(`${component}: tono desconocido "${String(tone)}"; se usa "primary".`)
   return 'primary'
 }
@@ -63,6 +65,7 @@ export function describeSeries(data: ReadonlyArray<number | null>, format: (valu
  */
 export function useCompactChart(theme: ChartTheme | undefined, forwardedRef: React.ForwardedRef<HTMLElement>) {
   const scopeRef = useRef<HTMLElement | null>(null)
+  // SAFETY: useChartTheme (JS) siempre devuelve 'light' | 'dark' | 'navy'.
   const mode = useChartTheme(theme, scopeRef) as CompactMode
   const setRef = useCallback((node: HTMLElement | null) => {
     scopeRef.current = node

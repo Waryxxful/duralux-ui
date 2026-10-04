@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ProcessSteps } from '../../../src'
-import { conAncho, TresTemas } from './soporte'
+import { conAncho } from './soporte'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const steps = [
   { key: 'recibida', label: 'Recibida', description: '16:40' },

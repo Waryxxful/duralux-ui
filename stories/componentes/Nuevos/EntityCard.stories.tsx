@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Badge, EntityCard, Severity } from '../../../src'
-import { conAncho, Fila, TresTemas } from './soporte'
+import { conAncho } from './soporte'
+import { Fila } from './Fila'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const stats = [
   { label: 'Ejecutivos', value: 24 },

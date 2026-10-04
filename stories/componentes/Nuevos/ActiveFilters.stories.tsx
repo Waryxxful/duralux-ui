@@ -2,7 +2,8 @@ import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ActiveFilters } from '../../../src'
 import type { ActiveFilter } from '../../../src'
-import { conAncho, TresTemas } from './soporte'
+import { conAncho } from './soporte'
+import { TresTemas } from '../Graficos/TresTemas'
 
 const filtros: ActiveFilter[] = [
   { key: 'estado', label: 'Estado', value: 'Vencido' },

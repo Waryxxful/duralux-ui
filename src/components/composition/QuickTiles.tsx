@@ -2,7 +2,7 @@ import { forwardRef, useId } from 'react'
 import { cx } from '../../utils/cx'
 import { isArray, isFunction, isString } from '../../utils/typeGuards'
 import type { QuickTile, QuickTilesProps } from '../../public/types'
-import { hasIndicatorContent, resolveTone } from '../ui/internal/indicator'
+import { hasIndicatorContent, headingTag, resolveTone } from '../ui/internal/indicator'
 import { IndicatorGlyph } from '../ui/internal/IndicatorParts'
 
 function tileKey(tile: QuickTile, seen: Map<string, number>): string {
@@ -52,7 +52,7 @@ export const QuickTiles = /* @__PURE__ */ forwardRef<HTMLElement, QuickTilesProp
   const titleId = `gcu-quick-tiles-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
   const list = isArray(items) ? items : []
   const seen = new Map<string, number>()
-  const Heading = `h${headingLevel}` as 'h3'
+  const Heading = headingTag(headingLevel, 'h3')
   const hasTitle = hasIndicatorContent(title)
 
   return (
