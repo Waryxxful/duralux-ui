@@ -1,0 +1,7 @@
+/* Tooltip (gcu-tooltip): globo breve en portal, posición fija calculada en JS. Solo tokens.
+   Craft «Hover Restraint»: la espera la decide el JS (400–700 ms el primero, vecinos al instante);
+   el CSS solo funde la entrada. Con reduced-motion la duración es 0 por tokens. */
+.gcu-tooltip{position:fixed;top:0;left:0;z-index:var(--gcu-z-tooltip);max-inline-size:min(20rem,calc(100vw - var(--gcu-space-4)));padding:var(--gcu-space-1) var(--gcu-space-2);border:1px solid var(--gcu-border-strong);border-radius:var(--gcu-radius-md);background-color:var(--gcu-text);color:var(--gcu-text-inverse);font-family:var(--gcu-font-sans);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium);text-wrap:pretty;overflow-wrap:break-word;box-shadow:var(--gcu-shadow-3);animation:gcu-tooltip-in var(--gcu-duration-instant) var(--gcu-ease-enter)}
+@keyframes gcu-tooltip-in{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.gcu-tooltip{animation:none}}
+@media (forced-colors:active){.gcu-tooltip{border-color:CanvasText}}

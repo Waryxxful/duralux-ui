@@ -1,0 +1,33 @@
+/* Fieldset, RadioGroup y ChoiceCard: agrupación de campos con tokens. Responden a su contenedor
+   (container queries), no al viewport. */
+.gcu-fieldset{container-type:inline-size;min-inline-size:0;margin:0;padding:0;border:0}
+.gcu-fieldset__legend{float:none;inline-size:auto;margin:0 0 var(--gcu-space-1);padding:0;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-fieldset__description{max-inline-size:68ch;margin:0 0 var(--gcu-space-2);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);text-wrap:pretty}
+.gcu-fieldset__body{display:grid;gap:var(--gcu-space-3);margin-block-start:var(--gcu-space-2)}
+@container (min-width:32rem){.gcu-fieldset__body--2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gcu-fieldset__error{display:flex;align-items:flex-start;gap:var(--gcu-space-1);margin:var(--gcu-space-2) 0 0;color:var(--gcu-danger-text);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-fieldset__error i{line-height:inherit}
+
+/* RadioGroup: vertical por defecto; horizontal solo cuando el grupo mide 28rem o más. */
+.gcu-radio-group .gcu-fieldset__body{gap:0}
+.gcu-radio-group__options{display:flex;flex-direction:column;gap:var(--gcu-space-2)}
+@container (min-width:28rem){.gcu-radio-group__options--horizontal{flex-direction:row;flex-wrap:wrap;column-gap:var(--gcu-space-5)}}
+.gcu-radio-group__option .form-check{margin-bottom:0}
+.gcu-radio-group__description{margin:var(--gcu-space-0-5) 0 0;padding-inline-start:1.5em;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+
+/* ChoiceCard: toda la tarjeta es la etiqueta. Seleccionada = borde y fondo de marca + control
+   marcado (el estado no va solo en color). Hover instantáneo; presión con escala de token. */
+.gcu-choice-card{display:flex;align-items:flex-start;gap:var(--gcu-space-3);margin:0;padding:var(--gcu-space-3) var(--gcu-space-4);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);color:var(--gcu-text);cursor:pointer;transition:transform var(--gcu-duration-instant) var(--gcu-ease-standard)}
+.gcu-choice-card .gcu-choice-card__input{flex:none;margin:var(--gcu-space-0-5) 0 0;float:none}
+.gcu-choice-card__icon{display:inline-flex;flex:none;align-items:center;justify-content:center;inline-size:var(--gcu-control-h-sm);block-size:var(--gcu-control-h-sm);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface-sunken);color:var(--gcu-muted);font-size:var(--gcu-font-size-md)}
+.gcu-choice-card__text{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);min-inline-size:0}
+.gcu-choice-card__title{font-size:var(--gcu-font-size-base);line-height:var(--gcu-line-height-base);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-choice-card__description{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);text-wrap:pretty}
+@media (hover:hover){.gcu-choice-card:hover:not(:has(:disabled)){border-color:var(--gcu-border-strong);background-color:var(--gcu-surface-subtle)}}
+.gcu-choice-card:active:not(:has(:disabled)){transform:scale(var(--gcu-press-scale))}
+.gcu-choice-card:has(.gcu-choice-card__input:checked){border-color:var(--gcu-primary-border);background-color:var(--gcu-primary-soft)}
+.gcu-choice-card:has(.gcu-choice-card__input:checked) .gcu-choice-card__icon{background-color:var(--gcu-surface);color:var(--gcu-primary-text)}
+.gcu-choice-card:has(.gcu-choice-card__input:focus-visible){box-shadow:var(--gcu-focus-ring)}
+.gcu-choice-card:has(.gcu-choice-card__input:disabled){background-color:var(--gcu-surface-subtle);color:var(--gcu-muted);cursor:not-allowed}
+.gcu-choice-card--invalid{border-color:var(--gcu-danger-border)}
+@media (forced-colors:active){.gcu-choice-card:has(.gcu-choice-card__input:checked){outline:2px solid Highlight}}

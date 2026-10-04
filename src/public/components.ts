@@ -49,6 +49,20 @@ import { Sidebar as SidebarRuntime } from '../components/layout/Sidebar'
 import { PageHeader as PageHeaderRuntime } from '../components/layout/PageHeader'
 import { Footer as FooterRuntime } from '../components/layout/Footer'
 export { AvatarGroup } from '../components/ui/AvatarGroup'
+// 2.5 · Lote N1: controles y estructura.
+export { Tooltip } from '../components/ui/Tooltip'
+export { Segmented } from '../components/ui/Segmented'
+export { Accordion } from '../components/ui/Accordion'
+export { Drawer } from '../components/ui/Drawer'
+export { Divider } from '../components/ui/Divider'
+export { Kbd } from '../components/ui/Kbd'
+export { Spinner } from '../components/ui/Spinner'
+export { Skeleton } from '../components/ui/Skeleton'
+export { Tag } from '../components/ui/Tag'
+export { Switch } from '../components/form/Switch'
+export { Fieldset } from '../components/form/Fieldset'
+export { RadioGroup } from '../components/form/RadioGroup'
+export { ChoiceCard } from '../components/form/ChoiceCard'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -218,4 +232,24 @@ export type {
   StatCardProps,
   ThemeProviderProps,
   ApiFetchOptions,
+  TooltipPlacement,
+  TooltipProps,
+  SegmentedValue,
+  SegmentedOption,
+  SegmentedProps,
+  SwitchProps,
+  FieldsetProps,
+  RadioGroupOption,
+  RadioGroupProps,
+  ChoiceCardProps,
+  AccordionItem,
+  AccordionProps,
+  DrawerSize,
+  DrawerProps,
+  DividerProps,
+  KbdProps,
+  SpinnerProps,
+  SkeletonProps,
+  TagTone,
+  TagProps,
 } from './types'

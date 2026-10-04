@@ -32,6 +32,13 @@
 @import "./components/chart-metrics-footer.css";
 @import "./components/chart.css";
 @import "./components/connection-card.css";
+@import "./components/tooltip.css";
+@import "./components/segmented.css";
+@import "./components/switch.css";
+@import "./components/fieldset.css";
+@import "./components/accordion.css";
+@import "./components/drawer.css";
+@import "./components/primitives.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */

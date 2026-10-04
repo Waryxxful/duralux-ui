@@ -45,7 +45,8 @@ export const Skeleton = /* @__PURE__ */ forwardRef<HTMLSpanElement, SkeletonProp
     ...(inlineSize ? { inlineSize } : null),
     ...(blockSize ? { blockSize } : null),
   }
-  const shapeClass = cx('gcu-skeleton', `gcu-skeleton--${variant}`)
+  // `gcu-skeleton--shape` acota los tamaños por defecto a este componente (las apps ya usan .gcu-skeleton).
+  const shapeClass = cx('gcu-skeleton', 'gcu-skeleton--shape', `gcu-skeleton--${variant}`)
 
   if (count === 1) {
     return (

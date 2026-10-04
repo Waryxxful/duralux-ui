@@ -1,0 +1,50 @@
+/* Primitivas del lote N1: Divider, Kbd, Spinner, Skeleton (complementos) y Tag. Solo tokens. */
+
+/* Divider: <hr> nativo; con etiqueta, líneas decorativas a los lados del texto. */
+.gcu-divider{margin:var(--gcu-space-4) 0;border:0;border-top:1px solid var(--gcu-border);opacity:1;color:var(--gcu-border)}
+.gcu-divider--vertical{align-self:stretch;inline-size:0;block-size:auto;min-block-size:1em;margin:0 var(--gcu-space-2);border-top:0;border-inline-start:1px solid var(--gcu-border)}
+.gcu-divider--label{display:flex;align-items:center;gap:var(--gcu-space-3);border-top:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-divider--label::before,.gcu-divider--label::after{content:"";flex:1 1 0;border-top:1px solid var(--gcu-border)}
+.gcu-divider--start::before{flex:0 0 var(--gcu-space-4)}
+.gcu-divider__label{flex:none;max-inline-size:80%;text-align:center}
+
+/* Kbd: tecla con relieve suave; combinaciones con «+» entre teclas. */
+.gcu-kbd{display:inline-flex;align-items:center;justify-content:center;min-inline-size:1.5rem;padding:0 var(--gcu-space-1);border:1px solid var(--gcu-border-strong);border-bottom-width:2px;border-radius:var(--gcu-radius-sm);background-color:var(--gcu-surface-raised);color:var(--gcu-text);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-2xs);line-height:var(--gcu-line-height-2xs);font-weight:var(--gcu-font-weight-medium);white-space:nowrap;box-shadow:none;vertical-align:baseline}
+.gcu-kbd-combo{display:inline-flex;align-items:center;gap:var(--gcu-space-1);padding:0;border:0;background:transparent;color:var(--gcu-muted);font-family:inherit;font-size:var(--gcu-font-size-xs);box-shadow:none}
+.gcu-kbd-combo__plus{color:var(--gcu-muted)}
+
+/* Spinner: anillo spinner-border con tamaño y tono por tokens. */
+.gcu-loading-spinner{display:inline-flex;align-items:center;vertical-align:middle}
+.gcu-spinner-ring{border-width:2px}
+.gcu-spinner-ring--sm{inline-size:var(--gcu-space-4);block-size:var(--gcu-space-4)}
+.gcu-spinner-ring--md{inline-size:var(--gcu-space-6);block-size:var(--gcu-space-6)}
+.gcu-spinner-ring--lg{inline-size:var(--gcu-space-10);block-size:var(--gcu-space-10);border-width:3px}
+.gcu-spinner-ring--primary{color:var(--gcu-primary-text)}
+.gcu-spinner-ring--muted{color:var(--gcu-muted)}
+.gcu-spinner-ring--current{color:currentColor}
+
+/* Skeleton: base en grancrm-ui.css (.gcu-skeleton, --text, --circle); aquí bloque y líneas. */
+.gcu-skeleton--shape.gcu-skeleton--circle{inline-size:var(--gcu-control-h-md);block-size:var(--gcu-control-h-md);flex:none}
+.gcu-skeleton--shape.gcu-skeleton--block{inline-size:100%;block-size:var(--gcu-space-16);border-radius:var(--gcu-radius-md)}
+.gcu-skeleton-lines{display:block}
+.gcu-skeleton-lines>.gcu-skeleton:last-child:not(:first-child){inline-size:60%}
+
+/* Tag: valor removible. Neutro por defecto; tonos suaves -soft/-text/-border (AA por tokens). */
+.gcu-tag{--gcu-tag-bg:var(--gcu-surface-sunken);--gcu-tag-fg:var(--gcu-text);--gcu-tag-border:var(--gcu-border-strong);display:inline-flex;align-items:center;gap:var(--gcu-space-1);max-inline-size:100%;min-block-size:var(--gcu-control-h-xs);padding:0 var(--gcu-space-2);border:1px solid var(--gcu-tag-border);border-radius:var(--gcu-radius-md);background-color:var(--gcu-tag-bg);color:var(--gcu-tag-fg);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium);vertical-align:middle}
+.gcu-tag--sm{min-block-size:calc(var(--gcu-control-h-xs) - var(--gcu-space-1));padding-inline:var(--gcu-space-1);font-size:var(--gcu-font-size-2xs)}
+.gcu-tag--primary{--gcu-tag-bg:var(--gcu-primary-soft);--gcu-tag-fg:var(--gcu-primary-text);--gcu-tag-border:var(--gcu-primary-border)}
+.gcu-tag--success{--gcu-tag-bg:var(--gcu-success-soft);--gcu-tag-fg:var(--gcu-success-text);--gcu-tag-border:var(--gcu-success-border)}
+.gcu-tag--warning{--gcu-tag-bg:var(--gcu-warning-soft);--gcu-tag-fg:var(--gcu-warning-text);--gcu-tag-border:var(--gcu-warning-border)}
+.gcu-tag--danger{--gcu-tag-bg:var(--gcu-danger-soft);--gcu-tag-fg:var(--gcu-danger-text);--gcu-tag-border:var(--gcu-danger-border)}
+.gcu-tag--info{--gcu-tag-bg:var(--gcu-info-soft);--gcu-tag-fg:var(--gcu-info-text);--gcu-tag-border:var(--gcu-info-border)}
+/* Alineación óptica: el lado del botón de quitar lleva menos padding. */
+.gcu-tag--removable{padding-inline-end:var(--gcu-space-0-5)}
+.gcu-tag__text{min-inline-size:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gcu-tag__icon{flex:none}
+.gcu-tag__remove{display:inline-flex;flex:none;align-items:center;justify-content:center;inline-size:calc(var(--gcu-control-h-xs) - var(--gcu-space-2));block-size:calc(var(--gcu-control-h-xs) - var(--gcu-space-2));padding:0;border:0;border-radius:max(0px,calc(var(--gcu-radius-md) - var(--gcu-space-0-5)));background:transparent;color:inherit;cursor:pointer;transition:none}
+@media (hover:hover){.gcu-tag__remove:hover:not(:disabled){background-color:color-mix(in srgb,currentColor 14%,transparent)}}
+.gcu-tag__remove:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-tag__remove:active:not(:disabled){transform:scale(var(--gcu-press-scale))}
+.gcu-tag--disabled{opacity:.6}
+.gcu-tag__remove:disabled{cursor:not-allowed}
+@media (forced-colors:active){.gcu-tag{border-color:CanvasText}.gcu-tag__remove:focus-visible{outline:2px solid currentColor}}
