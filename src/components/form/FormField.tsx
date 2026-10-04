@@ -79,7 +79,7 @@ function appendUnique(values: string[], next: string[]): string[] {
  * - helpText: ayuda bajo el control. `hint` está deprecado.
  * - El ref apunta a la fila contenedora.
  */
-export const FormField = forwardRef<HTMLDivElement, FormFieldProps>(function FormField(
+export const FormField = /* @__PURE__ */ forwardRef<HTMLDivElement, FormFieldProps>(function FormField(
   { label, htmlFor, required, error, helpText, hint, className, children },
   ref,
 ) {

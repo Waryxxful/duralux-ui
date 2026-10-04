@@ -489,15 +489,10 @@ img {
 }
 
 // Filled components are reading surfaces, not color swatches. Give every
-// semantic progress bar the same AA fill/white-foreground contract as solid
+// semantic progress bar (avatares: src/styles/components/avatar.css) the same AA fill/white-foreground contract as solid
 // buttons and badges; this avoids a mixed black/white value treatment.
 @each $name, $fill in $gcu-solid-fills {
 	.progress-bar.bg-#{$name} {
-		background-color: $fill !important;
-		color: map-get($gcu-solid-foregrounds, $name) !important;
-	}
-
-	.gcu-avatar--semantic.gcu-avatar--#{$name} {
 		background-color: $fill !important;
 		color: map-get($gcu-solid-foregrounds, $name) !important;
 	}

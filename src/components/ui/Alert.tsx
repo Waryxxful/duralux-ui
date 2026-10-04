@@ -34,7 +34,7 @@ function hasTitle(value: React.ReactNode): boolean {
  * - announce: anuncia feedback dinámico en una región `status` educada.
  * - dismissible / onDismiss: muestra el botón «Cerrar».
  */
-export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({
+export const Alert = /* @__PURE__ */ forwardRef<HTMLDivElement, AlertProps>(function Alert({
   variant = 'primary',
   soft = false,
   icon,

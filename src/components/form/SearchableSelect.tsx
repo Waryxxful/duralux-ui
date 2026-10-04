@@ -41,7 +41,7 @@ function renderSelected(option, renderValue): string {
  * - Si la opción elegida desaparece de `options`, deja de mostrarse y de enviarse (derivado en render, DX-017).
  * - El ref apunta al `<input role="combobox">`.
  */
-const SearchableSelectBase = forwardRef<HTMLInputElement, SearchableSelectProps>(function SearchableSelect({
+const SearchableSelectBase = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchableSelectProps>(function SearchableSelect({
   options = EMPTY_OPTIONS,
   value,
   defaultValue,
@@ -233,7 +233,9 @@ type SearchableSelectComponent = (<TOption = SelectOptionInput>(
   props: SearchableSelectProps<TOption> & React.RefAttributes<HTMLInputElement>,
 ) => React.ReactElement | null) & { duraluxFormControl?: boolean; displayName?: string }
 
-export const SearchableSelect =
+// Object.assign dentro de una expresión pura: si la app no usa SearchableSelect, el bundler lo descarta.
+export const SearchableSelect: SearchableSelectComponent = /* @__PURE__ */ Object.assign(
   // SAFETY: forwardRef borra el genérico TOption; la implementación solo lee `options` como datos opacos.
-  SearchableSelectBase as SearchableSelectComponent
-SearchableSelect.duraluxFormControl = true
+  SearchableSelectBase as SearchableSelectComponent,
+  { duraluxFormControl: true },
+)

@@ -25,7 +25,11 @@ function compileForm() {
   ).css
 }
 
-const runtimeCss = readFileSync(resolve(repoRoot, 'src/styles/grancrm-ui.css'), 'utf8')
+// CSS público en runtime: grancrm-ui.css más los archivos por componente que importa (2.3).
+const runtimeCss = readFileSync(resolve(repoRoot, 'src/styles/grancrm-ui.css'), 'utf8').replace(
+  /@import "\.\/(components\/[\w-]+\.css)";/g,
+  (_, file: string) => readFileSync(resolve(repoRoot, 'src/styles', file), 'utf8'),
+)
 
 type CssRule = {
   selectors: string[]
@@ -241,11 +245,10 @@ describe('CSS theme contract', () => {
       ).toBeGreaterThanOrEqual(4.5)
     }
 
-    const lightBadge = ruleWithDeclarations(css, '.badge.gcu-badge--light', [
-      'color',
-      'background-color',
-    ])
-    expect(contrastRatio(lightBadge.color, lightBadge['background-color'])).toBeGreaterThanOrEqual(4.5)
+    // Corrección 2.3 (lote L3): el chip `variant="light"` dejó el SCSS con prioridad forzada;
+    // vive en src/styles/components/badge.css con tokens y su AA se verifica por tema en
+    // test/Badge.refined.test.tsx.
+    expect(css).not.toContain('.badge.gcu-badge--light')
   })
 
   // Corrección documentada (lote L2): las alertas suaves dejaron el SCSS con hex/overrides de oscuro y
@@ -253,7 +256,7 @@ describe('CSS theme contract', () => {
   // lo verifica tokens:check. light/dark usan las superficies neutras del tema.
   test('keeps soft alerts on semantic tone tokens in every theme', () => {
     const alertCss = readFileSync(resolve(repoRoot, 'src/styles/components/alert.css'), 'utf8')
-    expect(runtimeCss).toContain('@import "./components/alert.css";')
+    expect(readFileSync(resolve(repoRoot, 'src/styles/grancrm-ui.css'), 'utf8')).toContain('@import "./components/alert.css";')
     for (const variant of alertVariants) {
       expect(alertCss, `alert ${variant}`).toContain(`.alert-soft-${variant}-message`)
       if (variant === 'light' || variant === 'dark') continue
@@ -307,12 +310,7 @@ describe('CSS theme contract', () => {
 
     const solidDanger = ruleWithDeclarations(css, 'html.app-skin-dark .bg-danger', ['background-color'])
     expect(parseColor(solidDanger['background-color'])).toEqual(parseColor(solidFills.danger))
-
-    const lightChip = ruleWithDeclarations(css, 'html.app-skin-dark .badge.gcu-badge--light', [
-      'color',
-      'background-color',
-    ])
-    expect(contrastRatio(lightChip.color, lightChip['background-color'])).toBeGreaterThanOrEqual(4.5)
+    // Corrección 2.3 (lote L3): sin override oscuro del chip light; los tokens cambian por tema.
   })
 
   test('keeps React widget glue readable on solid and soft brand surfaces', () => {
@@ -364,17 +362,17 @@ describe('CSS theme contract', () => {
       expect(contrastRatio(variant === 'light' ? '#283c50' : '#fff', glassSurface), `colored-stat glass ${variant}`).toBeGreaterThanOrEqual(4.5)
     }
 
-    // Avatars and visible progress labels are compact filled reading surfaces,
-    // so their foreground must follow the same solid AA contract as buttons.
+    // Visible progress labels are compact filled reading surfaces, so their foreground
+    // must follow the same solid AA contract as buttons. Corrección 2.3 (lote L3): los
+    // avatares semánticos salieron del SCSS con hex; su AA por tema se verifica en
+    // test/Avatar.refined.test.tsx contra src/styles/components/avatar.css.
     for (const [variant, surface] of Object.entries(coloredStatSurfaces)) {
       const expectedForeground = variant === 'light' ? '#283c50' : '#fff'
       const progress = ruleWithDeclarations(css, `.progress-bar.bg-${variant}`, ['background-color', 'color'])
-      const avatar = ruleWithDeclarations(css, `.gcu-avatar--semantic.gcu-avatar--${variant}`, ['background-color', 'color'])
       expect(parseColor(progress['background-color']), `progress ${variant}`).toEqual(parseColor(surface))
       expect(parseColor(progress.color), `progress foreground ${variant}`).toEqual(parseColor(expectedForeground))
-      expect(parseColor(avatar['background-color']), `avatar ${variant}`).toEqual(parseColor(surface))
-      expect(parseColor(avatar.color), `avatar foreground ${variant}`).toEqual(parseColor(expectedForeground))
     }
+    expect(css).not.toContain('.gcu-avatar--semantic')
 
     for (const [variant, foreground] of Object.entries(softForegrounds)) {
       const soft = ruleWithDeclarations(css, `.gcu-mini-stat .avatar-text.bg-soft-${variant}`, [
@@ -412,7 +410,8 @@ describe('CSS theme contract', () => {
     expect(css).not.toMatch(/bootstrap-icons/i)
     expect(runtimeCss).not.toMatch(/bootstrap-icons/i)
     expect(runtimeCss).toContain('.gcu-colored-stat{color:#fff!important}')
-    expect(runtimeCss).toContain('.progress-bar.bg-success,.gcu-avatar--semantic.gcu-avatar--success{background-color:#108745!important;color:#fff!important}')
+    // Corrección 2.3 (lote L3): el avatar semántico ya no comparte esta regla (ver avatar.css).
+    expect(runtimeCss).toContain('.progress-bar.bg-success{background-color:#108745!important;color:#fff!important}')
     expect(runtimeCss).toContain('.gcu-colored-stat.bg-success{background-color:#108745!important')
     expect(runtimeCss).toContain('color:#283c50!important')
     expect(runtimeCss).toContain('color:var(--gcu-dark)!important')
@@ -422,8 +421,8 @@ describe('CSS theme contract', () => {
   })
 
   test('keeps Tabs focus-visible, named-track, and narrow-container safeguards in the public CSS', () => {
-    expect(runtimeCss).toContain('.gcu-tabs-viewport')
-    expect(runtimeCss).toContain('padding:4px')
+    // La pista deja aire para el anillo de foco (antes se buscaba 'padding:4px' suelto y coincidía con otra regla).
+    expect(runtimeCss).toMatch(/\.gcu-tabs-viewport\{[^}]*padding:var\(--gcu-space-1\)/)
     expect(runtimeCss).toContain('@container (max-width:40rem)')
     expect(runtimeCss).toContain('outline:2px solid currentColor')
     expect(runtimeCss).toContain('@media (forced-colors:active)')

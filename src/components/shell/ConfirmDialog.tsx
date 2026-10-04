@@ -30,7 +30,7 @@ const DEFAULT_CONFIRM_LABEL = 'Confirmar';
  *   («Eliminar campaña»); con la etiqueta genérica se avisa por `log.warn`.
  * - Los botones se apilan (primario arriba) en contenedores angostos (container query).
  */
-export const ConfirmDialog = forwardRef<HTMLDivElement, ConfirmDialogProps>(function ConfirmDialog({
+export const ConfirmDialog = /* @__PURE__ */ forwardRef<HTMLDivElement, ConfirmDialogProps>(function ConfirmDialog({
   open,
   onConfirm,
   onCancel,

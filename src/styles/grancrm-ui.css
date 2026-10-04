@@ -13,6 +13,22 @@
 @import "./components/dropdown.css";
 @import "./components/feedback-state.css";
 @import "./components/card-loader.css";
+@import "./components/icon.css";
+@import "./components/badge.css";
+@import "./components/avatar.css";
+@import "./components/progress.css";
+@import "./components/card.css";
+@import "./components/tabs.css";
+@import "./components/timeline.css";
+@import "./components/activity-feed.css";
+@import "./components/icon.css";
+@import "./components/badge.css";
+@import "./components/avatar.css";
+@import "./components/progress.css";
+@import "./components/card.css";
+@import "./components/tabs.css";
+@import "./components/timeline.css";
+@import "./components/activity-feed.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
@@ -55,16 +71,9 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 .gcu-btn--icon{width:36px;padding:0}.gcu-btn--icon.gcu-btn--sm{width:30px}.gcu-btn--icon.gcu-btn--lg{width:44px}.gcu-btn__icon{flex:none}
 .gcu-spinner{display:inline-block;width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:gcu-spin .65s linear infinite;vertical-align:-.125em}.gcu-spinner--lg{width:36px;height:36px;border-width:3px;color:var(--gcu-primary)}
 @keyframes gcu-spin{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.gcu-spinner{animation:none}.gcu-btn{transition:none}.gcu-btn:active:not(:disabled){transform:none}.gcu-progress__bar{transition:none}.gcu-progress__bar--animated{animation:none}}
+@media (prefers-reduced-motion:reduce){.gcu-spinner{animation:none}.gcu-btn{transition:none}.gcu-btn:active:not(:disabled){transform:none}}
 
-.gcu-badge{--gcu-badge-color:var(--gcu-primary);--gcu-badge-text:#fff;display:inline-flex;align-items:center;padding:4px 8px;border-radius:4px;background:var(--gcu-badge-color);color:var(--gcu-badge-text);font:600 11px/1 var(--gcu-font);white-space:nowrap}
-.gcu-badge--secondary{--gcu-badge-color:var(--gcu-secondary)}.gcu-badge--success{--gcu-badge-color:var(--gcu-success);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--danger{--gcu-badge-color:var(--gcu-danger);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--warning{--gcu-badge-color:var(--gcu-warning);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--info{--gcu-badge-color:var(--gcu-info);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--teal{--gcu-badge-color:var(--gcu-teal);--gcu-badge-text:var(--gcu-darken)}.gcu-badge--indigo{--gcu-badge-color:var(--gcu-indigo)}.gcu-badge--dark{--gcu-badge-color:var(--gcu-dark)}
-.gcu-badge--light{--gcu-badge-color:var(--gcu-light);--gcu-badge-text:var(--gcu-darken);color:var(--gcu-badge-text)}
 
-.gcu-avatar{display:inline-flex;align-items:center;justify-content:center;overflow:hidden;flex:none;font-family:var(--gcu-font)}
-.gcu-avatar img{display:block;width:100%;height:100%;object-fit:cover}.gcu-avatar--circle{border-radius:50%}.gcu-avatar--rounded{border-radius:6px}
-.gcu-avatar--text{background:var(--gcu-primary);color:#fff;font-weight:700}.gcu-avatar--secondary{background:var(--gcu-secondary);color:#fff}.gcu-avatar--success{background:var(--gcu-success);color:var(--gcu-darken)}
-.gcu-avatar--danger{background:var(--gcu-danger);color:var(--gcu-darken)}.gcu-avatar--warning{background:var(--gcu-warning);color:var(--gcu-darken)}.gcu-avatar--info{background:var(--gcu-info);color:var(--gcu-darken)}.gcu-avatar--teal{background:var(--gcu-teal);color:var(--gcu-darken)}.gcu-avatar--indigo{background:var(--gcu-indigo);color:#fff}.gcu-avatar--dark{background:var(--gcu-dark);color:#fff}.gcu-avatar--light{background:var(--gcu-light);color:var(--gcu-darken)}
 
 .gcu-card__header{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;padding:25px;border-bottom:1px solid var(--gcu-border)}
 .gcu-card__title{margin:0;color:var(--gcu-text);font-size:16px;font-weight:700}.gcu-card__actions{margin-left:auto}.gcu-card__body{padding:25px}.gcu-card__body--flush{padding:0}.gcu-card__footer{padding:25px;border-top:1px solid var(--gcu-border)}
@@ -75,9 +84,7 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 .gcu-breadcrumb{margin-bottom:4px}.gcu-breadcrumb__list{display:flex;flex-wrap:wrap;gap:0;margin:0;padding:0;list-style:none;font-size:11px}.gcu-breadcrumb__item+ .gcu-breadcrumb__item:before{content:"/";padding:0 7px;color:var(--gcu-muted)}.gcu-breadcrumb a{color:var(--gcu-primary);text-decoration:none}.gcu-breadcrumb__item--active{color:var(--gcu-muted)}
 
 
-.app-skin-dark .badge.gcu-badge--light,[data-gcu-theme="dark"] .badge.gcu-badge--light{color:#e2e8f0;background-color:var(--gcu-surface-raised);border-color:var(--gcu-border-strong)}
 .gcu-close{display:grid;width:28px;height:28px;padding:0;place-items:center;border:0;border-radius:4px;background:transparent;color:var(--gcu-muted);font:400 22px/1 sans-serif;cursor:pointer}.gcu-close:hover{background:var(--gcu-surface-subtle);color:var(--gcu-text)}
-.gcu-progress{height:7px;overflow:hidden;border-radius:99px;background:var(--gcu-surface-subtle)}.gcu-progress__bar{--gcu-progress-text:#fff;height:100%;background:var(--gcu-primary);color:var(--gcu-progress-text);font-size:9px;text-align:center;transition:width .2s cubic-bezier(.23,1,.32,1)}.gcu-progress__bar--success{background:var(--gcu-success);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--danger{background:var(--gcu-danger);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--warning{background:var(--gcu-warning);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--info{background:var(--gcu-info);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--secondary{background:var(--gcu-secondary)}.gcu-progress__bar--teal{background:var(--gcu-teal);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--indigo{background:var(--gcu-indigo)}.gcu-progress__bar--striped{background-image:linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%);background-size:16px 16px}.gcu-progress__bar--animated{animation:gcu-stripes 1s linear infinite}@keyframes gcu-stripes{to{background-position:16px 0}}
 
 .gcu-table-responsive{width:100%;overflow-x:auto}.gcu-table{width:100%;border-collapse:collapse;color:var(--gcu-text);font-family:var(--gcu-font)}.gcu-table th,.gcu-table td{padding:10px 12px;border-bottom:1px solid var(--gcu-border);vertical-align:middle}.gcu-table__heading{color:var(--gcu-muted);font-size:11px;font-weight:700;letter-spacing:.03em;text-align:left;text-transform:uppercase}.gcu-table__cell{font-size:13px}.gcu-table--striped tbody tr:nth-child(even){background:color-mix(in srgb,var(--gcu-surface-subtle) 65%,transparent)}.gcu-table--hover tbody tr:hover{background:var(--gcu-surface-subtle)}.gcu-table__state{padding:28px!important;color:var(--gcu-muted);font-size:13px;text-align:center}.gcu-table__state .gcu-spinner{margin-right:8px}
 .gcu-pagination{display:flex;margin:0;padding:0;list-style:none;font-family:var(--gcu-font)}.gcu-pagination__button{display:grid;min-width:31px;height:31px;padding:0 8px;place-items:center;border:1px solid var(--gcu-border);border-left:0;background:var(--gcu-surface);color:var(--gcu-muted);font:500 12px var(--gcu-font);cursor:pointer}.gcu-pagination__item:first-child .gcu-pagination__button{border-left:1px solid var(--gcu-border);border-radius:5px 0 0 5px}.gcu-pagination__item:last-child .gcu-pagination__button{border-radius:0 5px 5px 0}.gcu-pagination__item--active .gcu-pagination__button{border-color:var(--gcu-primary);background:var(--gcu-primary);color:#fff}.gcu-pagination__item--disabled .gcu-pagination__button{opacity:.5;cursor:not-allowed}
@@ -347,136 +354,17 @@ html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-
 /* Keep the remote page-header padding after the desktop rule in this file. */
 @media (max-width:575.98px){.page-header{padding:0 20px!important}}
 
-/* ── Tabs (gcu-tabs): underline active, Duralux primary hierarchy ─────────
-   Scoped class so PAGE-STRUCTURE native Bootstrap tabs stay untouched. */
-.gcu-tabs-viewport{
-  container-type:inline-size;
-  max-inline-size:100%;
-  margin:-4px;
-  padding:4px;
-  overflow-x:auto;
-  overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:thin;
-}
-/* The wrapping baseline keeps every control reachable where container units are unavailable. */
-.gcu-tabs.nav-tabs{
-  flex-wrap:wrap;
-  gap:0;
-  inline-size:100%;
-  overflow:visible;
-  border-bottom:1px solid var(--gcu-border,#e5e7eb);
-}
-.gcu-tabs.nav-tabs .nav-item{max-inline-size:100%;margin-bottom:0}
-.gcu-tabs.nav-tabs .nav-link{
-  max-inline-size:100%;
-  margin-bottom:-1px;
-  padding:.65rem 1rem;
-  border:0;
-  border-bottom:2px solid transparent;
-  border-radius:0;
-  background:transparent;
-  color:var(--gcu-muted,#64748b);
-  font-weight:500;
-  overflow-wrap:break-word;
-  text-align:start;
-  white-space:normal;
-  transition:color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1)),border-color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1)),background-color var(--duration-fast,.16s) var(--ease-out,cubic-bezier(.23,1,.32,1))
-}
-/* Modern browsers preserve a compact horizontal track while guaranteeing a next-tab peek. */
-@supports (width:1cqi){
-  .gcu-tabs.nav-tabs{flex-wrap:nowrap;inline-size:max-content;min-inline-size:100%}
-  .gcu-tabs.nav-tabs .nav-item{flex:0 0 auto;max-inline-size:calc(100cqi - 2rem)}
-  @container (max-width:40rem){
-    .gcu-tabs.nav-tabs{flex-wrap:wrap;inline-size:100%}
-    .gcu-tabs.nav-tabs .nav-item{flex:0 1 auto;max-inline-size:100%}
-  }
-}
-
-.gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
-.gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active){
-  color:var(--gcu-primary,#3454d1);
-  background:transparent;
-  border-bottom-color:color-mix(in srgb,var(--gcu-primary,#3454d1) 35%,transparent)
-}
-.gcu-tabs.nav-tabs .nav-link:focus-visible{
-  outline:2px solid currentColor;
-  outline-offset:1px
-}
-.gcu-tabs.nav-tabs .nav-link.active{
-  color:var(--gcu-primary,#3454d1);
-  font-weight:600;
-  background:transparent;
-  border-color:transparent transparent var(--gcu-primary,#3454d1)
-}
-.gcu-tabs.nav-tabs .nav-link:disabled,
-.gcu-tabs.nav-tabs .nav-link[aria-disabled="true"]{
-  color:var(--gcu-muted,#64748b);
-  opacity:.45;
-  cursor:not-allowed;
-  border-bottom-color:transparent
-}
-/* Dark: lift primary for ≥4.5:1 on surface; kill raised-tab fill/white notch */
-html.app-skin-dark .gcu-tabs.nav-tabs,
-.app-skin-dark .gcu-tabs.nav-tabs,
-[data-gcu-theme="dark"] .gcu-tabs.nav-tabs{
-  border-bottom-color:var(--gcu-border,#26272e)
-}
-html.app-skin-dark .gcu-tabs.nav-tabs .nav-link,
-.app-skin-dark .gcu-tabs.nav-tabs .nav-link,
-[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link{
-  color:var(--gcu-muted,#9aa4b2);
-  background:transparent!important;
-  border-color:transparent!important
-}
-html.app-skin-dark .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
-html.app-skin-dark .gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active),
-.app-skin-dark .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
-.app-skin-dark .gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active),
-[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link:hover:not(:disabled):not(.active),
-[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link:focus-visible:not(:disabled):not(.active){
-  color:var(--gcu-primary-text);
-  border-bottom-color:rgba(185,197,255,.35)!important
-}
-html.app-skin-dark .gcu-tabs.nav-tabs .nav-link.active,
-.app-skin-dark .gcu-tabs.nav-tabs .nav-link.active,
-[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link.active{
-  color:var(--gcu-primary-text)!important;
-  font-weight:600;
-  background:transparent!important;
-  border-color:transparent transparent var(--gcu-primary-text)!important
-}
-html.app-skin-dark .gcu-tabs.nav-tabs .nav-link:disabled,
-html.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
-.app-skin-dark .gcu-tabs.nav-tabs .nav-link:disabled,
-.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
-[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link:disabled,
-[data-gcu-theme="dark"] .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"]{
-  color:var(--gcu-muted,#9aa4b2)!important;
-  opacity:.4
-}
-@media (forced-colors:active){
-  .gcu-tabs.nav-tabs .nav-link:focus-visible{outline-color:Highlight}
-}
-@media (prefers-reduced-motion:reduce){
-  .gcu-tabs.nav-tabs .nav-link{transition:none}
-}
-
 /* Final reduced-motion contract for remotes that load only this glue file. */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-  .gcu-btn,.gcu-progress__bar,.gcu-link-button,.gcu-modules-menu,.nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow{transition:none!important}
-  .gcu-spinner,.gcu-progress__bar--animated{animation:none!important}
+  .gcu-btn,.gcu-link-button,.gcu-modules-menu,.nxl-header,.nxl-navigation,.nxl-navigation .nxl-link,.nxl-navigation .nxl-arrow{transition:none!important}
+  .gcu-spinner{animation:none!important}
 }
 
 /* Contextual foreground roles. Raw semantic hues remain fills; these roles are
    for readable text and icons placed on neutral or semantic surfaces. */
 .text-primary{color:var(--gcu-primary-text)!important}.text-success{color:var(--gcu-status-success)!important}.text-danger{color:var(--gcu-status-danger)!important}.text-warning{color:var(--gcu-status-warning)!important}.text-info{color:var(--gcu-status-info)!important}.text-teal{color:var(--gcu-status-teal)!important}.text-indigo{color:var(--gcu-status-indigo)!important}
-.gcu-progress-ring__indicator{stroke:var(--gcu-primary-text,#3454d1)}.gcu-progress-ring__label{color:var(--gcu-primary-text,#3454d1)}
 
-/* Avatar initials own their foreground when the component selected a semantic
-   variant. The legacy `bg` escape hatch intentionally retains caller control. */
-.gcu-avatar--semantic{background-color:var(--gcu-avatar-bg)!important;color:var(--gcu-avatar-fg)!important}.gcu-avatar--primary{--gcu-avatar-bg:var(--gcu-primary);--gcu-avatar-fg:var(--gcu-on-primary)}.gcu-avatar--secondary{--gcu-avatar-bg:var(--gcu-secondary);--gcu-avatar-fg:var(--gcu-on-secondary)}.gcu-avatar--success{--gcu-avatar-bg:var(--gcu-success);--gcu-avatar-fg:var(--gcu-on-success)}.gcu-avatar--danger{--gcu-avatar-bg:var(--gcu-danger);--gcu-avatar-fg:var(--gcu-on-danger)}.gcu-avatar--warning{--gcu-avatar-bg:var(--gcu-warning);--gcu-avatar-fg:var(--gcu-on-warning)}.gcu-avatar--info{--gcu-avatar-bg:var(--gcu-info);--gcu-avatar-fg:var(--gcu-on-info)}.gcu-avatar--teal{--gcu-avatar-bg:var(--gcu-teal);--gcu-avatar-fg:var(--gcu-on-teal)}.gcu-avatar--indigo{--gcu-avatar-bg:var(--gcu-indigo);--gcu-avatar-fg:var(--gcu-on-indigo)}.gcu-avatar--dark{--gcu-avatar-bg:var(--gcu-dark);--gcu-avatar-fg:var(--gcu-on-dark)}.gcu-avatar--darken{--gcu-avatar-bg:var(--gcu-darken);--gcu-avatar-fg:var(--gcu-on-darken)}.gcu-avatar--light{--gcu-avatar-bg:var(--gcu-light);--gcu-avatar-fg:var(--gcu-on-light)}
 
 
 /* Portal-safe message surfaces: ThemeProvider applies its class to <html>,
@@ -523,8 +411,7 @@ html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-
 html.app-skin-dark .gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .avatar-text,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .badge.bg-white,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .badge.bg-opacity-25,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .gcu-colored-stat__glass i,html.app-skin-dark .gcu-colored-stat:not(.bg-light) .avatar-text i{color:#fff!important}
 /* Shared solid-surface contract: readable content is always white over the
    deeper AA fills. Raw `.bg-*` remains available outside component APIs. */
-.progress-bar.bg-primary,.gcu-avatar--semantic.gcu-avatar--primary{background-color:#3454d1!important;color:#fff!important}.progress-bar.bg-secondary,.gcu-avatar--semantic.gcu-avatar--secondary{background-color:#64748b!important;color:#fff!important}.progress-bar.bg-success,.gcu-avatar--semantic.gcu-avatar--success{background-color:#108745!important;color:#fff!important}.progress-bar.bg-danger,.gcu-avatar--semantic.gcu-avatar--danger{background-color:#ce4444!important;color:#fff!important}.progress-bar.bg-warning,.gcu-avatar--semantic.gcu-avatar--warning{background-color:#a36813!important;color:#fff!important}.progress-bar.bg-info,.gcu-avatar--semantic.gcu-avatar--info{background-color:#28837d!important;color:#fff!important}.progress-bar.bg-teal,.gcu-avatar--semantic.gcu-avatar--teal{background-color:#2f808d!important;color:#fff!important}.progress-bar.bg-indigo,.gcu-avatar--semantic.gcu-avatar--indigo{background-color:#6610f2!important;color:#fff!important}.progress-bar.bg-dark,.gcu-avatar--semantic.gcu-avatar--dark{background-color:#283c50!important;color:#fff!important}.progress-bar.bg-darken,.gcu-avatar--semantic.gcu-avatar--darken{background-color:#001327!important;color:#fff!important}.progress-bar.bg-light,.gcu-avatar--semantic.gcu-avatar--light{background-color:#eff0f6!important;color:#283c50!important}
-.gcu-progress__bar{--gcu-progress-fill:#3454d1;--gcu-progress-text:#fff;background-color:var(--gcu-progress-fill)!important}.gcu-progress__bar--secondary{--gcu-progress-fill:#64748b}.gcu-progress__bar--success{--gcu-progress-fill:#108745;--gcu-progress-text:#fff}.gcu-progress__bar--danger{--gcu-progress-fill:#ce4444;--gcu-progress-text:#fff}.gcu-progress__bar--warning{--gcu-progress-fill:#a36813;--gcu-progress-text:#fff}.gcu-progress__bar--info{--gcu-progress-fill:#28837d;--gcu-progress-text:#fff}.gcu-progress__bar--teal{--gcu-progress-fill:#2f808d;--gcu-progress-text:#fff}.gcu-progress__bar--indigo{--gcu-progress-fill:#6610f2}
+.progress-bar.bg-primary{background-color:#3454d1!important;color:#fff!important}.progress-bar.bg-secondary{background-color:#64748b!important;color:#fff!important}.progress-bar.bg-success{background-color:#108745!important;color:#fff!important}.progress-bar.bg-danger{background-color:#ce4444!important;color:#fff!important}.progress-bar.bg-warning{background-color:#a36813!important;color:#fff!important}.progress-bar.bg-info{background-color:#28837d!important;color:#fff!important}.progress-bar.bg-teal{background-color:#2f808d!important;color:#fff!important}.progress-bar.bg-indigo{background-color:#6610f2!important;color:#fff!important}.progress-bar.bg-dark{background-color:#283c50!important;color:#fff!important}.progress-bar.bg-darken{background-color:#001327!important;color:#fff!important}.progress-bar.bg-light{background-color:#eff0f6!important;color:#283c50!important}
 
 /* BEGIN REFINEMENT 2.1 */
 /* Capa de refinamiento global desde tokens (spec §8.3 y §5.1.1). Va al final de este
@@ -541,11 +428,11 @@ h1,h2,h3,.h1,.h2,.h3{letter-spacing:var(--gcu-tracking-tight);text-wrap:balance}
 a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px;border-radius:var(--gcu-radius-xs)}
 
 /* Superficies y elevación. */
-.card{border-color:var(--gcu-border);box-shadow:var(--gcu-shadow-1)}
 .badge{border-radius:var(--gcu-radius-sm)}
 
 /* Hover solo con puntero real: en táctil el hover se queda "pegado". */
 @media (hover:hover){.card.gcu-card--interactive:hover{box-shadow:var(--gcu-shadow-2)}}
+@media (hover:hover){.dropdown-item:hover{background-color:var(--gcu-surface-subtle)}}
 
 /* Carga: skeleton en vez de spinner a pantalla completa. */
 .gcu-skeleton{display:block;min-height:12px;border-radius:var(--gcu-radius-sm);background:linear-gradient(90deg,var(--gcu-surface-sunken) 25%,var(--gcu-surface-subtle) 37%,var(--gcu-surface-sunken) 63%);background-size:400% 100%;animation:gcu-shimmer 1.4s var(--gcu-ease-standard) infinite}
@@ -554,8 +441,6 @@ a:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px
 /* Scroll sin saltos de layout. */
 .gcu-scroll{overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
 
-/* Iconos SVG (Tabler) alineados con el texto como los glifos Feather. */
-.gcu-icon-svg{display:inline-block;flex-shrink:0;vertical-align:-0.125em}
 
 @keyframes gcu-enter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @keyframes gcu-exit{from{opacity:1;transform:none}to{opacity:0;transform:translateY(4px)}}

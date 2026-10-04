@@ -12,7 +12,7 @@ const DEFAULT_MESSAGE = 'Cargando…'
  * - variant="skeleton": `rows` líneas con shimmer (respeta reduced-motion); el mensaje queda
  *   como nombre accesible. Preferible en listas y cards: no hay salto al llegar los datos.
  */
-export const LoadingState = forwardRef<HTMLDivElement, LoadingStateProps>(function LoadingState({
+export const LoadingState = /* @__PURE__ */ forwardRef<HTMLDivElement, LoadingStateProps>(function LoadingState({
   message = DEFAULT_MESSAGE,
   variant = 'spinner',
   rows = 3,

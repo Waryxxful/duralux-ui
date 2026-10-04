@@ -1,23 +1,13 @@
+import { forwardRef, useState } from 'react'
 import { cx } from '../../utils/cx'
 import { isString } from '../../utils/typeGuards'
+import { log } from '../../utils/log'
+import type { AvatarProps } from '../../public/types'
+import { resolveTone } from './internal/tones'
 
-const SEMANTIC_VARIANTS = new Set([
-  'primary', 'secondary', 'success', 'danger', 'warning', 'info',
-  'teal', 'indigo', 'dark', 'darken', 'light',
-])
+type Printable = string | number | bigint | boolean | null | undefined
 
-/**
- * Avatar — imagen o iniciales con tamaños Duralux.
- *
- * Props:
- *   src      — image URL
- *   name     — used to derive initials when no src
- *   size     — "sm" | "md" | "lg" | "xl" (default "md")
- *   rounded  — "circle" | "3" (default "circle") | boolean
- *   variant  — color de fondo semántico para las iniciales (alias legacy: bg="bg-...")
- *   alt      — texto alternativo explícito (default: "", avatar decorativo)
- */
-function safeString(value, fallback = '') {
+function safeString(value: Printable, fallback = ''): string {
   try {
     return String(value)
   } catch {
@@ -25,14 +15,25 @@ function safeString(value, fallback = '') {
   }
 }
 
-function getInitials(name) {
+function getInitials(name: Printable): string {
   const words = safeString(name ?? '').trim().split(/\s+/).filter(Boolean)
   if (words.length === 0) return '?'
   if (words.length === 1) return Array.from(words[0]).slice(0, 2).join('').toUpperCase()
   return words.slice(0, 2).map((word) => Array.from(word)[0]).join('').toUpperCase()
 }
 
-export function Avatar({
+/**
+ * Avatar — imagen o iniciales con tamaños Duralux.
+ *
+ * - src: imagen; si falla al cargar cae en las iniciales (y lo registra con `log.warn`).
+ * - name: de aquí salen las iniciales.
+ * - size: "sm" | "md" | "lg" | "xl" (default "md").
+ * - rounded: "circle" | "3" | boolean (default "circle").
+ * - variant: tono de las iniciales; relleno `--gcu-status-{tono}` con texto inverso (AA en los tres temas).
+ * - bg: escape legado (clase del consumidor, p. ej. "bg-soft-primary"); desactiva el relleno semántico.
+ * - alt / aria-label: sin ellos el avatar es decorativo (aria-hidden).
+ */
+export const Avatar = /* @__PURE__ */ forwardRef<HTMLDivElement, AvatarProps>(function Avatar({
   src = null,
   name = '',
   size = 'md',
@@ -48,10 +49,10 @@ export function Avatar({
   'aria-describedby': ariaDescribedBy = undefined,
   'aria-hidden': ariaHidden = undefined,
   ...rest
-}) {
-  const normalizedVariant = isString(variant) && SEMANTIC_VARIANTS.has(variant) ? variant : 'primary'
+}, ref) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const { tone } = resolveTone(variant, 'Avatar')
   const semanticBackground = bg === null
-  const bgClass = bg ?? `bg-${normalizedVariant}`
   const roundedClass = rounded === true ? 'circle' : rounded === false ? null : rounded
   const imageAlt = alt == null ? '' : safeString(alt)
   const initials = getInitials(name)
@@ -63,16 +64,18 @@ export function Avatar({
   const explicitHidden = ariaHidden === true || ariaHidden === 'true'
   const explicitVisible = ariaHidden === false || ariaHidden === 'false'
   const informative = !explicitHidden && (meaningfulAlt || meaningfulLabel || hasLabelReference || explicitVisible)
+  const showImage = Boolean(src) && failedSrc !== src
 
-  if (src) {
+  if (showImage) {
     return (
       <div
         {...rest}
-        className={cx('avatar-image', `avatar-${size}`, className)}
+        ref={ref}
+        className={cx('avatar-image', `avatar-${size}`, 'gcu-avatar', 'gcu-avatar--image', className)}
         style={style}
       >
         <img
-          src={src}
+          src={src ?? undefined}
           alt={imageAlt}
           className="img-fluid"
           role={roleProp ?? (informative ? 'img' : undefined)}
@@ -81,6 +84,10 @@ export function Avatar({
           aria-describedby={ariaDescribedBy}
           aria-hidden={ariaHidden !== undefined ? ariaHidden : informative ? undefined : true}
           style={{ borderRadius: roundedClass === 'circle' ? '50%' : undefined }}
+          onError={() => {
+            log.warn(`Avatar: no se pudo cargar la imagen "${src}"; se muestran las iniciales.`)
+            setFailedSrc(src)
+          }}
         />
       </div>
     )
@@ -89,13 +96,15 @@ export function Avatar({
   return (
     <div
       {...rest}
+      ref={ref}
       className={cx(
         'avatar-text',
         `avatar-${size}`,
+        'gcu-avatar',
         roundedClass && `rounded-${roundedClass}`,
-        bgClass,
+        bg,
         semanticBackground && 'gcu-avatar--semantic',
-        semanticBackground && `gcu-avatar--${normalizedVariant}`,
+        semanticBackground && `gcu-avatar--${tone}`,
         className,
       )}
       style={style}
@@ -108,4 +117,4 @@ export function Avatar({
       {initials}
     </div>
   )
-}
+})

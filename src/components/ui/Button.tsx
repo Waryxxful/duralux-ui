@@ -52,7 +52,7 @@ function ButtonContent({ loading, startIcon, icon, endIcon, children }: ButtonCo
  * - startIcon / endIcon: nombre Feather o icono Tabler (`<IconX />`).
  * - as / href: se renderiza como ancla u otro elemento; deshabilitado fuera de <button> bloquea eventos.
  */
-export const Button = forwardRef<HTMLElement, ButtonProps>(function Button({
+export const Button = /* @__PURE__ */ forwardRef<HTMLElement, ButtonProps>(function Button({
   variant = 'primary',
   outline = false,
   size = undefined,
@@ -121,7 +121,7 @@ export const Button = forwardRef<HTMLElement, ButtonProps>(function Button({
 })
 
 /** LinkButton — Button renderizado como ancla (<a>). */
-export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(function LinkButton({
+export const LinkButton = /* @__PURE__ */ forwardRef<HTMLAnchorElement, LinkButtonProps>(function LinkButton({
   href,
   variant = 'primary',
   outline = false,
@@ -154,7 +154,7 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(functio
 })
 
 /** IconButton — botón de solo icono; `label` es obligatorio y se usa como aria-label y title. */
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
+export const IconButton = /* @__PURE__ */ forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
   { icon, label, variant, size, outline, className = '', type = 'button', ...rest },
   ref,
 ) {

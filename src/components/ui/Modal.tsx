@@ -340,7 +340,7 @@ function isTopmostModal(entry) {
  *   scrollable — cuerpo con scroll interno (modal-dialog-scrollable)
  *   footer     — JSX for footer (usually buttons)
  */
-export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal({
+export const Modal = /* @__PURE__ */ forwardRef<HTMLDivElement, ModalProps>(function Modal({
   open = false,
   onClose,
   closeOnEscape = true,

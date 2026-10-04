@@ -1,6 +1,6 @@
 import type * as React from 'react'
-import { Avatar as AvatarRuntime } from '../components/ui/Avatar'
-import { Badge as BadgeRuntime } from '../components/ui/Badge'
+export { Avatar } from '../components/ui/Avatar'
+export { Badge } from '../components/ui/Badge'
 // Componentes ya en TSX: se exportan tal cual (tipos y ref reales).
 export { Button, IconButton, LinkButton } from '../components/ui/Button'
 export { Checkbox } from '../components/form/Checkbox'
@@ -19,17 +19,17 @@ export { CardLoader } from '../components/ui/CardLoader'
 export { LoadingState } from '../components/feedback/LoadingState'
 export { ErrorState } from '../components/feedback/ErrorState'
 export { EmptyState } from '../components/feedback/EmptyState'
-import { Icon as IconRuntime } from '../components/ui/Icon'
-import { Card as CardRuntime } from '../components/ui/Card'
+export { Icon } from '../components/ui/Icon'
+export { Card } from '../components/ui/Card'
 import { StatsCard as StatsCardRuntime } from '../components/ui/StatsCard'
 import { MiniStatCard as MiniStatCardRuntime } from '../components/ui/MiniStatCard'
 import { ColoredStatCard as ColoredStatCardRuntime } from '../components/ui/ColoredStatCard'
 import { ChartMetricsFooter as ChartMetricsFooterRuntime } from '../components/ui/ChartMetricsFooter'
 import { QuickLinkGrid as QuickLinkGridRuntime } from '../components/ui/QuickLinkGrid'
-import { Timeline as TimelineRuntime } from '../components/ui/Timeline'
-import { ProgressRing as ProgressRingRuntime } from '../components/ui/ProgressRing'
-import { Progress as ProgressRuntime } from '../components/ui/Progress'
-import { Tabs as TabsRuntime } from '../components/ui/Tabs'
+export { Timeline } from '../components/ui/Timeline'
+export { ProgressRing } from '../components/ui/ProgressRing'
+export { Progress } from '../components/ui/Progress'
+export { Tabs } from '../components/ui/Tabs'
 import { DataTable as DataTableRuntime } from '../components/data/DataTable'
 import { Table as TableRuntime } from '../components/data/Table'
 import { Pagination as PaginationRuntime } from '../components/data/Pagination'
@@ -46,7 +46,7 @@ import { Header as HeaderRuntime } from '../components/layout/Header'
 import { Sidebar as SidebarRuntime } from '../components/layout/Sidebar'
 import { PageHeader as PageHeaderRuntime } from '../components/layout/PageHeader'
 import { Footer as FooterRuntime } from '../components/layout/Footer'
-import { AvatarGroup as AvatarGroupRuntime } from '../components/ui/AvatarGroup'
+export { AvatarGroup } from '../components/ui/AvatarGroup'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -122,12 +122,6 @@ function asGenericComponent<F>(runtime: React.ComponentType<any>): F {
   return runtime as F
 }
 
-export const Icon = asComponent<IconProps>(IconRuntime)
-export const Badge = asComponent<BadgeProps>(BadgeRuntime)
-export const Card = asComponent<CardProps>(CardRuntime)
-export const Avatar = asComponent<AvatarProps>(AvatarRuntime)
-export const Progress = asComponent<ProgressProps>(ProgressRuntime)
-export const ProgressRing = asComponent<ProgressRingProps>(ProgressRingRuntime)
 export const Pagination = asComponent<PaginationProps>(PaginationRuntime)
 export const MessageBubble = asComponent<MessageBubbleProps>(MessageBubbleRuntime)
 export const ChatSidebar = asGenericComponent<<TContact extends import('./types').ChatContact = import('./types').ChatContact>(props: ChatSidebarProps<TContact>) => React.ReactElement>(ChatSidebarRuntime)
@@ -140,8 +134,6 @@ export const MiniStatCard = asComponent<MiniStatCardProps>(MiniStatCardRuntime)
 export const ColoredStatCard = asComponent<ColoredStatCardProps>(ColoredStatCardRuntime)
 export const ChartMetricsFooter = asComponent<ChartMetricsFooterProps>(ChartMetricsFooterRuntime)
 export const QuickLinkGrid = asComponent<QuickLinkGridProps>(QuickLinkGridRuntime)
-export const Timeline = asComponent<TimelineProps>(TimelineRuntime)
-export const Tabs = asGenericComponent<<K extends string | number = string | number>(props: TabsProps<K>) => React.ReactElement>(TabsRuntime)
 export const DataTable = asGenericComponent<<T extends object = Record<string, string | number | boolean | null | undefined>>(props: DataTableProps<T>) => React.ReactElement>(DataTableRuntime)
 export const Table = asGenericComponent<<T = unknown>(props: TableProps<T>) => React.ReactElement>(TableRuntime)
 export const ResponsiveTable = asGenericComponent<<T = unknown>(props: ResponsiveTableProps<T>) => React.ReactElement>(ResponsiveTableRuntime)
@@ -152,7 +144,6 @@ export const Header = asComponent<HeaderProps>(HeaderRuntime)
 export const Sidebar = asComponent<SidebarProps>(SidebarRuntime)
 export const PageHeader = asComponent<PageHeaderProps>(PageHeaderRuntime)
 export const Footer = asComponent<FooterProps>(FooterRuntime)
-export const AvatarGroup = asComponent<AvatarGroupProps>(AvatarGroupRuntime)
 
 export type {
   ControlSize,

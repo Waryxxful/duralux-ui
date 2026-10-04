@@ -258,11 +258,6 @@ $gcu-dark-palettes: (
 				}
 			}
 		}
-		.badge.gcu-badge--light {
-			color: $gray-200 !important;
-			background-color: $dark-theme-color-hover !important;
-			border-color: $dark-theme-color-border !important;
-		}
 		.daterangepicker,
 		.apexcharts-tooltip {
 			box-shadow: 0 4px 24px 0 rgb(4 0 40 / 80%);
@@ -850,11 +845,6 @@ $gcu-dark-palettes: (
 			}
 		}
 
-		/* <---------------! Card !---------------> */
-		.card {
-			box-shadow: 0 0 20px rgb(14 32 56 / 30%);
-		}
-
 		/* <---------------! Breadcrumb !---------------> */
 		.page-header .breadcrumb {
 			color: $dark-theme-color;
@@ -868,11 +858,6 @@ $gcu-dark-palettes: (
 			.breadcrumb-item:last-child {
 				color: $dark-theme-color;
 			}
-		}
-
-		/* <---------------! Progress !---------------> */
-		.progress {
-			--bs-progress-bg: rgba(255, 255, 255, 0.1);
 		}
 
 		/* <---------------! Table !---------------> */
@@ -917,8 +902,9 @@ $gcu-dark-palettes: (
 		}
 
 		/* <---------------! Navs & Tabs !---------------> */
-		/* Baseline uses dark border (not white) so raised tabs don't notch harshly. */
-		.nav-tabs {
+		/* Baseline uses dark border (not white) so raised tabs don't notch harshly.
+		   Tabs del design system (.gcu-tabs) se resuelven con tokens en components/tabs.css. */
+		.nav-tabs:not(.gcu-tabs) {
 			border-bottom-color: $dark-theme-color-border;
 
 			.nav-link {
@@ -964,7 +950,7 @@ $gcu-dark-palettes: (
 			}
 		}
 		.nav-item {
-			.nav-link {
+			.nav-link:not(.gcu-tabs__tab) {
 				color: $dark-theme-color;
 
 				&.active,

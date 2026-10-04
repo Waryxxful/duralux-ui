@@ -1,0 +1,21 @@
+/* Tabs (gcu-tabs): subrayado activo con tokens. Clase propia para no tocar las .nav-tabs
+   nativas de PAGE-STRUCTURE. Hover instantáneo; solo el indicador se anima (transform). */
+.gcu-tabs-viewport{container-type:inline-size;max-inline-size:100%;margin:calc(var(--gcu-space-1) * -1);padding:var(--gcu-space-1);overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+/* Base que envuelve: todas las pestañas quedan alcanzables aunque no haya unidades de contenedor. */
+.gcu-tabs.nav-tabs{flex-wrap:wrap;gap:0;inline-size:100%;overflow:visible;border-bottom:1px solid var(--gcu-border)}
+.gcu-tabs.nav-tabs .nav-item{max-inline-size:100%;margin-bottom:0}
+.gcu-tabs .gcu-tabs__tab{position:relative;max-inline-size:100%;margin-bottom:-1px;padding:var(--gcu-space-2) var(--gcu-space-4);border:0;border-radius:var(--gcu-radius-sm) var(--gcu-radius-sm) 0 0;background:transparent;color:var(--gcu-muted);font-weight:var(--gcu-font-weight-medium);overflow-wrap:break-word;text-align:start;white-space:normal;transition:none}
+.gcu-tabs__tab::after{content:"";position:absolute;inset-inline:var(--gcu-space-2);bottom:0;height:2px;border-radius:var(--gcu-radius-full);background-color:var(--gcu-primary-text);transform:scaleX(0);transition:transform var(--gcu-duration-base) var(--gcu-ease-standard)}
+@media (hover:hover){.gcu-tabs .gcu-tabs__tab:hover:not(:disabled):not(.active){color:var(--gcu-text);background-color:var(--gcu-surface-subtle)}}
+.gcu-tabs .gcu-tabs__tab.active{color:var(--gcu-primary-text);font-weight:var(--gcu-font-weight-semibold);background-color:transparent}
+.gcu-tabs__tab.active::after{transform:scaleX(1)}
+.gcu-tabs .gcu-tabs__tab:disabled,.gcu-tabs .gcu-tabs__tab[aria-disabled="true"]{color:var(--gcu-text-subtle);cursor:not-allowed;background-color:transparent}
+.gcu-tabs .gcu-tabs__tab:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+/* Pista horizontal con scroll en contenedores angostos; con unidades de contenedor, cada pestaña
+   deja asomar la siguiente. Los navegadores sin ellas envuelven (base de arriba). */
+@supports (width:1cqi){
+  .gcu-tabs.nav-tabs{flex-wrap:nowrap;inline-size:max-content;min-inline-size:100%}
+  .gcu-tabs.nav-tabs .nav-item{flex:0 0 auto;max-inline-size:calc(100cqi - 2rem)}
+  @container (max-width:40rem){.gcu-tabs .gcu-tabs__tab{padding-inline:var(--gcu-space-3)}}
+}
+@media (forced-colors:active){.gcu-tabs .gcu-tabs__tab:focus-visible{outline:2px solid currentColor;outline-color:Highlight}.gcu-tabs__tab::after{background-color:Highlight}}

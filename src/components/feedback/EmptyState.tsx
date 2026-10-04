@@ -12,7 +12,7 @@ import type { EmptyStateProps } from '../../public/types'
  * - compact: menos aire vertical (dentro de cards o celdas de tabla).
  * Las acciones se apilan en contenedores angostos y van en fila desde 28rem (container query).
  */
-export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(function EmptyState({
+export const EmptyState = /* @__PURE__ */ forwardRef<HTMLDivElement, EmptyStateProps>(function EmptyState({
   icon = 'inbox',
   title = 'No hay elementos todavía',
   message = 'Cuando haya elementos disponibles, aparecerán aquí.',

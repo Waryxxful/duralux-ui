@@ -152,7 +152,7 @@ function releaseViewport(element: HTMLElement) {
   viewportStates.delete(ownerDocument);
 }
 
-export const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(
+export const Toast = /* @__PURE__ */ forwardRef<HTMLDivElement, ToastProps>(function Toast(
   { variant, title, description, show, onClose, autoHideMs, className },
   ref,
 ) {

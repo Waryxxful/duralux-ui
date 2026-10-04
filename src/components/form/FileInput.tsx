@@ -13,7 +13,7 @@ import { sizeClass } from './internal/fieldState'
  * - controlSize: alturas 32 / 36 / 40 px.
  * - El ref apunta al `<input>` nativo.
  */
-export const FileInput = forwardRef<HTMLInputElement, FileInputProps>(function FileInput({
+export const FileInput = /* @__PURE__ */ forwardRef<HTMLInputElement, FileInputProps>(function FileInput({
   label,
   error,
   helpText,

@@ -11,7 +11,7 @@ import { ariaInvalidFor, resolveInvalid } from './internal/fieldState'
  * - error: borde y label en danger del tema. `invalid` está deprecado.
  * - El ref apunta al `<input type="radio">` nativo.
  */
-export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio({
+export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(function Radio({
   label,
   invalid,
   error,

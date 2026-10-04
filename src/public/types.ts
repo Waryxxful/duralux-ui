@@ -65,7 +65,11 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLElement> {
   variant?: SemanticTone
   soft?: boolean
   pill?: boolean
+  /** Punto de estado decorativo antes del texto. */
+  dot?: boolean
   as?: React.ElementType
+  /** Tipo nativo cuando `as="button"`. */
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -78,8 +82,15 @@ export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 't
   noPad?: boolean
   stretch?: boolean
   bodyClassName?: string
+  /** @deprecated usa `ref`. */
   elementRef?: React.Ref<HTMLDivElement>
+  /** Hover con elevación 2 y cursor de acción. */
+  interactive?: boolean
   loading?: boolean
+  /** `overlay` (default, CardLoader) o `skeleton` (filas skeleton en el cuerpo). */
+  loadingVariant?: 'overlay' | 'skeleton'
+  /** Filas del skeleton (1–12, default 3). */
+  skeletonRows?: number
   loadingLabel?: React.ReactNode
   onRefresh?: () => void
   onRemove?: () => void
@@ -675,19 +686,56 @@ export interface QuickLinkGridProps {
   columns?: number
 }
 
+/** Fecha de un evento: Date, ISO o epoch (ms). */
+export type EventDate = Date | string | number
+
 export interface TimelineItem {
   id?: string | number
   title: React.ReactNode
   description?: React.ReactNode
+  /** Fecha del evento: tiempo relativo visible y fecha completa (dd-mm-aaaa HH:mm) en `title`. */
+  date?: EventDate
+  /** Texto libre legado (se muestra tal cual si no hay `date`). */
   time?: React.ReactNode
+  /** `dateTime` del `<time>` cuando se usa `time`. */
+  dateTime?: string
   icon?: string
+  /** Tono del marcador. */
+  variant?: SemanticTone
+  /** @deprecated usa `variant`. */
   iconBg?: string
+  /** Alias legado de `variant`. */
   color?: string
   user?: { name?: React.ReactNode; avatar?: string }
 }
-
 export interface TimelineProps {
   items?: ReadonlyArray<TimelineItem>
+  className?: string
+  'aria-label'?: string
+  /** Instante de referencia del tiempo relativo (por defecto, ahora). */
+  now?: Date
+}
+
+export type ActivityFeedVariant = 'primary' | 'success' | 'danger' | 'warning' | 'info'
+
+export interface ActivityFeedItem {
+  key: string | number
+  variant: ActivityFeedVariant
+  title: React.ReactNode
+  description?: React.ReactNode
+  /** Fecha del evento: tiempo relativo visible y fecha completa en `title`. */
+  date?: EventDate
+  /** Texto libre legado (se muestra tal cual si no hay `date`). */
+  time?: React.ReactNode
+  /** Slot final (badges, acciones, avatares agrupados, etc.) */
+  extra?: React.ReactNode
+}
+
+export interface ActivityFeedProps {
+  items: ActivityFeedItem[]
+  className?: string
+  /** Instante de referencia del tiempo relativo (por defecto, ahora). */
+  now?: Date
 }
 
 export interface ChatContact {

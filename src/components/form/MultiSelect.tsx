@@ -73,7 +73,7 @@ function normalizeMax(max: number | string | null | undefined): number {
  * - Valores que ya no están en `options` o exceden `max` se descartan en render (DX-017), sin callback.
  * - El ref apunta al `<input role="combobox">`.
  */
-const MultiSelectBase = forwardRef<HTMLInputElement, MultiSelectProps>(function MultiSelect({
+const MultiSelectBase = /* @__PURE__ */ forwardRef<HTMLInputElement, MultiSelectProps>(function MultiSelect({
   options = EMPTY_OPTIONS,
   value,
   defaultValue = EMPTY_VALUES,
@@ -331,7 +331,9 @@ type MultiSelectComponent = (<TOption = SelectOptionInput>(
   props: MultiSelectProps<TOption> & React.RefAttributes<HTMLInputElement>,
 ) => React.ReactElement | null) & { duraluxFormControl?: boolean; displayName?: string }
 
-export const MultiSelect =
+// Object.assign dentro de una expresión pura: si la app no usa MultiSelect, el bundler lo descarta.
+export const MultiSelect: MultiSelectComponent = /* @__PURE__ */ Object.assign(
   // SAFETY: forwardRef borra el genérico TOption; la implementación solo lee `options` como datos opacos.
-  MultiSelectBase as MultiSelectComponent
-MultiSelect.duraluxFormControl = true
+  MultiSelectBase as MultiSelectComponent,
+  { duraluxFormControl: true },
+)

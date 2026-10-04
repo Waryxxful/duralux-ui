@@ -67,7 +67,7 @@ const DropdownContext = createContext<DropdownContextValue | null>(null);
  * Dropdown — menú desplegable APG (botón + menú): Esc cierra y devuelve el foco, clic fuera cierra.
  * Estilo en src/styles/components/dropdown.css (elevación 3, radio lg; entra en 100 ms, ítems sin transición).
  */
-export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropdown({
+export const Dropdown = /* @__PURE__ */ forwardRef<HTMLDivElement, DropdownProps>(function Dropdown({
   align = 'start',
   children,
   className = 'dropdown',
@@ -192,7 +192,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropd
   );
 });
 
-export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function DropdownMenu({
+export const DropdownMenu = /* @__PURE__ */ forwardRef<HTMLElement, DropdownMenuProps>(function DropdownMenu({
   as: Component = 'div',
   children,
   className,

@@ -11,7 +11,7 @@ import { ariaInvalidFor, mergeRefs, resolveInvalid } from './internal/fieldState
  * - error: borde y label en danger del tema. `invalid` está deprecado.
  * - El ref apunta al `<input type="checkbox">` nativo.
  */
-export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox({
+export const Checkbox = /* @__PURE__ */ forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox({
   label,
   invalid,
   error,

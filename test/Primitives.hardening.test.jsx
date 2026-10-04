@@ -40,7 +40,8 @@ test('ProgressRing uses the primary CSS token and keeps absurd geometry finite',
   const track = ring.querySelector('circle')
   const indicator = ring.querySelector('.gcu-progress-ring__indicator')
 
-  expect(indicator).toHaveAttribute('stroke', 'var(--gcu-primary-text, #3454d1)')
+  // Corrección 2.3 (lote L3): token sin fallback hex (deuda CSS de ProgressRing).
+  expect(indicator).toHaveAttribute('stroke', 'var(--gcu-primary-text)')
   expect(Number.isFinite(Number(svg.getAttribute('width')))).toBe(true)
   expect(Number.isFinite(Number(svg.getAttribute('height')))).toBe(true)
   expect(Number(track.getAttribute('r'))).toBeGreaterThan(0)
@@ -308,8 +309,9 @@ test('Tabs fall back to an enabled tab for controlled and uncontrolled selection
   )
 
   expect(screen.getByRole('tab', { name: 'Enabled' })).toHaveAttribute('aria-selected', 'true')
-  await waitFor(() => expect(controlledOnChange).toHaveBeenCalledWith('enabled'))
-  expect(controlledOnChange).toHaveBeenCalledOnce()
+  // Corrección 2.3 (DX-016): la caída a una pestaña habilitada se deriva en render; no se notifica al padre.
+  await Promise.resolve()
+  expect(controlledOnChange).not.toHaveBeenCalled()
 
   rerender(
     <Tabs

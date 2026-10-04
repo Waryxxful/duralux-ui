@@ -13,7 +13,7 @@ import { ariaInvalidFor, resolveInvalid, sizeClass } from './internal/fieldState
  * - icon / prefix: alias deprecados de startAddon.
  * - El ref apunta siempre al `<input>` nativo, también cuando hay addons.
  */
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input({
+export const Input = /* @__PURE__ */ forwardRef<HTMLInputElement, InputProps>(function Input({
   icon,
   prefix,
   startAddon,

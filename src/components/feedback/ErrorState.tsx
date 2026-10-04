@@ -32,7 +32,7 @@ function normalizeMessage(value: ErrorInput): React.ReactNode {
  * - onRetry / retryLabel / retrying: reintento con su etiqueta y estado de carga.
  * - action: acción alternativa (p. ej. «Contactar soporte»).
  */
-export const ErrorState = forwardRef<HTMLDivElement, ErrorStateProps>(function ErrorState({
+export const ErrorState = /* @__PURE__ */ forwardRef<HTMLDivElement, ErrorStateProps>(function ErrorState({
   title = 'Ocurrió un error',
   message = 'No se pudo cargar la información. Intenta nuevamente.',
   error = undefined,

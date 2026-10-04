@@ -1,0 +1,18 @@
+/* Progress y ProgressRing: relleno status con texto inverso (AA verificado en test),
+   pista neutra por tema y cifras tabulares en el valor visible. */
+.progress.gcu-progress{background-color:var(--gcu-border);border-radius:var(--gcu-radius-full)}
+.progress-bar.gcu-progress__bar{background-color:var(--gcu-progress-fill);color:var(--gcu-text-inverse);font-size:var(--gcu-font-size-2xs);font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums}
+.gcu-progress__bar--primary{--gcu-progress-fill:var(--gcu-status-primary)}
+.gcu-progress__bar--secondary{--gcu-progress-fill:var(--gcu-status-secondary)}
+.gcu-progress__bar--success{--gcu-progress-fill:var(--gcu-status-success)}
+.gcu-progress__bar--danger{--gcu-progress-fill:var(--gcu-status-danger)}
+.gcu-progress__bar--warning{--gcu-progress-fill:var(--gcu-status-warning)}
+.gcu-progress__bar--info{--gcu-progress-fill:var(--gcu-status-info)}
+.gcu-progress__bar--teal{--gcu-progress-fill:var(--gcu-status-teal)}
+.gcu-progress__bar--indigo{--gcu-progress-fill:var(--gcu-status-indigo)}
+.gcu-progress__bar--dark{--gcu-progress-fill:var(--gcu-text)}
+.gcu-progress__bar--light{--gcu-progress-fill:var(--gcu-border-strong)}
+.gcu-progress-ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.gcu-progress-ring__svg{transform:rotate(-90deg)}
+.gcu-progress-ring__track{stroke:var(--gcu-border)}
+.gcu-progress-ring__label{position:absolute;font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums;line-height:1}

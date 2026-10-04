@@ -86,7 +86,7 @@ function normalizeNativeOptions(options: SelectProps['options']): NativeOption[]
  * - error: borde y `aria-invalid`. `invalid` está deprecado.
  * - controlSize: alturas 32 / 36 / 40 px. El atributo nativo `size` (filas visibles) se conserva.
  */
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select({
+export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>(function Select({
   options = [],
   invalid,
   error,

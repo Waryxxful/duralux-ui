@@ -11,7 +11,7 @@ import { ariaInvalidFor, resolveInvalid, sizeClass } from './internal/fieldState
  * - controlSize: tipografía y relleno de los tamaños sm / lg.
  * - El ref apunta al `<textarea>` nativo, también con ícono.
  */
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({
+export const Textarea = /* @__PURE__ */ forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea({
   icon,
   invalid,
   error,

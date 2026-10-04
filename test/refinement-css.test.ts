@@ -23,13 +23,16 @@ describe('refinamiento visual 2.1 (grancrm-ui.css)', () => {
 
 
   test('superficies: cards con borde fino y elevación 1; modales xl con elevación 4', () => {
-    expect(rule('.card')).toContain('box-shadow:var(--gcu-shadow-1)')
-    expect(rule('.card')).toContain('border-color:var(--gcu-border)')
     // Corrección documentada (lote L2): modal y dropdown pasaron a su CSS propio (src/styles/components/).
     const modalCss = readFileSync(resolve(process.cwd(), 'src/styles/components/modal.css'), 'utf8')
     const dropdownCss = readFileSync(resolve(process.cwd(), 'src/styles/components/dropdown.css'), 'utf8')
     expect(modalCss).toMatch(/\.modal-content\{[^}]*border-radius:var\(--gcu-radius-xl\)[^}]*var\(--gcu-shadow-4\)/)
     expect(dropdownCss).toMatch(/\.dropdown-menu\{[^}]*var\(--gcu-shadow-3\)/)
+    // Corrección 2.3 (lote L3): la superficie de .card vive en components/card.css (importado por grancrm-ui.css).
+    const cardCss = readFileSync(resolve(process.cwd(), 'src/styles/components/card.css'), 'utf8')
+    expect(css).toContain('@import "./components/card.css";')
+    expect(cardCss).toMatch(/(^|\n)\.card\{[^}]*box-shadow:var\(--gcu-shadow-1\)/)
+    expect(cardCss).toMatch(/(^|\n)\.card\{[^}]*border-color:var\(--gcu-border\)/)
   })
 
   test('entrada animada de capas flotantes con keyframes propios', () => {

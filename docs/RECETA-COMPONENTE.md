@@ -18,6 +18,11 @@ Cómo se refina o se crea un componente de `@duralux/ui`. El ejemplar es **Butto
 10. **Verificar:** `npm test`, `npm run build` (contrato, tokens AA, presupuesto CSS, bundle, paquete, tipos, react-doctor) y `node scripts/audit/capture.mjs --storybook http://localhost:6006 --out <dir> --themes light,dark,navy`.
 11. **Cerrar defectos** que el componente tenía en `docs/auditoria/DEFECTOS.md`.
 
+## Tree-shaking
+
+- Toda llamada a nivel de módulo va anotada como pura: `export const X = /* @__PURE__ */ forwardRef<…>(…)`. Sin la anotación el bundler no puede descartar el componente y una app que importa solo Button arrastra toda la librería (el `gate:bundle` lo detecta: límite 20 KB gzip).
+- Nada de `X.algo = …` suelto a nivel de módulo: usa `/* @__PURE__ */ Object.assign(XBase, { algo })`.
+
 ## Prohibido
 
 - `npx vitest` (el hook lo reescribe a pnpm y rompe `node_modules`): usa `npm test -- <archivo>`.

@@ -15,7 +15,7 @@ function labelText(value: CardLoaderProps['label'], fallback = 'Cargando'): stri
  * Es el único spinner del overlay. Se usa directo o vía `Card loading`.
  * Estilo en src/styles/components/card-loader.css (superficie del tema, sin override oscuro).
  */
-export const CardLoader = forwardRef<HTMLDivElement, CardLoaderProps>(function CardLoader({
+export const CardLoader = /* @__PURE__ */ forwardRef<HTMLDivElement, CardLoaderProps>(function CardLoader({
   loading = true,
   visible = undefined,
   label = 'Cargando',

@@ -42,7 +42,7 @@ function mergeDescriptions(...values: Array<string | undefined>): string | undef
  * Con varios hijos no adivina a quién describe el label: usa el render-prop.
  * El ref apunta al contenedor `.input-group`.
  */
-export const InputGroup: InputGroupComponent = forwardRef<HTMLDivElement, InputGroupProps>(function InputGroup({
+const InputGroupBase = /* @__PURE__ */ forwardRef<HTMLDivElement, InputGroupProps>(function InputGroup({
   prepend,
   append,
   controlSize,
@@ -97,4 +97,7 @@ export const InputGroup: InputGroupComponent = forwardRef<HTMLDivElement, InputG
 
 // FormField pregunta a este marcador si la instancia tiene un único control destino.
 // Un grupo con varios controles se asocia de forma explícita.
-InputGroup.duraluxFormControl = ({ children }: InputGroupProps) => canForwardFieldSemantics(children)
+// Object.assign dentro de una expresión pura: si la app no usa InputGroup, el bundler lo descarta.
+export const InputGroup: InputGroupComponent = /* @__PURE__ */ Object.assign(InputGroupBase, {
+  duraluxFormControl: ({ children }: InputGroupProps) => canForwardFieldSemantics(children),
+})
