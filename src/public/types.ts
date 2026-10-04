@@ -1337,7 +1337,7 @@ export interface ActiveFiltersProps extends Omit<React.HTMLAttributes<HTMLDivEle
   resultCount?: number
 }
 
-export interface BulkBarProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
+export interface BulkBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Cantidad seleccionada; con 0 la barra no se muestra. */
   count: number
   /** Acciones sobre la selección (botones). */

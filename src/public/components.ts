@@ -57,6 +57,9 @@ export { Person } from '../components/ui/Person'
 export { DescriptionList } from '../components/data/DescriptionList'
 export { KpiCard } from '../components/data/KpiCard'
 export { StatGroup } from '../components/data/StatGroup'
+export { List } from '../components/data/List'
+export { BulkBar } from '../components/data/BulkBar'
+export { ActiveFilters } from '../components/data/ActiveFilters'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -239,4 +242,9 @@ export type {
   KpiCardProps,
   StatGroupItem,
   StatGroupProps,
+  ListItem,
+  ListProps,
+  BulkBarProps,
+  ActiveFilter,
+  ActiveFiltersProps,
 } from './types'

@@ -1,0 +1,14 @@
+/* BulkBar: barra de selección masiva. Entra con opacidad + 4 px (REGLAS §7); los tokens de duración
+   pasan a 0 con reduced-motion y además se quita la animación. Angosta: acciones bajo la cantidad. */
+@keyframes gcu-bulk-bar-enter{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.gcu-bulk-bar{border:1px solid var(--gcu-primary-border);border-radius:var(--gcu-radius-md);background-color:var(--gcu-primary-soft);color:var(--gcu-primary-text);animation:gcu-bulk-bar-enter var(--gcu-duration-base) var(--gcu-ease-enter) both}
+.gcu-bulk-bar__inner{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2) var(--gcu-space-3);padding:var(--gcu-space-2) var(--gcu-space-3)}
+.gcu-bulk-bar__count{flex:1 1 100%;margin:0;font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums}
+.gcu-bulk-bar__actions{display:flex;flex-wrap:wrap;gap:var(--gcu-space-2)}
+.gcu-bulk-bar__clear{margin-inline-start:auto}
+@media (prefers-reduced-motion:reduce){.gcu-bulk-bar{animation:none}}
+
+@container (min-width: 28rem){
+  .gcu-bulk-bar__count{flex:0 1 auto;margin-inline-end:auto}
+  .gcu-bulk-bar__clear{margin-inline-start:0}
+}

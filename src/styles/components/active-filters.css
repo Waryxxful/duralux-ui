@@ -1,0 +1,13 @@
+/* ActiveFilters: chips de filtros aplicados sobre la card de resultados. Chip neutro con borde
+   (visible en los tres temas); botón de quitar con área de 24 px y anillo de foco del tema. */
+.gcu-active-filters{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);margin-bottom:var(--gcu-space-4)}
+.gcu-active-filters__label{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium)}
+.gcu-active-filters__list{display:flex;flex-wrap:wrap;gap:var(--gcu-space-2);min-width:0;margin:0;padding:0;list-style:none}
+.gcu-active-filters__chip{display:inline-flex;align-items:center;gap:var(--gcu-space-1);max-width:100%;min-height:var(--gcu-control-h-xs);padding-inline:var(--gcu-space-2) var(--gcu-space-0-5);border:1px solid var(--gcu-border-strong);border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface-sunken);color:var(--gcu-text);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-active-filters__text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gcu-active-filters__value{font-weight:var(--gcu-font-weight-semibold)}
+.gcu-active-filters__remove{display:inline-flex;flex:none;align-items:center;justify-content:center;width:var(--gcu-space-6);height:var(--gcu-space-6);padding:0;border:0;border-radius:var(--gcu-radius-full);background:none;color:var(--gcu-muted);cursor:pointer}
+@media (hover:hover){.gcu-active-filters__remove:hover{background-color:var(--gcu-surface);color:var(--gcu-text)}}
+.gcu-active-filters__remove:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-active-filters__clear{font-size:var(--gcu-font-size-xs)}
+.gcu-active-filters__count{margin-inline-start:auto;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
