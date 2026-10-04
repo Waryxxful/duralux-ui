@@ -2,6 +2,25 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## 2.5.0 — Componentes nuevos, DataTable sobre TanStack y antd ampliado
+
+Lotes N1, N2, N3 y 2.5.1 (sub-specs `2026-10-04-2-5-componentes-nuevos-design.md` y `2026-10-04-2-5-1-antd-ampliado-design.md`). API aditiva: nada se rompe.
+
+### Controles y estructura (N1)
+Tooltip, Segmented, Switch, Fieldset, RadioGroup, ChoiceCard, Accordion, Drawer, Divider, Kbd, Spinner, Skeleton y Tag. La pila de capas modales se comparte entre Modal y Drawer (`ui/internal/modalStack`).
+
+### Datos y composición (N2)
+Severity, Score/ScoreHero, Person, DescriptionList, KpiCard, StatGroup, List, BulkBar, ActiveFilters, EntityCard, RankList, QuickTiles, ProcessSteps, AppStatusCard, Spotlight, WelcomeBand y DashGrid; Sparkline, TrendLine, Gauge y Donut en `charts/apex`.
+
+### DataTable sobre TanStack Table (N3)
+Misma API (los 30 tests previos pasan sin cambios) más orden múltiple, menú de columnas, `density`, `stickyHeader`, `virtualized`, `error` + `onRetry`, `renderBulkActions` con BulkBar y anuncios accesibles. Dependencias nuevas: `@tanstack/react-table` y `@tanstack/react-virtual`. Sin `import()` dinámicos (rompían los remotos de Module Federation): nuevo gate en `check-bundle`.
+
+### `@duralux/ui/antd` ampliado (2.5.1)
+RangeSlider, Transfer, CheckTree, Splitter, TimePicker/TimeRangePicker, Calendar, Tour, AutoComplete, Mentions, NumberInput (es-CL), ColorPicker e ImagePreview. `DuraluxAntdProvider` sigue a ThemeScope y a `data-gcu-theme` de `<html>` sin ThemeProvider (satélites en el shell).
+
+### Correcciones
+Skeleton visible sobre superficies sutiles; Switch en oscuro y navy.
+
 ## 2.4.0 — Indicadores, tablas, gráficos y chat refinados
 
 Cierra el refinamiento del núcleo (lotes L4–L7). Mismas reglas que 2.3: TSX con `forwardRef`, CSS propio con tokens, stories en tres temas, API sin rupturas (props nuevas; lo reemplazado con `deprecate()`).
