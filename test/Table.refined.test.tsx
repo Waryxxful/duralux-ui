@@ -87,6 +87,18 @@ describe('Table refinada (receta de componente 2.3)', () => {
     expect(wrapper).not.toHaveAttribute('data-scrolled')
   })
 
+  test('el contenedor con scroll se puede recorrer con teclado (axe scrollable-region-focusable)', () => {
+    const { container, rerender } = render(<Table columns={columns} rows={rows} rowKey="id" aria-label="Campañas" stickyHeader />)
+    // SAFETY: con responsive (por defecto) el primer hijo es el contenedor <div> de la tabla.
+    const wrapper = container.firstElementChild as HTMLElement
+    expect(wrapper).toHaveAttribute('tabindex', '0')
+    expect(wrapper).toHaveAttribute('role', 'region')
+    expect(wrapper).toHaveAccessibleName('Campañas')
+    // Sin desborde (jsdom mide 0) y sin encabezado fijo no agrega una parada de tabulación.
+    rerender(<Table columns={columns} rows={rows} rowKey="id" aria-label="Campañas" />)
+    expect(container.firstElementChild).not.toHaveAttribute('tabindex')
+  })
+
   test('encabezado fijo sin contenedor propio avisa por log y no rompe', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     render(<Table columns={columns} rows={rows} rowKey="id" stickyHeader responsive={false} />)

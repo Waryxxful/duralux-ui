@@ -157,6 +157,25 @@ const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknow
   }, [rowEntries])
 
   const hasStickyContainer = stickyHeader && responsive
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [overflowing, setOverflowing] = useState(false)
+
+  // Un contenedor que desplaza debe recorrerse con teclado (WCAG 2.1.1, axe scrollable-region-focusable).
+  // Solo se agrega la parada de tabulación cuando de verdad hay desborde (o el encabezado es fijo).
+  useEffect(() => {
+    const node = wrapperRef.current
+    if (!node || !responsive) return undefined
+    const measure = () => setOverflowing(node.scrollWidth > node.clientWidth || node.scrollHeight > node.clientHeight)
+    measure()
+    if (!('ResizeObserver' in globalThis)) {
+      log.debug('Table: sin ResizeObserver; el desborde se mide una sola vez.')
+      return undefined
+    }
+    const observer = new ResizeObserver(measure)
+    observer.observe(node)
+    if (node.firstElementChild) observer.observe(node.firstElementChild)
+    return () => observer.disconnect()
+  }, [responsive])
   useEffect(() => {
     if (stickyHeader && !responsive) {
       log.warn('Table: `stickyHeader` necesita el contenedor propio de la tabla; con responsive={false} el encabezado no se fija.')
@@ -291,8 +310,15 @@ const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknow
   // quien ya provee su propio contenedor con overflow.
   if (!responsive) return table
 
+  const scrollFocusable = hasStickyContainer || overflowing
+  const regionLabel = ariaLabelProp ?? ariaLabel ?? (isString(caption) ? caption : undefined)
+
   return (
     <div
+      ref={wrapperRef}
+      tabIndex={scrollFocusable ? 0 : undefined}
+      role={scrollFocusable && regionLabel ? 'region' : undefined}
+      aria-label={scrollFocusable && regionLabel ? regionLabel : undefined}
       className={cx(
         'table-responsive',
         'gcu-table-scroll',

@@ -29,7 +29,7 @@
 .text-end>.gcu-table__skeleton{margin-inline-start:auto}
 
 /* Celdas de acciones: el hover y el foco de los botones de la última fila no se recortan. */
-.gcu-table-actions-cell,.table td.gcu-table-actions-cell{overflow:visible;padding-block:var(--gcu-space-3)}
+.gcu-table-actions-cell,.table td.gcu-table-actions-cell{overflow:visible}
 .gcu-table-actions{overflow:visible;padding-block:var(--gcu-space-0-5)}
 
 /* Scroll horizontal dentro del contenedor, nunca de la página. */
@@ -47,3 +47,5 @@
 .data-table-toolbar label{color:var(--gcu-text);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-medium)}
 .gcu-table-toolbar__actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);margin-inline-start:auto}
 @container (max-width: 36rem){.data-table-toolbar__search,.data-table-toolbar__page-size,.gcu-table-toolbar__actions{flex:1 1 100%;max-width:none}.gcu-table-toolbar__actions{margin-inline-start:0}}
+/* El contenedor con desborde recibe foco de teclado (para desplazarlo con flechas): anillo interior. */
+.gcu-table-scroll:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:-2px}

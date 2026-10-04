@@ -18,7 +18,8 @@ const meta: Meta<typeof DataTableToolbar> = {
       },
     },
   },
-  decorators: [Story => <div className="card"><Story /></div>],
+  // El ancho máximo va en la card (parameters.maxWidth) para probar el contexto angosto real.
+  decorators: [(Story, context) => <div className="card" style={{ maxWidth: context.parameters.maxWidth }}><Story /></div>],
 }
 export default meta
 type Story = StoryObj<typeof DataTableToolbar>
@@ -65,5 +66,5 @@ export const SobreTabla: Story = {
 export const Angosta: Story = {
   name: 'Contenedor angosto',
   args: { children: <Button variant="light-brand" startIcon="download">Exportar</Button> },
-  decorators: [Story => <div style={{ maxWidth: 360 }}><Story /></div>],
+  parameters: { maxWidth: 360 },
 }
