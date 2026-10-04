@@ -49,6 +49,12 @@ describe('Table refinada (receta de componente 2.3)', () => {
     expect(state).not.toHaveTextContent('Cuando haya elementos disponibles')
   })
 
+  test('si emptyMessage ya es un elemento (uso real en apps: <EmptyState />) no se anida otro EmptyState', () => {
+    const { container } = render(<Table columns={columns} rows={[]} rowKey="id" emptyMessage={<div className="gcu-state gcu-state--empty">Sin usuarios</div>} />)
+    expect(container.querySelectorAll('.gcu-state--empty')).toHaveLength(1)
+    expect(screen.getByText('Sin usuarios')).toBeInTheDocument()
+  })
+
   test('emptyState reemplaza el vacío por defecto (por ejemplo, con una acción)', () => {
     render(<Table columns={columns} rows={[]} rowKey="id" emptyState={<p>Crea tu primera campaña</p>} />)
     expect(screen.getByText('Crea tu primera campaña')).toBeInTheDocument()

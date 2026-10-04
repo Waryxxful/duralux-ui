@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, isValidElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type * as React from 'react'
 import {
   createRowEntries,
@@ -246,7 +246,10 @@ const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknow
       return (
         <tr className="gcu-table__state-row">
           <td colSpan={emptyColSpan}>
-            {emptyState ?? <EmptyState compact icon="inbox" title={emptyMessage} message={null} />}
+            {emptyState ?? (isValidElement(emptyMessage)
+              // Las apps ya pasan <EmptyState /> como emptyMessage: se respeta tal cual, sin anidar otro.
+              ? emptyMessage
+              : <EmptyState compact icon="inbox" title={emptyMessage} message={null} />)}
           </td>
         </tr>
       )
