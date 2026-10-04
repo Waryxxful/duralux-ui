@@ -1,6 +1,6 @@
 import { Calendar as AntdCalendar, TimePicker as AntdTimePicker } from 'antd'
 import type { CalendarProps as AntdCalendarProps, TimePickerProps, TimeRangePickerProps } from 'antd'
-import esES from 'antd/locale/es_ES'
+import esES from 'antd/locale/es_ES.js'
 import type { Dayjs } from 'dayjs'
 
 export const TIME_FORMAT = 'HH:mm'
