@@ -4,5 +4,4 @@
 /* Alineación óptica: un ícono pesa más que el texto; su lado exterior lleva 2 px menos. */
 .input-group>.input-group-text:first-child:has(>i,>svg){padding-inline-start:calc(var(--gcu-space-3) - 2px)}
 .input-group>.input-group-text:last-child:has(>i,>svg){padding-inline-end:calc(var(--gcu-space-3) - 2px)}
-.input-group:has(>.form-control:disabled)>.input-group-text{color:var(--gcu-text-subtle)}
 .input-group>.form-control.is-invalid~.input-group-text,.input-group>.input-group-text:has(~.form-control.is-invalid){border-color:var(--gcu-status-danger)}

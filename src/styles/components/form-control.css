@@ -38,3 +38,7 @@ textarea.form-control{min-height:calc(var(--gcu-control-h-md) * 2);resize:vertic
 
 /* iOS: 16 px evita el zoom automático al enfocar. */
 @media (max-width:575.98px){.form-control,.form-select,textarea.form-control{font-size:var(--gcu-font-size-md)}}
+/* Chevron del select dibujado con el color del tema (el SVG de Bootstrap trae un gris fijo que no se ve en oscuro). */
+.form-select{background-image:linear-gradient(45deg,transparent 50%,var(--gcu-muted) 50%),linear-gradient(135deg,var(--gcu-muted) 50%,transparent 50%);background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-inline-end:var(--gcu-space-8)}
+.form-select[multiple],.form-select[size]:not([size="1"]){background-image:none;padding-inline-end:var(--gcu-space-4)}
+.form-select.is-invalid:not([multiple]):not([size]),.form-select.is-invalid:not([multiple])[size="1"]{background-image:linear-gradient(45deg,transparent 50%,var(--gcu-status-danger) 50%),linear-gradient(135deg,var(--gcu-status-danger) 50%,transparent 50%);background-position:calc(100% - 17px) 50%,calc(100% - 12px) 50%;background-size:5px 5px,5px 5px;padding-inline-end:var(--gcu-space-8)}
