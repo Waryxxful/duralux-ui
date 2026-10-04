@@ -135,6 +135,12 @@ test('anuncia total y página en una región polite', async () => {
 })
 
 test('virtualizada: sin paginación, monta solo una parte de 2.000 filas y expone aria-rowcount', async () => {
+  // jsdom no tiene layout: el virtualizador mide el contenedor con offsetHeight/offsetWidth.
+  const restore = (['offsetHeight', 'offsetWidth'] as const).map(prop => {
+    const original = Object.getOwnPropertyDescriptor(HTMLElement.prototype, prop)
+    Object.defineProperty(HTMLElement.prototype, prop, { configurable: true, get: () => 600 })
+    return () => original && Object.defineProperty(HTMLElement.prototype, prop, original)
+  })
   const muchas = Array.from({ length: 2000 }, (_, index) => ({ id: index + 1, nombre: `F${index + 1}`, cola: 'X', monto: index }))
   const { container } = render(<DataTable<Fila> columns={COLUMNAS} data={muchas} virtualized pageSize={10} aria-label="Llamadas" />)
 
@@ -146,4 +152,5 @@ test('virtualizada: sin paginación, monta solo una parte de 2.000 filas y expon
     expect(rows.length).toBeGreaterThan(0)
     expect(rows.length).toBeLessThan(100)
   })
+  restore.forEach(undo => undo())
 })

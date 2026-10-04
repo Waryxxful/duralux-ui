@@ -106,8 +106,17 @@ export async function runBundleGate({ distDir = join(ROOT, 'dist'), maxGzipBytes
   return result
 }
 
+// Un import() de un chunk propio hace que el Vite del consumidor lo envuelva con su helper de precarga
+// (base "/"); dentro del chunk compartido por Module Federation rompe el CSS de los remotos (visto en DEV).
+function assertNoPreloadHelper() {
+  const code = readFileSync(join(ROOT, 'dist/index.js'), 'utf8')
+  if (/import\(\s*["']\.\.?\//.test(code)) {
+    throw new Error('dist/index.js contains a dynamic import() of an internal chunk.')
+  }
+}
+
 if (resolve(process.argv[1] ?? '') === resolve(fileURLToPath(import.meta.url))) {
-  runBundleGate()
+  Promise.resolve().then(assertNoPreloadHelper).then(runBundleGate)
     .then(({ gzipBytes }) => console.log(`bundle gate: OK (${gzipBytes} gzip bytes for Button consumer)`))
     .catch((error) => {
       console.error(`bundle gate: ${error instanceof Error ? error.message : String(error)}`)

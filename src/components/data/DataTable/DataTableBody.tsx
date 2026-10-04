@@ -1,14 +1,11 @@
-import { lazy, Suspense } from 'react'
 import type * as React from 'react'
 import { DataTableRow } from './DataTableRow'
 import type { DataTableRowProps } from './DataTableRow'
 import type { DataTableEntry } from './dataTableModel'
 
-// Chunk aparte: @tanstack/react-virtual solo se carga si alguna tabla usa `virtualized`.
-const DataTableVirtualRows = /* @__PURE__ */ lazy(() => import('./DataTableVirtualRows'))
-
-/** Filas que se pintan mientras llega el chunk virtual (llenan la vista sin montar miles). */
-const VIRTUAL_FALLBACK_ROWS = 30
+// ponytail: import estático a propósito. Un import() en la librería hace que Vite meta su helper de
+// precarga (base "/") en el chunk compartido por Module Federation y rompe el CSS de los remotos.
+import DataTableVirtualRows from './DataTableVirtualRows'
 
 export interface DataTableBodyRow<T> {
   entry: DataTableEntry<T>
@@ -48,10 +45,8 @@ export function DataTableBody<T>({ rows, rowProps, virtual }: DataTableBodyProps
 
   if (!virtual) return <>{rows.map((_, index) => renderRow(index))}</>
 
-  const fallback = rows.slice(0, VIRTUAL_FALLBACK_ROWS).map((_, index) => renderRow(index))
   return (
-    <Suspense fallback={fallback}>
-      <DataTableVirtualRows
+    <DataTableVirtualRows
         count={rows.length}
         getScrollElement={virtual.getScrollElement}
         rowHeight={virtual.rowHeight}
@@ -59,6 +54,5 @@ export function DataTableBody<T>({ rows, rowProps, virtual }: DataTableBodyProps
         getItemKey={index => rows[index].entry.reactKey}
         renderRow={renderRow}
       />
-    </Suspense>
   )
 }

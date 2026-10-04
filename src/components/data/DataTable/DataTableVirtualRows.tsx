@@ -1,4 +1,5 @@
 import { useVirtualizer } from '@tanstack/react-virtual'
+import { useRef } from 'react'
 import type * as React from 'react'
 
 export interface DataTableVirtualRowsProps {
@@ -16,8 +17,7 @@ const OVERSCAN = 8
 
 /**
  * Cuerpo virtualizado: solo monta las filas visibles (más un margen) y reserva el alto del resto
- * con dos filas espaciadoras. Vive en su propio chunk: @tanstack/react-virtual solo se descarga
- * cuando una tabla usa `virtualized`.
+ * con dos filas espaciadoras.
  */
 export default function DataTableVirtualRows({
   count,
@@ -27,9 +27,12 @@ export default function DataTableVirtualRows({
   getItemKey,
   renderRow,
 }: DataTableVirtualRowsProps) {
+  // El ref de <table> se asigna después de los efectos de sus hijos: en el primer render
+  // getScrollElement() da null. El espaciador superior (propio) ya está montado y encuentra el contenedor.
+  const anchorRef = useRef<HTMLTableRowElement>(null)
   const virtualizer = useVirtualizer({
     count,
-    getScrollElement,
+    getScrollElement: () => getScrollElement() ?? anchorRef.current?.closest<HTMLElement>('.gcu-table-scroll') ?? null,
     estimateSize: () => rowHeight,
     getItemKey,
     overscan: OVERSCAN,
@@ -40,11 +43,9 @@ export default function DataTableVirtualRows({
 
   return (
     <>
-      {paddingTop > 0 ? (
-        <tr className="gcu-data-table__spacer" aria-hidden="true">
-          <td colSpan={colSpan} style={{ height: paddingTop }} />
-        </tr>
-      ) : null}
+      <tr ref={anchorRef} className="gcu-data-table__spacer" aria-hidden="true">
+        <td colSpan={colSpan} style={{ height: paddingTop }} />
+      </tr>
       {items.map(item => renderRow(item.index))}
       {paddingBottom > 0 ? (
         <tr className="gcu-data-table__spacer" aria-hidden="true">
