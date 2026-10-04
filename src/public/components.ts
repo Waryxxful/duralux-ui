@@ -1,5 +1,5 @@
 import type * as React from 'react'
-import { Avatar as AvatarRuntime } from '../components/ui/Avatar'
+export { Avatar } from '../components/ui/Avatar'
 export { Badge } from '../components/ui/Badge'
 // Componentes ya en TSX: se exportan tal cual (tipos y ref reales).
 export { Button, IconButton, LinkButton } from '../components/ui/Button'
@@ -45,7 +45,7 @@ import { Header as HeaderRuntime } from '../components/layout/Header'
 import { Sidebar as SidebarRuntime } from '../components/layout/Sidebar'
 import { PageHeader as PageHeaderRuntime } from '../components/layout/PageHeader'
 import { Footer as FooterRuntime } from '../components/layout/Footer'
-import { AvatarGroup as AvatarGroupRuntime } from '../components/ui/AvatarGroup'
+export { AvatarGroup } from '../components/ui/AvatarGroup'
 import { CardLoader as CardLoaderRuntime } from '../components/ui/CardLoader'
 import type {
   AlertProps,
@@ -143,7 +143,6 @@ function asGenericComponent<F>(runtime: React.ComponentType<any>): F {
 }
 
 export const Card = asComponent<CardProps>(CardRuntime)
-export const Avatar = asComponent<AvatarProps>(AvatarRuntime)
 export const Alert = asComponent<AlertProps>(AlertRuntime)
 export const Modal = asComponent<ModalProps>(ModalRuntime)
 export const EmptyState = asComponent<EmptyStateProps>(EmptyStateRuntime)
@@ -185,7 +184,6 @@ export const Header = asComponent<HeaderProps>(HeaderRuntime)
 export const Sidebar = asComponent<SidebarProps>(SidebarRuntime)
 export const PageHeader = asComponent<PageHeaderProps>(PageHeaderRuntime)
 export const Footer = asComponent<FooterProps>(FooterRuntime)
-export const AvatarGroup = asComponent<AvatarGroupProps>(AvatarGroupRuntime)
 export const CardLoader = asComponent<CardLoaderProps>(CardLoaderRuntime)
 
 export type {

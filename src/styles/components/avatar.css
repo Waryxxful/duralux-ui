@@ -1,0 +1,23 @@
+/* Avatar y AvatarGroup. El relleno de las iniciales va en background-image: el tema pinta
+   .avatar-text y las utilidades .bg-* con background-color de prioridad forzada, que no
+   alcanza a la imagen de fondo; así el token gana en los tres temas sin forzar prioridad. */
+.gcu-avatar{flex:none;overflow:hidden;cursor:inherit;font-family:var(--gcu-font-sans);font-weight:var(--gcu-font-weight-semibold);line-height:1;letter-spacing:var(--gcu-tracking-normal)}
+.gcu-avatar--semantic,.gcu-avatar--overflow{background-image:linear-gradient(var(--gcu-avatar-bg),var(--gcu-avatar-bg));color:var(--gcu-avatar-fg);border-color:var(--gcu-avatar-bg)}
+.gcu-avatar--primary,.gcu-avatar--secondary,.gcu-avatar--success,.gcu-avatar--danger,.gcu-avatar--warning,.gcu-avatar--info,.gcu-avatar--teal,.gcu-avatar--indigo,.gcu-avatar--dark{--gcu-avatar-fg:var(--gcu-text-inverse)}
+.gcu-avatar--primary{--gcu-avatar-bg:var(--gcu-status-primary)}
+.gcu-avatar--secondary{--gcu-avatar-bg:var(--gcu-status-secondary)}
+.gcu-avatar--success{--gcu-avatar-bg:var(--gcu-status-success)}
+.gcu-avatar--danger{--gcu-avatar-bg:var(--gcu-status-danger)}
+.gcu-avatar--warning{--gcu-avatar-bg:var(--gcu-status-warning)}
+.gcu-avatar--info{--gcu-avatar-bg:var(--gcu-status-info)}
+.gcu-avatar--teal{--gcu-avatar-bg:var(--gcu-status-teal)}
+.gcu-avatar--indigo{--gcu-avatar-bg:var(--gcu-status-indigo)}
+.gcu-avatar--dark{--gcu-avatar-bg:var(--gcu-text)}
+.gcu-avatar--light{--gcu-avatar-bg:var(--gcu-surface-sunken);--gcu-avatar-fg:var(--gcu-text)}
+/* Contorno interior fino: separa fotos e iniciales claras del fondo sin engrosar el borde. */
+.gcu-avatar--image img,.gcu-avatar--semantic.gcu-avatar--light{outline:1px solid var(--gcu-image-outline,rgb(0 0 0 / 0.1));outline-offset:-1px}
+/* Contador «+N» del grupo: superficie suave del tono primario, cifras tabulares. */
+.gcu-avatar--overflow{--gcu-avatar-bg:var(--gcu-primary-soft);--gcu-avatar-fg:var(--gcu-primary-text);border-color:var(--gcu-primary-border);font-variant-numeric:tabular-nums;font-size:var(--gcu-font-size-2xs)}
+button.gcu-avatar--overflow{padding:0;cursor:pointer}
+button.gcu-avatar--overflow:focus-visible,.gcu-avatar-group a:focus-visible,.gcu-avatar-group button:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring);border-radius:var(--gcu-radius-full)}
+.gcu-avatar-group a,.gcu-avatar-group button:not(.gcu-avatar){display:inline-flex;padding:0;border:0;background:none}

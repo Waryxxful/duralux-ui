@@ -372,17 +372,17 @@ describe('CSS theme contract', () => {
       expect(contrastRatio(variant === 'light' ? '#283c50' : '#fff', glassSurface), `colored-stat glass ${variant}`).toBeGreaterThanOrEqual(4.5)
     }
 
-    // Avatars and visible progress labels are compact filled reading surfaces,
-    // so their foreground must follow the same solid AA contract as buttons.
+    // Visible progress labels are compact filled reading surfaces, so their foreground
+    // must follow the same solid AA contract as buttons. Corrección 2.3 (lote L3): los
+    // avatares semánticos salieron del SCSS con hex; su AA por tema se verifica en
+    // test/Avatar.refined.test.tsx contra src/styles/components/avatar.css.
     for (const [variant, surface] of Object.entries(coloredStatSurfaces)) {
       const expectedForeground = variant === 'light' ? '#283c50' : '#fff'
       const progress = ruleWithDeclarations(css, `.progress-bar.bg-${variant}`, ['background-color', 'color'])
-      const avatar = ruleWithDeclarations(css, `.gcu-avatar--semantic.gcu-avatar--${variant}`, ['background-color', 'color'])
       expect(parseColor(progress['background-color']), `progress ${variant}`).toEqual(parseColor(surface))
       expect(parseColor(progress.color), `progress foreground ${variant}`).toEqual(parseColor(expectedForeground))
-      expect(parseColor(avatar['background-color']), `avatar ${variant}`).toEqual(parseColor(surface))
-      expect(parseColor(avatar.color), `avatar foreground ${variant}`).toEqual(parseColor(expectedForeground))
     }
+    expect(css).not.toContain('.gcu-avatar--semantic')
 
     for (const [variant, foreground] of Object.entries(softForegrounds)) {
       const soft = ruleWithDeclarations(css, `.gcu-mini-stat .avatar-text.bg-soft-${variant}`, [
@@ -421,7 +421,8 @@ describe('CSS theme contract', () => {
     expect(runtimeCss).not.toMatch(/bootstrap-icons/i)
     expect(runtimeCss).toContain('.gcu-colored-stat{color:#fff!important}')
     expect(runtimeCss).toContain('.gcu-alert--success{--gcu-alert-icon-fill:#108745;--gcu-alert-icon-foreground:#fff}')
-    expect(runtimeCss).toContain('.progress-bar.bg-success,.gcu-avatar--semantic.gcu-avatar--success{background-color:#108745!important;color:#fff!important}')
+    // Corrección 2.3 (lote L3): el avatar semántico ya no comparte esta regla (ver avatar.css).
+    expect(runtimeCss).toContain('.progress-bar.bg-success{background-color:#108745!important;color:#fff!important}')
     expect(runtimeCss).toContain('.gcu-colored-stat.bg-success{background-color:#108745!important')
     expect(runtimeCss).toContain('color:#283c50!important')
     expect(runtimeCss).toContain('color:var(--gcu-dark)!important')

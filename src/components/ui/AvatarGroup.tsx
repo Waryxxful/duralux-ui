@@ -1,8 +1,11 @@
+import { forwardRef } from 'react'
+import type * as React from 'react'
 import { Avatar } from './Avatar'
 import { cx } from '../../utils/cx'
 import { isArray, isFunction, isNonEmptyString } from '../../utils/typeGuards'
+import type { AvatarGroupItem, AvatarGroupProps, AvatarProps } from '../../public/types'
 
-function safeToken(value, fallback) {
+function safeToken(value: unknown, fallback: string): string {
   let token = ''
   try {
     token = String(value ?? '').normalize('NFKD')
@@ -10,30 +13,37 @@ function safeToken(value, fallback) {
     token = ''
   }
   token = token
-  .replace(/[\u0300-\u036f]/g, '')
-  .replace(/[^a-zA-Z0-9_-]+/g, '-')
-  .replace(/^-+|-+$/g, '')
-  .slice(0, 48)
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-zA-Z0-9_-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48)
   return token || fallback
 }
 
-function normalizedMax(max, fallback = 5) {
+function normalizedMax(max: unknown, fallback = 5): number {
   const numeric = Number(max)
   if (!Number.isFinite(numeric)) return fallback
   return Math.max(0, Math.floor(numeric))
 }
 
-function hasHref(href) {
+function hasHref(href: unknown): href is string {
   return isNonEmptyString(href) && href !== '#'
 }
 
-function itemLabel(item) {
+function itemLabel(item: AvatarGroupItem | null | undefined): string | undefined {
   if (item?.name === null || item?.name === undefined) return undefined
   const label = String(item.name).trim()
   return label || undefined
 }
 
-function AvatarItem({ item, index, renderItem, size, className }) {
+interface AvatarItemProps {
+  item: AvatarGroupItem
+  index: number
+  renderItem?: AvatarGroupProps['renderItem']
+  size: AvatarProps['size']
+}
+
+function AvatarItem({ item, index, renderItem, size }: AvatarItemProps) {
   const name = itemLabel(item)
   const onClick = isFunction(item?.onClick) ? item.onClick : undefined
   const href = hasHref(item?.href) ? item.href : undefined
@@ -45,10 +55,9 @@ function AvatarItem({ item, index, renderItem, size, className }) {
     : (
       <Avatar
         src={item?.src}
-        name={item?.name}
+        name={item?.name === undefined || item?.name === null ? '' : String(item.name)}
         alt=""
         size={size}
-        className={className}
         aria-hidden="true"
       />
     )
@@ -68,11 +77,11 @@ function AvatarItem({ item, index, renderItem, size, className }) {
 }
 
 /**
- * AvatarGroup — a small, router-agnostic avatar stack using the theme's
- * `.img-group` contract. Missing or duplicate identities get deterministic,
- * safe DOM keys so production markup never depends on random values.
+ * AvatarGroup — pila de avatares sobre el contrato `.img-group` del tema, independiente del router.
+ * Identidades faltantes o repetidas reciben claves DOM deterministas. El contador «+N» usa cifras
+ * tabulares y es un botón solo si hay `onOverflowClick`.
  */
-export function AvatarGroup({
+export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(function AvatarGroup({
   items = [],
   max = 5,
   size = 'md',
@@ -81,13 +90,13 @@ export function AvatarGroup({
   onOverflowClick,
   overflowLabel = undefined,
   overflowClassName = '',
-}) {
-  const list = isArray(items) ? items : []
+}, ref) {
+  const list: ReadonlyArray<AvatarGroupItem> = isArray(items) ? items : []
   const limit = normalizedMax(max)
   const visibleItems = list.slice(0, limit)
   const overflowCount = Math.max(0, list.length - visibleItems.length)
-  const seen = new Map()
-  const getKey = (item, index) => {
+  const seen = new Map<string, number>()
+  const getKey = (item: AvatarGroupItem, index: number) => {
     const identity = item?.id !== undefined && item?.id !== null && String(item.id).trim() !== ''
       ? item.id
       : `missing-${index}`
@@ -97,44 +106,28 @@ export function AvatarGroup({
     return `avatar-group-${base}-${occurrence}`
   }
   const label = overflowLabel ?? `${overflowCount} ${overflowCount === 1 ? 'persona' : 'personas'} más`
-  const overflow = overflowCount > 0
-    ? isFunction(onOverflowClick)
+  const overflowClasses = cx('avatar-text', `avatar-${size}`, 'gcu-avatar', 'gcu-avatar--overflow', overflowClassName)
+  let overflow: React.ReactNode = null
+  if (overflowCount > 0) {
+    overflow = isFunction(onOverflowClick)
       ? (
-        <button
-          type="button"
-          className={cx('avatar-text avatar-md bg-soft-primary text-primary', overflowClassName)}
-          aria-label={label}
-          title={label}
-          onClick={onOverflowClick}
-        >
+        <button type="button" className={overflowClasses} aria-label={label} title={label} onClick={onOverflowClick}>
           +{overflowCount}
         </button>
       )
       : (
-        <span
-          className={cx('avatar-text avatar-md bg-soft-primary text-primary', overflowClassName)}
-          role="img"
-          aria-label={label}
-          title={label}
-        >
+        <span className={overflowClasses} role="img" aria-label={label} title={label}>
           +{overflowCount}
         </span>
       )
-    : null
+  }
 
   return (
-    <div className={cx('img-group', className)}>
+    <div ref={ref} className={cx('img-group', 'gcu-avatar-group', className)}>
       {visibleItems.map((item, index) => (
-        <AvatarItem
-          key={getKey(item, index)}
-          item={item}
-          index={index}
-          renderItem={renderItem}
-          size={size}
-          className=""
-        />
+        <AvatarItem key={getKey(item, index)} item={item} index={index} renderItem={renderItem} size={size} />
       ))}
       {overflow}
     </div>
   )
-}
+})
