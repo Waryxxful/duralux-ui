@@ -1193,4 +1193,362 @@ export interface PageHeaderProps {
   children?: React.ReactNode
 }
 
+// ── 2.5 · Lote N2: datos y composición ─────────────────────────────────────────
+
+/** Severidad: crítico requiere acción ya; advertencia está fuera de lo esperado; normal, sin urgencia. */
+export type SeverityLevel = 'critical' | 'warning' | 'normal'
+
+export interface SeverityProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children'> {
+  level: SeverityLevel
+  /** Texto visible («SLA vencido»). Por defecto el nombre del nivel; `false` deja solo el marcador con nombre accesible. */
+  label?: React.ReactNode | false
+  size?: 'sm' | 'md'
+}
+
+/** Umbrales de `severityOf`. Por defecto más es mejor: bajo `warning` es advertencia y bajo `critical`, crítico. */
+export interface SeverityThresholds {
+  warning?: number
+  critical?: number
+  /** Métricas donde más es peor (abandono, TMO): el umbral se alcanza con `>=`. */
+  higherIsWorse?: boolean
+}
+
+/** Rango de un puntaje: ok (≥ 80 % del máximo), medio (≥ 50 %), bajo o anulado por error grave. */
+export type ScoreRange = 'ok' | 'medio' | 'bajo' | 'anulado'
+
+export interface ScoreThresholds {
+  /** Desde este valor el puntaje está en rango ok. Por defecto 80 % del máximo. */
+  ok?: number
+  /** Desde este valor el puntaje está en rango medio. Por defecto 50 % del máximo. */
+  medio?: number
+}
+
+export interface ScoreProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children'> {
+  /** Puntaje; `null` o `undefined` muestran «—» y «Sin puntaje». */
+  value: number | null | undefined
+  max?: number
+  /** El puntaje fue anulado por un error grave: la cifra se tacha y el rango dice «Anulado». */
+  voided?: boolean
+  thresholds?: ScoreThresholds
+  /** Muestra el rango en texto («Bueno», «Medio», «Bajo», «Anulado»). Por defecto `true`. */
+  showRange?: boolean
+  size?: 'sm' | 'md'
+}
+
+export interface ScoreHeroProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  value: number | null | undefined
+  max?: number
+  /** Por defecto «Puntaje final». */
+  label?: React.ReactNode
+  /** Puntaje previo a la anulación: si existe, el puntaje se considera anulado y se muestra al lado. */
+  previous?: number
+  voided?: boolean
+  thresholds?: ScoreThresholds
+  /** Variación respecto de la evaluación anterior. */
+  delta?: IndicatorDelta
+  /** Contexto visible: «Meta 80 · 12 evaluaciones». */
+  context?: React.ReactNode
+  loading?: boolean
+}
+
+export interface PersonProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children'> {
+  name: string
+  /** Dato secundario en la misma línea: rol, equipo, correo. */
+  meta?: React.ReactNode
+  src?: string | null
+  size?: 'sm' | 'md' | 'lg'
+  /** Tono de las iniciales. */
+  variant?: SemanticTone
+}
+
+export interface DescriptionListItem {
+  /** Clave estable; si falta se usa la etiqueta (texto). */
+  id?: string | number
+  label: React.ReactNode
+  value?: React.ReactNode
+  /** Valor en monoespaciada (IDs, URLs, esquemas). */
+  mono?: boolean
+  /** Columnas que ocupa el par cuando hay espacio. */
+  span?: 1 | 2 | 3
+}
+
+export interface DescriptionListProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  items: ReadonlyArray<DescriptionListItem>
+  /** Columnas cuando el contenedor tiene espacio (2 desde 28rem, 3 desde 42rem). Por defecto 1. */
+  columns?: 1 | 2 | 3
+  /** Lo que se muestra en valores vacíos. Por defecto «—» (y «Sin dato» para lectores de pantalla). */
+  emptyValue?: React.ReactNode
+  loading?: boolean
+}
+
+export interface KpiCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  label: React.ReactNode
+  /** Cifra principal. Un número se formatea en es-CL; `null` muestra el estado vacío. */
+  value: React.ReactNode
+  /** Sufijo pequeño tras la cifra: «%», «/100», «s». */
+  unit?: React.ReactNode
+  icon?: IndicatorIcon
+  /** Variación con signo, unidad y flecha. */
+  delta?: IndicatorDelta
+  /** Meta o tendencia en texto: «Meta 80 %». Toda cifra necesita `delta`, `context` o `chart`. */
+  context?: React.ReactNode
+  /** Tono del ícono; `danger`/`warning` marcan una cifra fuera de meta (con el texto de `status`). */
+  tone?: IndicatorTone
+  /** Estado en texto cuando la cifra está fuera de meta: «Bajo la meta». */
+  status?: React.ReactNode
+  /** Sparkline u otro gráfico compacto bajo la cifra (de `@duralux/ui/charts/apex`). */
+  chart?: React.ReactNode
+  footer?: React.ReactNode
+  loading?: boolean
+  emptyText?: React.ReactNode
+  /** Nivel del encabezado de la etiqueta (h2–h6). Por defecto 3. */
+  headingLevel?: 2 | 3 | 4 | 5 | 6
+}
+
+export interface StatGroupItem {
+  id?: string | number
+  label: React.ReactNode
+  value: React.ReactNode
+  unit?: React.ReactNode
+  icon?: IndicatorIcon
+  tone?: IndicatorTone
+  delta?: IndicatorDelta
+  context?: React.ReactNode
+}
+
+export interface StatGroupProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
+  /** De 2 a 4 métricas relacionadas. */
+  items: ReadonlyArray<StatGroupItem>
+  /** Título de la card; si falta, usa `aria-label`. */
+  title?: React.ReactNode
+  /** Nivel del título (h2–h6). Por defecto 3. */
+  headingLevel?: 2 | 3 | 4 | 5 | 6
+  loading?: boolean
+}
+
+export interface ListItem {
+  id: string | number
+  title: React.ReactNode
+  meta?: React.ReactNode
+  /** Avatar, ícono o marca a la izquierda. */
+  leading?: React.ReactNode
+  /** Cifra o estado a la derecha. En listas seleccionables no debe ser interactivo. */
+  trailing?: React.ReactNode
+  /** Lista no seleccionable: la fila es un botón. */
+  onClick?: () => void
+  /** Lista no seleccionable: la fila es un enlace. */
+  href?: string
+  disabled?: boolean
+  /** Marca «Sin leer» (notificaciones): punto + texto oculto. */
+  unread?: boolean
+  /** Fila actual (vista de detalle) en listas no seleccionables. */
+  active?: boolean
+  /** Texto para la búsqueda por tipeo cuando `title` no es texto. */
+  textValue?: string
+}
+
+export interface ListProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange' | 'defaultValue'> {
+  items: ReadonlyArray<ListItem>
+  /** Nombre accesible de la lista (obligatorio si es seleccionable). */
+  label?: string
+  /** `single` o `multiple` la vuelven un `listbox` con teclado completo. */
+  selectionMode?: 'none' | 'single' | 'multiple'
+  selectedIds?: ReadonlyArray<string | number>
+  defaultSelectedIds?: ReadonlyArray<string | number>
+  onSelectionChange?: (ids: Array<string | number>) => void
+  density?: 'compact' | 'default' | 'comfortable'
+  loading?: boolean
+  /** Estado vacío (por defecto un texto que explica qué pasó). */
+  empty?: React.ReactNode
+}
+
+export interface ActiveFilter {
+  key: string
+  /** Nombre del filtro: «Estado». */
+  label: React.ReactNode
+  /** Valor aplicado: «Vencido». */
+  value?: React.ReactNode
+  /** Texto para el botón de quitar cuando label/value no son texto. */
+  textValue?: string
+}
+
+export interface ActiveFiltersProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+  filters: ReadonlyArray<ActiveFilter>
+  onRemove: (key: string) => void
+  onClear?: () => void
+  /** Por defecto «Filtros activos». */
+  label?: React.ReactNode
+  /** Cantidad de resultados con los filtros aplicados: «128 resultados». */
+  resultCount?: number
+}
+
+export interface BulkBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  /** Cantidad seleccionada; con 0 la barra no se muestra. */
+  count: number
+  /** Acciones sobre la selección (botones). */
+  actions?: React.ReactNode
+  onClear?: () => void
+  /** Nombre del botón que quita la selección. Por defecto «Quitar selección». */
+  clearLabel?: string
+  /** Total de filas, para «3 de 120 seleccionados». */
+  total?: number
+  /** Texto de la cantidad; por defecto «N seleccionado(s)». */
+  formatCount?: (count: number, total?: number) => string
+}
+
+export interface EntityCardStat {
+  id?: string | number
+  label: React.ReactNode
+  value: React.ReactNode
+}
+
+export interface EntityCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title' | 'onClick'> {
+  title: React.ReactNode
+  subtitle?: React.ReactNode
+  /** Nombre para las iniciales del avatar (si no hay `mark`). */
+  name?: string
+  /** Marca propia (logo, ícono); reemplaza al avatar. */
+  mark?: React.ReactNode
+  src?: string | null
+  stats?: ReadonlyArray<EntityCardStat>
+  /** Badges o Severity. */
+  chips?: React.ReactNode
+  footer?: React.ReactNode
+  /** Entidad inactiva: se atenúa y se anuncia «Inactiva». */
+  inactive?: boolean
+  href?: string
+  onClick?: () => void
+  /** Nivel del título (h2–h6). Por defecto 3. */
+  headingLevel?: 2 | 3 | 4 | 5 | 6
+}
+
+export interface RankListItem {
+  id?: string | number
+  label: React.ReactNode
+  meta?: React.ReactNode
+  value: number
+  /** Texto de la cifra (por defecto el número en es-CL). */
+  display?: React.ReactNode
+  tone?: IndicatorTone
+}
+
+export interface RankListProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  /** De 3 a 6 filas, ya ordenadas. */
+  items: ReadonlyArray<RankListItem>
+  /** Unidad de las cifras: «llamadas». */
+  unit?: string
+  /** Valor que define la barra completa; por defecto el máximo de la lista. */
+  max?: number
+  /** Nombre accesible del ranking. */
+  label?: string
+  loading?: boolean
+  emptyText?: React.ReactNode
+}
+
+export interface QuickTile {
+  id?: string | number
+  label: React.ReactNode
+  icon?: IndicatorIcon
+  description?: React.ReactNode
+  tone?: IndicatorTone
+  href?: string
+  onClick?: () => void
+  disabled?: boolean
+  /** Por qué está deshabilitado (texto visible). */
+  disabledReason?: React.ReactNode
+}
+
+export interface QuickTilesProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
+  items: ReadonlyArray<QuickTile>
+  title?: React.ReactNode
+  /** Nivel del título (h2–h6). Por defecto 3. */
+  headingLevel?: 2 | 3 | 4 | 5 | 6
+}
+
+export type ProcessStepStatus = 'done' | 'current' | 'failed' | 'todo'
+
+export interface ProcessStep {
+  key: string
+  label: React.ReactNode
+  description?: React.ReactNode
+  /** Estado explícito; si falta se deduce de `current`. */
+  status?: ProcessStepStatus
+}
+
+export interface ProcessStepsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  steps: ReadonlyArray<ProcessStep>
+  /** Índice del paso en curso. */
+  current?: number
+  /** El paso en curso falló. */
+  failed?: boolean
+  /** Nombre accesible del proceso: «Procesamiento de la llamada». */
+  label: string
+  /** Horizontal pasa a vertical en contenedores angostos. Por defecto `horizontal`. */
+  orientation?: 'horizontal' | 'vertical'
+}
+
+/** Estado de una app conectada (contrato `AppManifestEntry.estado`). */
+export type AppStatus = 'activo' | 'montaje' | 'caido'
+
+export interface AppStatusCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  name: React.ReactNode
+  description?: React.ReactNode
+  icon?: IndicatorIcon
+  status: AppStatus
+  /** Detalle del estado: «Desde 16:42», «Responde en 320 ms». */
+  detail?: React.ReactNode
+  action?: React.ReactNode
+}
+
+/** Relleno de las superficies de color (Spotlight, WelcomeBand): profundo, con texto blanco AA. */
+export type ColorSurfaceTone = 'primary' | 'indigo' | 'dark' | 'danger' | 'success' | 'info' | 'teal'
+
+export interface WelcomeBandStat {
+  id?: string | number
+  label: React.ReactNode
+  value: React.ReactNode
+}
+
+export interface WelcomeBandProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
+  /** Por defecto «Qué atender primero». */
+  eyebrow?: React.ReactNode
+  /** Nombra la tarea con su cifra: «Cobranza tiene 18 llamadas en espera». No saluda. */
+  title: React.ReactNode
+  lede?: React.ReactNode
+  /** Una acción primaria y, si hace falta, una secundaria. */
+  actions?: React.ReactNode
+  stats?: ReadonlyArray<WelcomeBandStat>
+  tone?: ColorSurfaceTone
+  /** Nivel del título (h1–h3). Por defecto 2. */
+  headingLevel?: 1 | 2 | 3
+}
+
+export interface SpotlightProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
+  label: React.ReactNode
+  value: React.ReactNode
+  /** Sufijo pequeño: «%», «/100». */
+  unit?: React.ReactNode
+  delta?: IndicatorDelta
+  /** Contexto de la cifra: «Meta 80 %». */
+  context?: React.ReactNode
+  /** Sparkline u otro gráfico compacto (usa `onColor` en el gráfico). */
+  children?: React.ReactNode
+  tone?: ColorSurfaceTone
+  loading?: boolean
+  emptyText?: React.ReactNode
+}
+
+/** Columnas de una celda de DashGrid. Filas permitidas: 12 · 8+4 · 7+5 · 6+6 · 4+4+4 · 3+3+3+3. */
+export type DashGridSpan = 3 | 4 | 5 | 6 | 7 | 8 | 12
+
+export interface DashGridProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode
+}
+
+export interface DashGridRowProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Columnas de cada celda, en orden. Debe ser una fila permitida (si no, se avisa por consola). */
+  layout: ReadonlyArray<DashGridSpan>
+  children?: React.ReactNode
+}
+
 export type { SemanticVariant, StatusVariant }

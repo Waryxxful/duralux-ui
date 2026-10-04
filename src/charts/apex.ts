@@ -1,6 +1,10 @@
 export {
   ApexChart,
   ChartCard,
+  Sparkline,
+  TrendLine,
+  Gauge,
+  Donut,
 } from '../public/apex'
 export type {
   ApexAxisLabels,
@@ -33,4 +37,10 @@ export type {
   ChartStateProps,
   ChartTheme,
   ChartThemeMode,
+  CompactChartTone,
+  SparklineProps,
+  TrendLineProps,
+  TrendLineSeries,
+  GaugeProps,
+  DonutProps,
 } from '../public/apex'

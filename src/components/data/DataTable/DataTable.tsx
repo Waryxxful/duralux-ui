@@ -324,9 +324,11 @@ export function DataTable<T extends object = AnyRow>(props: DataTableProps<T>) {
   return (
     <div className="gcu-data-table">
       {toolbarContent}
-      {isFunction(renderBulkActions) && selection.selected.size > 0 ? (
+      {isFunction(renderBulkActions) ? (
         <DataTableBulkBar count={selection.selected.size} onClear={selection.clear}>
-          {renderBulkActions(selection.selectedRows, { count: selection.selected.size, clearSelection: selection.clear })}
+          {selection.selected.size > 0
+            ? renderBulkActions(selection.selectedRows, { count: selection.selected.size, clearSelection: selection.clear })
+            : null}
         </DataTableBulkBar>
       ) : null}
       {hasSortable ? (

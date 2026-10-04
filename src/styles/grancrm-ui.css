@@ -33,6 +33,23 @@
 @import "./components/chart-metrics-footer.css";
 @import "./components/chart.css";
 @import "./components/connection-card.css";
+@import "./components/severity.css";
+@import "./components/score.css";
+@import "./components/person.css";
+@import "./components/description-list.css";
+@import "./components/kpi-card.css";
+@import "./components/stat-group.css";
+@import "./components/list.css";
+@import "./components/bulk-bar.css";
+@import "./components/active-filters.css";
+@import "./components/entity-card.css";
+@import "./components/rank-list.css";
+@import "./components/quick-tiles.css";
+@import "./components/process-steps.css";
+@import "./components/app-status-card.css";
+@import "./components/spotlight.css";
+@import "./components/welcome-band.css";
+@import "./components/dash-grid.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */

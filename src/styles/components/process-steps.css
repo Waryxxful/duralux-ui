@@ -1,0 +1,23 @@
+/* ProcessSteps: marcador con forma (check, número, cruz) + estado en texto. Vertical por defecto en
+   contenedores angostos; horizontal desde 36rem con conector entre pasos. */
+.gcu-process-steps__list{display:flex;flex-direction:column;gap:var(--gcu-space-4);margin:0;padding:0;list-style:none}
+.gcu-process-steps__item{position:relative;display:flex;align-items:flex-start;gap:var(--gcu-space-3);min-width:0}
+.gcu-process-steps__marker{display:inline-flex;flex:none;align-items:center;justify-content:center;width:var(--gcu-control-h-xs);height:var(--gcu-control-h-xs);border:2px solid var(--gcu-border-strong);border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-process-steps__text{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);min-width:0;padding-top:var(--gcu-space-0-5)}
+.gcu-process-steps__label{color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium)}
+.gcu-process-steps__status,.gcu-process-steps__description{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+/* Conector vertical entre marcadores. */
+.gcu-process-steps__item:not(:last-child)::after{content:"";position:absolute;top:calc(var(--gcu-control-h-xs) + var(--gcu-space-1));bottom:calc(var(--gcu-space-1) * -3);inset-inline-start:calc(var(--gcu-control-h-xs) / 2 - 1px);width:2px;background-color:var(--gcu-border)}
+.gcu-process-steps__item--done::after{background-color:var(--gcu-status-success)}
+
+.gcu-process-steps__item--done .gcu-process-steps__marker{border-color:var(--gcu-status-success);background-color:var(--gcu-status-success);color:var(--gcu-text-inverse)}
+.gcu-process-steps__item--current .gcu-process-steps__marker{border-color:var(--gcu-status-primary);background-color:var(--gcu-primary-soft);color:var(--gcu-primary-text)}
+.gcu-process-steps__item--current .gcu-process-steps__status{color:var(--gcu-primary-text);font-weight:var(--gcu-font-weight-medium)}
+.gcu-process-steps__item--failed .gcu-process-steps__marker{border-color:var(--gcu-status-danger);background-color:var(--gcu-status-danger);color:var(--gcu-text-inverse)}
+.gcu-process-steps__item--failed .gcu-process-steps__status{color:var(--gcu-danger-text);font-weight:var(--gcu-font-weight-medium)}
+
+@container (min-width: 36rem){
+  .gcu-process-steps--horizontal .gcu-process-steps__list{flex-direction:row;gap:var(--gcu-space-2)}
+  .gcu-process-steps--horizontal .gcu-process-steps__item{flex:1 1 0;flex-direction:column;align-items:flex-start}
+  .gcu-process-steps--horizontal .gcu-process-steps__item:not(:last-child)::after{top:calc(var(--gcu-control-h-xs) / 2 - 1px);bottom:auto;inset-inline-start:calc(var(--gcu-control-h-xs) + var(--gcu-space-2));inset-inline-end:var(--gcu-space-2);width:auto;height:2px}
+}

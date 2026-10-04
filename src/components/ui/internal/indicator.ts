@@ -140,7 +140,36 @@ export function formatLegacyTrend(value: string | number | null | undefined, up:
   return { text: signed, direction, sentiment: direction === 'up' ? 'positive' : 'negative', spoken: SPOKEN[direction] }
 }
 
+/** Presencia de un nodo opcional: descarta `null`, `undefined`, `false` y texto vacío. */
+export function hasIndicatorContent(node: React.ReactNode): boolean {
+  return !isEmptyIndicatorValue(node)
+}
+
+const contextWarned = /* @__PURE__ */ new Set<string>()
+
+/**
+ * Regla §1 de diseño («toda cifra tiene contexto»): avisa una vez por componente y etiqueta
+ * cuando una cifra llega sin meta, variación ni tendencia. No cambia lo que se muestra.
+ */
+export function warnMissingContext(component: string, label: React.ReactNode, hasContext: boolean): void {
+  if (hasContext) return
+  const key = `${component}:${isString(label) ? label : '?'}`
+  if (contextWarned.has(key)) return
+  contextWarned.add(key)
+  log.warn(`${component}: la cifra "${isString(label) ? label : 'sin etiqueta'}" no tiene contexto; agrega meta, variación o tendencia (delta, context o chart).`)
+}
+
 /** Clase completa (`feather-users`, `bi bi-x`) o nombre Feather suelto (`users`). */
 export function isIconClass(icon: string): boolean {
   return /^(feather-|bi[- ]|ti[- ]|fa[- ])/.test(icon) || icon.includes(' ')
+}
+
+const HEADING_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const
+export type HeadingTag = (typeof HEADING_TAGS)[number]
+
+/** Etiqueta del encabezado para `headingLevel` (1–6); fuera de rango usa `fallback`. */
+export function headingTag(level: number | undefined, fallback: HeadingTag = 'h3'): HeadingTag {
+  const tag = isFiniteNumber(level) ? HEADING_TAGS[level - 1] : undefined
+  if (!tag && level !== undefined) log.warn(`headingLevel ${String(level)} no es un nivel de encabezado válido (1–6); se usa ${fallback}.`)
+  return tag ?? fallback
 }

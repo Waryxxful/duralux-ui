@@ -57,15 +57,24 @@ interface IndicatorValueProps {
   value: React.ReactNode
   loading?: boolean
   className?: string
+  /** Sufijo pequeño tras la cifra («%», «/100»); no se muestra en carga ni vacío. */
+  unit?: React.ReactNode
 }
 
 /** Cifra principal: es-CL + tabular; en carga, skeleton; vacía, un guion decorativo (la explicación va en el contexto). */
-export function IndicatorValue({ value, loading = false, className }: IndicatorValueProps) {
+export function IndicatorValue({ value, loading = false, className, unit }: IndicatorValueProps) {
   let content: React.ReactNode
+  const empty = isEmptyIndicatorValue(value)
   if (loading) content = <IndicatorSkeleton />
-  else if (isEmptyIndicatorValue(value)) content = <span aria-hidden="true">—</span>
+  else if (empty) content = <span aria-hidden="true">—</span>
   else content = formatIndicatorValue(value)
-  return <div className={cx('gcu-stat__value', 'gcu-tabular', className)}>{content}</div>
+  const showUnit = !loading && !empty && unit !== undefined && unit !== null && unit !== ''
+  return (
+    <div className={cx('gcu-stat__value', 'gcu-tabular', className)}>
+      {content}
+      {showUnit && <span className="gcu-stat__unit">{unit}</span>}
+    </div>
+  )
 }
 
 interface IndicatorContextProps {

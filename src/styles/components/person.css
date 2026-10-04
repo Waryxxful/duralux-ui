@@ -1,0 +1,9 @@
+/* Person: avatar + nombre + dato en una sola fila (celda de tabla, lista, cabecera).
+   El texto se trunca con «…» y el valor completo queda en title; nunca empuja el ancho del contenedor. */
+.gcu-person{display:inline-flex;align-items:center;gap:var(--gcu-space-2);min-width:0;max-width:100%;vertical-align:middle}
+.gcu-person--lg{gap:var(--gcu-space-3)}
+.gcu-person .gcu-avatar{flex:none}
+.gcu-person__text{display:flex;flex-direction:column;min-width:0;line-height:var(--gcu-line-height-sm)}
+.gcu-person__name,.gcu-person__meta{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gcu-person__name{color:var(--gcu-text);font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-medium)}
+.gcu-person__meta{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
