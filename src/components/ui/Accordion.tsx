@@ -71,8 +71,13 @@ export const Accordion = /* @__PURE__ */ forwardRef<HTMLDivElement, AccordionPro
   const [uncontrolled, setUncontrolled] = useState<ReadonlyArray<string>>(defaultValue ?? EMPTY)
   const openValues = value ?? uncontrolled
   const triggerRefs = useRef(new Map<string, HTMLButtonElement>())
+  // SAFETY: headingLevel está acotado a 2–6 por tipo; h2…h6 comparten las props de h3.
   const Heading = `h${headingLevel}` as 'h3'
-  const enabledValues = useMemo(() => items.filter((item) => !item.disabled).map((item) => item.value), [items])
+  const enabledValues = useMemo(() => items.reduce<string[]>((values, item) => {
+    if (!item.disabled) values.push(item.value)
+    return values
+  }, []), [items])
+  const openSet = useMemo(() => new Set(openValues), [openValues])
   const tooManyOpen = !multiple && openValues.length > 1
 
   useEffect(() => {
@@ -101,7 +106,7 @@ export const Accordion = /* @__PURE__ */ forwardRef<HTMLDivElement, AccordionPro
   return (
     <div {...rest} ref={ref} className={cx('gcu-accordion', flush && 'gcu-accordion--flush', className)}>
       {items.map((item) => {
-        const open = openValues.includes(item.value)
+        const open = openSet.has(item.value)
         const triggerId = `${baseId}-${item.value}-trigger`
         const panelId = `${baseId}-${item.value}-panel`
         return (

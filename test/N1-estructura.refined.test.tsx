@@ -124,10 +124,10 @@ describe('Primitivas N1', () => {
 
   test('Skeleton: aria-hidden, variantes y líneas', () => {
     const { container, rerender } = render(<Skeleton variant="circle" width={40} />)
-    const circle = container.firstElementChild as HTMLElement
+    const circle = container.querySelector<HTMLElement>('.gcu-skeleton--circle')
     expect(circle).toHaveAttribute('aria-hidden', 'true')
-    expect(circle).toHaveClass('gcu-skeleton', 'gcu-skeleton--circle')
-    expect(circle.style.blockSize).toBe('40px')
+    expect(circle).toHaveClass('gcu-skeleton')
+    expect(circle?.style.blockSize).toBe('40px')
     rerender(<Skeleton lines={3} />)
     expect(container.querySelectorAll('.gcu-skeleton')).toHaveLength(3)
   })

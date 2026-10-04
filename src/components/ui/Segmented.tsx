@@ -68,7 +68,7 @@ function SegmentedInner<V extends SegmentedValue = string>({
 
   useEffect(() => {
     const root = rootRef.current
-    if (!root || typeof ResizeObserver === 'undefined') return undefined
+    if (!root || !('ResizeObserver' in globalThis)) return undefined
     const observer = new ResizeObserver(() => placeIndicator(root))
     observer.observe(root)
     // El deslizamiento se habilita después de la primera posición: la carga no anima.

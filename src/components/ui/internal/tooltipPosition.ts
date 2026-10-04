@@ -3,11 +3,10 @@ import type { TooltipPlacement } from '../../../public/types'
 const GAP = 8
 const VIEWPORT_MARGIN = 8
 
-const OPPOSITE: Record<TooltipPlacement, TooltipPlacement> = {
-  top: 'bottom',
-  bottom: 'top',
-  start: 'end',
-  end: 'start',
+function opposite(placement: TooltipPlacement): TooltipPlacement {
+  if (placement === 'top') return 'bottom'
+  if (placement === 'bottom') return 'top'
+  return placement === 'start' ? 'end' : 'start'
 }
 
 interface Box { top: number; left: number }
@@ -52,9 +51,9 @@ export function placeTooltip(trigger: HTMLElement | null, bubble: HTMLElement | 
   let side = placement
   let box = coordinates(rect, width, height, side, rtl)
   if (!fits(box, width, height, view.innerWidth, view.innerHeight)) {
-    const flipped = coordinates(rect, width, height, OPPOSITE[placement], rtl)
+    const flipped = coordinates(rect, width, height, opposite(placement), rtl)
     if (fits(flipped, width, height, view.innerWidth, view.innerHeight)) {
-      side = OPPOSITE[placement]
+      side = opposite(placement)
       box = flipped
     }
   }

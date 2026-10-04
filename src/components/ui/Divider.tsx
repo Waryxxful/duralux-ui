@@ -1,7 +1,7 @@
-import { forwardRef } from 'react'
-import type * as React from 'react'
+import { forwardRef, useCallback } from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
+import { assignRef } from '../../utils/assignRef'
 import type { DividerProps } from '../../public/types'
 
 function hasLabel(label: DividerProps['label']): boolean {
@@ -22,13 +22,15 @@ export const Divider = /* @__PURE__ */ forwardRef<HTMLElement, DividerProps>(fun
   ref,
 ) {
   const vertical = orientation === 'vertical'
+  // Callback tipado como HTMLElement: sirve tanto para el <div> como para el <hr>.
+  const setRef = useCallback((node: HTMLElement | null) => assignRef(ref, node), [ref])
   if (vertical && hasLabel(label)) log.warn('Divider: la etiqueta solo se muestra en horizontal; se ignora en vertical.')
 
   if (!vertical && hasLabel(label)) {
     return (
       <div
         {...rest}
-        ref={ref as React.Ref<HTMLDivElement>}
+        ref={setRef}
         className={cx('gcu-divider', 'gcu-divider--label', align === 'start' && 'gcu-divider--start', className)}
       >
         <span className="gcu-divider__label">{label}</span>
@@ -39,7 +41,7 @@ export const Divider = /* @__PURE__ */ forwardRef<HTMLElement, DividerProps>(fun
   return (
     <hr
       {...rest}
-      ref={ref as React.Ref<HTMLHRElement>}
+      ref={setRef}
       className={cx('gcu-divider', vertical && 'gcu-divider--vertical', className)}
       aria-orientation={vertical ? 'vertical' : undefined}
     />

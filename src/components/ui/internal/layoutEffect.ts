@@ -1,7 +1,18 @@
-import { useEffect, useLayoutEffect } from 'react'
+import { useEffect, useLayoutEffect, useSyncExternalStore } from 'react'
 
 /** useLayoutEffect en el navegador (mide antes de pintar) y useEffect en SSR (sin aviso). */
-export const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect
+export const useIsomorphicLayoutEffect = 'document' in globalThis ? useLayoutEffect : useEffect
+
+function subscribeNothing(): () => void {
+  return () => {}
+}
+const onClient = () => true
+const onServer = () => false
+
+/** `true` solo después de hidratar en el navegador: los portales no se renderizan en SSR. */
+export function useIsClient(): boolean {
+  return useSyncExternalStore(subscribeNothing, onClient, onServer)
+}
 
 /** Duración de la animación CSS de un elemento en ms (0 si no hay o con reduced-motion). */
 export function animationDurationMs(element: Element | null): number {

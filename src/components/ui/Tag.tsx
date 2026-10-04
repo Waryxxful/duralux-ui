@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 import type * as React from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
-import { isFiniteNumber, isString } from '../../utils/typeGuards'
+import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 import { renderIconSlot } from '../../utils/iconSlot'
 import type { TagProps, TagTone } from '../../public/types'
 
@@ -38,7 +38,7 @@ export const Tag = /* @__PURE__ */ forwardRef<HTMLSpanElement, TagProps>(functio
   ref,
 ) {
   const resolvedTone = resolveTagTone(tone)
-  const removable = typeof onRemove === 'function'
+  const removable = isFunction(onRemove)
   return (
     <span
       {...rest}

@@ -3,6 +3,16 @@ import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import type { KbdProps } from '../../public/types'
 
+/** Identidad estable por tecla: el texto más su repetición («Shift», «Shift-2»). */
+function keyEntries(keys: ReadonlyArray<string>) {
+  const seen = new Map<string, number>()
+  return keys.map((key, position) => {
+    const count = (seen.get(key) ?? 0) + 1
+    seen.set(key, count)
+    return { id: count === 1 ? key : `${key}-${count}`, key, first: position === 0 }
+  })
+}
+
 /**
  * Kbd — tecla o atajo de teclado.
  *
@@ -24,10 +34,9 @@ export const Kbd = /* @__PURE__ */ forwardRef<HTMLElement, KbdProps>(function Kb
   }
   return (
     <kbd {...rest} ref={ref} className={cx('gcu-kbd-combo', className)}>
-      {keys.map((key, index) => (
-        // Las teclas de una combinación no se reordenan: la posición es su identidad.
-        <Fragment key={`${index}-${key}`}>
-          {index > 0 && <span className="gcu-kbd-combo__plus" aria-hidden="true">+</span>}
+      {keyEntries(keys).map(({ id, key, first }) => (
+        <Fragment key={id}>
+          {!first && <span className="gcu-kbd-combo__plus" aria-hidden="true">+</span>}
           <kbd className="gcu-kbd">{key}</kbd>
         </Fragment>
       ))}

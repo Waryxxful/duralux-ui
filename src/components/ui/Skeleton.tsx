@@ -41,20 +41,20 @@ export const Skeleton = /* @__PURE__ */ forwardRef<HTMLSpanElement, SkeletonProp
   const count = lineCount(variant, lines)
   const inlineSize = toLength(width)
   const blockSize = variant === 'circle' ? toLength(height) ?? inlineSize : toLength(height)
-  const shapeStyle: React.CSSProperties = {
+  const dimensions: React.CSSProperties = {
     ...(inlineSize ? { inlineSize } : null),
     ...(blockSize ? { blockSize } : null),
   }
   // `gcu-skeleton--shape` acota los tamaños por defecto a este componente (las apps ya usan .gcu-skeleton).
-  const shapeClass = cx('gcu-skeleton', 'gcu-skeleton--shape', `gcu-skeleton--${variant}`)
+  const skeletonClasses = cx('gcu-skeleton', 'gcu-skeleton--shape', `gcu-skeleton--${variant}`)
 
   if (count === 1) {
     return (
       <span
         {...rest}
         ref={ref}
-        className={cx(shapeClass, className)}
-        style={{ ...shapeStyle, ...style }}
+        className={cx(skeletonClasses, className)}
+        style={{ ...dimensions, ...style }}
         aria-hidden="true"
       />
     )
@@ -63,7 +63,7 @@ export const Skeleton = /* @__PURE__ */ forwardRef<HTMLSpanElement, SkeletonProp
   return (
     <span {...rest} ref={ref} className={cx('gcu-skeleton-lines', className)} style={style} aria-hidden="true">
       {Array.from({ length: count }, (_, line) => (
-        <span key={`linea-${line + 1}`} className={shapeClass} style={shapeStyle} />
+        <span key={`linea-${line + 1}`} className={skeletonClasses} style={dimensions} />
       ))}
     </span>
   )

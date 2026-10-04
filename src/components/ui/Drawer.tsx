@@ -8,7 +8,7 @@ import { isFunction } from '../../utils/typeGuards'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
 import { useThemeBoundaryMode } from '../../theme/themeBoundary'
 import type { DrawerProps } from '../../public/types'
-import { animationDurationMs } from './internal/layoutEffect'
+import { animationDurationMs, useIsClient } from './internal/layoutEffect'
 import {
   focusDialog,
   getFocusableElements,
@@ -20,6 +20,12 @@ import {
 } from './internal/modalStack'
 
 const SIZES = new Set(['sm', 'md', 'lg'])
+
+interface DrawerStackEntry {
+  dialog: HTMLElement | null
+  backdrop: null
+  previousFocus: Element | null
+}
 
 function hasContent(value: React.ReactNode): boolean {
   return value !== undefined && value !== null && value !== false && value !== ''
@@ -80,10 +86,10 @@ export const Drawer = /* @__PURE__ */ forwardRef<HTMLDialogElement, DrawerProps>
   const titleId = `${baseId}-title`
   const descriptionId = `${baseId}-description`
   const themeMode = useThemeBoundaryMode()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useIsClient()
   const [rendered, setRendered] = useState(open)
   const dialogRef = useRef<HTMLDialogElement | null>(null)
-  const entryRef = useRef({ dialog: null as HTMLElement | null, backdrop: null, previousFocus: null as Element | null })
+  const entryRef = useRef<DrawerStackEntry>({ dialog: null, backdrop: null, previousFocus: null })
   const onCloseRef = useRef(onClose)
   const closeOnEscapeRef = useRef(closeOnEscape)
   const canClose = isFunction(onClose)
@@ -95,10 +101,6 @@ export const Drawer = /* @__PURE__ */ forwardRef<HTMLDialogElement, DrawerProps>
     dialogRef.current = node
     assignRef(forwardedRef, node)
   }, [forwardedRef])
-
-  useEffect(() => {
-    if (globalThis.document) setMounted(true)
-  }, [])
 
   useEffect(() => {
     onCloseRef.current = onClose

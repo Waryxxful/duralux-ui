@@ -8,7 +8,7 @@ import { isFiniteNumber } from '../../utils/typeGuards'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
 import { useThemeBoundaryMode } from '../../theme/themeBoundary'
 import type { TooltipProps } from '../../public/types'
-import { useIsomorphicLayoutEffect } from './internal/layoutEffect'
+import { useIsClient, useIsomorphicLayoutEffect } from './internal/layoutEffect'
 import { placeTooltip } from './internal/tooltipPosition'
 
 const MIN_DELAY = 400
@@ -18,13 +18,15 @@ const DEFAULT_DELAY = 500
 const WARM_WINDOW_MS = 300
 const HIDE_GRACE_MS = 100
 
-/** Estado compartido entre tooltips: si hay uno abierto o se cerró hace poco, el siguiente no espera. */
-const tooltipGroup = {
-  openCount: 0,
-  lastCloseAt: Number.NEGATIVE_INFINITY,
+interface TooltipGroup {
+  openCount: number
+  lastCloseAt: number
   /** Cierra el tooltip visible: al aparecer un vecino, solo queda uno. */
-  closeActive: null as (() => void) | null,
+  closeActive: (() => void) | null
 }
+
+/** Estado compartido entre tooltips: si hay uno abierto o se cerró hace poco, el siguiente no espera. */
+const tooltipGroup: TooltipGroup = { openCount: 0, lastCloseAt: Number.NEGATIVE_INFINITY, closeActive: null }
 
 function isWarm(): boolean {
   return tooltipGroup.openCount > 0 || Date.now() - tooltipGroup.lastCloseAt < WARM_WINDOW_MS
@@ -50,8 +52,14 @@ function matchesFocusVisible(element: Element): boolean {
   }
 }
 
+/** Disparador visible del tooltip: el elemento cuyo aria-describedby lo nombra. */
+function findTrigger(id: string): HTMLElement | null {
+  // `~=` compara ids separados por espacios; se escapan comillas y barras del id del consumidor.
+  const safeId = id.replace(/["\\]/g, '\\$&')
+  return globalThis.document?.querySelector<HTMLElement>(`[aria-describedby~="${safeId}"]`) ?? null
+}
+
 interface TriggerProps {
-  ref?: React.Ref<HTMLElement>
   'aria-describedby'?: string
   onPointerEnter?: React.PointerEventHandler<HTMLElement>
   onPointerLeave?: React.PointerEventHandler<HTMLElement>
@@ -88,9 +96,8 @@ export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(
   const id = idProp ?? `gcu-tooltip-${autoId.replace(/:/g, '')}`
   const themeMode = useThemeBoundaryMode()
   const [uncontrolledOpen, setUncontrolledOpen] = useState(defaultOpen)
-  const [mounted, setMounted] = useState(false)
+  const mounted = useIsClient()
   const open = !disabled && (controlledOpen ?? uncontrolledOpen)
-  const triggerRef = useRef<HTMLElement | null>(null)
   const bubbleRef = useRef<HTMLDivElement | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const wait = resolveDelay(delay)
@@ -118,7 +125,6 @@ export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(
   }
 
   useEffect(() => {
-    if (globalThis.document) setMounted(true)
     return () => {
       if (timerRef.current !== undefined) clearTimeout(timerRef.current)
     }
@@ -145,7 +151,8 @@ export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(
 
   useIsomorphicLayoutEffect(() => {
     if (!open || !mounted) return undefined
-    const update = () => placeTooltip(triggerRef.current, bubbleRef.current, placement)
+    // El disparador es quien apunta al globo con aria-describedby: no hace falta tomar el ref del hijo.
+    const update = () => placeTooltip(findTrigger(id), bubbleRef.current, placement)
     update()
     window.addEventListener('scroll', update, true)
     window.addEventListener('resize', update)
@@ -153,7 +160,7 @@ export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(
       window.removeEventListener('scroll', update, true)
       window.removeEventListener('resize', update)
     }
-  }, [mounted, open, placement])
+  }, [id, mounted, open, placement])
 
   if (!isValidElement<TriggerProps>(children)) {
     log.warn('Tooltip: `children` debe ser un único elemento enfocable; se muestra sin tooltip.')
@@ -161,15 +168,9 @@ export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(
   }
 
   const childProps = children.props
-  // SAFETY: en React 18 el ref del hijo vive en el elemento, no en sus props.
-  const childRef = (children as unknown as { ref?: React.Ref<HTMLElement> }).ref ?? childProps.ref
   const describedBy = [childProps['aria-describedby'], open ? id : undefined].filter(Boolean).join(' ') || undefined
 
-  const trigger = cloneElement(children, {
-    ref: (node: HTMLElement | null) => {
-      triggerRef.current = node
-      assignRef(childRef, node)
-    },
+  const triggerProps: TriggerProps = {
     'aria-describedby': describedBy,
     onPointerEnter: (event: React.PointerEvent<HTMLElement>) => {
       childProps.onPointerEnter?.(event)
@@ -191,7 +192,8 @@ export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(
       childProps.onBlur?.(event)
       hide(true)
     },
-  } as TriggerProps)
+  }
+  const trigger = cloneElement(children, triggerProps)
 
   const bubble = open && mounted && globalThis.document?.body
     ? createPortal(

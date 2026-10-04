@@ -169,7 +169,7 @@ describe('Accordion (APG)', () => {
     act(() => { horario.focus() })
     fireEvent.keyDown(horario, { key: 'ArrowDown' })
     expect(screen.getByRole('button', { name: 'Canales' })).toHaveFocus()
-    fireEvent.keyDown(document.activeElement as Element, { key: 'ArrowDown' })
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Canales' }), { key: 'ArrowDown' })
     expect(horario).toHaveFocus()
     fireEvent.keyDown(horario, { key: 'End' })
     expect(screen.getByRole('button', { name: 'Canales' })).toHaveFocus()
