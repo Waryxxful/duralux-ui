@@ -10,7 +10,7 @@ import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalet
 import { useChartTheme } from './chartTheme'
 import { ChartLegend } from './ChartLegend'
 import { ChartTooltip } from './ChartTooltip'
-import { AXIS_TICK_FONT_SIZE, CARTESIAN_MARGIN, ENTER_ANIMATION_MS, normalizeSeries } from './rechartsShared'
+import { AXIS_TICK_FONT_SIZE, CARTESIAN_MARGIN, ENTER_ANIMATION_MS, Y_AXIS_WIDTH, formatAxisTick, keepSeriesOrder, normalizeSeries } from './rechartsShared'
 import type { AreaChartWidgetProps } from '../../public/chart-types'
 
 function sanitizeIdPart(value: string | number): string {
@@ -101,7 +101,7 @@ export const AreaChartWidget = /* @__PURE__ */ forwardRef<HTMLElement, AreaChart
           </defs>
           {grid && <CartesianGrid vertical={false} stroke={resolvedTheme.border} />}
           <XAxis dataKey="name" tick={{ fontSize: AXIS_TICK_FONT_SIZE, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} />
-          <YAxis tick={{ fontSize: AXIS_TICK_FONT_SIZE, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fontSize: AXIS_TICK_FONT_SIZE, fill: resolvedTheme.muted }} axisLine={false} tickLine={false} width={Y_AXIS_WIDTH} tickFormatter={formatAxisTick} />
           <Tooltip
             content={<ChartTooltip mark="line" />}
             contentStyle={getChartTooltipStyle(resolvedTheme)}
@@ -109,7 +109,7 @@ export const AreaChartWidget = /* @__PURE__ */ forwardRef<HTMLElement, AreaChart
             isAnimationActive={!reducedMotion}
           />
           {normalizedSeries.length > 1 && (
-            <Legend wrapperStyle={{ color: resolvedTheme.text }} content={<ChartLegend mark="line" />} />
+            <Legend wrapperStyle={{ color: resolvedTheme.text }} itemSorter={keepSeriesOrder} content={<ChartLegend mark="line" />} />
           )}
           {normalizedSeries.map((s, index) => (
             <Area

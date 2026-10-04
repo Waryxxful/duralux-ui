@@ -52,9 +52,16 @@
 /* ChartCard: título y acciones en una fila; el título no cambia de tamaño con su nivel. */
 .gcu-chart-card__header{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--gcu-space-3)}
 .gcu-chart-card__head{min-width:0}
-.gcu-chart-card__title{text-wrap:balance}
+/* Gana a `.card .card-header .card-title` del tema (color fijo y peso 700): token por tema y 600. */
+.gcu-chart-card .card-header .gcu-chart-card__title.card-title{color:var(--gcu-text);font-weight:var(--gcu-font-weight-semibold);text-wrap:balance}
 .gcu-chart-card__subtitle{margin:var(--gcu-space-1) 0 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
-.gcu-chart-card__menu{flex:none}
+/* Borde de cabecera y menú con tokens (el tema fija el borde en el documento, no en un ThemeScope local). */
+.gcu-chart-card .card-header{border-bottom-color:var(--gcu-border)}
+/* Menú de acciones: botón de ícono de 32 px; hover instantáneo y solo con puntero (Craft). */
+.gcu-chart-card__menu{display:inline-grid;flex:none;width:var(--gcu-control-h-sm);height:var(--gcu-control-h-sm);place-items:center;padding:0;border:0;border-radius:var(--gcu-radius-md);background:transparent;color:var(--gcu-muted);font-size:var(--gcu-font-size-md);line-height:1}
+@media (hover:hover){.gcu-chart-card__menu:hover{background:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+.gcu-chart-card__menu.show{background:var(--gcu-surface-subtle);color:var(--gcu-text)}
+.gcu-chart-card__menu:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
 
 /* Contenedor ancho: ejes y leyenda con un paso más de tamaño. */
 @container (min-width:28rem){

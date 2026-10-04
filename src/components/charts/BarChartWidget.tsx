@@ -10,7 +10,7 @@ import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalet
 import { useChartTheme } from './chartTheme'
 import { ChartLegend } from './ChartLegend'
 import { ChartTooltip } from './ChartTooltip'
-import { CARTESIAN_MARGIN, ENTER_ANIMATION_MS, normalizeSeries } from './rechartsShared'
+import { CARTESIAN_MARGIN, ENTER_ANIMATION_MS, Y_AXIS_WIDTH, formatAxisTick, keepSeriesOrder, normalizeSeries } from './rechartsShared'
 import type { BarChartWidgetProps } from '../../public/chart-types'
 
 const BAR_TICK_FONT_SIZE = 10
@@ -109,7 +109,8 @@ export const BarChartWidget = /* @__PURE__ */ forwardRef<HTMLElement, BarChartWi
             tick={{ fontSize: BAR_TICK_FONT_SIZE, fill: resolvedTheme.muted }}
             axisLine={false}
             tickLine={false}
-            width={40}
+            width={Y_AXIS_WIDTH}
+            tickFormatter={formatAxisTick}
           />
           <Tooltip
             content={<ChartTooltip mark="square" />}
@@ -118,7 +119,7 @@ export const BarChartWidget = /* @__PURE__ */ forwardRef<HTMLElement, BarChartWi
             isAnimationActive={!reducedMotion}
           />
           {normalizedSeries.length > 1 && (
-            <Legend wrapperStyle={{ color: resolvedTheme.text }} content={<ChartLegend mark="square" />} />
+            <Legend wrapperStyle={{ color: resolvedTheme.text }} itemSorter={keepSeriesOrder} content={<ChartLegend mark="square" />} />
           )}
           {normalizedSeries.map((s, index) => (
             <Bar

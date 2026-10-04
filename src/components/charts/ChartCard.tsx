@@ -134,7 +134,8 @@ export const ChartCard = /* @__PURE__ */ forwardRef<HTMLElement, ChartCardProps>
               trigger={(triggerProps, { open }) => (
                 <button
                   {...triggerProps}
-                  className={cx('avatar-text avatar-sm bg-transparent border-0 text-muted gcu-chart-card__menu', open && 'show')}
+                  type="button"
+                  className={cx('gcu-chart-card__menu', open && 'show')}
                   aria-label={isNonEmptyString(title) ? `Acciones de ${title.trim()}` : 'Acciones del gráfico'}
                 >
                   <i className="feather-more-vertical" aria-hidden="true"></i>

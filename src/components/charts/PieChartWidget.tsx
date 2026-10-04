@@ -9,7 +9,7 @@ import { getChartTheme, getChartTooltipStyle, getChartColor } from './chartPalet
 import { useChartTheme } from './chartTheme'
 import { ChartLegend } from './ChartLegend'
 import { ChartTooltip } from './ChartTooltip'
-import { ENTER_ANIMATION_MS } from './rechartsShared'
+import { ENTER_ANIMATION_MS, keepSeriesOrder } from './rechartsShared'
 import { isArray, isFiniteNumber, isObject, isString } from '../../utils/typeGuards'
 import type { PieChartDatum, PieChartWidgetProps } from '../../public/chart-types'
 
@@ -149,7 +149,7 @@ export const PieChartWidget = /* @__PURE__ */ forwardRef<HTMLElement, PieChartWi
             isAnimationActive={!reducedMotion}
           />
           {legend && (
-            <Legend wrapperStyle={{ color: resolvedTheme.text }} content={<ChartLegend mark="circle" />} />
+            <Legend wrapperStyle={{ color: resolvedTheme.text }} itemSorter={keepSeriesOrder} content={<ChartLegend mark="circle" />} />
           )}
         </PieChart>
       </ResponsiveContainer>
