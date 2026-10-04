@@ -1,0 +1,13 @@
+/* Pagination y cualquier .pagination de las apps. Bootstrap la pinta desde --bs-pagination-*:
+   aquí se alimentan de tokens (claro, oscuro y navy sin overrides de tema). */
+.gcu-pagination{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:var(--gcu-space-2) var(--gcu-space-4)}
+.gcu-pagination>.pagination{margin:0}
+.gcu-pagination__range{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pagination{--bs-pagination-padding-x:var(--gcu-space-2);--bs-pagination-padding-y:0;--bs-pagination-font-size:var(--gcu-font-size-sm);--bs-pagination-color:var(--gcu-text);--bs-pagination-bg:transparent;--bs-pagination-border-width:1px;--bs-pagination-border-color:transparent;--bs-pagination-border-radius:var(--gcu-radius-md);--bs-pagination-hover-color:var(--gcu-text);--bs-pagination-hover-bg:transparent;--bs-pagination-hover-border-color:transparent;--bs-pagination-focus-color:var(--gcu-text);--bs-pagination-focus-bg:transparent;--bs-pagination-focus-box-shadow:none;--bs-pagination-active-color:var(--gcu-on-primary);--bs-pagination-active-bg:var(--gcu-primary);--bs-pagination-active-border-color:var(--gcu-primary);--bs-pagination-disabled-color:var(--gcu-text-subtle);--bs-pagination-disabled-bg:transparent;--bs-pagination-disabled-border-color:transparent;gap:var(--gcu-space-1)}
+/* Hover Restraint (Craft): cambio de superficie instantáneo y solo con puntero real. */
+@media (hover:hover){.pagination{--bs-pagination-hover-bg:color-mix(in srgb,var(--gcu-text) 6%,transparent)}}
+/* Botones de 32 px separados (sin grupo pegado) y cifras tabulares: el ancho no salta al cambiar de página.
+   El foco usa el anillo global (.page-link:focus-visible). */
+.pagination>.page-item>.page-link{display:inline-flex;align-items:center;justify-content:center;min-width:var(--gcu-control-h-sm);height:var(--gcu-control-h-sm);margin-left:0;border-radius:var(--bs-pagination-border-radius);line-height:1;font-variant-numeric:tabular-nums;transition:none}
+.pagination>.page-item.active>.page-link{font-weight:var(--gcu-font-weight-semibold)}
+.pagination>.page-item.disabled>.page-link{cursor:not-allowed}

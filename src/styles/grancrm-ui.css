@@ -13,6 +13,8 @@
 @import "./components/dropdown.css";
 @import "./components/feedback-state.css";
 @import "./components/card-loader.css";
+@import "./components/table.css";
+@import "./components/pagination.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
@@ -44,7 +46,7 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 
 .gcu-btn{--gcu-btn-color:var(--gcu-primary);--gcu-btn-text:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:7px 14px;border:1px solid var(--gcu-btn-color);border-radius:5px;background:var(--gcu-btn-color);color:var(--gcu-btn-text);font:600 13px/1.25 var(--gcu-font);text-decoration:none;cursor:pointer;transition:background-color .3s ease,border-color .3s ease,box-shadow .3s ease,transform .3s ease,filter .3s ease}
 .gcu-btn:hover:not(:disabled){filter:brightness(.94);color:var(--gcu-btn-text)}.gcu-btn:active:not(:disabled){transform:scale(.97)}
-.gcu-btn:focus-visible,.gcu-pagination__button:focus-visible,.gcu-close:focus-visible{outline:0;box-shadow:0 0 0 3px var(--gcu-focus)}
+.gcu-btn:focus-visible,.gcu-close:focus-visible{outline:0;box-shadow:0 0 0 3px var(--gcu-focus)}
 .gcu-btn:disabled,.gcu-btn[aria-disabled="true"]{opacity:.6;cursor:not-allowed}
 .gcu-btn--secondary{--gcu-btn-color:var(--gcu-secondary);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--success{--gcu-btn-color:var(--gcu-success);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--danger{--gcu-btn-color:var(--gcu-danger);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}
 .gcu-btn--warning{--gcu-btn-color:var(--gcu-warning);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--info{--gcu-btn-color:var(--gcu-info);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--teal{--gcu-btn-color:var(--gcu-teal);--gcu-btn-text:var(--gcu-darken);--gcu-btn-outline-text:var(--gcu-darken)}.gcu-btn--indigo{--gcu-btn-color:var(--gcu-indigo);--gcu-btn-outline-text:var(--gcu-indigo)}.gcu-btn--dark{--gcu-btn-color:var(--gcu-dark);--gcu-btn-outline-text:var(--gcu-dark)}
@@ -79,8 +81,6 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 .gcu-close{display:grid;width:28px;height:28px;padding:0;place-items:center;border:0;border-radius:4px;background:transparent;color:var(--gcu-muted);font:400 22px/1 sans-serif;cursor:pointer}.gcu-close:hover{background:var(--gcu-surface-subtle);color:var(--gcu-text)}
 .gcu-progress{height:7px;overflow:hidden;border-radius:99px;background:var(--gcu-surface-subtle)}.gcu-progress__bar{--gcu-progress-text:#fff;height:100%;background:var(--gcu-primary);color:var(--gcu-progress-text);font-size:9px;text-align:center;transition:width .2s cubic-bezier(.23,1,.32,1)}.gcu-progress__bar--success{background:var(--gcu-success);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--danger{background:var(--gcu-danger);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--warning{background:var(--gcu-warning);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--info{background:var(--gcu-info);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--secondary{background:var(--gcu-secondary)}.gcu-progress__bar--teal{background:var(--gcu-teal);--gcu-progress-text:var(--gcu-darken)}.gcu-progress__bar--indigo{background:var(--gcu-indigo)}.gcu-progress__bar--striped{background-image:linear-gradient(45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%);background-size:16px 16px}.gcu-progress__bar--animated{animation:gcu-stripes 1s linear infinite}@keyframes gcu-stripes{to{background-position:16px 0}}
 
-.gcu-table-responsive{width:100%;overflow-x:auto}.gcu-table{width:100%;border-collapse:collapse;color:var(--gcu-text);font-family:var(--gcu-font)}.gcu-table th,.gcu-table td{padding:10px 12px;border-bottom:1px solid var(--gcu-border);vertical-align:middle}.gcu-table__heading{color:var(--gcu-muted);font-size:11px;font-weight:700;letter-spacing:.03em;text-align:left;text-transform:uppercase}.gcu-table__cell{font-size:13px}.gcu-table--striped tbody tr:nth-child(even){background:color-mix(in srgb,var(--gcu-surface-subtle) 65%,transparent)}.gcu-table--hover tbody tr:hover{background:var(--gcu-surface-subtle)}.gcu-table__state{padding:28px!important;color:var(--gcu-muted);font-size:13px;text-align:center}.gcu-table__state .gcu-spinner{margin-right:8px}
-.gcu-pagination{display:flex;margin:0;padding:0;list-style:none;font-family:var(--gcu-font)}.gcu-pagination__button{display:grid;min-width:31px;height:31px;padding:0 8px;place-items:center;border:1px solid var(--gcu-border);border-left:0;background:var(--gcu-surface);color:var(--gcu-muted);font:500 12px var(--gcu-font);cursor:pointer}.gcu-pagination__item:first-child .gcu-pagination__button{border-left:1px solid var(--gcu-border);border-radius:5px 0 0 5px}.gcu-pagination__item:last-child .gcu-pagination__button{border-radius:0 5px 5px 0}.gcu-pagination__item--active .gcu-pagination__button{border-color:var(--gcu-primary);background:var(--gcu-primary);color:#fff}.gcu-pagination__item--disabled .gcu-pagination__button{opacity:.5;cursor:not-allowed}
 
 .gcu-message-row{display:flex;width:100%;font-family:var(--gcu-font)}.gcu-message-row--incoming{justify-content:flex-start}.gcu-message-row--outgoing{justify-content:flex-end}.gcu-message-bubble{box-sizing:border-box;max-width:min(75%,680px);padding:10px 13px;border:1px solid var(--gcu-border);border-radius:12px;background:#e2e8f0;color:#0f172a;font-size:13px;line-height:1.5;box-shadow:0 1px 2px rgba(15,23,42,.06)}.gcu-message-bubble--incoming{border-color:#93c5fd;background:#dbeafe;color:#1e3a8a}.gcu-message-bubble--outgoing{border-color:var(--gcu-primary);background:var(--gcu-primary);color:#fff}.gcu-message-bubble--highlighted{box-shadow:0 0 0 2px var(--gcu-warning),0 8px 22px rgba(15,23,42,.12)}.gcu-message-bubble__header{margin-bottom:4px;color:inherit;font-size:11px;font-weight:800;letter-spacing:.02em;text-transform:uppercase;opacity:.88}.gcu-message-bubble__meta{margin-top:4px;color:inherit;font-size:10px;opacity:.86}.gcu-message-system{display:inline-block;padding:5px 10px;border:1px solid #cbd5e1;border-radius:999px;background:#f1f5f9;color:#475569;font:600 11px var(--gcu-font)}.gcu-badge--light{border:1px solid #94a3b8!important;background:#e2e8f0!important;color:#0f172a!important;font-weight:700}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble,.app-skin-dark .gcu-theme .gcu-message-bubble{background:var(--gcu-surface);border-color:var(--gcu-border-strong);color:#e2e8f0}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble--incoming,.app-skin-dark .gcu-theme .gcu-message-bubble--incoming{background:#1d4ed8;border-color:#3b82f6;color:#fff}.gcu-theme[data-gcu-theme=dark] .gcu-message-bubble--outgoing,.app-skin-dark .gcu-theme .gcu-message-bubble--outgoing{background:var(--gcu-primary);border-color:var(--gcu-primary);color:#fff}.gcu-theme[data-gcu-theme=dark] .gcu-message-system,.app-skin-dark .gcu-theme .gcu-message-system{background:var(--gcu-surface-sunken);border-color:var(--gcu-border-strong);color:var(--gcu-muted)}.gcu-theme[data-gcu-theme=dark] .gcu-badge--light,.app-skin-dark .gcu-theme .gcu-badge--light{border-color:var(--gcu-border-strong)!important;background:var(--gcu-surface)!important;color:#e2e8f0!important}
 
@@ -89,24 +89,6 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
 
 @media (max-width:575px){.gcu-page-header{align-items:flex-start;flex-direction:column}.gcu-page-header__actions{width:100%;margin-left:0}.gcu-message-bubble{max-width:88%}.page-header{padding:0 20px!important}}
 
-/* DataTable autoWidth: encoge la tabla a su contenido en vez del 100% del
-   contenedor (evita columnas muy separadas con pocas columnas/texto corto). */
-.table-auto-width{width:auto}
-
-/* ── Table / list action cells: never clip last-row button hover/focus ─────
-   table-responsive still scrolls horizontally; the action stack itself must
-   stay overflow-visible with padding so borders/scale on :hover/:focus-visible
-   are not cut off (audit: "last button clipped until hover"). */
-.gcu-table-actions-cell,
-.table td.gcu-table-actions-cell {
-  overflow: visible;
-  padding-top: 12px;
-  padding-bottom: 12px;
-}
-.gcu-table-actions {
-  overflow: visible;
-  padding: 2px 0;
-}
 .page-header-right-items-wrapper {
   overflow: visible;
   padding-block: 2px;
@@ -115,20 +97,6 @@ body{color:var(--gcu-body);background-color:var(--gcu-canvas)}
    Theme SCSS also sets overflow:visible; reinforce for remotes that only load glue. */
 .main-content {
   overflow: visible;
-}
-
-/* Defense in depth: never strip borders from interactive controls inside tables
-   (theme used to set tr:last-child * { border-bottom: transparent }). */
-.table-responsive .table tbody tr:last-child .btn,
-.table-responsive .table tbody tr:last-child .btn-icon,
-.table tbody tr:last-child .btn,
-.table tbody tr:last-child .btn-icon {
-  border-bottom-style: solid;
-  border-bottom-color: inherit;
-}
-.table-responsive .table tbody tr:last-child .btn-light-brand,
-.table tbody tr:last-child .btn-light-brand {
-  border-bottom-color: var(--bs-border-color-2, #dcdee4);
 }
 
 /* ── Sangría lateral de .page-header en remotes ────────────────────────────
@@ -336,13 +304,6 @@ html.app-skin-dark .gcu-colored-stat .gcu-colored-stat__glass,html.app-skin-dark
 html.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],html.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-mini-stat .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-quick-link .avatar-text[class*="bg-soft-"],.app-skin-dark .gcu-stats-card .avatar-text[class*="bg-soft-"]{background-color:rgba(var(--gcu-widget-soft-rgb),.18)!important;color:#fff!important}
 /* /gcu-widgets-ui */
 
-/* Searchable select + DataTable toolbar primitives. */
-.data-table-toolbar{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--gcu-border);background:var(--gcu-surface)}
-.data-table-toolbar__search,.data-table-toolbar__page-size{display:grid;gap:4px}
-.data-table-toolbar__search{flex:1 1 240px;max-width:420px}
-.data-table-toolbar__page-size{flex:0 0 auto}
-.data-table-toolbar label{color:var(--gcu-text);font-size:12px;font-weight:600}
-@media (max-width:575.98px){.data-table-toolbar__search{max-width:none}.data-table-toolbar>*{width:100%}}
 
 /* Keep the remote page-header padding after the desktop rule in this file. */
 @media (max-width:575.98px){.page-header{padding:0 20px!important}}
@@ -486,8 +447,8 @@ html.app-skin-dark .gcu-tabs.nav-tabs .nav-link[aria-disabled="true"],
 /* The SCSS dark selector is document-rooted. These package primitives form a
    usable local dark scope, and the explicit-light block wins over root dark
    declarations for nested previews and portals. */
-.gcu-theme[data-gcu-theme="dark"] .card,.gcu-theme[data-gcu-theme="dark"] .list-group-item,.gcu-theme[data-gcu-theme="navy"] .card,.gcu-theme[data-gcu-theme="navy"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}.gcu-theme[data-gcu-theme="dark"] .table,.gcu-theme[data-gcu-theme="navy"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)}
-html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .card,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .table{--bs-table-bg:var(--gcu-surface);--bs-table-color:var(--gcu-text);--bs-table-border-color:var(--gcu-border);color:var(--gcu-text)!important}
+.gcu-theme[data-gcu-theme="dark"] .card,.gcu-theme[data-gcu-theme="dark"] .list-group-item,.gcu-theme[data-gcu-theme="navy"] .card,.gcu-theme[data-gcu-theme="navy"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}
+html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .card,html.app-skin-dark .gcu-theme[data-gcu-theme="light"] .list-group-item{background-color:var(--gcu-surface)!important;color:var(--gcu-text)!important;border-color:var(--gcu-border)!important}
 
 /* Runtime glue is loaded after the SCSS theme. Keep its dark widget foregrounds
    semantic instead of flattening every icon to white. */
