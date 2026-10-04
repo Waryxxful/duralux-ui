@@ -19,6 +19,10 @@ export { CardLoader } from '../components/ui/CardLoader'
 export { LoadingState } from '../components/feedback/LoadingState'
 export { ErrorState } from '../components/feedback/ErrorState'
 export { EmptyState } from '../components/feedback/EmptyState'
+export { Table } from '../components/data/Table'
+export { ResponsiveTable } from '../components/data/ResponsiveTable'
+export { Pagination } from '../components/data/Pagination'
+export { DataTableToolbar } from '../components/data/DataTableToolbar'
 import { Icon as IconRuntime } from '../components/ui/Icon'
 import { Card as CardRuntime } from '../components/ui/Card'
 import { StatsCard as StatsCardRuntime } from '../components/ui/StatsCard'
@@ -31,10 +35,6 @@ import { ProgressRing as ProgressRingRuntime } from '../components/ui/ProgressRi
 import { Progress as ProgressRuntime } from '../components/ui/Progress'
 import { Tabs as TabsRuntime } from '../components/ui/Tabs'
 import { DataTable as DataTableRuntime } from '../components/data/DataTable'
-import { Table as TableRuntime } from '../components/data/Table'
-import { Pagination as PaginationRuntime } from '../components/data/Pagination'
-import { ResponsiveTable as ResponsiveTableRuntime } from '../components/data/ResponsiveTable'
-import { DataTableToolbar as DataTableToolbarRuntime } from '../components/data/DataTableToolbar'
 import { ChatSidebar as ChatSidebarRuntime } from '../components/chat/ChatSidebar'
 import { ChatBubble as ChatBubbleRuntime, ChatTypingIndicator as ChatTypingIndicatorRuntime } from '../components/chat/ChatBubble'
 import { ChatInputBar as ChatInputBarRuntime } from '../components/chat/ChatInputBar'
@@ -84,15 +84,11 @@ import type {
   ModalSize,
   PageHeaderBreadcrumb,
   PageHeaderProps,
-  PaginationProps,
   ProgressProps,
   ProgressRingProps,
-  ResponsiveTableProps,
-  DataTableToolbarProps,
   DataTableToolbarContext,
   SidebarProps,
   TableColumn,
-  TableProps,
   TableRowEntry,
   TableSlot,
   TableSlotContext,
@@ -128,7 +124,6 @@ export const Card = asComponent<CardProps>(CardRuntime)
 export const Avatar = asComponent<AvatarProps>(AvatarRuntime)
 export const Progress = asComponent<ProgressProps>(ProgressRuntime)
 export const ProgressRing = asComponent<ProgressRingProps>(ProgressRingRuntime)
-export const Pagination = asComponent<PaginationProps>(PaginationRuntime)
 export const MessageBubble = asComponent<MessageBubbleProps>(MessageBubbleRuntime)
 export const ChatSidebar = asGenericComponent<<TContact extends import('./types').ChatContact = import('./types').ChatContact>(props: ChatSidebarProps<TContact>) => React.ReactElement>(ChatSidebarRuntime)
 export const ChatBubble = asComponent<ChatBubbleProps>(ChatBubbleRuntime)
@@ -143,9 +138,6 @@ export const QuickLinkGrid = asComponent<QuickLinkGridProps>(QuickLinkGridRuntim
 export const Timeline = asComponent<TimelineProps>(TimelineRuntime)
 export const Tabs = asGenericComponent<<K extends string | number = string | number>(props: TabsProps<K>) => React.ReactElement>(TabsRuntime)
 export const DataTable = asGenericComponent<<T extends object = Record<string, string | number | boolean | null | undefined>>(props: DataTableProps<T>) => React.ReactElement>(DataTableRuntime)
-export const Table = asGenericComponent<<T = unknown>(props: TableProps<T>) => React.ReactElement>(TableRuntime)
-export const ResponsiveTable = asGenericComponent<<T = unknown>(props: ResponsiveTableProps<T>) => React.ReactElement>(ResponsiveTableRuntime)
-export const DataTableToolbar = asComponent<DataTableToolbarProps>(DataTableToolbarRuntime)
 export const AppLayout = asComponent<AppLayoutProps>(AppLayoutRuntime)
 export const AuthLayout = asComponent<AuthLayoutProps>(AuthLayoutRuntime)
 export const Header = asComponent<HeaderProps>(HeaderRuntime)
@@ -219,6 +211,7 @@ export type {
   SidebarProps,
   TableColumn,
   TableProps,
+  TableDensity,
   TableRowEntry,
   TableSlot,
   TableSlotContext,

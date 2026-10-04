@@ -387,8 +387,13 @@ export interface TableColumn<T = unknown> {
   headerClassName?: string
   width?: string | number
   cellClassName?: string
+  /** Columna numérica: alinea encabezado y celdas a la derecha con números tabulares. */
+  numeric?: boolean
   render?: (row: T, rowIndex: number) => React.ReactNode
 }
+
+/** Densidad de filas: `compact` (40 px) para tablas operativas largas, `comfortable` (56 px) para pocas filas. */
+export type TableDensity = 'compact' | 'comfortable'
 
 export interface TableProps<T = unknown> extends Omit<React.TableHTMLAttributes<HTMLTableElement>, 'children' | 'className' | 'rows'> {
   columns?: ReadonlyArray<TableColumn<T>>
@@ -411,6 +416,16 @@ export interface TableProps<T = unknown> extends Omit<React.TableHTMLAttributes<
   'aria-label'?: string
   'aria-labelledby'?: string
   'aria-busy'?: React.AriaAttributes['aria-busy']
+  /** Densidad de filas; sin valor, altura estándar de 48 px. */
+  density?: TableDensity
+  /** Encabezado fijo dentro del contenedor (que pasa a desplazarse en vertical); sombra solo al hacer scroll. */
+  stickyHeader?: boolean
+  /** Alto máximo del contenedor con `stickyHeader` (número en px o largo CSS). Por defecto `min(32rem, 70vh)`. */
+  maxHeight?: number | string
+  /** Reemplaza el estado vacío por defecto (EmptyState con `emptyMessage` como título). */
+  emptyState?: React.ReactNode
+  /** Filas de skeleton mientras `loading` (por defecto 5). */
+  loadingRows?: number
 }
 
 export type DataTableKey<T extends object> = Extract<keyof T, string | number>
@@ -524,6 +539,10 @@ export interface PaginationProps {
   className?: string
   pageAriaLabel?: (page: number) => string
   'aria-label'?: string
+  /** Filas por página; con `totalItems` muestra el rango visible («11–20 de 248»). */
+  pageSize?: number
+  /** Total de registros; con `pageSize` muestra el rango visible. */
+  totalItems?: number
 }
 
 export interface ResponsiveTableProps<T = unknown> extends TableProps<T> {}
