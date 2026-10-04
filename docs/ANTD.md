@@ -1,6 +1,24 @@
 # antd en @duralux/ui
 
-antd se usa solo para lo que es caro construir a mano: calendarios, rangos de fecha, árboles, cascadas y carga de archivos. Todo lo demás (botones, inputs, selects simples, tablas, modales) es Duralux.
+antd se usa solo para lo que es caro construir a mano: calendarios, rangos de fecha y hora, árboles, cascadas, carga de archivos, sliders de rango, listas de transferencia, paneles redimensionables, recorridos guiados, menciones, selector de color y visor de imágenes. Todo lo demás (botones, inputs, selects simples, tablas, modales) es Duralux.
+
+## Criterio: qué se envuelve y qué no
+
+Se envuelve lo que el sistema **no tiene** o tiene peor. Cada export es un wrapper fino: defaults Duralux (textos en español internacional, formatos, nombres accesibles) y el resto de las props de antd pasa tal cual.
+
+**No se envuelve** (ya existe en `@duralux/ui`; usar el componente Duralux):
+
+| antd | Duralux |
+|---|---|
+| `Table` | `DataTable` (TanStack) |
+| `Modal`, `Drawer` | `Modal` (un panel lateral nuevo va en el núcleo, no vía antd) |
+| `Dropdown`, `Tabs`, `Steps` | `Dropdown`, `Tabs`, `ProcessSteps` |
+| `Tooltip` | `IconButton label` / ayuda de `FormField` (un tooltip genérico va en el núcleo) |
+| `message`, `notification` | `Toast` |
+| `Form` | `FormField` + controles Duralux |
+| `Card`, `Descriptions`, `Statistic` | `Card`, `DescriptionList`, `KpiCard` / `MiniStatCard` |
+
+Si un componente de antd no aparece en el catálogo, no se importa directo en las apps: se propone aquí primero.
 
 ## Instalación (solo en apps que lo necesiten)
 
@@ -13,7 +31,7 @@ pnpm add antd@^6 dayjs@^1.11
 ## Uso
 
 ```tsx
-import { DuraluxAntdProvider, DateRangeFilter, DatePicker, TreeSelect, Cascader, FileDrop } from '@duralux/ui/antd'
+import { DuraluxAntdProvider, DateRangeFilter, RangeSlider, NumberInput, Tour } from '@duralux/ui/antd'
 
 <DuraluxAntdProvider>
   <DateRangeFilter onChange={setRango} />
@@ -28,7 +46,7 @@ import { DuraluxAntdProvider, DateRangeFilter, DatePicker, TreeSelect, Cascader,
 
 En una app con Module Federation, monta un solo `DuraluxAntdProvider` cerca de la raíz de la vista que usa antd.
 
-## Componentes
+## Catálogo
 
 | Componente | Defaults Duralux |
 |---|---|
@@ -38,5 +56,18 @@ En una app con Module Federation, monta un solo `DuraluxAntdProvider` cerca de l
 | `TreeSelect` | búsqueda por título, «Selecciona una opción», nombre accesible desde el placeholder |
 | `Cascader` | búsqueda, «Selecciona una opción», nombre accesible desde el placeholder |
 | `FileDrop` | `Upload.Dragger` en español; sin `action` no sube nada solo: entrega los archivos en `onChange` |
+| `RangeSlider` | `Slider range`, 0–100, valor en el tooltip; `handleLabels: [mín, máx]` **obligatorio** (nombre accesible de cada manija); sin valor parte en `[min, max]` |
+| `NumberInput` | `InputNumber` con formato es-CL (`1.234.567,5`); respeta lo tecleado y normaliza al salir; `prefix` / `suffix` de antd. Helpers `formatNumberEsCL` / `parseNumberEsCL` |
+| `TimePicker` | `HH:mm`, «Selecciona una hora» |
+| `TimeRangePicker` | `HH:mm`, «Desde» / «Hasta» |
+| `Calendar` | locale español aunque falte el provider; semana desde el lunes (dayjs `es`) |
+| `Transfer` | búsqueda, «Disponibles» / «Seleccionados», «Buscar…», «elemento(s)», «Sin resultados»; `render` por defecto = `title` |
+| `CheckTree` | `Tree checkable`; con `searchable`, buscador que resalta coincidencias (sin distinguir tildes) y expande sus ramas |
+| `Splitter` | `Splitter.Panel` sin `min` recibe 160 px (`SPLITTER_PANEL_MIN`) |
+| `Tour` | «Anterior», «Siguiente» y «Finalizar» en cada paso, aunque un `ConfigProvider` anidado cambie el locale |
+| `AutoComplete` | «Escribe para buscar…», nombre accesible desde el placeholder |
+| `Mentions` | prefijo `@`, «Sin coincidencias» |
+| `ColorPicker` | presets «Paleta Duralux» (tono 500 de cada familia de tokens, `duraluxColorPresets`) |
+| `ImagePreview` | `Image` con visor; «Ver» sobre la miniatura y botones del visor rotulados en español (Acercar, Girar a la izquierda…) |
 
-Todos aceptan las props de antd. Ver Storybook › Componentes › antd.
+Todos aceptan las props de antd. Los que abren popup (pickers, AutoComplete, Mentions, ColorPicker, Tour) se ven sobre un `Modal` Duralux gracias a `zIndexPopupBase`. Valores inválidos (rango fuera de `min`/`max`, número no interpretable, `Tour` sin pasos, imagen sin `alt`) se avisan con `log.warn` (`[duralux]`, solo fuera de producción). Ver Storybook › Componentes › antd.

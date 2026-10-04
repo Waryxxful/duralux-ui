@@ -2,7 +2,7 @@ import { act, render, screen } from '@testing-library/react'
 import { theme as antdTheme } from 'antd'
 import { describe, expect, test } from 'vitest'
 import { ThemeProvider } from '../src/theme/ThemeProvider'
-import { antdConfigFor, DatePicker, DateRangeFilter, DuraluxAntdProvider, FileDrop, RangePicker, TreeSelect, Cascader, dateRangePresets } from '../src/antd'
+import { antdConfigFor, DatePicker, DateRangeFilter, DuraluxAntdProvider, FileDrop, RangePicker, TreeSelect, Cascader, dateRangePresets, formatNumberEsCL, parseNumberEsCL, NumberInput, RangeSlider } from '../src/antd'
 
 describe('@duralux/ui/antd', () => {
   test('la configuración usa el algoritmo oscuro en dark y navy, y los tokens del tema', () => {
@@ -81,5 +81,22 @@ describe('@duralux/ui/antd — accesibilidad', () => {
     )
     expect(screen.getByRole('combobox', { name: 'Área' })).toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: 'Región' })).toBeInTheDocument()
+  })
+})
+
+describe('@duralux/ui/antd — 2.5.1', () => {
+  test('NumberInput usa formato es-CL (miles con punto, decimal con coma) y lo interpreta de vuelta', () => {
+    expect(formatNumberEsCL(1234567.5)).toBe('1.234.567,5')
+    expect(formatNumberEsCL(-1000)).toBe('-1.000')
+    expect(parseNumberEsCL('1.234.567,5')).toBe('1234567.5')
+    expect(parseNumberEsCL('12,5 %')).toBe('12.5')
+    render(<DuraluxAntdProvider theme="light"><NumberInput aria-label="Monto" defaultValue={1250000.75} /></DuraluxAntdProvider>)
+    expect(screen.getByRole('spinbutton', { name: 'Monto' })).toHaveValue('1.250.000,75')
+  })
+
+  test('RangeSlider da nombre accesible a cada manija', () => {
+    render(<DuraluxAntdProvider theme="light"><RangeSlider handleLabels={['Puntaje mínimo', 'Puntaje máximo']} defaultValue={[20, 80]} /></DuraluxAntdProvider>)
+    expect(screen.getByRole('slider', { name: 'Puntaje mínimo' })).toHaveAttribute('aria-valuenow', '20')
+    expect(screen.getByRole('slider', { name: 'Puntaje máximo' })).toHaveAttribute('aria-valuenow', '80')
   })
 })
