@@ -16,7 +16,8 @@ function itemKey(item: DescriptionListItem, seen: Map<string, number>): string {
 }
 
 function resolveColumns(columns: number | undefined): 1 | 2 | 3 {
-  if (columns === undefined || columns === 1 || columns === 2 || columns === 3) return columns ?? 1
+  if (columns === undefined) return 1
+  if (columns === 1 || columns === 2 || columns === 3) return columns
   log.warn(`DescriptionList: columns debe ser 1, 2 o 3 (recibido: ${String(columns)}); se usa 1.`)
   return 1
 }

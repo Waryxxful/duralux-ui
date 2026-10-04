@@ -336,3 +336,66 @@ export interface PieChartWidgetProps extends ChartStateProps {
   height?: number
   legend?: boolean
 }
+
+// ── 2.5 · Lote N2: gráficos compactos (`@duralux/ui/charts/apex`) ─────────────────
+
+/** Tono de la serie principal de un gráfico compacto (roles `status-*`, ≥ 3:1 como marca gráfica). */
+export type CompactChartTone = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'indigo' | 'teal' | 'secondary'
+
+interface CompactChartBaseProps extends Omit<ChartStateProps, 'ariaLabel'> {
+  /** Nombre accesible de la figura (obligatorio: un gráfico compacto no tiene título visible). */
+  ariaLabel: string
+  /** Formato de las cifras (por defecto es-CL: 2.840 · 4,3). */
+  formatValue?: (value: number) => string
+}
+
+export interface SparklineProps extends CompactChartBaseProps {
+  data: ReadonlyArray<number>
+  /** Etiquetas de cada punto (para la tabla de datos y el tooltip). */
+  categories?: ReadonlyArray<string>
+  /** Nombre de la serie; por defecto `ariaLabel`. */
+  name?: string
+  tone?: CompactChartTone
+  /** Sobre una superficie de color (Spotlight, ColoredStatCard): línea clara y fondo transparente. */
+  onColor?: boolean
+  variant?: 'area' | 'line'
+  /** Alto en px. Por defecto 48. */
+  height?: number
+}
+
+export interface TrendLineSeries {
+  name: string
+  data: ReadonlyArray<number | null>
+}
+
+export interface TrendLineProps extends CompactChartBaseProps {
+  /** Serie principal y, opcionalmente, una de comparación (se dibuja punteada). */
+  series: ReadonlyArray<TrendLineSeries>
+  categories: ReadonlyArray<string>
+  /** Línea de meta horizontal, punteada y con su etiqueta. */
+  target?: { value: number; label: string }
+  tone?: CompactChartTone
+  /** Alto en px. Por defecto 240. */
+  height?: number
+}
+
+export interface GaugeProps extends CompactChartBaseProps {
+  value: number
+  max?: number
+  /** Unidad de la cifra central. Por defecto «%». */
+  unit?: string
+  tone?: CompactChartTone
+  /** Alto en px. Por defecto 180. */
+  height?: number
+}
+
+export interface DonutProps extends CompactChartBaseProps {
+  labels: ReadonlyArray<string>
+  values: ReadonlyArray<number>
+  /** Texto central; por defecto la suma en es-CL. */
+  total?: string
+  /** Etiqueta del centro. Por defecto «Total». */
+  totalLabel?: string
+  /** Alto en px. Por defecto 240. */
+  height?: number
+}
