@@ -944,11 +944,6 @@ $gcu-dark-palettes: (
 			}
 		}
 
-		/* <---------------! Progress !---------------> */
-		.progress {
-			--bs-progress-bg: rgba(255, 255, 255, 0.1);
-		}
-
 		/* <---------------! Table !---------------> */
 		.table {
 			// Keep the hover state distinct, while the permanent zebra stripe stays

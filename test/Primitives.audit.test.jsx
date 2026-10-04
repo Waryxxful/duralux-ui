@@ -211,7 +211,8 @@ test('Progress clamps finite values in visual and ARIA output', () => {
   expect(bar).toHaveAttribute('aria-valuemin', '0')
   expect(bar).toHaveAttribute('aria-valuemax', '100')
   expect(bar).toHaveStyle({ width: '0%' })
-  expect(bar).toHaveTextContent('0%')
+  // Corrección 2.3 (lote L3): formato de porcentaje de REGLAS §8 («0 %»).
+  expect(bar).toHaveTextContent('0 %')
 })
 
 test('ProgressRing exposes a clamped progressbar and a CSS indicator class', () => {

@@ -13,8 +13,8 @@ import { ColoredStatCard as ColoredStatCardRuntime } from '../components/ui/Colo
 import { ChartMetricsFooter as ChartMetricsFooterRuntime } from '../components/ui/ChartMetricsFooter'
 import { QuickLinkGrid as QuickLinkGridRuntime } from '../components/ui/QuickLinkGrid'
 import { Timeline as TimelineRuntime } from '../components/ui/Timeline'
-import { ProgressRing as ProgressRingRuntime } from '../components/ui/ProgressRing'
-import { Progress as ProgressRuntime } from '../components/ui/Progress'
+export { ProgressRing } from '../components/ui/ProgressRing'
+export { Progress } from '../components/ui/Progress'
 import { Tabs as TabsRuntime } from '../components/ui/Tabs'
 import { EmptyState as EmptyStateRuntime } from '../components/feedback/EmptyState'
 import { ErrorState as ErrorStateRuntime } from '../components/feedback/ErrorState'
@@ -148,8 +148,6 @@ export const Modal = asComponent<ModalProps>(ModalRuntime)
 export const EmptyState = asComponent<EmptyStateProps>(EmptyStateRuntime)
 export const ErrorState = asComponent<ErrorStateProps>(ErrorStateRuntime)
 export const LoadingState = asComponent<LoadingStateProps>(LoadingStateRuntime)
-export const Progress = asComponent<ProgressProps>(ProgressRuntime)
-export const ProgressRing = asComponent<ProgressRingProps>(ProgressRingRuntime)
 export const Checkbox = asComponent<CheckboxProps>(CheckboxRuntime)
 export const Radio = asComponent<RadioProps>(RadioRuntime)
 export const FileInput = asComponent<FileInputProps>(FileInputRuntime)
