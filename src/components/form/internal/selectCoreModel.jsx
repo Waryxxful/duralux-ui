@@ -1,6 +1,7 @@
 import React, { isValidElement, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { registerDismissableLayer } from '../../../utils/dismissableLayer'
 import { isArray, isBoolean, isFiniteNumber, isFunction, isNonEmptyString, isObject, isString } from '../../../utils/typeGuards'
+import { warnOnce } from './fieldState'
 
 export const EMPTY_OPTIONS = Object.freeze([])
 export const MAX_OPTION_COUNT = 10000
@@ -166,8 +167,9 @@ export function optionVisual(option, renderOption) {
       // Consumer renderers are an escape hatch, but React cannot render an
       // arbitrary object. Keep the listbox usable when an option is hostile.
       return safeRenderable(renderOption(option.raw, option), option.label)
-    } catch {
+    } catch (error) {
       // A consumer renderer is an escape hatch; fall back to the safe label.
+      warnOnce('select-render-option', `renderOption lanzó un error; se muestra el label de la opción. ${safeString(error)}`)
     }
   }
 
@@ -212,13 +214,15 @@ export function useListboxCore({
   onSelect,
   isSelected,
   closeOnSelect,
-  onClose,
+  onClose = undefined,
 }) {
   const generatedId = useId()
   const prefix = `gcu-select-${safeIdPart(generatedId)}`
   const rootRef = useRef(null)
   const inputRef = useRef(null)
-  const [open, setOpen] = useState(false)
+  const [openState, setOpen] = useState(false)
+  // DX-017: deshabilitado se deriva en render; no se ajusta estado en un efecto.
+  const open = openState && !disabled
   const [activeToken, setActiveToken] = useState(null)
   const composingRef = useRef(false)
 
@@ -230,7 +234,9 @@ export function useListboxCore({
   }, [options, query])
 
   const enabled = useMemo(() => filtered.filter(option => !option.disabled), [filtered])
-  const activeIndex = enabled.findIndex(option => option.token === activeToken)
+  // DX-017: si la opción activa sale del filtro, la activa es la primera habilitada (derivado en render).
+  const storedIndex = enabled.findIndex(option => option.token === activeToken)
+  const activeIndex = storedIndex >= 0 ? storedIndex : (open && enabled.length ? 0 : -1)
   const activeOption = activeIndex >= 0 ? enabled[activeIndex] : null
 
   const close = useCallback((restoreFocus = false) => {
@@ -258,17 +264,6 @@ export function useListboxCore({
       onPointerDownOutside: () => close(false),
     })
   }, [close, open])
-
-  useEffect(() => {
-    if (!disabled || !open) return
-    close(false)
-  }, [close, disabled, open])
-
-  useEffect(() => {
-    if (!open) return
-    if (activeOption) return
-    setActiveToken(firstEnabled(enabled))
-  }, [activeOption, enabled, open])
 
   function move(delta) {
     if (!enabled.length) return
@@ -327,7 +322,7 @@ export function useListboxCore({
     inputRef,
     open,
     filtered,
-    activeToken,
+    activeToken: activeOption?.token ?? null,
     activeOption,
     setActiveToken,
     show,

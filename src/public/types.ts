@@ -172,6 +172,9 @@ export interface ProgressRingProps extends React.HTMLAttributes<HTMLDivElement> 
   label?: React.ReactNode
 }
 
+/** Altura del control: 32 / 36 / 40 px (`--gcu-control-h-{sm,md,lg}`). `md` es el tamaño base. */
+export type ControlSize = 'sm' | 'md' | 'lg'
+
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: React.ReactNode
   invalid?: boolean
@@ -189,6 +192,7 @@ export interface FileInputProps extends Omit<React.InputHTMLAttributes<HTMLInput
   label?: React.ReactNode
   error?: boolean | string
   helpText?: React.ReactNode
+  controlSize?: ControlSize
 }
 
 export interface InputGroupControlProps {
@@ -203,6 +207,8 @@ export interface InputGroupControlProps {
 export interface InputGroupProps {
   prepend?: React.ReactNode
   append?: React.ReactNode
+  /** Altura del grupo completo (`input-group-sm` / `-lg`). */
+  controlSize?: ControlSize
   className?: string
   id?: string
   required?: boolean
@@ -309,6 +315,8 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   endAddon?: React.ReactNode
   invalid?: boolean
   error?: boolean | string
+  /** Altura del control; el atributo nativo `size` (ancho en caracteres) se conserva. */
+  controlSize?: ControlSize
 }
 
 export interface SelectOption {
@@ -322,12 +330,15 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
   invalid?: boolean
   error?: boolean | string
   placeholder?: React.ReactNode
+  /** Altura del control; el atributo nativo `size` (filas visibles) se conserva. */
+  controlSize?: ControlSize
 }
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   icon?: string
   invalid?: boolean
   error?: boolean | string
+  controlSize?: ControlSize
 }
 
 export interface TableRowEntry<T> {

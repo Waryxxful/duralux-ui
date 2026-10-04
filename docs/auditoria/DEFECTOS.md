@@ -35,14 +35,14 @@ react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 pá
 | DX-007 | P2 | a11y | Atributo ARIA prohibido en un elemento (ver `axe-light.json`) | axe aria-prohibited-attr | 2 | cerrado 2.1 (tendencia de StatsCard con texto oculto, sin aria-label en div) |
 | DX-008 | P1 | visual | Campo obligatorio muestra asterisco duplicado (`Nombre * *`) | captura `dark-forms.png` (formulario completo) | 2 | cerrado 2.1 (era la demo: label con `*` + `required`) |
 | DX-009 | P1 | visual | `Select` usa tamaño de fuente mayor que `Input` en la misma fila | captura `dark-forms.png` (Select País/Estado) | 1 | cerrado 2.1 (causa raíz: orden de imports de Bootstrap) |
-| DX-010 | P2 | visual | `FileInput`: botón nativo claro en tema oscuro | captura `dark-forms.png` (FileInput) | 2 | abierto |
+| DX-010 | P2 | visual | `FileInput`: botón nativo claro en tema oscuro | captura `dark-forms.png` (FileInput) | 2 | cerrado 2.3 L1 (`::file-selector-button` con tokens) |
 | DX-011 | P2 | tema | Navy solo existe como rama `theme/navy`; no seleccionable en runtime | `git branch` | 1 | cerrado 2.1 (navy en runtime) |
 | DX-012 | P2 | tema | `readStoredMode` convierte cualquier valor ≠ `dark` en `light` | `src/theme/ThemeContext.ts:23` | 1 | cerrado 2.1 (4 modos + `log.warn`) |
 | DX-013 | P2 | tipografía | Inter cargada desde Google Fonts (dependencia externa, privacidad, offline) | `scss/theme.scss` `@import url(fonts.googleapis…)` | 1 | cerrado 2.1 (Inter Variable autoalojada) |
 | DX-014 | P2 | tokens | Solo 14 tokens de color; sin escalas de espaciado, elevación, motion, z-index, alturas | `tokens/semantic-colors.json` | 1 | cerrado 2.1 (tokens DTCG de tres niveles) |
 | DX-015 | P2 | css | 680 `!important`, 181 overrides `.app-skin-dark`, 428 hex sueltos | `docs/auditoria/baseline.json` | 1 (global) / 2 (componentes) | en curso: presupuesto por archivo en gate (2.1); reducción en subproyecto 2 |
 | DX-016 | P2 | react | `setState` síncrono en efecto y estado empujado al padre vía efecto | `src/components/ui/Tabs.jsx:106`, `:129` | 2 | abierto |
-| DX-017 | P2 | react | Estado ajustado tras cambio de prop (×5) | `ChatSidebar.jsx:140`, `SearchableSelect.jsx:83`, `selectCoreModel.jsx:237-238`, `navigationCore.tsx:428` | 2 | abierto |
+| DX-017 | P2 | react | Estado ajustado tras cambio de prop (×5) | `ChatSidebar.jsx:140`, `SearchableSelect.jsx:83`, `selectCoreModel.jsx:237-238`, `navigationCore.tsx:428` | 2 | parcial: SearchableSelect/MultiSelect/selectCoreModel cerrados en 2.3 L1 (derivado en render); ChatSidebar (L7) y navigationCore (2.6) abiertos |
 | DX-018 | P3 | react | Key por índice | `src/components/charts/ChartLegend.jsx:11` | 2 | no aplica: el índice solo desempata series con la misma clave |
 | DX-019 | P2 | react | Modal propio en vez de `<dialog>` | `src/components/ui/Modal.jsx:487` | 2 | abierto |
 | DX-020 | P3 | react | `role` en vez de elemento HTML | `src/components/ui/StatsCard.jsx:73` | 2 | abierto |

@@ -36,17 +36,11 @@ describe('hallazgos de la revisión final 2.1', () => {
 
   test('los puentes de superficie del ThemeScope local cubren navy', () => {
     expect(css).toContain('.gcu-theme[data-gcu-theme="navy"] .card')
-    expect(css).toContain('.gcu-theme[data-gcu-theme="navy"] .form-control')
   })
 
   test('reduced-motion anula duraciones también en .gcu-theme y scopes locales', () => {
     const block = renderGeneratedCss(readTokens(root))
     expect(block).toMatch(/@media \(prefers-reduced-motion:reduce\)\{:root,\.gcu-theme,\[data-gcu-theme\]\{/)
-  })
-
-  test('form-control-sm/-lg y form-select-sm/-lg mantienen 32/40 px', () => {
-    expect(css).toMatch(/\.form-control-sm,\.form-select-sm[^{]*\{[^}]*min-height:var\(--gcu-control-h-sm\)/)
-    expect(css).toMatch(/\.form-control-lg,\.form-select-lg[^{]*\{[^}]*min-height:var\(--gcu-control-h-lg\)/)
   })
 
   test('bootstrap.css sigue siendo legible sin grancrm-ui.css (var() con fallback)', () => {

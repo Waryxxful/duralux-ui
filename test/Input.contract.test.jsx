@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
-import { Input } from '../src/components/form/Input.jsx'
+import { Input } from '../src/components/form/Input'
 
 test('sets aria-invalid when invalid/error is truthy', () => {
   const { rerender } = render(<Input aria-label="Nombre" error />)

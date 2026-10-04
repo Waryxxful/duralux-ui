@@ -1,0 +1,7 @@
+/* InputGroup y addons de Input/Textarea (.input-group-text de las apps).
+   Mismo borde y alturas que el control; el addon se lee como superficie secundaria. */
+.input-group-text{min-height:var(--gcu-control-h-md);padding-inline:var(--gcu-space-3);border-color:var(--gcu-border-strong);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface-subtle);color:var(--gcu-muted);font-weight:var(--gcu-font-weight-semibold)}
+/* Alineación óptica: un ícono pesa más que el texto; su lado exterior lleva 2 px menos. */
+.input-group>.input-group-text:first-child:has(>i,>svg){padding-inline-start:calc(var(--gcu-space-3) - 2px)}
+.input-group>.input-group-text:last-child:has(>i,>svg){padding-inline-end:calc(var(--gcu-space-3) - 2px)}
+.input-group>.form-control.is-invalid~.input-group-text,.input-group>.input-group-text:has(~.form-control.is-invalid){border-color:var(--gcu-status-danger)}
