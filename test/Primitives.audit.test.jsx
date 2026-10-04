@@ -241,7 +241,8 @@ test('StatsCard gives its progress bar the shared normalized semantics', () => {
   )
   const bar = screen.getByRole('progressbar', { name: 'Customer completion' })
 
-  expect(bar).toHaveAttribute('aria-valuenow', '0')
-  expect(bar).toHaveAttribute('aria-valuemax', '100')
-  expect(bar).toHaveStyle({ width: '0%' })
+  // DX-020 (lote L4): <progress> nativo en vez de role="progressbar"; valor y máximo van en value/max.
+  expect(bar.tagName).toBe('PROGRESS')
+  expect(bar).toHaveAttribute('value', '0')
+  expect(bar).toHaveAttribute('max', '100')
 })

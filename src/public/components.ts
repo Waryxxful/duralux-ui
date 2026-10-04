@@ -25,11 +25,12 @@ export { Table } from '../components/data/Table'
 export { ResponsiveTable } from '../components/data/ResponsiveTable'
 export { Pagination } from '../components/data/Pagination'
 export { DataTableToolbar } from '../components/data/DataTableToolbar'
-import { StatsCard as StatsCardRuntime } from '../components/ui/StatsCard'
-import { MiniStatCard as MiniStatCardRuntime } from '../components/ui/MiniStatCard'
-import { ColoredStatCard as ColoredStatCardRuntime } from '../components/ui/ColoredStatCard'
-import { ChartMetricsFooter as ChartMetricsFooterRuntime } from '../components/ui/ChartMetricsFooter'
-import { QuickLinkGrid as QuickLinkGridRuntime } from '../components/ui/QuickLinkGrid'
+export { StatsCard } from '../components/ui/StatsCard'
+export { MiniStatCard } from '../components/ui/MiniStatCard'
+export { ColoredStatCard } from '../components/ui/ColoredStatCard'
+export { ChartMetricsFooter } from '../components/ui/ChartMetricsFooter'
+export { QuickLinkGrid } from '../components/ui/QuickLinkGrid'
+export { ConnectionCard } from '../components/ui/ConnectionCard'
 export { Timeline } from '../components/ui/Timeline'
 export { ProgressRing } from '../components/ui/ProgressRing'
 export { Progress } from '../components/ui/Progress'
@@ -63,7 +64,6 @@ import type {
   ChatTypingIndicatorProps,
   ChatWindowContact,
   ChatWindowProps,
-  ColoredStatCardProps,
   DataTableProps,
   DataTableAction,
   DataTableColumn,
@@ -79,7 +79,6 @@ import type {
   LinkButtonProps,
   LoadingStateProps,
   MessageBubbleProps,
-  MiniStatCardProps,
   ModalProps,
   ModalSize,
   PageHeaderBreadcrumb,
@@ -101,9 +100,6 @@ import type {
   AvatarGroupItem,
   FooterProps,
   FooterLink,
-  ChartMetricsFooterProps,
-  QuickLinkGridProps,
-  StatsCardProps,
   ThemeProviderProps,
   ApiFetchOptions,
 } from './types'
@@ -124,11 +120,6 @@ export const ChatBubble = asComponent<ChatBubbleProps>(ChatBubbleRuntime)
 export const ChatTypingIndicator = asComponent<ChatTypingIndicatorProps>(ChatTypingIndicatorRuntime)
 export const ChatInputBar = asComponent<ChatInputBarProps>(ChatInputBarRuntime)
 export const ChatWindow = asGenericComponent<<TContact extends import('./types').ChatWindowContact = import('./types').ChatWindowContact>(props: ChatWindowProps<TContact>) => React.ReactElement>(ChatWindowRuntime)
-export const StatsCard = asComponent<StatsCardProps>(StatsCardRuntime)
-export const MiniStatCard = asComponent<MiniStatCardProps>(MiniStatCardRuntime)
-export const ColoredStatCard = asComponent<ColoredStatCardProps>(ColoredStatCardRuntime)
-export const ChartMetricsFooter = asComponent<ChartMetricsFooterProps>(ChartMetricsFooterRuntime)
-export const QuickLinkGrid = asComponent<QuickLinkGridProps>(QuickLinkGridRuntime)
 export const DataTable = asGenericComponent<<T extends object = Record<string, string | number | boolean | null | undefined>>(props: DataTableProps<T>) => React.ReactElement>(DataTableRuntime)
 export const AppLayout = asComponent<AppLayoutProps>(AppLayoutRuntime)
 export const AuthLayout = asComponent<AuthLayoutProps>(AuthLayoutRuntime)
@@ -219,6 +210,20 @@ export type {
   ChartMetricsFooterProps,
   QuickLinkGridProps,
   StatsCardProps,
+  StatsCardTrend,
+  StatsCardProgress,
+  IndicatorTone,
+  IndicatorDelta,
+  IndicatorIcon,
+  ChartMetric,
+  QuickLinkItem,
+  ConnectionCardProps,
+  CardHeaderProps,
+  CardBodyProps,
+  CardFooterProps,
+  StatusBadgeProps,
+  StatusButtonProps,
+  StatCardProps,
   ThemeProviderProps,
   ApiFetchOptions,
 } from './types'

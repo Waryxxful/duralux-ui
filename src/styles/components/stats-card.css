@@ -1,0 +1,21 @@
+/* StatsCard (y StatCard de GranCRM): KPI con ícono, cifra, variación, contexto y progreso.
+   Responde a su contenedor: angosta, la variación baja bajo la cifra; desde 24rem va a la derecha. */
+.gcu-stats-card__body{display:flex;flex-direction:column;gap:var(--gcu-space-3)}
+.gcu-stats-card__main{display:flex;flex-wrap:wrap;align-items:flex-start;gap:var(--gcu-space-3)}
+.gcu-stats-card__figures{display:flex;flex:1 1 0;flex-direction:column;gap:var(--gcu-space-0-5);min-width:0}
+.gcu-stats-card__delta{flex-basis:100%}
+.gcu-stats-card__progress{display:flex;flex-direction:column;gap:var(--gcu-space-1);padding-top:var(--gcu-space-1)}
+.gcu-stats-card__progress-head{display:flex;justify-content:space-between;gap:var(--gcu-space-2);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+
+/* Pie: acción o nota; radio inferior anidado (Craft): radio de la card − su borde de 1px. */
+.gcu-stats-card .gcu-stats-card__footer{display:block;width:100%;min-height:0;padding:var(--gcu-space-4);border-radius:0 0 max(0px,calc(var(--gcu-radius-lg) - 1px)) max(0px,calc(var(--gcu-radius-lg) - 1px));background-color:transparent;color:var(--gcu-text);font-size:var(--gcu-font-size-2xs);line-height:var(--gcu-line-height-2xs);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-caps);text-align:center;text-transform:uppercase}
+/* Hover Restraint (Craft): el pie cambia al instante y solo con puntero real. */
+@media (hover:hover){.gcu-stats-card button.gcu-stats-card__footer:hover{background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+.gcu-stats-card button.gcu-stats-card__footer:active:not(:disabled){transform:none;background-color:var(--gcu-surface-sunken)}
+
+@container (min-width: 24rem){
+  .gcu-stats-card__main{flex-wrap:nowrap;gap:var(--gcu-space-4)}
+  .gcu-stats-card__delta{flex-basis:auto;flex-direction:column;align-items:flex-end;text-align:end}
+  .gcu-stats-card .gcu-stat__icon{width:var(--gcu-space-12);height:var(--gcu-space-12);font-size:var(--gcu-font-size-xl)}
+  .gcu-stats-card .gcu-stat__value{font-size:var(--gcu-font-size-2xl);line-height:var(--gcu-line-height-2xl);min-height:var(--gcu-line-height-2xl)}
+}

@@ -5,9 +5,9 @@
     "hex": 0
   },
   "src/styles/grancrm-ui.css": {
-    "important": 223,
-    "darkSelectors": 165,
-    "hex": 168
+    "important": 102,
+    "darkSelectors": 16,
+    "hex": 47
   },
   "src/components/charts/chartPalette.js": {
     "important": 0,
@@ -15,31 +15,6 @@
     "hex": 34
   },
   "src/components/charts/chartTheme.js": {
-    "important": 0,
-    "darkSelectors": 1,
-    "hex": 0
-  },
-  "src/components/ui/ColoredStatCard.jsx": {
-    "important": 0,
-    "darkSelectors": 1,
-    "hex": 0
-  },
-  "src/components/ui/MiniStatCard.jsx": {
-    "important": 0,
-    "darkSelectors": 1,
-    "hex": 0
-  },
-  "src/components/ui/ProgressRing.jsx": {
-    "important": 0,
-    "darkSelectors": 0,
-    "hex": 2
-  },
-  "src/components/ui/QuickLinkGrid.jsx": {
-    "important": 0,
-    "darkSelectors": 1,
-    "hex": 0
-  },
-  "src/components/ui/StatsCard.jsx": {
     "important": 0,
     "darkSelectors": 1,
     "hex": 0
@@ -79,13 +54,8 @@
     "darkSelectors": 0,
     "hex": 0
   },
-  "scss/themes/components/_alert.scss": {
-    "important": 4,
-    "darkSelectors": 1,
-    "hex": 0
-  },
   "scss/themes/components/_badge.scss": {
-    "important": 21,
+    "important": 15,
     "darkSelectors": 0,
     "hex": 0
   },
@@ -99,18 +69,8 @@
     "darkSelectors": 0,
     "hex": 4
   },
-  "scss/themes/components/_dropdown.scss": {
-    "important": 1,
-    "darkSelectors": 0,
-    "hex": 0
-  },
-  "scss/themes/components/_form.scss": {
-    "important": 9,
-    "darkSelectors": 0,
-    "hex": 0
-  },
   "scss/themes/components/_general.scss": {
-    "important": 115,
+    "important": 113,
     "darkSelectors": 0,
     "hex": 0
   },
@@ -118,11 +78,6 @@
     "important": 3,
     "darkSelectors": 0,
     "hex": 0
-  },
-  "scss/themes/components/_modal.scss": {
-    "important": 0,
-    "darkSelectors": 0,
-    "hex": 1
   },
   "scss/themes/components/_motion-reduced.scss": {
     "important": 6,
@@ -140,14 +95,9 @@
     "hex": 0
   },
   "scss/themes/components/_table.scss": {
-    "important": 7,
+    "important": 2,
     "darkSelectors": 0,
     "hex": 1
-  },
-  "scss/themes/components/_widgets-ui.scss": {
-    "important": 27,
-    "darkSelectors": 4,
-    "hex": 0
   },
   "scss/themes/layouts/_nxl-common.scss": {
     "important": 3,
@@ -175,9 +125,9 @@
     "hex": 0
   },
   "scss/themes/options/_theme-options-dark-theme.scss": {
-    "important": 115,
+    "important": 92,
     "darkSelectors": 3,
-    "hex": 55
+    "hex": 51
   },
   "scss/themes/options/_theme-options-header.scss": {
     "important": 4,

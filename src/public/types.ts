@@ -640,6 +640,42 @@ export interface FooterProps {
   className?: string
 }
 
+// ── Indicadores (lote L4) ──────────────────────────────────────────────────────
+
+/** Tono de un indicador: define el ícono suave o el relleno de la tarjeta de color. */
+export type IndicatorTone =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'teal'
+  | 'indigo'
+  | 'dark'
+  | 'neutral'
+
+/**
+ * Variación de una cifra respecto de un periodo o una meta. Se muestra con signo, unidad y
+ * forma (flecha + texto), nunca solo con color: «+4 pts vs. semana pasada».
+ */
+export interface IndicatorDelta {
+  /** Variación numérica; el signo define la flecha. Se formatea en es-CL (coma decimal). */
+  value: number
+  /** Unidad que sigue a la cifra: `%` (con espacio), `pts`, `s`, `llamadas`… */
+  unit?: string
+  /** Contexto de la comparación: «vs. semana pasada», «vs. meta». */
+  label?: React.ReactNode
+  /** Qué sentido es bueno (define el color de apoyo). Por defecto `up`; TMO o abandono usan `down`. */
+  goodWhen?: 'up' | 'down'
+  /** Decimales visibles (por defecto los necesarios, hasta 1). */
+  fractionDigits?: number
+}
+
+/** Ícono de un indicador: clase completa (`feather-users`), nombre Feather (`users`) o un SVG Tabler. */
+export type IndicatorIcon = string | React.ReactElement
+
+/** @deprecated Usa `IndicatorDelta` con la prop `delta`. */
 export interface StatsCardTrend {
   value: string
   up?: boolean
@@ -652,57 +688,137 @@ export interface StatsCardProgress {
   color?: string
 }
 
-export interface StatsCardProps {
-  icon?: string
+export interface StatsCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title' | 'color'> {
+  icon?: IndicatorIcon
+  /** @deprecated Usa `tone`. Clases del ícono (`bg-soft-info text-info`); se siguen aplicando. */
   iconBg?: string
+  /** Tono del ícono con los roles `--gcu-{tono}-soft` / `--gcu-{tono}-text`. */
+  tone?: IndicatorTone
+  /** Cifra principal. Un número se formatea en es-CL (2.840 · 4,3). `null` muestra el estado vacío. */
   value: React.ReactNode
   label: React.ReactNode
+  /** Variación con signo, unidad y flecha. */
+  delta?: IndicatorDelta
+  /** Contexto visible de la cifra: «meta 80 %», «de 120 agentes». */
+  context?: React.ReactNode
+  /** @deprecated Usa `delta`. */
   trend?: StatsCardTrend
   progress?: StatsCardProgress
   footer?: React.ReactNode
   onFooter?: () => void
+  /** Muestra skeleton en lugar de la cifra y marca `aria-busy`. */
+  loading?: boolean
+  /** Texto del estado vacío (cuando `value` es `null`, `undefined` o ''). */
+  emptyText?: React.ReactNode
 }
 
-export interface MiniStatCardProps {
-  icon?: string
+export interface MiniStatCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title' | 'color'> {
+  icon?: IndicatorIcon
   value: React.ReactNode
   label: React.ReactNode
+  /** Tono del ícono (`primary`, `success`…). Equivale a `tone`. */
   color?: string
+  tone?: IndicatorTone
+  delta?: IndicatorDelta
+  context?: React.ReactNode
+  loading?: boolean
+  emptyText?: React.ReactNode
 }
 
-export interface ColoredStatCardProps {
-  icon?: string
+export interface ColoredStatCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title' | 'color'> {
+  icon?: IndicatorIcon
   value: React.ReactNode
   label: React.ReactNode
+  /** Relleno de la tarjeta (AA con texto blanco en claro, oscuro y navy). */
+  tone?: Exclude<IndicatorTone, 'neutral'>
+  delta?: IndicatorDelta
+  context?: React.ReactNode
+  /** @deprecated Usa `delta`. */
   trend?: string
+  /** @deprecated Usa `delta` (el signo de `value` define la flecha). */
   trendUp?: boolean
+  /** @deprecated Usa `tone`. Clase `bg-{tono}`: se traduce al tono equivalente. */
   bg?: string
   chart?: React.ReactNode
+  loading?: boolean
+  emptyText?: React.ReactNode
 }
 
 export interface ChartMetric {
   id?: React.Key
   label: React.ReactNode
   value: React.ReactNode
+  /** Clase de color del valor (`text-primary`). */
   color?: string
+  delta?: IndicatorDelta
 }
 
-export interface ChartMetricsFooterProps {
+export interface ChartMetricsFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   metrics?: ReadonlyArray<ChartMetric>
+  loading?: boolean
 }
 
 export interface QuickLinkItem {
   id?: React.Key
-  icon: string
+  icon: IndicatorIcon
   label: React.ReactNode
+  /** Cifra opcional del acceso: «12 pendientes». */
+  description?: React.ReactNode
   href?: string
   onClick?: (event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void
   color?: string
 }
 
-export interface QuickLinkGridProps {
+export interface QuickLinkGridProps extends React.HTMLAttributes<HTMLDivElement> {
   items?: ReadonlyArray<QuickLinkItem>
+  /** Columnas cuando el contenedor tiene espacio (≥ 36rem). En contenedores angostos bajan a 2. */
   columns?: number
+}
+
+export interface ConnectionCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title' | 'onChange'> {
+  /** Logo o ícono de la integración (p. ej. `<Icon />` o una imagen de marca). */
+  icon: React.ReactNode
+  title: React.ReactNode
+  description?: React.ReactNode
+  checked: boolean
+  onChange: (checked: boolean) => void
+  disabled?: boolean
+  /** Explica por qué el switch está deshabilitado (se asocia con `aria-describedby`). */
+  disabledReason?: React.ReactNode
+  className?: string
+}
+
+// ── Extras GranCRM (CardHeader, CardBody, CardFooter, StatusBadge, StatusButton, StatCard) ─────
+
+export interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  title?: React.ReactNode
+  actions?: React.ReactNode
+}
+
+export type CardBodyProps = React.HTMLAttributes<HTMLDivElement>
+
+export type CardFooterProps = React.HTMLAttributes<HTMLDivElement>
+
+export interface StatusBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
+  status: StatusVariant
+  label?: string
+  soft?: boolean
+}
+
+export interface StatusButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  status: StatusVariant
+  label?: string
+  soft?: boolean
+}
+
+export interface StatCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  title: string
+  value: React.ReactNode
+  icon?: string
+  variant?: Exclude<SemanticVariant, 'link'>
+  /** Variación en porcentaje: se muestra con signo, `%` y flecha. */
+  change?: { value: number; label?: string }
+  footer?: React.ReactNode
 }
 
 /** Fecha de un evento: Date, ISO o epoch (ms). */

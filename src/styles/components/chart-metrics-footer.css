@@ -1,0 +1,14 @@
+/* ChartMetricsFooter: cifras bajo un gráfico. Angosto: dos columnas sin separadores.
+   Desde 28rem: una fila con separadores verticales (tokens, no .border-start del tema). */
+.gcu-chart-metrics{margin-top:var(--gcu-space-1);padding-top:var(--gcu-space-3);border-top:1px solid var(--gcu-border)}
+.gcu-chart-metrics__list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gcu-space-3);margin:0}
+.gcu-chart-metrics__item{display:flex;flex-direction:column;align-items:center;gap:var(--gcu-space-0-5);min-width:0;padding-inline:var(--gcu-space-2);text-align:center}
+.gcu-chart-metrics__label{order:2;margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-regular)}
+.gcu-chart-metrics__value{order:1;margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-lg);line-height:var(--gcu-line-height-lg);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-chart-metrics .gcu-chart-metrics__figure{min-height:var(--gcu-line-height-lg);color:inherit;font-size:inherit;line-height:inherit}
+.gcu-chart-metrics__delta{order:3;margin:0}
+
+@container (min-width: 28rem){
+  .gcu-chart-metrics__list{grid-template-columns:none;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:0}
+  .gcu-chart-metrics__item + .gcu-chart-metrics__item{border-inline-start:1px solid var(--gcu-border)}
+}

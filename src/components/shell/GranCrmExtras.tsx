@@ -1,133 +1,98 @@
 /**
- * GranCRM-specific components with no Duralux template equivalent
- * (CardHeader/CardBody/CardFooter as standalone sub-parts).
- * StatusBadge/StatusButton/StatCard wrap the real Badge/card primitives —
- * see Badge.jsx and StatsCard.jsx for the Bootstrap-real versions.
+ * Extras GranCRM sin equivalente en la plantilla Duralux: CardHeader/CardBody/CardFooter sueltos,
+ * StatusBadge/StatusButton (contrato de clases de Badge) y StatCard (firma GranCRM sobre StatsCard).
+ * Este archivo solo exporta componentes (fast refresh, DX-021): los tipos viven en
+ * src/public/types.ts y la lógica sin JSX en ./granCrmExtras.model.ts.
  */
-import React from 'react';
-import type { SemanticVariant, StatusVariant } from '../../tokens';
-import { Badge } from '../ui/Badge';
-import { StatsCard as RuntimeStatsCard } from '../ui/StatsCard';
-import { isString } from '../../utils/typeGuards';
+import { forwardRef } from 'react'
+import type {
+  CardBodyProps,
+  CardFooterProps,
+  CardHeaderProps,
+  StatCardProps,
+  StatusBadgeProps,
+  StatusButtonProps,
+} from '../../public/types'
+import { cx } from '../../utils/cx'
+import { isString } from '../../utils/typeGuards'
+import { StatsCard } from '../ui/StatsCard'
+import { statCardDelta, statCardIcon, statCardTone, statusBadgeClassName } from './granCrmExtras.model'
 
-// ── CardHeader / CardBody / CardFooter (sub-components not in @duralux/ui) ────
+// ── CardHeader / CardBody / CardFooter ────────────────────────────────────────
 
-export interface CardHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  title?: React.ReactNode;
-  actions?: React.ReactNode;
-}
-
-export function CardHeader({ title, actions, className, children, ...rest }: CardHeaderProps) {
-  // Duralux-first: .card-header / .card-title / .card-header-action (not legacy gcu-card__*).
+/** Encabezado de card: `.card-header` con título (h2 visual h5) y acciones a la derecha. */
+export const CardHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, CardHeaderProps>(function CardHeader(
+  { title, actions, className, children, ...rest },
+  ref,
+) {
   const content = children ?? (
     <>
       {isString(title) ? <h2 className="h5 card-title mb-0">{title}</h2> : title}
       {actions && <div className="card-header-action">{actions}</div>}
     </>
-  );
-  return (
-    <div className={['card-header', className].filter(Boolean).join(' ')} {...rest}>
-      {content}
-    </div>
-  );
-}
+  )
+  return <div {...rest} ref={ref} className={cx('card-header', className)}>{content}</div>
+})
 
-export type CardBodyProps = React.HTMLAttributes<HTMLDivElement>;
+export const CardBody = /* @__PURE__ */ forwardRef<HTMLDivElement, CardBodyProps>(function CardBody({ className, ...rest }, ref) {
+  return <div {...rest} ref={ref} className={cx('card-body', className)} />
+})
 
-export function CardBody({ className, children, ...rest }: CardBodyProps) {
-  return (
-    <div className={['card-body', className].filter(Boolean).join(' ')} {...rest}>
-      {children}
-    </div>
-  );
-}
-
-export type CardFooterProps = React.HTMLAttributes<HTMLDivElement>;
-
-export function CardFooter({ className, children, ...rest }: CardFooterProps) {
-  return (
-    <div className={['card-footer', className].filter(Boolean).join(' ')} {...rest}>
-      {children}
-    </div>
-  );
-}
+export const CardFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, CardFooterProps>(function CardFooter({ className, ...rest }, ref) {
+  return <div {...rest} ref={ref} className={cx('card-footer', className)} />
+})
 
 // ── StatusBadge / StatusButton ────────────────────────────────────────────────
 
-export interface StatusBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  status: StatusVariant;
-  label?: string;
-  soft?: boolean;
-}
-
-export function StatusBadge({ status, label, soft, className, children, ...rest }: StatusBadgeProps) {
+/** Badge de estado (texto obligatorio vía `label` o hijos: el estado nunca va solo en color). */
+export const StatusBadge = /* @__PURE__ */ forwardRef<HTMLSpanElement, StatusBadgeProps>(function StatusBadge(
+  { status, label, soft, className, children, ...rest },
+  ref,
+) {
   return (
-    <Badge variant={status} soft={soft} className={className} {...rest}>
+    <span {...rest} ref={ref} className={statusBadgeClassName(status, soft, false, className)}>
       {label ?? children}
-    </Badge>
-  );
-}
+    </span>
+  )
+})
 
-export interface StatusButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  status: StatusVariant;
-  label?: string;
-  soft?: boolean;
-}
-
-export function StatusButton({ status, label, soft, className, children, type = 'button', ...rest }: StatusButtonProps) {
+export const StatusButton = /* @__PURE__ */ forwardRef<HTMLButtonElement, StatusButtonProps>(function StatusButton(
+  { status, label, soft, className, children, type = 'button', ...rest },
+  ref,
+) {
   return (
-    <Badge as="button" type={type} variant={status} soft={soft} className={className} {...rest}>
+    <button
+      {...rest}
+      ref={ref}
+      type={type}
+      className={statusBadgeClassName(status, soft, true, className)}
+      style={{ cursor: 'pointer', ...rest.style }}
+    >
       {label ?? children}
-    </Badge>
-  );
-}
+    </button>
+  )
+})
 
 // ── StatCard ──────────────────────────────────────────────────────────────────
 
-export interface StatCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  title: string;
-  value: React.ReactNode;
-  icon?: string;
-  variant?: Exclude<SemanticVariant, 'link'>;
-  change?: { value: number; label?: string };
-  footer?: React.ReactNode;
-}
-
 /**
- * Compatibility adapter for the older GranCRM signature.
- *
- * StatsCard.jsx is the runtime source of truth. Its current signature does
- * not accept the legacy `className`/HTML passthrough or GranCRM's `change`,
- * so this adapter maps those props and clones only the runtime root to retain
- * the old attributes without reimplementing a second card DOM.
+ * StatCard — firma GranCRM (`title`, `variant`, `change`) sobre StatsCard, que es la fuente de verdad
+ * del DOM. `change.value` es un porcentaje: se muestra con signo, `%` y flecha.
  */
-export function StatCard({
-  title,
-  value,
-  icon,
-  variant = 'primary',
-  change,
-  footer,
-  className,
-  ...rest
-}: StatCardProps) {
-  const trend = change
-    ? {
-      value: `${change.value}%${change.label ? ` ${change.label}` : ''}`,
-      up: change.value >= 0,
-    }
-    : undefined;
-  const runtimeCard = RuntimeStatsCard({
-    icon: icon ? (icon.startsWith('feather-') ? icon : `feather-${icon}`) : undefined,
-    iconBg: `bg-soft-${variant} text-${variant}`,
-    value,
-    label: title,
-    trend,
-    footer,
-  });
-
-  return React.cloneElement(runtimeCard, {
-    className: [runtimeCard.props.className, className].filter(Boolean).join(' '),
-    ...rest,
-  });
-}
+export const StatCard = /* @__PURE__ */ forwardRef<HTMLDivElement, StatCardProps>(function StatCard(
+  { title, value, icon, variant = 'primary', change, footer, ...rest },
+  ref,
+) {
+  return (
+    <StatsCard
+      {...rest}
+      ref={ref}
+      icon={statCardIcon(icon)}
+      tone={statCardTone(variant)}
+      value={value}
+      label={title}
+      delta={statCardDelta(change)}
+      footer={footer}
+    />
+  )
+})

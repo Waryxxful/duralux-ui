@@ -1,0 +1,19 @@
+/* QuickLinkGrid: accesos directos en grilla CSS que responde a su contenedor (no a col-md-*).
+   Dos columnas en contenedores angostos; desde 36rem, las columnas pedidas (--gcu-quick-links-columns). */
+.gcu-quick-links__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gcu-space-3);margin:0;padding:0;list-style:none}
+.gcu-quick-links__item{display:flex;min-width:0}
+.card.gcu-quick-link{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--gcu-space-2);width:100%;height:100%;margin:0;padding:var(--gcu-space-4) var(--gcu-space-3);color:var(--gcu-text);font:inherit;text-align:center;text-decoration:none;transition:transform var(--gcu-duration-instant) var(--gcu-ease-standard)}
+.gcu-quick-link__text{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);min-width:0;max-width:100%}
+.gcu-quick-link__label{color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium);overflow-wrap:anywhere}
+.gcu-quick-link__description{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+
+/* Interactivo: hover instantáneo solo con puntero (Craft), presión y anillo de foco del tema. */
+.card.gcu-quick-link--interactive{cursor:pointer}
+@media (hover:hover){.card.gcu-quick-link--interactive:hover{border-color:var(--gcu-border-strong);box-shadow:var(--gcu-shadow-2)}}
+.card.gcu-quick-link--interactive:active{transform:scale(var(--gcu-press-scale))}
+.card.gcu-quick-link--interactive:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+@media (prefers-reduced-motion:reduce){.card.gcu-quick-link--interactive:active{transform:none}}
+
+@container (min-width: 36rem){
+  .gcu-quick-links__grid{grid-template-columns:repeat(var(--gcu-quick-links-columns,4),minmax(0,1fr))}
+}

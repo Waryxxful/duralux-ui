@@ -1,0 +1,18 @@
+/* ConnectionCard: integración con switch. Borde punteado y superficie desde tokens
+   (las utilidades .border/.border-gray-3 del tema se fuerzan en oscuro).
+   Angosta: menos aire y la descripción en hasta dos líneas. Desde 24rem: una línea truncada. */
+.gcu-connection-card{margin-bottom:var(--gcu-space-3);border:1px dashed var(--gcu-border-strong);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface)}
+.gcu-connection-card__inner{display:flex;align-items:center;justify-content:space-between;gap:var(--gcu-space-3);padding:var(--gcu-space-3)}
+.gcu-connection-card__main{display:flex;align-items:center;gap:var(--gcu-space-3);min-width:0}
+.gcu-connection-card__icon{display:flex;flex:0 0 auto;align-items:center;justify-content:center;width:var(--gcu-control-h-lg)}
+.gcu-connection-card__text{min-width:0}
+.gcu-connection-card__title{overflow:hidden;color:var(--gcu-text);font-weight:var(--gcu-font-weight-semibold);text-overflow:ellipsis;white-space:nowrap}
+.gcu-connection-card__description{display:-webkit-box;overflow:hidden;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.gcu-connection-card__reason{margin:var(--gcu-space-1) 0 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-connection-card__switch{flex:0 0 auto;margin:0}
+
+@container (min-width: 24rem){
+  .gcu-connection-card__inner{gap:var(--gcu-space-4);padding:var(--gcu-space-5)}
+  .gcu-connection-card__main{gap:var(--gcu-space-4)}
+  .gcu-connection-card__description{-webkit-line-clamp:1}
+}

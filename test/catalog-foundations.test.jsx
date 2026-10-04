@@ -196,8 +196,10 @@ test('GranCRM StatCard adapts the runtime StatsCard while preserving legacy prop
   const card = screen.getByTestId('legacy-stat')
   expect(card).toHaveClass('card', 'gcu-stats-card')
   expect(within(card).getByText('Open tickets')).toBeInTheDocument()
-  expect(card.querySelector('.fs-4')).toHaveTextContent('0')
-  expect(card.querySelector('.avatar-lg')).toHaveClass('bg-soft-warning', 'text-warning')
+  // Lote L4: la cifra y el ícono usan clases propias con tokens (`.fs-4` y `bg-soft-*` del tema
+  // ganaban con !important y el tema oscuro pintaba sólido el avatar).
+  expect(card.querySelector('.gcu-stat__value')).toHaveTextContent('0')
+  expect(card.querySelector('.avatar-lg')).toHaveClass('gcu-stat__icon', 'gcu-stat__icon--warning')
   expect(card.querySelector('.feather-alert-circle')).toBeInTheDocument()
   expect(card.querySelector('.card-footer')).toHaveTextContent('0')
 })

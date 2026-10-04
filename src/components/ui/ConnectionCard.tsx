@@ -1,76 +1,68 @@
-import React, { useId } from 'react';
+import { forwardRef, useId } from 'react'
+import type * as React from 'react'
+import { cx } from '../../utils/cx'
+import { log } from '../../utils/log'
+import { isFunction } from '../../utils/typeGuards'
+import type { ConnectionCardProps } from '../../public/types'
 
 /**
- * ConnectionCard — tarjeta de integración con switch on/off.
+ * ConnectionCard — integración con switch on/off (markup de duralux-admin/customers-view.html,
+ * sección .development-connections), con superficie y borde punteado desde tokens.
  *
- * Markup 1:1 de duralux-admin/customers-view.html, tab #connectionTab,
- * sección .development-connections (~línea 3617): hstack + wd-40 + switch.
- *
- * Nota de fidelidad: la plantilla original marca el <label> del switch con la
- * clase `fw-500`, que no existe en ningún SCSS de la plantilla (ni fuente ni
- * compilado) — el label ahí es visualmente vacío, así que la clase no hace
- * nada. Se omite acá en vez de inventar una regla `.fw-500` que no es canon.
+ * - El switch se nombra con «Activar conexión» + el título de la integración.
+ * - disabledReason: explica por qué está deshabilitado (aria-describedby).
+ * - Responde a su contenedor: en celdas angostas la descripción ocupa dos líneas en vez de truncarse.
+ * Estilos: src/styles/components/connection-card.css (el switch usa form-check.css).
  */
-export interface ConnectionCardProps {
-  /** Logo/ícono de la integración (ej. <Icon/> o una imagen de marca) */
-  icon: React.ReactNode;
-  title: React.ReactNode;
-  description?: React.ReactNode;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-  disabled?: boolean;
-  className?: string;
-}
-
-export function ConnectionCard({
+export const ConnectionCard = /* @__PURE__ */ forwardRef<HTMLDivElement, ConnectionCardProps>(function ConnectionCard({
   icon,
   title,
   description,
   checked,
   onChange,
   disabled,
+  disabledReason,
   className,
-}: ConnectionCardProps) {
-  const titleId = useId();
-  const switchId = useId();
-  const switchLabelId = useId();
+  ...rest
+}, ref) {
+  const titleId = useId()
+  const switchId = useId()
+  const switchLabelId = useId()
+  const reasonId = useId()
+  const hasReason = Boolean(disabled) && disabledReason !== undefined && disabledReason !== null && disabledReason !== ''
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (isFunction(onChange)) onChange(event.target.checked)
+    else log.error('ConnectionCard: falta `onChange`; el switch no puede cambiar de estado.')
+  }
 
   return (
-    <div
-      className={[
-        'hstack justify-content-between p-4 mb-3 border border-dashed border-gray-3 rounded-1',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
-    >
-      {/* overflow-hidden: permite que el flex item se contraiga y el truncado
-          funcione con títulos largos sin espacios (min-width automático → 0) */}
-      <div className="hstack me-4 overflow-hidden">
-        <div className="wd-40 flex-shrink-0">{icon}</div>
-        <div className="ms-4 overflow-hidden">
-          <div id={titleId} className="fw-bold mb-1 text-truncate-1-line">
-            {title}
+    <div {...rest} ref={ref} className={cx('gcu-connection-card', 'gcu-container', className)}>
+      <div className="gcu-connection-card__inner">
+        <div className="gcu-connection-card__main">
+          <div className="gcu-connection-card__icon">{icon}</div>
+          <div className="gcu-connection-card__text">
+            <div id={titleId} className="gcu-connection-card__title">{title}</div>
+            {description != null && <div className="gcu-connection-card__description">{description}</div>}
+            {hasReason && <p id={reasonId} className="gcu-connection-card__reason">{disabledReason}</p>}
           </div>
-          {description != null && (
-            <div className="fs-12 text-muted text-truncate-1-line">{description}</div>
-          )}
+        </div>
+        <div className="form-check form-switch form-switch-sm gcu-connection-card__switch">
+          <label id={switchLabelId} className="form-check-label c-pointer" htmlFor={switchId}>
+            <span className="visually-hidden">Activar conexión</span>
+          </label>
+          <input
+            className="form-check-input c-pointer"
+            type="checkbox"
+            id={switchId}
+            checked={checked}
+            disabled={disabled}
+            aria-labelledby={`${switchLabelId} ${titleId}`}
+            aria-describedby={hasReason ? reasonId : undefined}
+            onChange={handleChange}
+          />
         </div>
       </div>
-      <div className="form-check form-switch form-switch-sm flex-shrink-0">
-        <label id={switchLabelId} className="form-check-label c-pointer" htmlFor={switchId}>
-          <span className="visually-hidden">Activar conexión</span>
-        </label>
-        <input
-          className="form-check-input c-pointer"
-          type="checkbox"
-          id={switchId}
-          checked={checked}
-          disabled={disabled}
-          aria-labelledby={`${switchLabelId} ${titleId}`}
-          onChange={(event) => onChange(event.target.checked)}
-        />
-      </div>
     </div>
-  );
-}
+  )
+})

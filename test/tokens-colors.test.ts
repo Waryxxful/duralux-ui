@@ -72,8 +72,8 @@ describe('tokens sincronizados con duralux-v2', () => {
     expect(css).not.toMatch(/--gcu-[a-z]+[A-Z]/)
     expect(css).not.toContain('#727981')
     expect(css).not.toContain('#4d2fb0')
-    expect(css).toContain('rgba(var(--gcu-indigo-rgb),.12)')
-    expect(css).toContain('rgba(var(--gcu-widget-soft-rgb),.18)')
+    // Lote L4: los tintes suaves de los widgets (indigo .12 y --gcu-widget-soft-rgb .18 en oscuro) se
+    // reemplazaron por los roles --gcu-{tono}-soft/-text; lo verifica test/indicadores-css.test.ts.
   })
 
   test('la cascada de page-header conserva 30px en desktop y 20px hasta 575px', () => {
