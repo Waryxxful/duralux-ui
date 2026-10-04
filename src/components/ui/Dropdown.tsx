@@ -1,5 +1,6 @@
 import {
   createContext,
+  forwardRef,
   useCallback,
   useContext,
   useEffect,
@@ -18,6 +19,8 @@ import type {
   RefCallback,
 } from 'react';
 import { registerDismissableLayer } from '../../utils/dismissableLayer';
+import { log } from '../../utils/log';
+import { assignRef } from '../../utils/assignRef';
 
 export type DropdownAlignment = 'start' | 'end';
 
@@ -60,7 +63,11 @@ interface DropdownContextValue {
 
 const DropdownContext = createContext<DropdownContextValue | null>(null);
 
-export function Dropdown({
+/**
+ * Dropdown — menú desplegable APG (botón + menú): Esc cierra y devuelve el foco, clic fuera cierra.
+ * Estilo en src/styles/components/dropdown.css (elevación 3, radio lg; entra en 100 ms, ítems sin transición).
+ */
+export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropdown({
   align = 'start',
   children,
   className = 'dropdown',
@@ -73,7 +80,7 @@ export function Dropdown({
   open: controlledOpen,
   trigger,
   ...rootProps
-}: DropdownProps) {
+}, forwardedRef) {
   const reactId = useId();
   const resolvedMenuId = menuId ?? `dropdown-${reactId.replace(/:/g, '')}`;
   const triggerId = `${resolvedMenuId}-trigger`;
@@ -158,7 +165,10 @@ export function Dropdown({
     <DropdownContext.Provider value={context}>
       <div
         {...rootProps}
-        ref={rootRef}
+        ref={(node) => {
+          rootRef.current = node;
+          assignRef(forwardedRef, node);
+        }}
         className={className}
         onMouseEnter={(event) => {
           onMouseEnter?.(event);
@@ -180,18 +190,21 @@ export function Dropdown({
       </div>
     </DropdownContext.Provider>
   );
-}
+});
 
-export function DropdownMenu({
+export const DropdownMenu = forwardRef<HTMLElement, DropdownMenuProps>(function DropdownMenu({
   as: Component = 'div',
   children,
   className,
   closeOnSelect = true,
   onClick,
   ...menuProps
-}: DropdownMenuProps) {
+}, ref) {
   const context = useContext(DropdownContext);
-  if (!context) throw new Error('DropdownMenu must be rendered inside Dropdown');
+  if (!context) {
+    log.error('DropdownMenu debe renderizarse dentro de Dropdown.');
+    throw new Error('DropdownMenu must be rendered inside Dropdown');
+  }
 
   const { align, close, menuId, open, triggerId } = context;
 
@@ -210,10 +223,12 @@ export function DropdownMenu({
   return (
     <Component
       {...menuProps}
+      ref={ref}
       id={menuId}
       inert={menuProps.inert ?? (!open ? '' : undefined)}
       className={[
         'dropdown-menu',
+        'gcu-dropdown-menu',
         align === 'end' ? 'dropdown-menu-end' : '',
         className,
         open ? 'show' : '',
@@ -225,4 +240,4 @@ export function DropdownMenu({
       {children}
     </Component>
   );
-}
+});

@@ -80,7 +80,6 @@ $gcu-dark-palettes: (
 		.user-name,
 		#renderRange,
 		.ladda-button,
-		.dropdown-item,
 		.custom-file,
 		.custom-select,
 		.table tfoot th,
@@ -97,14 +96,6 @@ $gcu-dark-palettes: (
 		.text-muted {
 			color: $dark-theme-color !important;
 		}
-		.dropdown-item {
-			&:focus,
-			&:hover,
-			&:active,
-			&.active {
-				color: $primary !important;
-			}
-		}
 		body,
 		.offcanvas,
 		.page-header,
@@ -119,8 +110,6 @@ $gcu-dark-palettes: (
 		.nxl-header,
 		.swal2-popup,
 		.ladda-button,
-		.dropdown-menu,
-		.modal-content,
 		.list-group-item,
 		.page-header-right-items,
 		.page-content-left-sidebar-wrapper,
@@ -132,7 +121,6 @@ $gcu-dark-palettes: (
 		.btn-light,
 		.filter-btn,
 		.btn-light-brand,
-		.card .card-loader,
 		.reportrange-picker-field {
 			background-color: $dark-theme-color-hover !important;
 		}
@@ -155,10 +143,6 @@ $gcu-dark-palettes: (
 		.border-start,
 		.border-bottom,
 		.ladda-button,
-		.modal-header,
-		.modal-footer,
-		.modal-content,
-		.dropdown-menu,
 		.table tr td,
 		.table thead th,
 		.dropdown-header,
@@ -202,7 +186,6 @@ $gcu-dark-palettes: (
 			color: $dark-theme-color;
 			background-color: $dark-theme-color-dark;
 		}
-		.dropdown-item,
 		.nxl-header .nxl-head-link,
 		.daterangepicker .ranges li,
 		.daterangepicker td.available,
@@ -422,22 +405,6 @@ $gcu-dark-palettes: (
 		.border-black {
 			border-color: $black !important;
 		}
-		.alert {
-			@each $name, $color in $gcu-alert-soft-colors {
-				&.alert-soft-#{$name}-message {
-					@if $name == "light" or $name == "dark" {
-						color: $gray-200 !important;
-						background-color: $dark-theme-color-dark !important;
-						border: 1px dashed $dark-theme-color !important;
-					} @else {
-						color: lighten($color, 24%) !important;
-						background-color: rgba($color, 0.16) !important;
-						border: 1px dashed rgba($color, 0.45) !important;
-					}
-				}
-			}
-		}
-
 		/* <---------------! Hamburger !---------------> */
 		.hamburger-inner {
 			background-color: $white;
@@ -883,26 +850,6 @@ $gcu-dark-palettes: (
 			}
 		}
 
-		/* <---------------! Dropdown !---------------> */
-		.dropdown {
-			.dropdown-menu {
-				box-shadow: 0 10px 20px rgb(5 0 38 / 80%);
-				.dropdown-item {
-					i.bg-gray-500 {
-						background-color: $white !important;
-					}
-					&.active,
-					&:active,
-					&:focus,
-					&:hover {
-						i.bg-gray-500 {
-							background-color: $primary !important;
-						}
-					}
-				}
-			}
-		}
-
 		/* <---------------! Card !---------------> */
 		.card {
 			box-shadow: 0 0 20px rgb(14 32 56 / 30%);
@@ -961,12 +908,6 @@ $gcu-dark-palettes: (
 					background-color: lighten($dark-theme-color-dark, 5);
 				}
 			}
-		}
-
-		/* <---------------! Modal !---------------> */
-		.modal-backdrop {
-			--bs-backdrop-opacity: 0.9;
-			background-color: map-get($p, backdrop);
 		}
 
 		/* <---------------! Popover !---------------> */

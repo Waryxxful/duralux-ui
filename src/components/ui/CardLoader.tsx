@@ -1,19 +1,21 @@
+import { forwardRef } from 'react'
 import { cx } from '../../utils/cx'
 import { isFiniteNumber, isNonEmptyString } from '../../utils/typeGuards'
+import type { CardLoaderProps } from '../../public/types'
 
-function labelText(value, fallback = 'Cargando') {
+function labelText(value: CardLoaderProps['label'], fallback = 'Cargando'): string {
   if (isNonEmptyString(value)) return value
   if (isFiniteNumber(value)) return String(value)
   return fallback
 }
 
 /**
- * CardLoader — the public, controlled overlay for a Duralux card.
+ * CardLoader — overlay controlado de carga de una card Duralux (region `status` ocupada).
  *
- * It deliberately owns the only spinner rendered by the overlay. Consumers
- * can use it directly, or Card can compose it with `loading`.
+ * Es el único spinner del overlay. Se usa directo o vía `Card loading`.
+ * Estilo en src/styles/components/card-loader.css (superficie del tema, sin override oscuro).
  */
-export function CardLoader({
+export const CardLoader = forwardRef<HTMLDivElement, CardLoaderProps>(function CardLoader({
   loading = true,
   visible = undefined,
   label = 'Cargando',
@@ -21,7 +23,7 @@ export function CardLoader({
   className = '',
   'aria-label': ariaLabel = undefined,
   ...rest
-}) {
+}, ref) {
   const isVisible = visible === undefined ? Boolean(loading) : Boolean(visible)
   if (!isVisible) return null
 
@@ -30,13 +32,15 @@ export function CardLoader({
   return (
     <div
       {...rest}
+      ref={ref}
       className={cx('card-loader', className)}
       role="status"
       aria-live="polite"
+      aria-busy="true"
       aria-label={ariaLabel ?? accessibleLabel}
     >
       <span className="spinner-border text-primary" aria-hidden="true"></span>
       <span className="visually-hidden">{accessibleLabel}</span>
     </div>
   )
-}
+})

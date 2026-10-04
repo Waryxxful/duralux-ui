@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useThemeBoundaryMode } from '../../theme/themeBoundary';
+import { log } from '../../utils/log';
+import { isNumber, isString } from '../../utils/typeGuards';
 
 /**
  * Toast — feedback de acción canónico de la plantilla (SweetAlert2 toast:
  * top-end, auto-dismiss ~3s) implementado en React puro, sin dependencia
  * nueva. Controlado: un solo item por instancia, sin provider/context.
  *
- * Estilo: usa el sistema de tokens `--gcu-*` (src/styles/grancrm-ui.css),
- * igual que ShellHeader/ConfirmDialog — así el dark theme (`app-skin-dark` /
- * `[data-gcu-theme="dark"]`) se resuelve solo, sin overrides propios.
+ * Estilo: src/styles/components/toast.css, solo tokens `--gcu-*` (los temas se
+ * resuelven solos). Entra con `gcu-enter` y sale más rápido con `--gcu-ease-exit`;
+ * con reduced-motion no anima. El auto-cierre se pausa con puntero o foco.
  *
  * Apilado: cada Toast montado hace portal a un viewport compartido
  * (#gcu-toast-viewport, creado on-demand) fijo debajo del header de 80px;
@@ -28,12 +30,17 @@ const DEFAULT_AUTO_HIDE_MS = {
 export interface ToastProps {
   variant: ToastVariant;
   title: React.ReactNode;
+  /** Línea secundaria opcional (qué pasó o qué hacer). */
+  description?: React.ReactNode;
   show: boolean;
   onClose: () => void;
-  /** ms antes del auto-dismiss. Omitido usa 3000 en success/info y permanece hasta el cierre en danger/warning. 0 o un valor no positivo lo desactiva. */
+  /** ms antes del auto-dismiss. Omitido usa 3000 en success/info (más si el texto es largo: nunca se acorta el tiempo de lectura) y permanece hasta el cierre en danger/warning. 0 o un valor no positivo lo desactiva. */
   autoHideMs?: number;
   className?: string;
 }
+
+/** Espera antes de avisar onClose: cubre la salida CSS (150 ms, --gcu-duration-fast) con margen. */
+const CLOSE_UNMOUNT_MS = 300;
 
 const VARIANT_ICON = {
   success: 'check-circle',
@@ -70,7 +77,28 @@ function getViewportRegistry(): WeakMap<Document, ViewportState> {
 const viewportStates = getViewportRegistry();
 
 function normalizeVariant(variant: ToastVariant): ToastVariant {
-  return VARIANTS.has(variant) ? variant : 'info';
+  if (VARIANTS.has(variant)) return variant;
+  log.warn(`Toast: la variante "${String(variant)}" no existe; se usa "info".`);
+  return 'info';
+}
+
+/** Tiempo de lectura: 2 s + 50 ms por carácter, tope 10 s. Solo alarga el valor por defecto. */
+const READING_BASE_MS = 2000;
+const READING_MS_PER_CHAR = 50;
+const READING_MAX_MS = 10_000;
+
+function textLength(node: React.ReactNode): number {
+  if (isString(node) || isNumber(node)) return String(node).length;
+  if (Array.isArray(node)) return node.reduce<number>((total, child) => total + textLength(child), 0);
+  if (React.isValidElement<{ children?: React.ReactNode }>(node)) return textLength(node.props.children);
+  return 0;
+}
+
+function defaultAutoHideMs(variant: ToastVariant, title: React.ReactNode, description: React.ReactNode): number {
+  const base = DEFAULT_AUTO_HIDE_MS[variant];
+  if (base <= 0) return base;
+  const reading = READING_BASE_MS + (textLength(title) + textLength(description)) * READING_MS_PER_CHAR;
+  return Math.max(base, Math.min(READING_MAX_MS, reading));
 }
 
 function acquireViewport(): HTMLElement | null {
@@ -84,6 +112,9 @@ function acquireViewport(): HTMLElement | null {
     element.id = VIEWPORT_ID;
     element.className = 'gcu-toast-viewport';
     element.setAttribute('data-gcu-toast-owned', 'true');
+    // Región con nombre: los toasts quedan dentro de un landmark y se pueden encontrar con lector de pantalla.
+    element.setAttribute('role', 'region');
+    element.setAttribute('aria-label', 'Notificaciones');
     document.body.appendChild(element);
     state = undefined;
     createdByThisRegistry = true;
@@ -121,10 +152,13 @@ function releaseViewport(element: HTMLElement) {
   viewportStates.delete(ownerDocument);
 }
 
-export function Toast({ variant, title, show, onClose, autoHideMs, className }: ToastProps) {
+export const Toast = forwardRef<HTMLDivElement, ToastProps>(function Toast(
+  { variant, title, description, show, onClose, autoHideMs, className },
+  ref,
+) {
   const themeMode = useThemeBoundaryMode();
   const resolvedVariant = normalizeVariant(variant);
-  const resolvedAutoHideMs = autoHideMs ?? DEFAULT_AUTO_HIDE_MS[resolvedVariant];
+  const resolvedAutoHideMs = autoHideMs ?? defaultAutoHideMs(resolvedVariant, title, description);
   const [closing, setClosing] = useState(false);
   const [paused, setPaused] = useState(false);
   const [viewport, setViewport] = useState<HTMLElement | null>(null);
@@ -194,7 +228,7 @@ export function Toast({ variant, title, show, onClose, autoHideMs, className }: 
       if (componentMountedRef.current && onCloseRef.current) {
         onCloseRef.current();
       }
-    }, 300);
+    }, CLOSE_UNMOUNT_MS);
   }, []);
 
   useEffect(() => {
@@ -245,6 +279,7 @@ export function Toast({ variant, title, show, onClose, autoHideMs, className }: 
 
   return createPortal(
     <div
+      ref={ref}
       className={['gcu-toast', themeMode && 'gcu-theme', `gcu-toast--${resolvedVariant}`, closing ? 'gcu-toast--closing' : '', className]
         .filter(Boolean)
         .join(' ')}
@@ -258,11 +293,16 @@ export function Toast({ variant, title, show, onClose, autoHideMs, className }: 
       onBlur={resumeTimer}
     >
       <i className={`gcu-icon gcu-toast__icon feather-${VARIANT_ICON[resolvedVariant]}`} aria-hidden="true" />
-      <div className="gcu-toast__title">{title}</div>
+      <div className="gcu-toast__content">
+        <div className="gcu-toast__title">{title}</div>
+        {description !== undefined && description !== null && description !== false && (
+          <div className="gcu-toast__description">{description}</div>
+        )}
+      </div>
       <button type="button" className="gcu-toast__close" aria-label="Cerrar notificación" onClick={requestClose}>
         <i className="gcu-icon feather-x" aria-hidden="true" />
       </button>
     </div>,
     viewport,
   );
-}
+});

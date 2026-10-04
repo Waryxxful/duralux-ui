@@ -22,12 +22,4 @@ body.modal-open {
 		transition: all 0.2s linear;
 	}
 }
-.modal {
-	.modal-content {
-		border-radius: $radius-md;
-	}
-}
-.modal-backdrop {
-	background-color: #022142;
-	transition: all 0.2s linear;
-}
+// Superficie, radio xl, elevación 4, fondo y animación: src/styles/components/modal.css (tokens).

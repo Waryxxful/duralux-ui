@@ -4,55 +4,6 @@
 <--!----------------------------------------------------------------!-->
 */
 
-// Keep the soft alert API aligned with Alert.jsx. The foreground map is
-// shared with buttons and badges so soft surfaces use the Duralux v2 hue.
-$gcu-alert-soft-colors: (
-	"primary": $primary,
-	"secondary": $secondary,
-	"success": $success,
-	"danger": $danger,
-	"warning": $warning,
-	"info": $info,
-	"light": $light,
-	"dark": $dark,
-	"teal": $teal,
-	"indigo": $indigo,
-);
-
-// Alert icons are compact filled surfaces. Match the AA solid-fill contract
-// rather than borrowing the alert's bright tint and a different foreground.
-@each $color, $fill in $gcu-solid-fills {
-	.gcu-alert--#{$color} {
-		--gcu-alert-icon-fill: #{$fill};
-		--gcu-alert-icon-foreground: #{map-get($gcu-solid-foregrounds, $color)};
-	}
-}
-
-.gcu-alert__icon {
-	background-color: var(--gcu-alert-icon-fill) !important;
-	color: var(--gcu-alert-icon-foreground) !important;
-}
-
-html.app-skin-dark .gcu-alert.gcu-alert .gcu-alert__icon,
-[data-gcu-theme="dark"] .gcu-alert.gcu-alert .gcu-alert__icon {
-	background-color: var(--gcu-alert-icon-fill) !important;
-	color: var(--gcu-alert-icon-foreground) !important;
-}
-
-@each $color, $value in $gcu-alert-soft-colors {
-	$foreground: map-get($gcu-soft-foregrounds, $color);
-	$background: shift-color($value, -90%);
-	$border: shade-color($value, 20%);
-
-	.alert.alert-soft-#{$color}-message {
-		color: $foreground;
-		background-color: $background;
-		border: 1px dashed $border;
-
-		a {
-			color: $foreground;
-			text-decoration: underline;
-			text-underline-offset: 0.15em;
-		}
-	}
-}
+// Alert y las clases canónicas .alert-soft-{tono}-message viven en
+// src/styles/components/alert.css (tokens semánticos que cambian por tema),
+// sin overrides de oscuro ni prioridad forzada.

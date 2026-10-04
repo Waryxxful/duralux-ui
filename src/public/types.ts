@@ -106,7 +106,8 @@ export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
 export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   variant?: SemanticTone
   soft?: boolean
-  icon?: string
+  /** Clase Feather completa (`"feather-info"`) o icono Tabler (`<IconInfoCircle />`). */
+  icon?: string | React.ReactElement
   title?: React.ReactNode
   onDismiss?: () => void
   dismissible?: boolean
@@ -130,23 +131,43 @@ export interface ModalProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
   showCloseButton?: boolean
 }
 
-export interface EmptyStateProps {
-  icon?: string
+export interface EmptyStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** Nombre Feather (`"inbox"`) o icono Tabler (`<IconInbox />`). */
+  icon?: IconSlot
   title?: React.ReactNode
   message?: React.ReactNode
+  /** Acción siguiente (normalmente un Button). */
   action?: React.ReactNode
+  /** Acción alternativa junto a la principal. */
+  secondaryAction?: React.ReactNode
+  /** Menos aire vertical (dentro de cards o celdas de tabla). */
+  compact?: boolean
   className?: string
 }
 
-export interface ErrorStateProps {
+export interface ErrorStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title' | 'role'> {
   title?: React.ReactNode
   message?: React.ReactNode
+  /** Error recibido (Error u objeto con `message`): reemplaza a `message` y se registra con `log.error`. */
+  error?: Error | { message?: React.ReactNode } | React.ReactNode
   onRetry?: () => void
+  /** Etiqueta del botón de reintento (por defecto «Reintentar»). */
+  retryLabel?: string
+  /** El reintento está en curso: el botón muestra spinner y `aria-busy`. */
+  retrying?: boolean
+  /** Acción alternativa junto al reintento. */
+  action?: React.ReactNode
+  compact?: boolean
   className?: string
 }
 
-export interface LoadingStateProps {
+export interface LoadingStateProps extends React.HTMLAttributes<HTMLDivElement> {
   message?: React.ReactNode
+  /** `spinner` (por defecto) o `skeleton` (líneas con shimmer; recomendado en listas y cards). */
+  variant?: 'spinner' | 'skeleton'
+  /** Líneas del skeleton (por defecto 3). */
+  rows?: number
+  compact?: boolean
   className?: string
 }
 

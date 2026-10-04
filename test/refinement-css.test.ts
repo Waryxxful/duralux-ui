@@ -25,13 +25,16 @@ describe('refinamiento visual 2.1 (grancrm-ui.css)', () => {
   test('superficies: cards con borde fino y elevación 1; modales xl con elevación 4', () => {
     expect(rule('.card')).toContain('box-shadow:var(--gcu-shadow-1)')
     expect(rule('.card')).toContain('border-color:var(--gcu-border)')
-    expect(refinement).toMatch(/\.modal-content,\.gcu-modal__content\{[^}]*border-radius:var\(--gcu-radius-xl\)[^}]*var\(--gcu-shadow-4\)/)
-    expect(refinement).toMatch(/\.dropdown-menu\{[^}]*var\(--gcu-shadow-3\)/)
+    // Corrección documentada (lote L2): modal y dropdown pasaron a su CSS propio (src/styles/components/).
+    const modalCss = readFileSync(resolve(process.cwd(), 'src/styles/components/modal.css'), 'utf8')
+    const dropdownCss = readFileSync(resolve(process.cwd(), 'src/styles/components/dropdown.css'), 'utf8')
+    expect(modalCss).toMatch(/\.modal-content\{[^}]*border-radius:var\(--gcu-radius-xl\)[^}]*var\(--gcu-shadow-4\)/)
+    expect(dropdownCss).toMatch(/\.dropdown-menu\{[^}]*var\(--gcu-shadow-3\)/)
   })
 
   test('entrada animada de capas flotantes con keyframes propios', () => {
     expect(refinement).toContain('@keyframes gcu-enter')
-    expect(refinement).toMatch(/\.dropdown-menu\.show\{animation:gcu-enter/)
+    expect(readFileSync(resolve(process.cwd(), 'src/styles/components/dropdown.css'), 'utf8')).toMatch(/\.dropdown-menu\.show\{animation:gcu-enter/)
   })
 
   test('skeleton con shimmer que se detiene con reduced-motion', () => {

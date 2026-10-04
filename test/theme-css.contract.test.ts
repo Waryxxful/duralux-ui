@@ -248,32 +248,18 @@ describe('CSS theme contract', () => {
     expect(contrastRatio(lightBadge.color, lightBadge['background-color'])).toBeGreaterThanOrEqual(4.5)
   })
 
-  test('keeps soft alerts on the Duralux v2 semantic hue', () => {
+  // Corrección documentada (lote L2): las alertas suaves dejaron el SCSS con hex/overrides de oscuro y
+  // viven en src/styles/components/alert.css con roles --gcu-{tono}-soft/-text, cuyo AA en los 3 temas
+  // lo verifica tokens:check. light/dark usan las superficies neutras del tema.
+  test('keeps soft alerts on semantic tone tokens in every theme', () => {
+    const alertCss = readFileSync(resolve(repoRoot, 'src/styles/components/alert.css'), 'utf8')
+    expect(runtimeCss).toContain('@import "./components/alert.css";')
     for (const variant of alertVariants) {
-      const declarations = ruleWithDeclarations(css, `.alert.alert-soft-${variant}-message`, [
-        'color',
-      ])
-      const expected = variant === 'light' ? '#283c50' : v2SoftForegrounds[variant] ?? solidColors[variant]
-      expect(parseColor(declarations.color), `alert ${variant}`).toEqual(parseColor(expected))
-      expect(runtimeCss).toContain(`.alert.alert-soft-${variant}-message`)
-
-      const darkDeclarations = ruleWithDeclarations(css, `html.app-skin-dark .alert.alert-soft-${variant}-message`, [
-        'color',
-        'background-color',
-      ])
-      const darkFill = parseColorWithAlpha(darkDeclarations['background-color'])
-      const darkSurface = compositeColor(
-        `#${darkFill.channels.map((channel) => channel.toString(16).padStart(2, '0')).join('')}`,
-        '#121a2d',
-        darkFill.alpha,
-      )
-      expect(contrastRatio(darkDeclarations.color, darkSurface), `dark alert ${variant}`)
-        .toBeGreaterThanOrEqual(4.5)
-      if (variant !== 'light' && variant !== 'dark') {
-        const hue = parseColor(darkDeclarations.color)
-        expect(hue[0] + hue[1] + hue[2], `dark alert ${variant} keeps hue`).toBeLessThan(255 * 3)
-      }
+      expect(alertCss, `alert ${variant}`).toContain(`.alert-soft-${variant}-message`)
+      if (variant === 'light' || variant === 'dark') continue
+      expect(alertCss).toContain(`.gcu-alert--${variant},.alert-soft-${variant}-message{--gcu-alert-soft:var(--gcu-${variant}-soft);--gcu-alert-border:var(--gcu-${variant}-border);--gcu-alert-text:var(--gcu-${variant}-text)`)
     }
+    expect(css).not.toMatch(/app-skin-dark[^{]*\.alert-soft-/)
   })
 
   test('keeps dark-mode soft buttons on the semantic hue with readable contrast', () => {
@@ -426,7 +412,6 @@ describe('CSS theme contract', () => {
     expect(css).not.toMatch(/bootstrap-icons/i)
     expect(runtimeCss).not.toMatch(/bootstrap-icons/i)
     expect(runtimeCss).toContain('.gcu-colored-stat{color:#fff!important}')
-    expect(runtimeCss).toContain('.gcu-alert--success{--gcu-alert-icon-fill:#108745;--gcu-alert-icon-foreground:#fff}')
     expect(runtimeCss).toContain('.progress-bar.bg-success,.gcu-avatar--semantic.gcu-avatar--success{background-color:#108745!important;color:#fff!important}')
     expect(runtimeCss).toContain('.gcu-colored-stat.bg-success{background-color:#108745!important')
     expect(runtimeCss).toContain('color:#283c50!important')

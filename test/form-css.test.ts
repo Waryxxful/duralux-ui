@@ -83,3 +83,10 @@ describe('CSS de formularios (src/styles/components/*)', () => {
     expect(form).not.toMatch(/::placeholder[^{]*\{[^}]*!important/)
   })
 })
+
+describe('móvil', () => {
+  test('inputs y selects a 16 px en pantallas chicas: iOS Safari no hace zoom al enfocar', () => {
+    const css = readFileSync(resolve(process.cwd(), 'src/styles/components/form-control.css'), 'utf8')
+    expect(css).toMatch(/@media \(max-width:575\.98px\)\{\.form-control,\.form-select\{font-size:16px\}\}/)
+  })
+})

@@ -1,0 +1,18 @@
+/* Toast: feedback efímero arriba a la derecha, bajo el header.
+   Entra con gcu-enter (base, enter) y sale más rápido (fast, exit). Elevación flotante 3, radio lg. */
+.gcu-toast-viewport{position:fixed;top:calc(var(--gcu-space-16) + var(--gcu-space-8));right:var(--gcu-space-4);z-index:var(--gcu-z-toast);display:flex;flex-direction:column;gap:var(--gcu-space-2);max-width:calc(100vw - var(--gcu-space-8));pointer-events:none}
+.gcu-toast{--gcu-toast-tone:var(--gcu-status-info);pointer-events:auto;display:flex;align-items:flex-start;gap:var(--gcu-space-3);width:min(22.5rem,100%);padding:var(--gcu-space-3) var(--gcu-space-3) var(--gcu-space-3) calc(var(--gcu-space-4) - var(--gcu-space-0-5));border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background:var(--gcu-surface-raised);color:var(--gcu-text);box-shadow:var(--gcu-shadow-3);font-family:var(--gcu-font);font-variant-numeric:tabular-nums;animation:gcu-enter var(--gcu-duration-base) var(--gcu-ease-enter)}
+.gcu-toast--success{--gcu-toast-tone:var(--gcu-status-success)}
+.gcu-toast--danger{--gcu-toast-tone:var(--gcu-status-danger)}
+.gcu-toast--warning{--gcu-toast-tone:var(--gcu-status-warning)}
+.gcu-toast--info{--gcu-toast-tone:var(--gcu-status-info)}
+.gcu-toast--closing{animation:gcu-exit var(--gcu-duration-fast) var(--gcu-ease-exit) forwards}
+.gcu-toast__icon{flex-shrink:0;margin-top:var(--gcu-space-0-5);color:var(--gcu-toast-tone);font-size:var(--gcu-font-size-lg)}
+.gcu-toast__content{flex:1;min-width:0;padding-top:var(--gcu-space-0-5)}
+.gcu-toast__title{font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-semibold);line-height:var(--gcu-line-height-sm);overflow-wrap:anywhere}
+.gcu-toast__description{margin-top:var(--gcu-space-0-5);color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+/* Cerrar: área de 28 px centrada ópticamente con la primera línea. */
+.gcu-toast__close{display:grid;flex-shrink:0;width:var(--gcu-control-h-xs);height:var(--gcu-control-h-xs);margin:calc(var(--gcu-space-1) * -1) calc(var(--gcu-space-1) * -1) 0 0;padding:0;place-items:center;border:0;border-radius:var(--gcu-radius-sm);background:transparent;color:var(--gcu-muted);cursor:pointer;transition:background-color var(--gcu-duration-fast) var(--gcu-ease-standard),color var(--gcu-duration-fast) var(--gcu-ease-standard)}
+@media (hover:hover){.gcu-toast__close:hover{background:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+.gcu-toast__close:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+@media (prefers-reduced-motion:reduce){.gcu-toast,.gcu-toast--closing{animation:none}.gcu-toast__close{transition:none}}

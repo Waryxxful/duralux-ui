@@ -1,0 +1,22 @@
+/* Modal (patrón APG propio sobre .modal de Bootstrap). Elevación 4 y radio xl; fondo con --gcu-overlay.
+   Se usa una vez por sesión: entra con gcu-enter (base, enter). La salida es síncrona (ver Modal.tsx). */
+.modal-content{border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-xl);background-color:var(--gcu-surface-raised);color:var(--gcu-text);box-shadow:var(--gcu-shadow-4)}
+/* Radios anidados: el header y el footer heredan el radio exterior menos el borde. */
+.modal-header{border-color:var(--gcu-border);border-top-left-radius:calc(var(--gcu-radius-xl) - 1px);border-top-right-radius:calc(var(--gcu-radius-xl) - 1px)}
+.modal-footer{gap:var(--gcu-space-2);border-color:var(--gcu-border);border-bottom-left-radius:calc(var(--gcu-radius-xl) - 1px);border-bottom-right-radius:calc(var(--gcu-radius-xl) - 1px)}
+.modal-footer>*{margin:0}
+.modal-title{font-size:var(--gcu-font-size-lg);font-weight:var(--gcu-font-weight-semibold);line-height:var(--gcu-line-height-lg);text-wrap:balance}
+.modal-backdrop{background-color:var(--gcu-overlay)}
+.modal-backdrop.show{opacity:1}
+/* El cuerpo responde a su propio ancho, no al viewport (formularios en 1 o 2 columnas). */
+.gcu-modal-body{container-type:inline-size}
+.gcu-modal-dialog{animation:gcu-enter var(--gcu-duration-base) var(--gcu-ease-enter)}
+@media (prefers-reduced-motion:reduce){.gcu-modal-dialog{animation:none}}
+/* Ayuda de disposición: campos en 1 columna y en 2 cuando el cuerpo del modal mide 28rem o más. */
+.gcu-modal-columns{display:grid;gap:var(--gcu-space-3)}
+@container (min-width:28rem){.gcu-modal-columns{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* ConfirmDialog: mensaje legible y botones apilados (primario arriba) cuando el diálogo es angosto. */
+.gcu-confirm-dialog .modal-content{container-type:inline-size}
+.gcu-confirm-dialog__message{margin:0;color:var(--gcu-text);text-wrap:pretty}
+.gcu-confirm-dialog .modal-footer{flex-direction:column-reverse;align-items:stretch}
+@container (min-width:18rem){.gcu-confirm-dialog .modal-footer{flex-direction:row;justify-content:flex-end}}
