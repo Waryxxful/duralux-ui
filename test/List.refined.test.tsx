@@ -92,6 +92,13 @@ describe('BulkBar (lote N2)', () => {
     expect(onClear).toHaveBeenCalled()
   })
 
+  test('clearLabel nombra el botón y la cantidad visible es la región status (sin texto duplicado)', () => {
+    render(<BulkBar count={2} onClear={() => {}} clearLabel="Limpiar selección" formatCount={(n) => `${n} seleccionadas`} />)
+    expect(screen.getByRole('button', { name: 'Limpiar selección' })).toBeInTheDocument()
+    expect(screen.getAllByText('2 seleccionadas')).toHaveLength(1)
+    expect(screen.getByRole('status')).toHaveTextContent('2 seleccionadas')
+  })
+
   test('singular y total', () => {
     render(<BulkBar count={1} total={1200} />)
     expect(screen.getByRole('status')).toHaveTextContent('1 de 1.200 seleccionado')

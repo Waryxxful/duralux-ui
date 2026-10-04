@@ -1,4 +1,4 @@
-/* DataTable: botón de orden, menú «Columnas», barra de acciones masivas y filas espaciadoras virtuales.
+/* DataTable: botón de orden, menú «Columnas», margen de la BulkBar (bulk-bar.css) y filas espaciadoras virtuales.
    La tabla en sí usa table.css (.table.table-hover, densidad, encabezado fijo). */
 .gcu-data-table__sort{display:inline-flex;align-items:center;gap:var(--gcu-space-1);padding:0;border:0;background:transparent;color:inherit;font:inherit;text-transform:inherit;letter-spacing:inherit;cursor:pointer;user-select:none;border-radius:var(--gcu-radius-sm)}
 .gcu-data-table__sort:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:2px}
@@ -7,8 +7,6 @@
 .gcu-data-table__column-menu{min-width:13rem;padding-block:var(--gcu-space-2)}
 .gcu-data-table__column-option{margin:0;padding:var(--gcu-space-1) var(--gcu-space-3) var(--gcu-space-1) calc(var(--gcu-space-3) + 1.5em)}
 .gcu-data-table__column-hint{padding:var(--gcu-space-1) var(--gcu-space-3) 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
-.gcu-data-table__bulk{container-type:inline-size;display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-3);padding:var(--gcu-space-2) var(--gcu-space-6);border-bottom:1px solid var(--gcu-border);background:var(--gcu-primary-soft);color:var(--gcu-primary-text)}
-.gcu-data-table__bulk-count{font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums}
-.gcu-data-table__bulk-actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);margin-inline-end:auto}
+.gcu-data-table__bulk[data-state="open"]{padding:var(--gcu-space-2) var(--gcu-space-6) 0}
 .table>tbody>tr.gcu-data-table__spacer>td{padding:0;border:0}
 .table-hover>tbody>tr.gcu-data-table__spacer:hover>*{--bs-table-accent-bg:transparent}

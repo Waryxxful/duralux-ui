@@ -1388,6 +1388,8 @@ export interface BulkBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
   /** Acciones sobre la selección (botones). */
   actions?: React.ReactNode
   onClear?: () => void
+  /** Nombre del botón que quita la selección. Por defecto «Quitar selección». */
+  clearLabel?: string
   /** Total de filas, para «3 de 120 seleccionados». */
   total?: number
   /** Texto de la cantidad; por defecto «N seleccionado(s)». */
