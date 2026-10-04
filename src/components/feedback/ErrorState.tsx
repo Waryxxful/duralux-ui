@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useId } from 'react'
+import { forwardRef, isValidElement, useEffect, useId } from 'react'
 import type * as React from 'react'
 import { Button } from '../ui/Button'
 import { cx } from '../../utils/cx'
@@ -6,17 +6,23 @@ import { log } from '../../utils/log'
 import { isArray, isFunction, isObject, isString } from '../../utils/typeGuards'
 import type { ErrorStateProps } from '../../public/types'
 
-function hasContent(value: unknown): boolean {
+type ErrorInput = ErrorStateProps['error']
+
+function hasContent(value: ErrorInput): boolean {
   if (value === null || value === undefined || value === false || value === true) return false
   if (isString(value)) return value.trim() !== ''
   return true
 }
 
-function normalizeMessage(value: unknown): React.ReactNode {
+function hasMessage(value: ErrorInput): value is { message: React.ReactNode } {
+  return Boolean(value) && isObject(value) && !isArray(value) && 'message' in value
+}
+
+function normalizeMessage(value: ErrorInput): React.ReactNode {
   if (value instanceof Error) return value.message || 'Error desconocido'
-  if (value && isObject(value) && !hasContent(value)) return null
-  if (value && isObject(value) && 'message' in value && !isArray(value)) return (value as { message: React.ReactNode }).message
-  return value as React.ReactNode
+  if (hasMessage(value)) return value.message
+  if (isValidElement(value) || !isObject(value)) return value
+  return null
 }
 
 /**

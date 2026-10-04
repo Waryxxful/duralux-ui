@@ -5,6 +5,7 @@ import { registerDismissableLayer } from '../../utils/dismissableLayer'
 import { useThemeBoundaryMode } from '../../theme/themeBoundary'
 import { isFunction, isString } from '../../utils/typeGuards'
 import { log } from '../../utils/log'
+import { assignRef } from '../../utils/assignRef'
 import type { ModalProps } from '../../public/types'
 
 const FOCUSABLE_SELECTOR = [
@@ -371,8 +372,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal({
   const backdropRef = useRef(null)
   const setDialogRef = useCallback((node: HTMLDivElement | null) => {
     dialogRef.current = node
-    if (typeof forwardedRef === 'function') forwardedRef(node)
-    else if (forwardedRef) forwardedRef.current = node
+    assignRef(forwardedRef, node)
   }, [forwardedRef])
   const modalEntryRef = useRef({ dialog: null, backdrop: null, previousFocus: null })
   const closeOnEscapeRef = useRef(closeOnEscape)
@@ -452,7 +452,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal({
       const first = focusableElements[0]
       const last = focusableElements[focusableElements.length - 1]
       const activeElement = document.activeElement
-      const focusIsInSequence = focusableElements.includes(activeElement as HTMLElement)
+      const focusIsInSequence = focusableElements.some((element) => element === activeElement)
       if (e.shiftKey && (activeElement === first || !focusIsInSequence)) {
         e.preventDefault()
         last.focus()

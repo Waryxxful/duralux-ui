@@ -3,7 +3,7 @@ import { cx } from '../../utils/cx'
 import { isFiniteNumber, isNonEmptyString } from '../../utils/typeGuards'
 import type { CardLoaderProps } from '../../public/types'
 
-function labelText(value: unknown, fallback = 'Cargando'): string {
+function labelText(value: CardLoaderProps['label'], fallback = 'Cargando'): string {
   if (isNonEmptyString(value)) return value
   if (isFiniteNumber(value)) return String(value)
   return fallback

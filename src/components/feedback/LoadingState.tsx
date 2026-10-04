@@ -1,5 +1,6 @@
 import { forwardRef } from 'react'
 import { cx } from '../../utils/cx'
+import { isNonEmptyString } from '../../utils/typeGuards'
 import type { LoadingStateProps } from '../../public/types'
 
 const DEFAULT_MESSAGE = 'Cargando…'
@@ -19,7 +20,7 @@ export const LoadingState = forwardRef<HTMLDivElement, LoadingStateProps>(functi
   className,
   ...rest
 }, ref) {
-  const label = typeof message === 'string' && message.trim() !== '' ? message : DEFAULT_MESSAGE
+  const label = isNonEmptyString(message) ? message : DEFAULT_MESSAGE
   if (variant === 'skeleton') {
     const count = Math.max(1, Math.floor(Number(rows) || 1))
     return (

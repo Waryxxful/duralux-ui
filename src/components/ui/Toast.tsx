@@ -2,6 +2,7 @@ import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'rea
 import { createPortal } from 'react-dom';
 import { useThemeBoundaryMode } from '../../theme/themeBoundary';
 import { log } from '../../utils/log';
+import { isNumber, isString } from '../../utils/typeGuards';
 
 /**
  * Toast — feedback de acción canónico de la plantilla (SweetAlert2 toast:
@@ -87,7 +88,7 @@ const READING_MS_PER_CHAR = 50;
 const READING_MAX_MS = 10_000;
 
 function textLength(node: React.ReactNode): number {
-  if (typeof node === 'string' || typeof node === 'number') return String(node).length;
+  if (isString(node) || isNumber(node)) return String(node).length;
   if (Array.isArray(node)) return node.reduce<number>((total, child) => total + textLength(child), 0);
   if (React.isValidElement<{ children?: React.ReactNode }>(node)) return textLength(node.props.children);
   return 0;

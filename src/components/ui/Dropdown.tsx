@@ -20,6 +20,7 @@ import type {
 } from 'react';
 import { registerDismissableLayer } from '../../utils/dismissableLayer';
 import { log } from '../../utils/log';
+import { assignRef } from '../../utils/assignRef';
 
 export type DropdownAlignment = 'start' | 'end';
 
@@ -166,8 +167,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropd
         {...rootProps}
         ref={(node) => {
           rootRef.current = node;
-          if (typeof forwardedRef === 'function') forwardedRef(node);
-          else if (forwardedRef) forwardedRef.current = node;
+          assignRef(forwardedRef, node);
         }}
         className={className}
         onMouseEnter={(event) => {

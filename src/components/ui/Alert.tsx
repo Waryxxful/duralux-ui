@@ -1,7 +1,7 @@
 import { forwardRef, isValidElement, useState } from 'react'
 import type * as React from 'react'
 import { cx } from '../../utils/cx'
-import { isFunction } from '../../utils/typeGuards'
+import { isFunction, isNonEmptyString } from '../../utils/typeGuards'
 import { renderIconSlot } from '../../utils/iconSlot'
 import { log } from '../../utils/log'
 import type { AlertProps } from '../../public/types'
@@ -14,7 +14,7 @@ const BOOTSTRAP_SOLID_VARIANTS = new Set([
   'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark',
 ])
 
-function resolveAlertVariant(variant: unknown): string {
+function resolveAlertVariant(variant: AlertProps['variant']): string {
   const candidate = String(variant || 'primary')
   if (ALERT_VARIANTS.has(candidate)) return candidate
   log.warn(`Alert: la variante "${candidate}" no existe; se usa "primary".`)
@@ -58,7 +58,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({
     : BOOTSTRAP_SOLID_VARIANTS.has(resolvedVariant) ? `alert-${resolvedVariant}` : ''
   const iconNode = isValidElement(icon)
     ? renderIconSlot(icon)
-    : typeof icon === 'string' && icon ? <i className={icon} aria-hidden="true"></i> : null
+    : isNonEmptyString(icon) ? <i className={icon} aria-hidden="true"></i> : null
 
   const dismiss = () => {
     setVisible(false)

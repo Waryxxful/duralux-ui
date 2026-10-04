@@ -149,7 +149,7 @@ export interface ErrorStateProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   title?: React.ReactNode
   message?: React.ReactNode
   /** Error recibido (Error u objeto con `message`): reemplaza a `message` y se registra con `log.error`. */
-  error?: unknown
+  error?: Error | { message?: React.ReactNode } | React.ReactNode
   onRetry?: () => void
   /** Etiqueta del botón de reintento (por defecto «Reintentar»). */
   retryLabel?: string

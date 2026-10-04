@@ -7,6 +7,7 @@ const root = process.cwd()
 const read = (path: string) => readFileSync(resolve(root, path), 'utf8')
 const glue = read('src/styles/grancrm-ui.css')
 const files = ['alert', 'toast', 'modal', 'dropdown', 'feedback-state', 'card-loader'] as const
+// SAFETY: Object.fromEntries pierde las claves literales; se construye exactamente con `files`.
 const css = Object.fromEntries(files.map((name) => [name, read(`src/styles/components/${name}.css`)])) as Record<typeof files[number], string>
 
 describe('CSS por componente del lote L2', () => {
