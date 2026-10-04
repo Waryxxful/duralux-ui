@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ApexChart } from '../../../src/charts/apex'
-import { TresTemas } from './datos'
+import { TresTemas } from './TresTemas'
 
 const SEMANAS = ['Sem 36', 'Sem 37', 'Sem 38', 'Sem 39', 'Sem 40', 'Sem 41']
 

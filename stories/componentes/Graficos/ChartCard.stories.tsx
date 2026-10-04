@@ -1,6 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { BarChartWidget, ChartCard, PieChartWidget } from '../../../src/charts/recharts'
-import { ATENCION, FUENTES, SERIES_ATENCION, TresTemas, conEncabezado } from './datos'
+import type * as React from 'react'
+import { ATENCION, FUENTES, SERIES_ATENCION } from './datos'
+import { TresTemas } from './TresTemas'
+
+/** Los títulos de ChartCard son h3: un h2 (oculto) mantiene el orden de encabezados. */
+const conEncabezado = (Story: React.ComponentType) => (
+  <section aria-labelledby="sb-graficos">
+    <h2 id="sb-graficos" className="visually-hidden">Gráficos</h2>
+    <Story />
+  </section>
+)
 
 const meta: Meta<typeof ChartCard> = {
   title: 'Componentes/Gráficos/ChartCard',

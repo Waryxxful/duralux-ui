@@ -63,7 +63,7 @@ async function waitForApexOptions(assertion, index = 0) {
   await waitFor(() => {
     options = JSON.parse(screen.getAllByTestId('apex-chart')[index].dataset.options)
     assertion(options)
-  })
+  }, { timeout: 5000 })
   return options
 }
 

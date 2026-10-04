@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { BarChartWidget } from '../../../src/charts/recharts'
-import { ATENCION, SERIES_ATENCION, TresTemas } from './datos'
+import { ATENCION, SERIES_ATENCION } from './datos'
+import { TresTemas } from './TresTemas'
 
 const meta: Meta<typeof BarChartWidget> = {
   title: 'Componentes/Gráficos/BarChartWidget',

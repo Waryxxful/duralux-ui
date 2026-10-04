@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { PieChartWidget } from '../../../src/charts/recharts'
-import { FUENTES, TresTemas } from './datos'
+import { FUENTES } from './datos'
+import { TresTemas } from './TresTemas'
 
 const meta: Meta<typeof PieChartWidget> = {
   title: 'Componentes/Gráficos/PieChartWidget',

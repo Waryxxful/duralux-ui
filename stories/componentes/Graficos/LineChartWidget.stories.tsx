@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { LineChartWidget } from '../../../src/charts/recharts'
-import { ATENCION, TresTemas } from './datos'
+import { ATENCION } from './datos'
+import { TresTemas } from './TresTemas'
 
 const meta: Meta<typeof LineChartWidget> = {
   title: 'Componentes/Gráficos/LineChartWidget',

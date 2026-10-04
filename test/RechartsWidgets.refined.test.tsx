@@ -14,7 +14,12 @@ const tooltipPayload = [
   { name: 'Gastos', value: 4.5, color: '#654321', dataKey: 'gastos' },
 ]
 type ContentProps = { content?: React.ReactNode; isAnimationActive?: boolean; animationDuration?: number }
-const renderContent = (content: React.ReactNode, extra: Record<string, unknown>) => (
+interface ContentExtra {
+  active?: boolean
+  label?: string
+  payload: ReadonlyArray<object>
+}
+const renderContent = (content: React.ReactNode, extra: ContentExtra) => (
   isValidElement(content) ? cloneElement(content, extra) : null
 )
 
@@ -60,8 +65,8 @@ describe.each(widgets)('%s refinado', (name, renderWidget) => {
 
   test('la leyenda identifica cada serie con forma y texto, sin claves por índice', () => {
     render(renderWidget(createRef()))
-    const legend = document.querySelector('.gcu-chart-legend') as HTMLElement
-    expect(legend).not.toBeNull()
+    const legend = document.querySelector<HTMLElement>('.gcu-chart-legend')
+    if (!legend) throw new Error('falta la leyenda')
     const items = within(legend).getAllByRole('listitem')
     expect(items.map((item) => item.textContent)).toEqual(['Ventas', 'Gastos'])
     items.forEach((item) => expect(item.querySelector('.gcu-chart-legend__mark')).toHaveAttribute('aria-hidden', 'true'))
@@ -78,8 +83,8 @@ describe.each(widgets)('%s refinado', (name, renderWidget) => {
 
   test('el tooltip usa superficie elevada y cifras es-CL tabulares', () => {
     render(renderWidget(createRef()))
-    const tooltip = document.querySelector('.gcu-chart-tooltip') as HTMLElement
-    expect(tooltip).not.toBeNull()
+    const tooltip = document.querySelector<HTMLElement>('.gcu-chart-tooltip')
+    if (!tooltip) throw new Error('falta el tooltip')
     expect(within(tooltip).getByText('Ene')).toHaveClass('gcu-chart-tooltip__label')
     const values = Array.from(tooltip.querySelectorAll('.gcu-chart-tooltip__value'), (node) => node.textContent)
     expect(values).toEqual(['1.240.000', '4,5'])
