@@ -30,7 +30,7 @@ export const TrendLine = /* @__PURE__ */ forwardRef<HTMLElement, TrendLineProps>
 }, ref) {
   const { mode, setRef } = useCompactChart(theme, ref)
   const resolvedTone = resolveCompactTone('TrendLine', tone)
-  const list = isArray(series) ? series : []
+  const list = useMemo(() => (isArray(series) ? series : []), [series])
   if (list.length > 2) log.warn(`TrendLine: muestra una serie y, como mucho, una de comparación (recibidas: ${list.length}).`)
   const apexSeries = useMemo(() => list.map((item) => ({ name: item.name, data: [...item.data] })), [list])
   const format = useMemo(() => numberFormatter(formatValue), [formatValue])
