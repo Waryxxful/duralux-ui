@@ -1,6 +1,6 @@
 {
   "name": "@duralux/ui",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "type": "module",
   "description": "Librería de componentes React + Duralux CSS",
   "main": "./dist/index.cjs",
@@ -27,6 +27,11 @@
       "types": "./dist/charts/recharts.d.ts",
       "import": "./dist/charts/recharts.js",
       "require": "./dist/charts/recharts.cjs"
+    },
+    "./antd": {
+      "types": "./dist/antd/index.d.ts",
+      "import": "./dist/antd/index.js",
+      "require": "./dist/antd/index.cjs"
     },
     "./styles/grancrm-ui.css": "./dist/styles/grancrm-ui.css",
     "./styles/feather-icons.css": "./dist/styles/feather-icons.css",
@@ -74,7 +79,9 @@
     "react-apexcharts": "^2.1.1",
     "react-dom": ">=18",
     "react-router-dom": "^6.0.0 || ^7.0.0",
-    "recharts": "^3.8.1"
+    "recharts": "^3.8.1",
+    "antd": "^6.0.0",
+    "dayjs": "^1.11.0"
   },
   "peerDependenciesMeta": {
     "apexcharts": {
@@ -84,6 +91,12 @@
       "optional": true
     },
     "recharts": {
+      "optional": true
+    },
+    "antd": {
+      "optional": true
+    },
+    "dayjs": {
       "optional": true
     }
   },
@@ -100,8 +113,10 @@
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.3.4",
+    "antd": "^6.6.5",
     "apexcharts": "^5.15.2",
     "axe-core": "^4.13.0",
+    "dayjs": "^1.11.23",
     "jsdom": "^26.1.0",
     "oxlint": "1.79.0",
     "react": "^18.3.1",

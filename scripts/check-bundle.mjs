@@ -6,7 +6,8 @@ import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const CHART_ENGINE_PATTERN = /(?:^|[^A-Za-z0-9_])(?:apexcharts|react-apexcharts|recharts)(?:$|[^A-Za-z0-9_])/m
+// Motores opcionales (charts y antd/dayjs): nunca deben aparecer en el bundle raíz.
+const CHART_ENGINE_PATTERN = /(?:^|[^A-Za-z0-9_])(?:apexcharts|react-apexcharts|recharts|antd|dayjs)(?:$|[^A-Za-z0-9_])/m
 const EXTERNAL_PACKAGES = [
   'react',
   'react-dom',
@@ -16,6 +17,8 @@ const EXTERNAL_PACKAGES = [
   'apexcharts',
   'react-apexcharts',
   'recharts',
+  'antd',
+  'dayjs',
 ]
 
 function isExternal(id) {
@@ -37,7 +40,7 @@ export function assertRootBundleIsolated(distDir) {
 
   const offenders = paths.filter(path => CHART_ENGINE_PATTERN.test(readFileSync(path, 'utf8')))
   if (offenders.length > 0) {
-    throw new Error(`Root bundle contains chart engine specs: ${offenders.join(', ')}`)
+    throw new Error(`Root bundle contains optional engine specs (charts/antd): ${offenders.join(', ')}`)
   }
   return paths
 }

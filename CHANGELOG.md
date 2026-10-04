@@ -2,6 +2,24 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## 2.2.0 — antd tematizado y Button ejemplar
+
+### Agregado
+
+- **`@duralux/ui/antd`**: `DuraluxAntdProvider`, `DatePicker`, `RangePicker`, `DateRangeFilter` (presets en español), `TreeSelect`, `Cascader` y `FileDrop`. antd y dayjs son dependencias opcionales y nunca entran al bundle raíz. Ver `docs/ANTD.md`.
+- Token `--gcu-z-popover` (1070) y `--gcu-control-h-xs` (28 px).
+- `docs/RECETA-COMPONENTE.md`: la receta que siguen todos los componentes refinados.
+
+### Cambiado
+
+- `Button`, `LinkButton` e `IconButton` en TSX con `forwardRef` (el `ref` llega al elemento nativo y está tipado). Las variantes no canónicas avisan con `log` (`[duralux]`) y `outline` con `deprecate`.
+- El CSS de botón vive en `styles/components/button.css` (importado por `grancrm-ui.css`; no cambia cómo se importan los estilos).
+
+### Corregido
+
+- `.btn-link` en línea conserva su padding (DX-036).
+- Números tabulares solo en celdas numéricas; IconButton `sm` a 32 px y 28 px en tablas (regresiones vistas en DEV con 2.1).
+
 ## 2.1.0 — Fundaciones del design system
 
 Primera entrega de la serie 2.x (spec `docs/superpowers/specs/2026-10-03-duralux-design-system-design.md`). El contrato shell ↔ satélite (`src/contract.ts`) no cambia y no se elimina ninguna API. Sí hay **cambios visuales globales** y una **ampliación de tipos** que puede requerir ajustes:

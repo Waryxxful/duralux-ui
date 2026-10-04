@@ -27,6 +27,7 @@ export default defineConfig({
         'charts/index': resolve(__dirname, 'src/charts/index.ts'),
         'charts/apex': resolve(__dirname, 'src/charts/apex.ts'),
         'charts/recharts': resolve(__dirname, 'src/charts/recharts.ts'),
+        'antd/index': resolve(__dirname, 'src/antd/index.ts'),
       },
       name: 'DuraluxUI',
       formats: ['es', 'cjs'],
@@ -42,6 +43,8 @@ export default defineConfig({
         'apexcharts',
         'react-apexcharts',
         'recharts',
+        /^antd(\/|$)/,
+        /^dayjs(\/|$)/,
       ],
       output: {
         globals: {

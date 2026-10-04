@@ -254,6 +254,11 @@ function renderAntdTs(tokens) {
         colorInfo: base.info,
         colorText: r.text,
         colorTextSecondary: r.muted,
+        colorTextTertiary: r.muted,
+        colorTextDescription: r.muted,
+        // antd usa grises de 1,8:1 para placeholders y días fuera de mes; text-subtle cumple 3:1+.
+        colorTextPlaceholder: r['text-subtle'],
+        colorTextDisabled: r['text-subtle'],
         colorBgContainer: r.surface,
         colorBgElevated: r['surface-raised'],
         colorBgLayout: r['surface-subtle'],
@@ -267,6 +272,8 @@ function renderAntdTs(tokens) {
         controlHeightLG: px(v(tokens.control.height.lg)),
         fontFamily: v(tokens.font.family.sans),
         fontSize: px(v(tokens.font.size.sm)),
+        // Popups (calendario, selects) sobre los modales Duralux: un DatePicker dentro de un Modal debe verse.
+        zIndexPopupBase: v(tokens['z-index'].popover),
         boxShadow: r.shadow['2'],
         boxShadowSecondary: r.shadow['3'],
         motionDurationFast: `${px(v(tokens.motion.duration.instant)) / 1000}s`,

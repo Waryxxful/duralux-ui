@@ -5,7 +5,7 @@ import { dirname, join, normalize, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const REQUIRED_OPTIONAL_PEERS = ['apexcharts', 'react-apexcharts', 'recharts']
+const REQUIRED_OPTIONAL_PEERS = ['apexcharts', 'react-apexcharts', 'recharts', 'antd', 'dayjs']
 const REQUIRED_EXPORTS = {
   '.': {
     types: './dist/index.d.ts',
@@ -26,6 +26,11 @@ const REQUIRED_EXPORTS = {
     types: './dist/charts/recharts.d.ts',
     import: './dist/charts/recharts.js',
     require: './dist/charts/recharts.cjs',
+  },
+  './antd': {
+    types: './dist/antd/index.d.ts',
+    import: './dist/antd/index.js',
+    require: './dist/antd/index.cjs',
   },
 }
 const REQUIRED_ASSETS = [

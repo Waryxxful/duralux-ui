@@ -193,6 +193,7 @@ export const designTokens = {
     "sticky": 1020,
     "drawer": 1045,
     "modal": 1055,
+    "popover": 1070,
     "toast": 1090,
     "tooltip": 1100
   },

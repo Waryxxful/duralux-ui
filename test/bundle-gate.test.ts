@@ -40,6 +40,12 @@ describe('root bundle gate', () => {
   test('rejects chart engine specifications in any root target', async () => {
     await expect(runBundleGate({
       distDir: createRootDist('import ApexChart from "react-apexcharts"; export { ApexChart };'),
-    })).rejects.toThrow(/chart engine specs/)
+    })).rejects.toThrow(/optional engine specs/)
+  })
+
+  test('rejects antd or dayjs in the root bundle (only @duralux/ui/antd may import them)', async () => {
+    await expect(runBundleGate({
+      distDir: createRootDist('import { DatePicker } from "antd"; export { DatePicker };'),
+    })).rejects.toThrow(/optional engine specs/)
   })
 })
