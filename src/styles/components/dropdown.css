@@ -1,0 +1,13 @@
+/* Dropdown y cualquier .dropdown-menu. Elevación 3 y radio lg sobre la superficie elevada del tema.
+   Frecuente = instantáneo: entra en --gcu-duration-instant (100 ms) y los ítems cambian de fondo sin transición. */
+.dropdown-menu{--gcu-dropdown-inset:var(--gcu-space-2);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface-raised);color:var(--gcu-text);box-shadow:var(--gcu-shadow-3)}
+.dropdown-menu.show{animation:gcu-enter var(--gcu-duration-instant) var(--gcu-ease-enter)}
+/* Radio anidado: radio del menú menos la separación lateral del ítem. */
+.dropdown-item{border-radius:max(0px,calc(var(--gcu-radius-lg) - var(--gcu-dropdown-inset)));color:var(--gcu-text);transition:none}
+.dropdown-item:focus,.dropdown-item:focus-visible{background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}
+.dropdown-item.active,.dropdown-item:active{background-color:var(--gcu-primary-soft);color:var(--gcu-primary-text)}
+.dropdown-item.disabled,.dropdown-item:disabled{color:var(--gcu-muted)}
+.dropdown-header{color:var(--gcu-muted)}
+.dropdown-divider{border-color:var(--gcu-border)}
+@media (hover:hover){.dropdown-item:hover{background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+@media (prefers-reduced-motion:reduce){.dropdown-menu.show{animation:none}}

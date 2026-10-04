@@ -1,8 +1,11 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useId, useRef, useState } from 'react'
+import type * as React from 'react'
 import { createPortal } from 'react-dom'
 import { registerDismissableLayer } from '../../utils/dismissableLayer'
 import { useThemeBoundaryMode } from '../../theme/themeBoundary'
 import { isFunction, isString } from '../../utils/typeGuards'
+import { log } from '../../utils/log'
+import type { ModalProps } from '../../public/types'
 
 const FOCUSABLE_SELECTOR = [
   'a[href]',
@@ -208,8 +211,8 @@ function syncModalBackground() {
   }
 }
 
-function getFocusableElements(dialog) {
-  return Array.from(dialog.querySelectorAll(FOCUSABLE_SELECTOR)).filter((element) => (
+function getFocusableElements(dialog: HTMLElement): HTMLElement[] {
+  return Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((element) => (
     element.tabIndex >= 0 && !element.closest('[hidden], [inert], [aria-hidden="true"]')
   ))
 }
@@ -316,7 +319,14 @@ function isTopmostModal(entry) {
 }
 
 /**
- * Modal — portal-based modal con header/body/footer Duralux.
+ * Modal — portal-based modal con header/body/footer Duralux (patrón APG «Dialog (Modal)»).
+ *
+ * Decisión DX-019: se conserva el patrón APG propio en vez de `<dialog>` nativo. jsdom no
+ * implementa `showModal()` (no se podría verificar foco atrapado/retorno/Esc/scroll en tests) y
+ * la pila global compartida entre bundles (Escape solo en el modal superior, traspaso de foco al
+ * modal restante, fondo inert por capa) difiere de la semántica del top layer nativo.
+ * Entra con `gcu-enter`; no anima la salida porque el cierre es síncrono (foco y scroll se
+ * restauran en el mismo tick, contrato que verifican Modal.test y AppLayout.test).
  *
  * Props:
  *   open     — boolean
@@ -329,7 +339,7 @@ function isTopmostModal(entry) {
  *   scrollable — cuerpo con scroll interno (modal-dialog-scrollable)
  *   footer     — JSX for footer (usually buttons)
  */
-export function Modal({
+export const Modal = forwardRef<HTMLDivElement, ModalProps>(function Modal({
   open = false,
   onClose,
   closeOnEscape = true,
@@ -349,7 +359,7 @@ export function Modal({
   'aria-describedby': ariaDescribedBy = undefined,
   onClick: onDialogClick = undefined,
   ...rest
-}) {
+}, forwardedRef) {
   const titleId = useId()
   const themeMode = useThemeBoundaryMode()
   const hasTitle = isString(title)
@@ -357,8 +367,13 @@ export function Modal({
     : title !== undefined && title !== null && title !== false
   const canClose = isFunction(onClose)
   const [mounted, setMounted] = useState(false)
-  const dialogRef = useRef(null)
+  const dialogRef = useRef<HTMLDivElement | null>(null)
   const backdropRef = useRef(null)
+  const setDialogRef = useCallback((node: HTMLDivElement | null) => {
+    dialogRef.current = node
+    if (typeof forwardedRef === 'function') forwardedRef(node)
+    else if (forwardedRef) forwardedRef.current = node
+  }, [forwardedRef])
   const modalEntryRef = useRef({ dialog: null, backdrop: null, previousFocus: null })
   const closeOnEscapeRef = useRef(closeOnEscape)
   const onCloseRef = useRef(onClose)
@@ -437,7 +452,7 @@ export function Modal({
       const first = focusableElements[0]
       const last = focusableElements[focusableElements.length - 1]
       const activeElement = document.activeElement
-      const focusIsInSequence = focusableElements.includes(activeElement)
+      const focusIsInSequence = focusableElements.includes(activeElement as HTMLElement)
       if (e.shiftKey && (activeElement === first || !focusIsInSequence)) {
         e.preventDefault()
         last.focus()
@@ -458,6 +473,7 @@ export function Modal({
   const fallbackLabel = ariaLabel === undefined && effectiveLabelledBy === undefined && !hasTitle
     ? 'Modal'
     : undefined
+  if (fallbackLabel) log.warn('Modal sin nombre accesible: pasa `title`, `aria-label` o `aria-labelledby`.')
   const handleBackdropClick = (event) => {
     if (
       event.target === event.currentTarget
@@ -482,16 +498,16 @@ export function Modal({
         className={['modal fade show', themeMode && 'gcu-theme', className].filter(Boolean).join(' ')}
         data-gcu-theme={themeMode}
         style={{ ...(dialogStyle || {}), display: 'block' }}
-        tabIndex="-1"
+        tabIndex={-1}
         role={role ?? 'dialog'}
         aria-modal="true"
         aria-labelledby={effectiveLabelledBy}
         aria-label={ariaLabel !== undefined ? ariaLabel : fallbackLabel}
         aria-describedby={ariaDescribedBy}
-        ref={dialogRef}
+        ref={setDialogRef}
         onClick={handleDialogClick}
       >
-        <div className={`modal-dialog${size ? ` modal-${size}` : ''} modal-dialog-centered${scrollable ? ' modal-dialog-scrollable' : ''}`}>
+        <div className={`modal-dialog gcu-modal-dialog${size ? ` modal-${size}` : ''} modal-dialog-centered${scrollable ? ' modal-dialog-scrollable' : ''}`}>
           <div className="modal-content">
             {(hasTitle || (showCloseButton && canClose)) && (
               <div className="modal-header">
@@ -501,7 +517,7 @@ export function Modal({
                 )}
               </div>
             )}
-            <div className="modal-body">
+            <div className="modal-body gcu-modal-body">
               {children}
             </div>
             {footer !== undefined && footer !== null && footer !== false && (
@@ -536,4 +552,4 @@ export function Modal({
 
   const portalTarget = globalThis.document?.body ?? null
   return portalTarget ? createPortal(modalMarkup, portalTarget) : null
-}
+})

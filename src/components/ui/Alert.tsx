@@ -58,7 +58,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert({
     : BOOTSTRAP_SOLID_VARIANTS.has(resolvedVariant) ? `alert-${resolvedVariant}` : ''
   const iconNode = isValidElement(icon)
     ? renderIconSlot(icon)
-    : icon ? <i className={icon} aria-hidden="true"></i> : null
+    : typeof icon === 'string' && icon ? <i className={icon} aria-hidden="true"></i> : null
 
   const dismiss = () => {
     setVisible(false)
