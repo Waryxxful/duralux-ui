@@ -8,7 +8,7 @@ import type { ProgressRingProps } from '../../public/types'
 const DEFAULT_PROGRESS_COLOR = 'var(--gcu-primary-text)'
 const MAX_RING_SIZE = 1000
 
-function positiveFinite(value: unknown, fallback: number, maximum = MAX_RING_SIZE): number {
+function positiveFinite(value: number | string | null | undefined, fallback: number, maximum = MAX_RING_SIZE): number {
   try {
     const number = Number(value)
     return isFiniteNumber(number) && number > 0 ? Math.min(number, maximum) : fallback

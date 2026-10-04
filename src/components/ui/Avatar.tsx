@@ -5,7 +5,9 @@ import { log } from '../../utils/log'
 import type { AvatarProps } from '../../public/types'
 import { resolveTone } from './internal/tones'
 
-function safeString(value: unknown, fallback = ''): string {
+type Printable = string | number | bigint | boolean | null | undefined
+
+function safeString(value: Printable, fallback = ''): string {
   try {
     return String(value)
   } catch {
@@ -13,7 +15,7 @@ function safeString(value: unknown, fallback = ''): string {
   }
 }
 
-function getInitials(name: unknown): string {
+function getInitials(name: Printable): string {
   const words = safeString(name ?? '').trim().split(/\s+/).filter(Boolean)
   if (words.length === 0) return '?'
   if (words.length === 1) return Array.from(words[0]).slice(0, 2).join('').toUpperCase()

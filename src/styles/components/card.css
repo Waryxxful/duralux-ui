@@ -2,14 +2,14 @@
    real. En oscuro y navy la elevación la dan superficie y borde (tokens), no sombras fuertes. */
 .card{border-color:var(--gcu-border);box-shadow:var(--gcu-shadow-1)}
 .gcu-card .card-header{container-type:inline-size}
-.gcu-card__header{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-2);width:100%}
-.gcu-card__heading{min-width:0;max-width:100%}
-.gcu-card__title{text-wrap:balance}
-.gcu-card__subtitle{margin-top:var(--gcu-space-1);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-card-head{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-2);width:100%}
+.gcu-card-head__text{min-width:0;max-width:100%}
+.gcu-card-head__title{text-wrap:balance}
+.gcu-card-head__subtitle{margin-top:var(--gcu-space-1);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
 .gcu-card .card-header-action{flex-wrap:wrap;justify-content:flex-start;gap:var(--gcu-space-1)}
 /* Contenedor ancho: título a la izquierda y acciones alineadas a la derecha en una fila. */
 @container (min-width:28rem){
-  .gcu-card__header{flex-direction:row;align-items:center;justify-content:space-between;gap:var(--gcu-space-4)}
+  .gcu-card-head{flex-direction:row;align-items:center;justify-content:space-between;gap:var(--gcu-space-4)}
   .gcu-card .card-header-action{flex-wrap:nowrap;justify-content:flex-end;margin-inline-start:auto}
 }
 .gcu-card--interactive{cursor:pointer;transition:box-shadow var(--gcu-duration-fast) var(--gcu-ease-standard)}

@@ -41,7 +41,7 @@ react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 pá
 | DX-013 | P2 | tipografía | Inter cargada desde Google Fonts (dependencia externa, privacidad, offline) | `scss/theme.scss` `@import url(fonts.googleapis…)` | 1 | cerrado 2.1 (Inter Variable autoalojada) |
 | DX-014 | P2 | tokens | Solo 14 tokens de color; sin escalas de espaciado, elevación, motion, z-index, alturas | `tokens/semantic-colors.json` | 1 | cerrado 2.1 (tokens DTCG de tres niveles) |
 | DX-015 | P2 | css | 680 `!important`, 181 overrides `.app-skin-dark`, 428 hex sueltos | `docs/auditoria/baseline.json` | 1 (global) / 2 (componentes) | en curso: presupuesto por archivo en gate (2.1); reducción en subproyecto 2 |
-| DX-016 | P2 | react | `setState` síncrono en efecto y estado empujado al padre vía efecto | `src/components/ui/Tabs.jsx:106`, `:129` | 2 | abierto |
+| DX-016 | P2 | react | `setState` síncrono en efecto y estado empujado al padre vía efecto | `src/components/ui/Tabs.jsx:106`, `:129` | 2 | cerrado 2.3 (`Tabs.tsx`: activa derivada en render; `onChange` solo desde eventos; clave inválida avisa por `log.warn`) |
 | DX-017 | P2 | react | Estado ajustado tras cambio de prop (×5) | `ChatSidebar.jsx:140`, `SearchableSelect.jsx:83`, `selectCoreModel.jsx:237-238`, `navigationCore.tsx:428` | 2 | abierto |
 | DX-018 | P3 | react | Key por índice | `src/components/charts/ChartLegend.jsx:11` | 2 | no aplica: el índice solo desempata series con la misma clave |
 | DX-019 | P2 | react | Modal propio en vez de `<dialog>` | `src/components/ui/Modal.jsx:487` | 2 | abierto |
@@ -54,13 +54,13 @@ react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 pá
 | DX-026 | P3 | tooling | Regla oxlint interna con aserciones encadenadas y parámetros `unknown` | `tools/oxlint/anti-slop/shared/lexical-type-parameters.ts:5,20` | 1 | no aplica: plugin de lint vendorizado, excluido por política |
 | DX-027 | P3 | demo | Orden de encabezados de la demo (`h3` sin `h2`), 404 en la intro | axe heading-order ×19, consola intro | 2 (migración a Storybook) | abierto |
 | DX-028 | P3 | seguridad | react-doctor `require-pnpm-hardening` ×2 (el repo construye con npm) | react-doctor | 1 | no aplica: el repo construye con npm |
-| DX-029 | P2 | copy | `Card` trae etiquetas por defecto en inglés (`Refresh`, `Remove`, `Expand`) | `src/components/ui/Card.jsx:58-60` | 2 | abierto |
+| DX-029 | P2 | copy | `Card` trae etiquetas por defecto en inglés (`Refresh`, `Remove`, `Expand`) | `src/components/ui/Card.jsx:58-60` | 2 | cerrado 2.3 (`Card.tsx`: «Actualizar», «Quitar», «Expandir» con `IconButton`) |
 | DX-030 | P2 | copy | Voseo en documentación, comentarios y CLI (CHANGELOG 2.0, README, CLAUDE.md, JSDoc de Button/FormField, `scripts/check-doctor.mjs`): viola la regla de español internacional. Mensajes del gate corregidos en 2.1 | 10 archivos (`grep -rE 'usá|corré|podés'`) | 6 | parcial |
 | DX-031 | P3 | tests | `Charts.contract.test.jsx` intermitente bajo carga (carga diferida de ApexChart): 1 fallo en 4 corridas completas | `test/Charts.contract.test.jsx` «uses the literal accessible dark chart palette» | 2 | abierto |
 | DX-032 | P3 | theme | SSR con hidratación: `getServerSnapshot` = false hace que `system` con SO oscuro pinte light un instante y pise el snippet | `src/theme/ThemeProvider.tsx:54` | 2 | abierto |
 | DX-033 | P3 | theme | `setMode` no valida: un consumidor JS con `setMode('sepia')` deja `data-gcu-theme="sepia"` | `src/theme/ThemeProvider.tsx:53` | 2 | abierto |
-| DX-034 | P3 | icons | `Icon` con `icon` descarta `style` y `...rest` | `src/components/ui/Icon.jsx:25` | 2 | abierto |
-| DX-035 | P3 | a11y | `renderIconSlot` pisa el `aria-label` propio del elemento con `aria-hidden` | `src/utils/iconSlot.jsx:24-29` | 2 | abierto |
+| DX-034 | P3 | icons | `Icon` con `icon` descarta `style` y `...rest` | `src/components/ui/Icon.jsx:25` | 2 | cerrado 2.3 (`Icon.tsx` reenvía style, className, rest y ref al SVG) |
+| DX-035 | P3 | a11y | `renderIconSlot` pisa el `aria-label` propio del elemento con `aria-hidden` | `src/utils/iconSlot.jsx:24-29` | 2 | cerrado 2.3 (`iconSlot.tsx`: con `aria-label`/`aria-labelledby` propio se anuncia como imagen) |
 | DX-036 | P3 | styles | La capa de refinamiento quita padding vertical a todo `.btn` (afecta `.btn-link` en línea y botones de dos líneas) | `src/styles/grancrm-ui.css` (REFINEMENT 2.1) | 2 | cerrado 2.3 (`.btn:not(.btn-link)` en `components/button.css`) |
 | DX-037 | P3 | tests | Los tests de cascada de ThemeScope × tema de html × reduced-motion verifican texto, no la cascada medida en navegador | `test/tokens-generator.test.ts`, `test/refinement-css.test.ts` | 2 | abierto |
 | DX-038 | P3 | theme | Navy Sass agrega un atributo de especificidad: un override de app con el selector del oscuro pierde en navy (alternativa `:where()`) | `_theme-options-dark-theme.scss` | 2 | abierto |

@@ -23,7 +23,7 @@ function declarations(selectorStart: string): Record<string, string> {
 const light = declarations(':root,.gcu-theme,[data-gcu-theme="light"]{')
 const dark = { ...light, ...declarations('[data-gcu-theme="dark"],.app-skin-dark{') }
 const navy = { ...dark, ...declarations('[data-gcu-theme="navy"],') }
-const byTheme: Record<ThemeName, Record<string, string>> = { light, dark, navy }
+const byTheme = { light, dark, navy }
 
 /** Valor final de `var(--gcu-x)` (sigue referencias encadenadas). */
 export function token(theme: ThemeName, expression: string): string {
@@ -42,6 +42,7 @@ function channels(value: string): [number, number, number] {
   const hex = value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)
   if (hex) {
     const full = hex[1].length === 3 ? hex[1].replace(/./g, (d) => d + d) : hex[1]
+    // SAFETY: tres canales de un hex de 6 dígitos.
     return [0, 2, 4].map((i) => Number.parseInt(full.slice(i, i + 2), 16)) as [number, number, number]
   }
   const rgb = value.match(/^rgba?\(([^)]+)\)$/i)
@@ -72,18 +73,16 @@ export function componentCss(name: string): string {
   return readFileSync(resolve(process.cwd(), `src/styles/components/${name}.css`), 'utf8')
 }
 
-/** Declaraciones fusionadas de todas las reglas cuyo selector incluye exactamente `selector`. */
-export function ruleOf(css: string, selector: string): Record<string, string> {
-  let found = false
-  const merged: Record<string, string> = {}
+/** Valor de `property` en la última regla cuyo selector incluye exactamente `selector`. */
+export function ruleOf(css: string, selector: string, property: string): string {
+  let value: string | undefined
   for (const [, rawSelector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     const selectors = rawSelector.replace(/\/\*[\s\S]*?\*\//g, '').split(',').map((s) => s.trim())
     if (!selectors.includes(selector)) continue
-    found = true
-    for (const [, p, v] of body.matchAll(/([\w-]+)\s*:\s*([^;]+)/g)) merged[p] = v.trim()
+    for (const [, p, v] of body.matchAll(/([\w-]+)\s*:\s*([^;]+)/g)) if (p === property) value = v.trim()
   }
-  if (!found) throw new Error(`Regla no encontrada: ${selector}`)
-  return merged
+  if (value === undefined) throw new Error(`Regla no encontrada: ${selector} { ${property} }`)
+  return value
 }
 
 export const DEBT = /!important|#[0-9a-f]{3,8}\b|app-skin-dark/i

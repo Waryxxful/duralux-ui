@@ -35,7 +35,9 @@ describe('Avatar refinado (receta de componente 2.3)', () => {
   test('si la imagen falla, cae en las iniciales y lo registra', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const { container, rerender } = render(<Avatar src="/rota.png" name="Ada Lovelace" alt="Ada Lovelace" />)
-    fireEvent.error(container.querySelector('img') as HTMLImageElement)
+    const img = container.querySelector('img')
+    if (!img) throw new Error('falta la imagen')
+    fireEvent.error(img)
     expect(container.querySelector('img')).toBeNull()
     expect(screen.getByRole('img', { name: 'Ada Lovelace' })).toHaveTextContent('AL')
     expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('/rota.png'))
@@ -70,11 +72,11 @@ describe('CSS de Avatar (src/styles/components/avatar.css)', () => {
 
   test.each(THEMES)('las iniciales cumplen AA en %s', (theme) => {
     for (const tone of TONES) {
-      const rule = ruleOf(css, `.gcu-avatar--${tone}`)
-      expect(contrast(theme, rule['--gcu-avatar-fg'], rule['--gcu-avatar-bg']), tone).toBeGreaterThanOrEqual(4.5)
+      const sel = `.gcu-avatar--${tone}`
+      expect(contrast(theme, ruleOf(css, sel, '--gcu-avatar-fg'), ruleOf(css, sel, '--gcu-avatar-bg')), tone).toBeGreaterThanOrEqual(4.5)
     }
-    const overflow = ruleOf(css, '.gcu-avatar--overflow')
-    expect(contrast(theme, overflow['--gcu-avatar-fg'], overflow['--gcu-avatar-bg'])).toBeGreaterThanOrEqual(4.5)
+    const overflow = '.gcu-avatar--overflow'
+    expect(contrast(theme, ruleOf(css, overflow, '--gcu-avatar-fg'), ruleOf(css, overflow, '--gcu-avatar-bg'))).toBeGreaterThanOrEqual(4.5)
   })
 
   test('imagen e iniciales claras llevan contorno interior fino', () => {

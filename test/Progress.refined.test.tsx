@@ -60,9 +60,9 @@ describe('CSS de Progress (src/styles/components/progress.css)', () => {
 
   test.each(THEMES)('el valor sobre la barra cumple AA en %s', (theme) => {
     for (const tone of TONES) {
-      const rule = ruleOf(css, `.gcu-progress__bar--${tone}`)
-      const base = ruleOf(css, '.progress-bar.gcu-progress__bar')
-      expect(contrast(theme, base.color, rule['--gcu-progress-fill']), tone).toBeGreaterThanOrEqual(4.5)
+      const fill = ruleOf(css, `.gcu-progress__bar--${tone}`, '--gcu-progress-fill')
+      const text = ruleOf(css, '.progress-bar.gcu-progress__bar', 'color')
+      expect(contrast(theme, text, fill), tone).toBeGreaterThanOrEqual(4.5)
     }
   })
 })

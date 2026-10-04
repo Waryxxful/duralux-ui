@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import type * as React from 'react'
 import { cx } from '../../utils/cx'
 import { deprecate, log } from '../../utils/log'
 import { isArray, isString } from '../../utils/typeGuards'
@@ -6,13 +7,15 @@ import type { TimelineItem, TimelineProps } from '../../public/types'
 import { EventTime } from './internal/EventTime'
 import { resolveTone } from './internal/tones'
 
-function hasContent(value: unknown): boolean {
+type Printable = string | number | bigint | boolean | null | undefined
+
+function hasContent(value: React.ReactNode): boolean {
   if (value === null || value === undefined || value === false || value === true) return false
   if (isString(value)) return value.trim() !== ''
   return true
 }
 
-function safeString(value: unknown, fallback: string): string {
+function safeString(value: Printable, fallback: string): string {
   try {
     const result = String(value)
     return result || fallback
@@ -21,7 +24,7 @@ function safeString(value: unknown, fallback: string): string {
   }
 }
 
-function safeToken(value: unknown, fallback: string): string {
+function safeToken(value: Printable, fallback: string): string {
   let token = safeString(value, fallback)
   try {
     token = token.normalize('NFKD')

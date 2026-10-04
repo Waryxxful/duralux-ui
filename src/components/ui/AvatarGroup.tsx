@@ -5,7 +5,9 @@ import { cx } from '../../utils/cx'
 import { isArray, isFunction, isNonEmptyString } from '../../utils/typeGuards'
 import type { AvatarGroupItem, AvatarGroupProps, AvatarProps } from '../../public/types'
 
-function safeToken(value: unknown, fallback: string): string {
+type Printable = string | number | bigint | boolean | null | undefined
+
+function safeToken(value: Printable, fallback: string): string {
   let token = ''
   try {
     token = String(value ?? '').normalize('NFKD')
@@ -20,13 +22,13 @@ function safeToken(value: unknown, fallback: string): string {
   return token || fallback
 }
 
-function normalizedMax(max: unknown, fallback = 5): number {
+function normalizedMax(max: number | string | null | undefined, fallback = 5): number {
   const numeric = Number(max)
   if (!Number.isFinite(numeric)) return fallback
   return Math.max(0, Math.floor(numeric))
 }
 
-function hasHref(href: unknown): href is string {
+function hasHref(href: string | null | undefined): href is string {
   return isNonEmptyString(href) && href !== '#'
 }
 

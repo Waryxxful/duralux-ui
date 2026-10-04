@@ -7,9 +7,17 @@ export const PRESENTATION_TONES = [
 ] as const
 export type PresentationTone = (typeof PRESENTATION_TONES)[number]
 
-const TONES = new Set<string>(PRESENTATION_TONES)
-const ALIASES: Record<string, PresentationTone> = { darken: 'dark', 'light-brand': 'primary', 'light-light': 'light' }
+/** Alias públicos que no son un tono directo. */
+const ALIASES = new Map<string, PresentationTone>([
+  ['darken', 'dark'],
+  ['light-brand', 'primary'],
+  ['light-light', 'light'],
+])
 const warned = new Set<string>()
+
+function findTone(value: string): PresentationTone | undefined {
+  return PRESENTATION_TONES.find((tone) => tone === value)
+}
 
 export interface ResolvedTone {
   tone: PresentationTone
@@ -21,13 +29,18 @@ export interface ResolvedTone {
  * Normaliza la variante pública a un tono con tokens. `light-{tono}` se pinta suave;
  * un valor desconocido avisa una vez por componente y valor, y cae en `fallback`.
  */
-export function resolveTone(variant: unknown, component: string, fallback: PresentationTone = 'primary'): ResolvedTone {
+export function resolveTone(
+  variant: string | null | undefined,
+  component: string,
+  fallback: PresentationTone = 'primary',
+): ResolvedTone {
   if (!isString(variant)) return { tone: fallback, softAlias: false }
-  if (TONES.has(variant)) return { tone: variant as PresentationTone, softAlias: false }
-  if (ALIASES[variant]) return { tone: ALIASES[variant], softAlias: variant !== 'light-light' }
-  if (variant.startsWith('light-') && TONES.has(variant.slice(6))) {
-    return { tone: variant.slice(6) as PresentationTone, softAlias: true }
-  }
+  const direct = findTone(variant)
+  if (direct) return { tone: direct, softAlias: false }
+  const alias = ALIASES.get(variant)
+  if (alias) return { tone: alias, softAlias: variant !== 'light-light' }
+  const lightTone = variant.startsWith('light-') ? findTone(variant.slice(6)) : undefined
+  if (lightTone) return { tone: lightTone, softAlias: true }
   const key = `${component}:${variant}`
   if (!warned.has(key)) {
     warned.add(key)

@@ -11,13 +11,11 @@
 .gcu-tabs__tab.active::after{transform:scaleX(1)}
 .gcu-tabs .gcu-tabs__tab:disabled,.gcu-tabs .gcu-tabs__tab[aria-disabled="true"]{color:var(--gcu-text-subtle);cursor:not-allowed;background-color:transparent}
 .gcu-tabs .gcu-tabs__tab:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
-/* Navegadores modernos: pista horizontal compacta que deja asomar la siguiente pestaña. */
+/* Pista horizontal con scroll en contenedores angostos; con unidades de contenedor, cada pestaña
+   deja asomar la siguiente. Los navegadores sin ellas envuelven (base de arriba). */
 @supports (width:1cqi){
   .gcu-tabs.nav-tabs{flex-wrap:nowrap;inline-size:max-content;min-inline-size:100%}
   .gcu-tabs.nav-tabs .nav-item{flex:0 0 auto;max-inline-size:calc(100cqi - 2rem)}
-  @container (max-width:40rem){
-    .gcu-tabs.nav-tabs{flex-wrap:wrap;inline-size:100%}
-    .gcu-tabs.nav-tabs .nav-item{flex:0 1 auto;max-inline-size:100%}
-  }
+  @container (max-width:40rem){.gcu-tabs .gcu-tabs__tab{padding-inline:var(--gcu-space-3)}}
 }
 @media (forced-colors:active){.gcu-tabs .gcu-tabs__tab:focus-visible{outline:2px solid currentColor;outline-color:Highlight}.gcu-tabs__tab::after{background-color:Highlight}}

@@ -50,7 +50,7 @@ describe('Card refinado (receta de componente 2.3)', () => {
 
   test('la cabecera agrupa título y acciones en un contenedor que responde a su ancho', () => {
     const { container } = render(<Card title="Ventas" actions={<button type="button">Ver</button>}>Cuerpo</Card>)
-    const inner = container.querySelector('.card-header .gcu-card__header')
+    const inner = container.querySelector('.card-header .gcu-card-head')
     expect(inner).not.toBeNull()
     expect(inner?.querySelector('.card-header-action')).toHaveTextContent('Ver')
   })

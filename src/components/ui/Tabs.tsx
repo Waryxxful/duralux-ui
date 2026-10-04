@@ -21,7 +21,7 @@ interface TabEntry {
   token: string
 }
 
-function sameKey(left: unknown, right: unknown): boolean {
+function sameKey(left: TabKey | undefined, right: TabKey | undefined): boolean {
   return Object.is(left, right) || left === right
 }
 
@@ -70,6 +70,7 @@ function duplicateWarnings(entries: TabEntry[]): string[] {
 }
 
 function TabsInner<K extends TabKey = TabKey>({
+  // SAFETY: la lista vacía no contiene claves, así que es válida para cualquier K.
   tabs = EMPTY_TABS as ReadonlyArray<TabItem<K>>,
   className = '',
   tabClassName = '',
@@ -114,6 +115,7 @@ function TabsInner<K extends TabKey = TabKey>({
   const selectTab = (entry: TabEntry | undefined) => {
     if (!entry || entry.disabled || entry.reactKey === activeEntry?.reactKey) return
     if (!isControlled) setRequestedKey(entry.key)
+    // SAFETY: las claves de las entradas salen de `tabs: TabItem<K>[]`.
     onChange?.(entry.key as K)
   }
 
@@ -216,6 +218,8 @@ function TabsInner<K extends TabKey = TabKey>({
  * - Indicador de la pestaña activa animado por transform (reduced-motion lo deja instantáneo).
  * - Pista con scroll horizontal en contenedores angostos (container query).
  */
-export const Tabs = forwardRef(TabsInner) as <K extends TabKey = TabKey>(
+export const Tabs =
+  // SAFETY: forwardRef pierde el genérico K; se restituye con la misma firma de props + ref.
+  forwardRef(TabsInner) as <K extends TabKey = TabKey>(
   props: TabsProps<K> & { ref?: React.Ref<HTMLDivElement> },
 ) => React.ReactElement

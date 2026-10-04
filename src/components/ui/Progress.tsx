@@ -8,7 +8,7 @@ import type { ProgressProps } from '../../public/types'
 
 const CSS_LENGTH_PATTERN = /^(?:0|(?:\d+|\d*\.\d+)(?:px|rem|em|ex|ch|vw|vh|vmin|vmax|cm|mm|in|pt|pc|%))$/i
 
-function normalizeHeight(height: unknown): number | string | undefined {
+function normalizeHeight(height: number | string | null | undefined): number | string | undefined {
   if (height === undefined || height === null || height === '') return undefined
   if (isFiniteNumber(height)) return height >= 0 ? height : undefined
   if (!isString(height)) return undefined

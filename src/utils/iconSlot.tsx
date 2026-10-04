@@ -16,23 +16,34 @@ export interface IconSlotOptions {
   /** Ref hacia el nodo renderizado (glifo `<i>` o SVG clonado). */
   ref?: React.Ref<HTMLElement>
   /** Atributos extra (data-*, eventos, id…) que se reenvían al nodo. */
-  rest?: Record<string, unknown>
+  rest?: React.HTMLAttributes<HTMLElement>
 }
 
-interface SvgIconProps {
-  size?: number
-  stroke?: number
-  className?: string
-  style?: React.CSSProperties
+interface IconA11yProps {
   role?: string
   'aria-label'?: string
   'aria-labelledby'?: string
   'aria-hidden'?: boolean | 'true' | 'false'
+  focusable?: 'false'
+}
+
+interface SvgIconProps extends IconA11yProps {
+  ref?: React.Ref<HTMLElement>
+  size?: number
+  stroke?: number
+  className?: string
+  style?: React.CSSProperties
 }
 
 /** El elemento ya trae su propio nombre accesible: no se debe ocultar (DX-035). */
 function hasOwnAccessibleName(props: SvgIconProps): boolean {
   return isNonEmptyString(props['aria-label']) || isNonEmptyString(props['aria-labelledby'])
+}
+
+function svgA11y(own: SvgIconProps, label: string | undefined): IconA11yProps {
+  if (label) return { role: 'img', 'aria-label': label, 'aria-hidden': undefined }
+  if (hasOwnAccessibleName(own)) return { role: own.role ?? 'img' }
+  return { 'aria-hidden': own['aria-hidden'] ?? true, focusable: 'false' }
 }
 
 /**
@@ -56,17 +67,15 @@ export function renderIconSlot(
   if (!isValidElement<SvgIconProps>(value)) return null
   const own = value.props
   const px = isFiniteNumber(size) ? size : ICON_PX[size] ?? ICON_PX.md
-  let a11y: Record<string, unknown>
-  if (label) a11y = { role: 'img', 'aria-label': label, 'aria-hidden': undefined }
-  else if (hasOwnAccessibleName(own)) a11y = { role: own.role ?? 'img' }
-  else a11y = { 'aria-hidden': own['aria-hidden'] ?? true, focusable: 'false' }
+  const mergedStyle = own.style || style ? { ...own.style, ...style } : undefined
+  // `ref` indefinido no reemplaza el ref propio del elemento en cloneElement.
   return cloneElement(value, {
     ...rest,
-    ...(ref ? { ref } : {}),
+    ref,
     size: own.size ?? px,
     stroke: own.stroke ?? 2,
     className: cx('gcu-icon-svg', own.className, className),
-    style: own.style || style ? { ...own.style, ...style } : undefined,
-    ...a11y,
+    style: mergedStyle,
+    ...svgA11y(own, label),
   })
 }

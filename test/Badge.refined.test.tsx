@@ -69,11 +69,11 @@ describe('CSS de Badge (src/styles/components/badge.css)', () => {
 
   test.each(THEMES)('suave y sólido cumplen AA en %s', (theme) => {
     for (const tone of TONES) {
-      const soft = ruleOf(css, `.gcu-badge--${tone}`)
-      expect(contrast(theme, soft['--gcu-badge-soft-fg'], soft['--gcu-badge-soft-bg']), `soft ${tone}`).toBeGreaterThanOrEqual(4.5)
-      expect(contrast(theme, soft['--gcu-badge-solid-fg'], soft['--gcu-badge-solid-bg']), `solid ${tone}`).toBeGreaterThanOrEqual(4.5)
+      const sel = `.gcu-badge--${tone}`
+      expect(contrast(theme, ruleOf(css, sel, '--gcu-badge-soft-fg'), ruleOf(css, sel, '--gcu-badge-soft-bg')), `soft ${tone}`).toBeGreaterThanOrEqual(4.5)
+      expect(contrast(theme, ruleOf(css, sel, '--gcu-badge-solid-fg'), ruleOf(css, sel, '--gcu-badge-solid-bg')), `solid ${tone}`).toBeGreaterThanOrEqual(4.5)
     }
-    const chip = ruleOf(css, '.gcu-badge.gcu-badge--light')
-    expect(contrast(theme, chip.color, chip['background-color'])).toBeGreaterThanOrEqual(4.5)
+    const chip = '.gcu-badge.gcu-badge--light'
+    expect(contrast(theme, ruleOf(css, chip, 'color'), ruleOf(css, chip, 'background-color'))).toBeGreaterThanOrEqual(4.5)
   })
 })
