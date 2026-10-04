@@ -1,0 +1,34 @@
+/* Score y ScoreHero: puntaje tabular con su rango en texto (Bueno, Medio, Bajo, Anulado).
+   El rango va en texto sobre fondo suave (-text sobre -soft: AA por tokens:check); el color solo acompaña. */
+.gcu-score{display:inline-flex;align-items:baseline;gap:var(--gcu-space-2);color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);white-space:nowrap;vertical-align:baseline}
+.gcu-score__figure{display:inline-flex;align-items:baseline;font-variant-numeric:tabular-nums}
+.gcu-score__value{font-weight:var(--gcu-font-weight-semibold)}
+.gcu-score__max{color:var(--gcu-muted);font-size:.85em}
+.gcu-score__range{padding:var(--gcu-space-0-5) var(--gcu-space-2);border-radius:var(--gcu-radius-sm);font-size:var(--gcu-font-size-2xs);line-height:var(--gcu-line-height-2xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-score--sm{gap:var(--gcu-space-1);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-score--ok .gcu-score__range{background-color:var(--gcu-success-soft);color:var(--gcu-success-text)}
+.gcu-score--medio .gcu-score__range{background-color:var(--gcu-warning-soft);color:var(--gcu-warning-text)}
+.gcu-score--bajo .gcu-score__range,.gcu-score--anulado .gcu-score__range{background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-score--anulado .gcu-score__value{color:var(--gcu-muted);text-decoration-thickness:2px}
+.gcu-score--empty{color:var(--gcu-muted)}
+
+/* ScoreHero: cifra protagonista; angosto se apila, desde 24rem el puntaje previo va al lado. */
+.gcu-score-hero__inner{display:flex;flex-direction:column;gap:var(--gcu-space-4)}
+.gcu-score-hero__main,.gcu-score-hero__previous{display:flex;flex-direction:column;gap:var(--gcu-space-1);min-width:0}
+.gcu-score-hero__label{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium);letter-spacing:var(--gcu-tracking-caps);text-transform:uppercase}
+.gcu-score-hero__figure{display:flex;align-items:baseline;gap:var(--gcu-space-0-5);margin:0;min-height:var(--gcu-line-height-3xl);color:var(--gcu-text);font-size:var(--gcu-font-size-3xl);line-height:var(--gcu-line-height-3xl);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-tight);font-variant-numeric:tabular-nums}
+.gcu-score-hero__figure--sm{min-height:var(--gcu-line-height-xl);font-size:var(--gcu-font-size-xl);line-height:var(--gcu-line-height-xl);color:var(--gcu-muted)}
+.gcu-score-hero__max{color:var(--gcu-muted);font-size:.45em;font-weight:var(--gcu-font-weight-medium);letter-spacing:var(--gcu-tracking-normal)}
+.gcu-score-hero--anulado .gcu-score-hero__main .gcu-score-hero__value{color:var(--gcu-danger-text);text-decoration-thickness:3px}
+.gcu-score-hero__skeleton{display:inline-block;width:4ch;height:.7em}
+.gcu-score-hero__meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2)}
+.gcu-score-hero__range{padding:var(--gcu-space-0-5) var(--gcu-space-2);border-radius:var(--gcu-radius-sm);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-score-hero__range--ok{background-color:var(--gcu-success-soft);color:var(--gcu-success-text)}
+.gcu-score-hero__range--medio{background-color:var(--gcu-warning-soft);color:var(--gcu-warning-text)}
+.gcu-score-hero__range--bajo,.gcu-score-hero__range--anulado{background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-score-hero__context{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+
+@container (min-width: 24rem){
+  .gcu-score-hero__inner{flex-direction:row;align-items:flex-end;gap:var(--gcu-space-8)}
+  .gcu-score-hero__previous{padding-inline-start:var(--gcu-space-6);border-inline-start:1px solid var(--gcu-border)}
+}

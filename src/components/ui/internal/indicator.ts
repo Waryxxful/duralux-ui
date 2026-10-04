@@ -140,6 +140,25 @@ export function formatLegacyTrend(value: string | number | null | undefined, up:
   return { text: signed, direction, sentiment: direction === 'up' ? 'positive' : 'negative', spoken: SPOKEN[direction] }
 }
 
+/** Presencia de un nodo opcional: descarta `null`, `undefined`, `false` y texto vacío. */
+export function hasIndicatorContent(node: React.ReactNode): boolean {
+  return !isEmptyIndicatorValue(node)
+}
+
+const contextWarned = /* @__PURE__ */ new Set<string>()
+
+/**
+ * Regla §1 de diseño («toda cifra tiene contexto»): avisa una vez por componente y etiqueta
+ * cuando una cifra llega sin meta, variación ni tendencia. No cambia lo que se muestra.
+ */
+export function warnMissingContext(component: string, label: React.ReactNode, hasContext: boolean): void {
+  if (hasContext) return
+  const key = `${component}:${isString(label) ? label : '?'}`
+  if (contextWarned.has(key)) return
+  contextWarned.add(key)
+  log.warn(`${component}: la cifra "${isString(label) ? label : 'sin etiqueta'}" no tiene contexto; agrega meta, variación o tendencia (delta, context o chart).`)
+}
+
 /** Clase completa (`feather-users`, `bi bi-x`) o nombre Feather suelto (`users`). */
 export function isIconClass(icon: string): boolean {
   return /^(feather-|bi[- ]|ti[- ]|fa[- ])/.test(icon) || icon.includes(' ')

@@ -49,6 +49,14 @@ import { Sidebar as SidebarRuntime } from '../components/layout/Sidebar'
 import { PageHeader as PageHeaderRuntime } from '../components/layout/PageHeader'
 import { Footer as FooterRuntime } from '../components/layout/Footer'
 export { AvatarGroup } from '../components/ui/AvatarGroup'
+// 2.5 · Lote N2: datos y composición (TSX, se exportan tal cual).
+export { Severity } from '../components/ui/Severity'
+export { severityOf } from '../components/ui/internal/severity'
+export { Score, ScoreHero } from '../components/ui/Score'
+export { Person } from '../components/ui/Person'
+export { DescriptionList } from '../components/data/DescriptionList'
+export { KpiCard } from '../components/data/KpiCard'
+export { StatGroup } from '../components/data/StatGroup'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -218,4 +226,17 @@ export type {
   StatCardProps,
   ThemeProviderProps,
   ApiFetchOptions,
+  SeverityLevel,
+  SeverityProps,
+  SeverityThresholds,
+  ScoreRange,
+  ScoreThresholds,
+  ScoreProps,
+  ScoreHeroProps,
+  PersonProps,
+  DescriptionListItem,
+  DescriptionListProps,
+  KpiCardProps,
+  StatGroupItem,
+  StatGroupProps,
 } from './types'
