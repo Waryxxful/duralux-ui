@@ -74,9 +74,11 @@ export function formatIndicatorNumber(value: number, fractionDigits?: number): s
   return format.format(value)
 }
 
-/** La cifra principal: un número se formatea en es-CL; el texto ya formateado se respeta. */
+const valueFormat = /* @__PURE__ */ new Intl.NumberFormat('es-CL', { maximumFractionDigits: 3 })
+
+/** La cifra principal: un número solo recibe formato es-CL (no se redondea más allá de 3 decimales). */
 export function formatIndicatorValue(value: React.ReactNode): React.ReactNode {
-  if (isFiniteNumber(value)) return formatIndicatorNumber(value)
+  if (isFiniteNumber(value)) return valueFormat.format(value)
   return value
 }
 
@@ -132,7 +134,8 @@ export function formatDelta(component: string, delta: IndicatorDelta | undefined
 export function formatLegacyTrend(value: string | number | null | undefined, up: boolean | undefined): FormattedDelta | null {
   if (value === undefined || value === null || value === '') return null
   const raw = String(value).trim()
-  const direction: DeltaDirection = up === false ? 'down' : 'up'
+  // Igual que la API original: sin `up` (o `trendUp`) la tendencia es a la baja.
+  const direction: DeltaDirection = up ? 'up' : 'down'
   const signed = /^[+\-−]/.test(raw) ? raw.replace(/^-/, MINUS) : `${direction === 'up' ? '+' : MINUS}${raw}`
   return { text: signed, direction, sentiment: direction === 'up' ? 'positive' : 'negative', spoken: SPOKEN[direction] }
 }

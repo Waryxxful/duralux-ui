@@ -3,7 +3,7 @@
    Solo tokens: los mismos valores sirven en claro, oscuro, navy y dentro de un ThemeScope. */
 
 /* Ícono: clase propia (no .avatar-text, que el tema oscuro fuerza a un fondo sólido). */
-.gcu-stat__icon{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;width:var(--gcu-control-h-lg);height:var(--gcu-control-h-lg);border-radius:var(--gcu-radius-full);font-size:var(--gcu-font-size-lg);line-height:1}
+.gcu-stat__icon{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;width:var(--gcu-control-h-lg);height:var(--gcu-control-h-lg);min-width:0;min-height:0;max-width:none;max-height:none;border-radius:var(--gcu-radius-full);font-size:var(--gcu-font-size-lg);line-height:1}
 .gcu-stat__icon--primary{background-color:var(--gcu-primary-soft);color:var(--gcu-primary-text)}
 .gcu-stat__icon--secondary{background-color:var(--gcu-secondary-soft);color:var(--gcu-secondary-text)}
 .gcu-stat__icon--success{background-color:var(--gcu-success-soft);color:var(--gcu-success-text)}

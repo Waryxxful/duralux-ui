@@ -46,6 +46,17 @@ describe('StatsCard refinado (lote L4)', () => {
     expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('trend'))
   })
 
+  test('trend legado sin `up` conserva el sentido original (baja)', () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { container } = render(<StatsCard value="120" label="Leads" trend={{ value: '12%' }} />)
+    expect(container.querySelector('.gcu-stat-delta')).toHaveTextContent(/Baja\s*\u221212%/)
+  })
+
+  test('la cifra principal no se redondea: solo se le da formato es-CL', () => {
+    const { container } = render(<StatsCard value={99.99} label="Disponibilidad" />)
+    expect(container.querySelector('.gcu-stat__value')).toHaveTextContent('99,99')
+  })
+
   test('tone pinta el ícono con roles semánticos; iconBg legado se respeta y se depreca', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const { container, rerender } = render(<StatsCard icon="feather-users" tone="info" value={1} label="Agentes" />)
