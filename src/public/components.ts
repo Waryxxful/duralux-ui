@@ -3,8 +3,8 @@ import { Avatar as AvatarRuntime } from '../components/ui/Avatar'
 import { Badge as BadgeRuntime } from '../components/ui/Badge'
 // Componentes ya en TSX: se exportan tal cual (tipos y ref reales).
 export { Button, IconButton, LinkButton } from '../components/ui/Button'
+export { Alert } from '../components/ui/Alert'
 import { Icon as IconRuntime } from '../components/ui/Icon'
-import { Alert as AlertRuntime } from '../components/ui/Alert'
 import { Modal as ModalRuntime } from '../components/ui/Modal'
 import { Card as CardRuntime } from '../components/ui/Card'
 import { StatsCard as StatsCardRuntime } from '../components/ui/StatsCard'
@@ -146,7 +146,6 @@ export const Icon = asComponent<IconProps>(IconRuntime)
 export const Badge = asComponent<BadgeProps>(BadgeRuntime)
 export const Card = asComponent<CardProps>(CardRuntime)
 export const Avatar = asComponent<AvatarProps>(AvatarRuntime)
-export const Alert = asComponent<AlertProps>(AlertRuntime)
 export const Modal = asComponent<ModalProps>(ModalRuntime)
 export const EmptyState = asComponent<EmptyStateProps>(EmptyStateRuntime)
 export const ErrorState = asComponent<ErrorStateProps>(ErrorStateRuntime)

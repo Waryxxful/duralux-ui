@@ -106,7 +106,8 @@ export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
 export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   variant?: SemanticTone
   soft?: boolean
-  icon?: string
+  /** Clase Feather completa (`"feather-info"`) o icono Tabler (`<IconInfoCircle />`). */
+  icon?: string | React.ReactElement
   title?: React.ReactNode
   onDismiss?: () => void
   dismissible?: boolean
