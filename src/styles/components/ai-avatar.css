@@ -1,0 +1,10 @@
+/* AiAvatar: identidad del asistente en CSS (gradiente de tokens + .gcu-grain). Sin WebGL.
+   El gradiente usa primary → indigo → teal; el núcleo es un brillo interior suave. Solo tokens. */
+.gcu-ai-avatar{display:inline-flex;flex:none;align-items:center;justify-content:center;inline-size:var(--gcu-control-h-sm);block-size:var(--gcu-control-h-sm);border-radius:var(--gcu-radius-full);background:conic-gradient(from 210deg,var(--gcu-primary),var(--gcu-indigo),var(--gcu-teal),var(--gcu-primary));box-shadow:inset 0 0 0 1px var(--gcu-image-outline)}
+.gcu-ai-avatar--sm{inline-size:calc(var(--gcu-space-6));block-size:calc(var(--gcu-space-6))}
+.gcu-ai-avatar--lg{inline-size:var(--gcu-space-12);block-size:var(--gcu-space-12)}
+.gcu-ai-avatar__core{inline-size:40%;block-size:40%;border-radius:var(--gcu-radius-full);background:radial-gradient(circle,var(--gcu-on-primary),transparent 70%);opacity:.85}
+.gcu-ai-avatar--busy{animation:gcu-ai-avatar-spin calc(var(--gcu-duration-slow) * 12) linear infinite}
+@keyframes gcu-ai-avatar-spin{to{transform:rotate(1turn)}}
+@media (prefers-reduced-motion:reduce){.gcu-ai-avatar--busy{animation:none}}
+@media (forced-colors:active){.gcu-ai-avatar{border:1px solid CanvasText}}
