@@ -19,7 +19,7 @@ import type { DataTableToolbarProps } from '../../public/types'
  * - Responde a su contenedor (container query): en menos de 36rem cada bloque ocupa el ancho.
  * - Sin búsqueda, sin selector de filas y sin acciones no se renderiza.
  */
-export const DataTableToolbar = forwardRef<HTMLDivElement, DataTableToolbarProps>(function DataTableToolbar({
+export const DataTableToolbar = /* @__PURE__ */ forwardRef<HTMLDivElement, DataTableToolbarProps>(function DataTableToolbar({
   searchable = true,
   searchValue,
   defaultSearchValue = '',
@@ -80,6 +80,7 @@ export const DataTableToolbar = forwardRef<HTMLDivElement, DataTableToolbarProps
   return (
     <div ref={ref} className={cx('data-table-toolbar', 'gcu-table-toolbar', isString(className) && className)}>
       {hasSearch ? (
+        // role="search" y no <search>: React 18 no reconoce la etiqueta y los navegadores soportados aún no la mapean.
         <div className="data-table-toolbar__search" role="search" aria-label={safeSearchLabel}>
           <label htmlFor={resolvedSearchId}>{safeSearchLabel}</label>
           <input

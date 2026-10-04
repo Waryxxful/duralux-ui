@@ -9,22 +9,22 @@ import type { PaginationProps } from '../../public/types'
 // aunque quien llama pase un `sibling` enorme.
 const MAX_SIBLING_COUNT = 3
 
-function normalizeTotalPages(totalPages: unknown) {
+function normalizeTotalPages(totalPages: number | undefined) {
   if (!isFiniteNumber(totalPages)) return 0
   return Math.max(0, Math.floor(totalPages))
 }
 
-function normalizePage(page: unknown, totalPages: number) {
+function normalizePage(page: number | undefined, totalPages: number) {
   const candidate = isFiniteNumber(page) ? Math.floor(page) : 1
   return Math.min(Math.max(candidate, 1), Math.max(totalPages, 1))
 }
 
-function normalizeSibling(sibling: unknown) {
+function normalizeSibling(sibling: number | undefined) {
   if (!isFiniteNumber(sibling)) return 1
   return Math.min(Math.max(0, Math.floor(sibling)), MAX_SIBLING_COUNT)
 }
 
-function normalizeLabel(value: unknown, fallback: string) {
+function normalizeLabel(value: string | undefined, fallback: string) {
   if (!isString(value)) return fallback
   const label = value.trim()
   return label || fallback
@@ -68,8 +68,14 @@ function pageWindow(currentPage: number, totalPages: number, siblingCount: numbe
 
 const formatCount = (value: number) => value.toLocaleString('es-CL')
 
-/** Valida el rango opcional; devuelve null (y la causa) si no se puede mostrar. */
-function resolveRange(page: number, pageSize: unknown, totalItems: unknown): { text: string | null, problem: string | null } {
+/** Rango visible: el texto a mostrar o, si los datos no sirven, la causa para el log. */
+interface VisibleRange {
+  text: string | null
+  problem: string | null
+}
+
+/** Valida el rango opcional; sin texto (y con la causa) si no se puede mostrar. */
+function resolveRange(page: number, pageSize: number | undefined, totalItems: number | undefined): VisibleRange {
   if (pageSize === undefined || totalItems === undefined) return { text: null, problem: null }
   if (!isFiniteNumber(pageSize) || pageSize < 1) return { text: null, problem: `pageSize inválido (${String(pageSize)})` }
   if (!isFiniteNumber(totalItems) || totalItems < 0) return { text: null, problem: `totalItems inválido (${String(totalItems)})` }
@@ -123,7 +129,7 @@ function Ellipsis() {
  * - Al cambiar de página el foco queda en el botón de la página nueva.
  * - Con una página o menos no se renderiza.
  */
-export const Pagination = forwardRef<HTMLElement, PaginationProps>(function Pagination({
+export const Pagination = /* @__PURE__ */ forwardRef<HTMLElement, PaginationProps>(function Pagination({
   page,
   totalPages,
   onPageChange,

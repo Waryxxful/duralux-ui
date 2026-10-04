@@ -11,6 +11,7 @@ describe('Pagination refinada (receta de componente 2.3)', () => {
     render(<Pagination ref={ref} page={1} totalPages={5} onPageChange={() => {}} />)
     expect(ref.current?.tagName).toBe('NAV')
     expect(ref.current).toHaveClass('gcu-pagination')
+    // SAFETY: la línea anterior verificó que ref.current es el <nav> renderizado.
     expect(within(ref.current as HTMLElement).getByRole('list')).toHaveClass('pagination')
   })
 

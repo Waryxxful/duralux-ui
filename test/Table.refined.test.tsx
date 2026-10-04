@@ -74,6 +74,7 @@ describe('Table refinada (receta de componente 2.3)', () => {
 
   test('encabezado fijo: el contenedor desplaza en vertical y marca cuando hay scroll (sombra)', () => {
     const { container } = render(<Table columns={columns} rows={rows} rowKey="id" stickyHeader maxHeight={240} />)
+    // SAFETY: con responsive (por defecto) el primer hijo es el contenedor <div> de la tabla.
     const wrapper = container.firstElementChild as HTMLElement
     expect(wrapper).toHaveClass('gcu-table-scroll--sticky', 'gcu-scroll')
     expect(wrapper.style.maxHeight).toBe('240px')

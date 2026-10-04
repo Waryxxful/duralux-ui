@@ -19,51 +19,60 @@ const MAX_LOADING_ROWS = 20
 // Anchos del skeleton por columna: variados para que la carga no parezca una grilla rígida.
 const SKELETON_WIDTHS = ['72%', '48%', '60%', '36%', '54%']
 
-function normalizeClassName(value: unknown): string {
+type Column = TableColumn<unknown>
+type ColumnKey = Column['key']
+
+function normalizeClassName(value: string | null | undefined): string {
   return isString(value) ? value : ''
 }
 
-function columnKey(column: unknown) {
+function columnKey(column: Column | null): ColumnKey | undefined {
   return readProperty(column, 'key')
 }
 
-function columnReactKey(column: unknown, index: number) {
+function columnReactKey(column: Column | null, index: number) {
   const key = columnKey(column)
   return `duralux-column-${index}-${toSafeDomSegment(key ?? index)}`
 }
 
-function columnValue(row: unknown, key: unknown) {
+function columnValue<T>(row: T, key: ColumnKey | undefined): React.ReactNode {
   if (key === null || key === undefined) return undefined
   return readProperty(row, key)
 }
 
-function isNumericColumn(column: unknown) {
+function isNumericColumn(column: Column | null) {
   return readProperty(column, 'numeric') === true
 }
 
-function invokeSlot<T>(slot: TableSlot<T> | undefined, fallback: React.ReactNode, context: TableSlotContext<T>) {
-  return isFunction(slot) ? slot(context) : slot ?? fallback
+function invokeSlot<T>(slot: TableSlot<T> | undefined, fallback: React.ReactNode, context: TableSlotContext<T>): React.ReactNode {
+  if (isFunction<TableSlot<T> | undefined, (slotContext: TableSlotContext<T>) => React.ReactNode>(slot)) return slot(context)
+  return slot ?? fallback
 }
 
-function normalizeLoadingRows(value: unknown) {
+/** Props que el runtime JS aceptaba sin estar en el tipo público: se consumen sin llegar al DOM. */
+interface LegacyTableProps {
+  striped?: boolean
+}
+
+function normalizeLoadingRows(value: number | undefined) {
   if (!isFiniteNumber(value)) return DEFAULT_LOADING_ROWS
   return Math.min(Math.max(1, Math.floor(value)), MAX_LOADING_ROWS)
 }
 
-function cssLength(value: unknown): string | undefined {
+function cssLength(value: number | string | undefined): string | undefined {
   if (isFiniteNumber(value)) return `${value}px`
   return isString(value) && value.trim() ? value : undefined
 }
 
 interface LoadingBodyProps {
-  columns: ReadonlyArray<unknown>
+  columns: ReadonlyArray<Column>
   colSpan: number
   rows: number
 }
 
 /** Carga: un estado anunciado (sin altura) y un skeleton por fila con la forma de las columnas. */
 function LoadingBody({ columns, colSpan, rows }: LoadingBodyProps) {
-  const cells = columns.length > 0 ? columns : [null]
+  const cells: ReadonlyArray<Column | null> = columns.length > 0 ? columns : [null]
   return (
     <>
       <tr className="gcu-table__status-row">
@@ -97,7 +106,7 @@ function LoadingBody({ columns, colSpan, rows }: LoadingBodyProps) {
  * - stickyHeader: encabezado fijo dentro del contenedor (alto `maxHeight`), con sombra solo al hacer scroll.
  * - responsive: el contenedor desplaza en horizontal dentro de sí; `false` si quien llama ya tiene uno.
  */
-const TableBase = forwardRef<HTMLTableElement, TableProps<unknown>>(function Table({
+const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknown> & LegacyTableProps>(function Table({
   columns = EMPTY_ARRAY,
   rows = EMPTY_ARRAY,
   rowKey = DEFAULT_ROW_KEY,
@@ -127,7 +136,7 @@ const TableBase = forwardRef<HTMLTableElement, TableProps<unknown>>(function Tab
   ...tableProps
 }, ref) {
   // Duralux usa table-hover como tratamiento canónico: `striped` se consume sin llegar al DOM.
-  if (striped !== undefined) deprecate('table-striped', 'la prop `striped` de Table se ignora; las tablas Duralux usan solo `table-hover`.')
+  if (striped !== undefined) deprecate('table-prop-rayado', 'la prop `striped` de Table se ignora; las tablas Duralux usan solo `table-hover`.')
   if (header !== undefined) deprecate('table-header', 'la prop `header` de Table se renombró a `head`.')
   if (renderHeader !== undefined) deprecate('table-render-header', 'la prop `renderHeader` de Table se renombró a `head`.')
   if (renderBody !== undefined) deprecate('table-render-body', 'la prop `renderBody` de Table se renombró a `body`.')
@@ -303,5 +312,6 @@ type TableComponent = (<T = unknown>(
   props: TableProps<T> & React.RefAttributes<HTMLTableElement>,
 ) => React.ReactElement | null) & { displayName?: string }
 
-// SAFETY: forwardRef borra el genérico T; la implementación trata filas y columnas como datos opacos.
-export const Table = TableBase as TableComponent
+export const Table =
+  // SAFETY: forwardRef borra el genérico T; la implementación trata filas y columnas como datos opacos.
+  TableBase as TableComponent
