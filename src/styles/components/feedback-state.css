@@ -1,0 +1,13 @@
+/* EmptyState, ErrorState y LoadingState: ícono, título, una línea de explicación y la acción siguiente.
+   El raíz es contenedor de consultas (ancho dado: width 100%): las acciones se apilan en angosto y van en fila desde 28rem. */
+.gcu-state{container-type:inline-size;display:flex;width:100%;flex-direction:column;align-items:center;justify-content:center;gap:var(--gcu-space-2);padding:var(--gcu-space-10) var(--gcu-space-4);text-align:center}
+.gcu-state--compact{padding:var(--gcu-space-6) var(--gcu-space-3)}
+.gcu-state__icon{display:grid;width:var(--gcu-space-12);height:var(--gcu-space-12);margin-bottom:var(--gcu-space-1);place-items:center;border-radius:var(--gcu-radius-full);background:var(--gcu-surface-subtle);color:var(--gcu-muted);font-size:var(--gcu-font-size-xl);line-height:1}
+.gcu-state--error .gcu-state__icon{background:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-state__title{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-md);font-weight:var(--gcu-font-weight-semibold);line-height:var(--gcu-line-height-md);text-wrap:balance}
+.gcu-state__message{max-width:48ch;margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);text-wrap:pretty}
+.gcu-state__actions{display:flex;width:100%;max-width:20rem;flex-direction:column;align-items:stretch;gap:var(--gcu-space-2);margin-top:var(--gcu-space-2)}
+@container (min-width:28rem){.gcu-state__actions{width:auto;max-width:none;flex-direction:row;justify-content:center}}
+.gcu-state__spinner{width:var(--gcu-space-8);height:var(--gcu-space-8);color:var(--gcu-primary)}
+.gcu-state-skeleton{display:flex;flex-direction:column;gap:var(--gcu-space-1);padding:var(--gcu-space-3) 0}
+.gcu-state-skeleton .gcu-skeleton:last-child{width:60%}

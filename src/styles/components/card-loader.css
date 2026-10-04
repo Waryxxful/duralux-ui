@@ -1,0 +1,2 @@
+/* CardLoader: overlay de carga sobre la card con la superficie del tema (sin override oscuro). */
+.card-loader{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;border-radius:inherit;background:color-mix(in srgb,var(--gcu-surface) 88%,transparent);color:var(--gcu-primary)}

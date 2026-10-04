@@ -169,19 +169,7 @@
 		}
 	}
 
-	.card-loader {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		z-index: 1030;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: $radius-md;
-		background: rgba(255, 255, 255, 0.9);
-	}
+	// .card-loader: src/styles/components/card-loader.css (tokens).
 
 	&.card-loading .card-header {
 		position: relative;

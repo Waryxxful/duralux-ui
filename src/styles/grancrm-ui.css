@@ -5,6 +5,8 @@
 @import "./components/toast.css";
 @import "./components/modal.css";
 @import "./components/dropdown.css";
+@import "./components/feedback-state.css";
+@import "./components/card-loader.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
