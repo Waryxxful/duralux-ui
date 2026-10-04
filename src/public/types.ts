@@ -1723,3 +1723,272 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   removeLabel?: string
   disabled?: boolean
 }
+
+// ── 2.7 dominios: calidad, operación y CRM ─────────────────────────────────────
+
+/** Resultado de un criterio de la pauta de calidad. */
+export type CriterionResult = 'cumple' | 'no_cumple' | 'no_aplica'
+
+export interface QualityCriterion {
+  id: string
+  name: React.ReactNode
+  result: CriterionResult
+  /** Por qué la evaluación concluyó eso (persona evaluadora o IA). */
+  justification?: React.ReactNode
+  /** Cita literal de la conversación que respalda el resultado. */
+  quote?: string
+  /** Índice del turno de la transcripción que contiene la cita. */
+  turn?: number
+  /** Puntos obtenidos (no aplica a errores graves). */
+  points?: number
+  /** Puntos posibles del criterio. */
+  maxPoints?: number
+  /** Confianza de la evidencia 0–100; bajo 40 se marca como débil. */
+  evidence?: number
+  /** Criterio de error grave: «No cumple» se lee «Error grave». */
+  grave?: boolean
+}
+
+export interface CriterionRowProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  criterion: QualityCriterion
+  /** Muestra «Ver en la transcripción» junto a la cita y avisa el turno citado. */
+  onShowTurn?: (turn: number) => void
+}
+
+export type TranscriptSpeaker = 'agent' | 'client'
+
+export interface TranscriptTurn {
+  speaker: TranscriptSpeaker
+  text: string
+  /** Segundo de la grabación en que empieza el turno (se muestra m:ss). */
+  at?: number
+}
+
+export interface TranscriptProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  turns: ReadonlyArray<TranscriptTurn>
+  /** Turno resaltado (citado por un criterio): se marca y se desplaza a la vista dentro del recuadro. */
+  flagged?: number | null
+  /** Términos a resaltar con `<mark>` (sin distinguir mayúsculas). */
+  highlight?: ReadonlyArray<string>
+  /** Nombres visibles de cada lado. Por defecto «Agente» y «Cliente». */
+  agentLabel?: string
+  clientLabel?: string
+  /** Al elegir la marca de tiempo de un turno (p. ej. para saltar el audio). */
+  onSeek?: (seconds: number) => void
+  /** Alto máximo antes de desplazarse (valor CSS). Por defecto 35rem. */
+  maxHeight?: string
+  /** Nombre accesible. Por defecto «Transcripción». */
+  label?: string
+  loading?: boolean
+}
+
+export interface AudioMark {
+  /** Segundo de la grabación. */
+  at: number
+  label: string
+}
+
+export interface AudioPlayerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  /** URL del audio. Sin `src` el reproductor simula el avance (demos y vistas previas). */
+  src?: string
+  /** Duración conocida en segundos (se reemplaza por la del audio al cargar). */
+  duration: number
+  /** Momentos marcados (errores): botones para saltar a cada uno. */
+  marks?: ReadonlyArray<AudioMark>
+  onMarkClick?: (mark: AudioMark) => void
+  /** Avisa la posición actual (segundos) para sincronizar la transcripción. */
+  onTimeChange?: (seconds: number) => void
+  /** Forma de onda decorativa sobre la barra. `false` deja la barra sola (alternativa sin onda). */
+  waveform?: boolean
+  /** Segundos que saltan los botones de retroceder y adelantar. Por defecto 10. */
+  skipSeconds?: number
+  /** Velocidades disponibles. Por defecto 1×, 1,25×, 1,5× y 2×. */
+  rates?: ReadonlyArray<number>
+  /** Nombre accesible del reproductor. Por defecto «Grabación de la llamada». */
+  label?: string
+}
+
+export type CallId = string | number
+
+export interface CallSummary {
+  id: CallId
+  agent: string
+  /** Campaña, cola o canal. */
+  source?: string
+  /** Foco de la evaluación: «Venta», «Retención». */
+  focus?: string
+  /** Fecha ya formateada (dd-mm-aaaa HH:mm). */
+  date?: string
+  score: number | null
+  /** Tiene un error grave: el puntaje se anula. */
+  critical?: boolean
+  /** Días esperando revisión. */
+  waitDays?: number
+  summary?: React.ReactNode
+}
+
+export interface CallRowProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect' | 'children'> {
+  call: CallSummary
+  active?: boolean
+  onSelect?: (id: CallId) => void
+  /** Puntaje bajo el cual la llamada se marca como advertencia. Por defecto 50. */
+  threshold?: number
+}
+
+export interface CallListProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect' | 'children'> {
+  calls: ReadonlyArray<CallSummary>
+  activeId?: CallId | null
+  onSelect?: (id: CallId) => void
+  /** Nombre accesible del listbox. Por defecto «Llamadas». */
+  label?: string
+  threshold?: number
+  loading?: boolean
+  /** Contenido cuando no hay llamadas (qué pasó y qué probar). */
+  empty?: React.ReactNode
+}
+
+export interface TargetBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  label: React.ReactNode
+  /** Valor actual (mismas unidades que `target`). */
+  value: number
+  target: number
+  /** Máximo de la escala. Por defecto 100. */
+  max?: number
+  /** Más es peor (abandono, TMO, tiempo en cola). */
+  higherIsWorse?: boolean
+  /** Margen de advertencia como fracción de la meta. Por defecto 0,1 (10 %). */
+  warningMargin?: number
+  /** Formato del valor y la meta. Por defecto «82 %». */
+  format?: (value: number) => string
+  /** Dato adicional al pie: «80/20», «+3 pts vs. ayer». */
+  hint?: React.ReactNode
+}
+
+export interface QueueCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
+  name: string
+  /** Contactos en espera. */
+  waiting: number
+  /** Espera más larga, en segundos. */
+  longestWait: number
+  agentsAvailable: number
+  /** Nivel de servicio del día (%). */
+  serviceLevel: number
+  /** Meta de nivel de servicio (%). Por defecto 80. */
+  target?: number
+  /** Umbral de respuesta en segundos (el «20» de 80/20). Por defecto 20. */
+  thresholdSeconds?: number
+  /** Veces el umbral desde la que la espera máxima es crítica. Por defecto 6. */
+  criticalWaitFactor?: number
+  /** Canal o etiqueta junto al nombre. */
+  channel?: React.ReactNode
+  headingLevel?: 2 | 3 | 4 | 5 | 6
+}
+
+export type AgentPresence = 'disponible' | 'en_llamada' | 'post_llamada' | 'en_pausa' | 'desconectado'
+
+export interface AgentPresenceState {
+  id: string
+  name: string
+  presence: AgentPresence
+  /** Segundos en el estado actual. */
+  since: number
+  /** Detalle del estado: «Pausa: capacitación». Si falta se usa `queue`. */
+  detail?: React.ReactNode
+  queue?: string
+  src?: string | null
+}
+
+export interface AgentStatusBoardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect' | 'children'> {
+  agents: ReadonlyArray<AgentPresenceState>
+  onSelect?: (agent: AgentPresenceState) => void
+  /** Segundos desde los que una pausa se marca larga. Por defecto 900. */
+  longPauseAfter?: number
+  /** Segundos desde los que una llamada se marca larga. Por defecto 600. */
+  longCallAfter?: number
+  /** Nombre accesible. Por defecto «Agentes por estado». */
+  label?: string
+  loading?: boolean
+  empty?: React.ReactNode
+}
+
+export interface HeatmapProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  /** Encabezados de fila (p. ej. días) y de columna (p. ej. horas). */
+  rows: ReadonlyArray<string>
+  cols: ReadonlyArray<string>
+  /** `values[fila][columna]`; un valor ausente se muestra «—». */
+  values: ReadonlyArray<ReadonlyArray<number | null | undefined>>
+  /** Título de la tabla (caption). */
+  label: string
+  /** Formato de cada valor. Por defecto número es-CL. */
+  format?: (value: number) => string
+  /** Muestra la leyenda de la escala. Por defecto `true`. */
+  legend?: boolean
+  /** Oculta el caption visualmente (sigue para lectores de pantalla). */
+  hideLabel?: boolean
+}
+
+export interface ContactFact {
+  label: string
+  value: React.ReactNode
+}
+
+export interface ContactCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title' | 'children'> {
+  name: string
+  company?: string
+  role?: string
+  email?: string
+  phone?: string
+  src?: string | null
+  tags?: ReadonlyArray<string>
+  /** Estado del lead o cliente (Badge, Severity…). */
+  status?: React.ReactNode
+  /** Cifras del cliente: valor, casos abiertos, última compra. */
+  facts?: ReadonlyArray<ContactFact>
+  /** Acciones (una primaria como máximo). */
+  actions?: React.ReactNode
+  headingLevel?: 2 | 3 | 4 | 5 | 6
+  loading?: boolean
+}
+
+export interface PipelineDeal {
+  id: string
+  title: string
+  account: string
+  /** Monto (CLP por defecto; ver `currency`). */
+  value: number
+  owner: string
+  stage: string
+  /** Días sin actividad. */
+  idleDays?: number
+}
+
+export interface PipelineStage {
+  key: string
+  label: string
+}
+
+export interface PipelineBoardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  stages: ReadonlyArray<PipelineStage>
+  deals: ReadonlyArray<PipelineDeal>
+  /** Al soltar o mover con teclado una oportunidad a otra etapa. Sin él, el tablero es de solo lectura. */
+  onMove?: (dealId: string, toStage: string) => void
+  onOpen?: (deal: PipelineDeal) => void
+  /** Formato de montos. Por defecto CLP sin decimales. */
+  currency?: (value: number) => string
+  /** Nombre accesible. Por defecto «Pipeline de oportunidades». */
+  label?: string
+  /** Días sin actividad desde los que se marca una oportunidad. Por defecto 7. */
+  idleAfterDays?: number
+}
+
+export interface FunnelStep {
+  label: string
+  value: number
+}
+
+export interface FunnelProps extends Omit<React.HTMLAttributes<HTMLOListElement>, 'children'> {
+  steps: ReadonlyArray<FunnelStep>
+  format?: (value: number) => string
+  /** Nombre accesible. Por defecto «Embudo de conversión». */
+  label?: string
+}
