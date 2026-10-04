@@ -33,7 +33,7 @@ const meta: Meta<typeof StatsCard> = {
       },
     },
   },
-  decorators: [withHeading, Story => <div style={{ maxWidth: 420 }}><Story /></div>],
+  decorators: [withHeading, (Story, ctx) => <div style={{ maxWidth: ctx.parameters.maxWidth ?? 420 }}><Story /></div>],
 }
 export default meta
 type Story = StoryObj<typeof StatsCard>
@@ -79,7 +79,7 @@ export const Estados: Story = {
 
 export const Tablero: Story = {
   name: 'Tablero del contact center',
-  decorators: [Story => <div style={{ maxWidth: 'none' }}><Story /></div>],
+  parameters: { maxWidth: 'none' },
   render: () => (
     <div className="row g-3" style={{ minWidth: 0 }}>
       <div className="col-12 col-md-6 col-xl-3"><StatsCard icon="feather-alert-triangle" tone="danger" value={18} label="Llamadas en espera" delta={{ value: 6, unit: 'llamadas', label: 'en 10 min', goodWhen: 'down' }} context="Cola Cobranza sin agentes libres" footer="Reasignar agentes" onFooter={() => {}} /></div>
@@ -92,6 +92,6 @@ export const Tablero: Story = {
 
 export const ContenedorAngosto: Story = {
   name: 'Contenedor angosto (320 px)',
-  decorators: [Story => <div style={{ maxWidth: 320 }}><Story /></div>],
+  parameters: { maxWidth: 320 },
   args: { progress: { value: 84, label: 'Meta del turno', color: 'success' } },
 }

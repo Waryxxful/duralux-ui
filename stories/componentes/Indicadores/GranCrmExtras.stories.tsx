@@ -14,10 +14,10 @@ const meta: Meta<typeof StatCard> = {
     },
   },
   decorators: [
-    Story => (
+    (Story, ctx) => (
       <section aria-labelledby="sb-extras">
         <h2 id="sb-extras" className="visually-hidden">Extras GranCRM</h2>
-        <div style={{ maxWidth: 420 }}><Story /></div>
+        <div style={{ maxWidth: ctx.parameters.maxWidth ?? 420 }}><Story /></div>
       </section>
     ),
   ],
@@ -56,5 +56,5 @@ export const CardCompuesta: Story = {
 
 export const ContenedorAngosto: Story = {
   name: 'Contenedor angosto (320 px)',
-  decorators: [Story => <div style={{ maxWidth: 320 }}><Story /></div>],
+  parameters: { maxWidth: 320 },
 }

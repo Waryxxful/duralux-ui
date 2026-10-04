@@ -63,5 +63,5 @@ export const Tablero: Story = {
 
 export const ContenedorAngosto: Story = {
   name: 'Contenedor angosto (320 px)',
-  decorators: [Story => <div style={{ maxWidth: 320 }}><Story /></div>],
+  decorators: [(Story, ctx) => <div style={{ maxWidth: ctx.parameters.maxWidth ?? 320 }}><Story /></div>],
 }

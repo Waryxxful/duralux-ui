@@ -22,16 +22,18 @@ interface IndicatorDeltaChipProps {
   delta: FormattedDelta
   label?: React.ReactNode
   className?: string
+  /** Clase extra de la cifra (p. ej. el vidrio de ColoredStatCard). */
+  valueClassName?: string
 }
 
 /**
  * Variación con forma + texto + sentido hablado: la flecha es decorativa, el signo y la unidad
  * van en el texto y «Sube/Baja» se anuncia. El color (positivo/negativo) solo acompaña.
  */
-export function IndicatorDeltaChip({ delta, label, className }: IndicatorDeltaChipProps) {
+export function IndicatorDeltaChip({ delta, label, className, valueClassName }: IndicatorDeltaChipProps) {
   return (
     <span className={cx('gcu-stat-delta', `gcu-stat-delta--${delta.sentiment}`, className)} data-direction={delta.direction}>
-      <span className="gcu-stat-delta__value gcu-tabular">
+      <span className={cx('gcu-stat-delta__value', 'gcu-tabular', valueClassName)}>
         <i className={cx(ARROW[delta.direction], 'gcu-stat-delta__arrow')} aria-hidden="true" />
         <span className="visually-hidden">{delta.spoken} </span>
         {delta.text}

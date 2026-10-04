@@ -62,7 +62,7 @@ export const ColoredStatCard = /* @__PURE__ */ forwardRef<HTMLDivElement, Colore
         </div>
         {showMeta && (
           <div className="gcu-colored-stat__meta">
-            {formattedDelta && <IndicatorDeltaChip className="gcu-colored-stat__glass" delta={formattedDelta} label={delta?.label} />}
+            {formattedDelta && <IndicatorDeltaChip valueClassName="gcu-colored-stat__glass" delta={formattedDelta} label={delta?.label} />}
             <IndicatorContext value={value} context={context} emptyText={emptyText} />
           </div>
         )}

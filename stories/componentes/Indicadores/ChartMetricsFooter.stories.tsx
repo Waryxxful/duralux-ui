@@ -20,7 +20,7 @@ const meta: Meta<typeof ChartMetricsFooter> = {
       },
     },
   },
-  decorators: [Story => <div style={{ maxWidth: 560 }}><Story /></div>],
+  decorators: [(Story, ctx) => <div style={{ maxWidth: ctx.parameters.maxWidth ?? 560 }}><Story /></div>],
 }
 export default meta
 type Story = StoryObj<typeof ChartMetricsFooter>
@@ -57,5 +57,5 @@ export const BajoGrafico: Story = {
 
 export const ContenedorAngosto: Story = {
   name: 'Contenedor angosto (320 px)',
-  decorators: [Story => <div style={{ maxWidth: 320 }}><Story /></div>],
+  parameters: { maxWidth: 320 },
 }

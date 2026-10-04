@@ -17,7 +17,7 @@ const meta: Meta<typeof MiniStatCard> = {
       },
     },
   },
-  decorators: [Story => <div style={{ maxWidth: 420 }}><Story /></div>],
+  decorators: [(Story, ctx) => <div style={{ maxWidth: ctx.parameters.maxWidth ?? 420 }}><Story /></div>],
 }
 export default meta
 type Story = StoryObj<typeof MiniStatCard>
@@ -46,7 +46,7 @@ export const Estados: Story = {
 
 export const Tablero: Story = {
   name: 'Estado de agentes',
-  decorators: [Story => <div style={{ maxWidth: 'none' }}><Story /></div>],
+  parameters: { maxWidth: 'none' },
   render: () => (
     <div className="row g-3">
       <div className="col-6 col-lg-3"><MiniStatCard icon="feather-phone-call" tone="success" value={31} label="En llamada" delta={{ value: 4, unit: 'agentes', label: 'vs. 10 min' }} /></div>
@@ -59,6 +59,6 @@ export const Tablero: Story = {
 
 export const ContenedorAngosto: Story = {
   name: 'Contenedor angosto (320 px)',
-  decorators: [Story => <div style={{ maxWidth: 320 }}><Story /></div>],
+  parameters: { maxWidth: 320 },
   args: { delta: { value: -2, unit: 'agentes', label: 'vs. 10 min' } },
 }

@@ -24,7 +24,7 @@ describe('ColoredStatCard refinado (lote L4)', () => {
     const { container } = render(<ColoredStatCard icon="feather-users" value={1} label="X" delta={{ value: -2, unit: 'pts' }} />)
     expect(container.querySelector('.gcu-colored-stat__icon')).toHaveClass('gcu-colored-stat__glass')
     const delta = container.querySelector('.gcu-stat-delta')
-    expect(delta).toHaveClass('gcu-colored-stat__glass')
+    expect(delta?.querySelector('.gcu-stat-delta__value')).toHaveClass('gcu-colored-stat__glass')
     expect(delta).toHaveTextContent(/Baja\s*−2\spts/)
   })
 

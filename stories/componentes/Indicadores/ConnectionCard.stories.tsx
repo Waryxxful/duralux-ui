@@ -32,7 +32,7 @@ const meta: Meta<typeof ConnectionCard> = {
       },
     },
   },
-  decorators: [Story => <div style={{ maxWidth: 560 }}><Story /></div>],
+  decorators: [(Story, ctx) => <div style={{ maxWidth: ctx.parameters.maxWidth ?? 560 }}><Story /></div>],
   render: args => <Controlled {...args} />,
 }
 export default meta
@@ -52,6 +52,6 @@ export const Estados: Story = {
 
 export const ContenedorAngosto: Story = {
   name: 'Contenedor angosto (320 px)',
-  decorators: [Story => <div style={{ maxWidth: 320 }}><Story /></div>],
+  parameters: { maxWidth: 320 },
   args: { checked: false },
 }

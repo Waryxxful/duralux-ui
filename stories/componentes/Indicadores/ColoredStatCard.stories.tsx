@@ -23,7 +23,7 @@ const meta: Meta<typeof ColoredStatCard> = {
       },
     },
   },
-  decorators: [Story => <div style={{ maxWidth: 420 }}><Story /></div>],
+  decorators: [(Story, ctx) => <div style={{ maxWidth: ctx.parameters.maxWidth ?? 420 }}><Story /></div>],
 }
 export default meta
 type Story = StoryObj<typeof ColoredStatCard>
@@ -31,7 +31,7 @@ type Story = StoryObj<typeof ColoredStatCard>
 export const Playground: Story = {}
 
 export const Tonos: Story = {
-  decorators: [Story => <div style={{ maxWidth: 'none' }}><Story /></div>],
+  parameters: { maxWidth: 'none' },
   render: () => (
     <div className="row g-3">
       {tones.map(tone => (
@@ -55,7 +55,7 @@ export const Estados: Story = {
 
 export const Tablero: Story = {
   name: 'Campaña bajo la meta',
-  decorators: [Story => <div style={{ maxWidth: 'none' }}><Story /></div>],
+  parameters: { maxWidth: 'none' },
   render: () => (
     <div className="row g-3">
       <div className="col-12 col-lg-6">
@@ -70,5 +70,5 @@ export const Tablero: Story = {
 
 export const ContenedorAngosto: Story = {
   name: 'Contenedor angosto (320 px)',
-  decorators: [Story => <div style={{ maxWidth: 320 }}><Story /></div>],
+  parameters: { maxWidth: 320 },
 }
