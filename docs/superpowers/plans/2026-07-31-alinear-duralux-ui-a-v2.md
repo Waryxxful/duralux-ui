@@ -147,7 +147,7 @@ Expected: FAIL (shapes actuales de `shadow`/`border`/`radius` no coinciden, colo
  *   scss/themes/_bs-custom-variables.scss
  *
  * Fuente de verdad visual = SCSS, que a su vez sigue duralux-v2 (react-vite).
- * Si cambiás un color/escala en SCSS, actualizá acá en el mismo PR.
+ * Si cambias un color o escala en SCSS, actualiza aquí en el mismo PR.
  */
 export const tokens = {
   colors: {
