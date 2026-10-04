@@ -309,8 +309,9 @@ test('Tabs fall back to an enabled tab for controlled and uncontrolled selection
   )
 
   expect(screen.getByRole('tab', { name: 'Enabled' })).toHaveAttribute('aria-selected', 'true')
-  await waitFor(() => expect(controlledOnChange).toHaveBeenCalledWith('enabled'))
-  expect(controlledOnChange).toHaveBeenCalledOnce()
+  // Corrección 2.3 (DX-016): la caída a una pestaña habilitada se deriva en render; no se notifica al padre.
+  await Promise.resolve()
+  expect(controlledOnChange).not.toHaveBeenCalled()
 
   rerender(
     <Tabs

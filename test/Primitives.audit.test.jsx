@@ -173,7 +173,10 @@ test('Button disables custom link components while forwarding their disabled con
   expect(onParentClick).not.toHaveBeenCalled()
 })
 
-test('Tabs reconciles an invalid controlled key once', async () => {
+// Corrección 2.3 (DX-016): un activeKey controlado inválido se resuelve en render y avisa por
+// log.warn; ya no se notifica al padre desde un efecto (onChange solo sale de acciones del usuario).
+test('Tabs resolves an invalid controlled key in render without notifying the parent', async () => {
+  vi.spyOn(console, 'warn').mockImplementation(() => {})
   const onChange = vi.fn()
   const { rerender } = render(
     <Tabs
@@ -187,8 +190,8 @@ test('Tabs reconciles an invalid controlled key once', async () => {
   )
 
   expect(screen.getByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true')
-  await waitFor(() => expect(onChange).toHaveBeenCalledWith('overview'))
-  expect(onChange).toHaveBeenCalledOnce()
+  await waitFor(() => expect(console.warn).toHaveBeenCalled())
+  expect(onChange).not.toHaveBeenCalled()
 
   rerender(
     <Tabs
@@ -200,7 +203,8 @@ test('Tabs reconciles an invalid controlled key once', async () => {
       onChange={onChange}
     />,
   )
-  expect(onChange).toHaveBeenCalledOnce()
+  expect(onChange).not.toHaveBeenCalled()
+  vi.restoreAllMocks()
 })
 
 test('Progress clamps finite values in visual and ARIA output', () => {

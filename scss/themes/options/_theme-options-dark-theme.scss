@@ -987,8 +987,9 @@ $gcu-dark-palettes: (
 		}
 
 		/* <---------------! Navs & Tabs !---------------> */
-		/* Baseline uses dark border (not white) so raised tabs don't notch harshly. */
-		.nav-tabs {
+		/* Baseline uses dark border (not white) so raised tabs don't notch harshly.
+		   Tabs del design system (.gcu-tabs) se resuelven con tokens en components/tabs.css. */
+		.nav-tabs:not(.gcu-tabs) {
 			border-bottom-color: $dark-theme-color-border;
 
 			.nav-link {
@@ -1034,7 +1035,7 @@ $gcu-dark-palettes: (
 			}
 		}
 		.nav-item {
-			.nav-link {
+			.nav-link:not(.gcu-tabs__tab) {
 				color: $dark-theme-color;
 
 				&.active,

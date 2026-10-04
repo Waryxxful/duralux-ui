@@ -25,7 +25,11 @@ function compileForm() {
   ).css
 }
 
-const runtimeCss = readFileSync(resolve(repoRoot, 'src/styles/grancrm-ui.css'), 'utf8')
+// CSS público en runtime: grancrm-ui.css más los archivos por componente que importa (2.3).
+const runtimeCss = readFileSync(resolve(repoRoot, 'src/styles/grancrm-ui.css'), 'utf8').replace(
+  /@import "\.\/(components\/[\w-]+\.css)";/g,
+  (_, file: string) => readFileSync(resolve(repoRoot, 'src/styles', file), 'utf8'),
+)
 
 type CssRule = {
   selectors: string[]
