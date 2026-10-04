@@ -592,6 +592,12 @@ export interface MessageBubbleProps {
   'data-raw'?: string
   bubbleRef?: React.Ref<HTMLDivElement>
   className?: string
+  /** Hora visible en la meta (cifras tabulares). */
+  time?: React.ReactNode
+  /** Estado de entrega: ícono + texto (nunca solo color). */
+  status?: ChatDeliveryStatus
+  /** Continuación de un mensaje del mismo autor: menos aire y sin cola. */
+  grouped?: boolean
 }
 
 export interface CardLoaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'aria-label'> {
@@ -905,6 +911,12 @@ export interface ChatLabels {
   attach?: string | number
   emoji?: string | number
   send?: string | number
+  /** Título del estado vacío cuando la lista no tiene conversaciones (sin búsqueda). */
+  emptyList?: string | number
+  /** Botón para volver a la lista en contenedores angostos. */
+  back?: string | number
+  /** Anuncio y texto del estado de carga. */
+  loading?: string | number
 }
 
 export interface ChatSidebarProps<TContact extends ChatContact = ChatContact> {
@@ -922,23 +934,55 @@ export interface ChatSidebarProps<TContact extends ChatContact = ChatContact> {
   unreadLabel?: string | number
   selectedLabel?: string | number
   labels?: ChatLabels
+  /** Muestra filas skeleton y marca la lista con `aria-busy`. */
+  loading?: boolean
+  className?: string
 }
+
+/** Estado de entrega de un mensaje propio. */
+export type ChatDeliveryStatus = 'sending' | 'sent' | 'delivered' | 'read' | 'failed'
 
 export interface ChatMessage {
   id?: string | number
   text?: string | number
   time?: string | number
-  sender?: { name?: string | number; avatar?: string }
+  sender?: { id?: string | number; name?: string | number; avatar?: string }
   mine?: boolean
+  /** Fecha del mensaje: separadores de día («Hoy», «Ayer», dd-mm-aaaa) y agrupación. */
+  date?: EventDate
+  /** Estado de entrega (solo mensajes propios). */
+  status?: ChatDeliveryStatus
+  /** Mensaje del sistema: discreto y centrado («Ana se unió a la conversación»). */
+  system?: boolean
 }
 
 export interface ChatBubbleProps {
   message: ChatMessage
+  /** Continuación del mismo autor: oculta avatar y nombre, y junta la burbuja con la anterior. */
+  grouped?: boolean
+  /** Reintento de un mensaje con `status: 'failed'`; sin él solo se informa el error. */
+  onRetry?: (message: ChatMessage) => void
+  retryLabel?: string
+  className?: string
 }
 
 export interface ChatTypingIndicatorProps {
   name?: string | number
+  className?: string
 }
+
+export interface ChatDaySeparatorProps {
+  /** Día del separador: «Hoy», «Ayer» o dd-mm-aaaa. */
+  date: EventDate
+  /** Instante de referencia (tests y capturas); por defecto, ahora. */
+  now?: Date
+  className?: string
+}
+
+/** Entrada de `groupChatMessages`: separador de día o mensaje con su agrupación. */
+export type ChatTimelineEntry =
+  | { type: 'day'; key: string; date: Date; label: string }
+  | { type: 'message'; key: string; message: ChatMessage; grouped: boolean }
 
 export interface ChatInputBarProps {
   onSend?: (text: string) => void
@@ -951,6 +995,19 @@ export interface ChatInputBarProps {
   emojiLabel?: string | number
   sendLabel?: string | number
   labels?: Pick<ChatLabels, 'input' | 'attach' | 'emoji' | 'send'>
+  /** Textarea que crece con el texto: Enter envía y Shift+Enter salta de línea. */
+  multiline?: boolean
+  /** Filas máximas antes de desplazar (multiline). Por defecto 6. */
+  maxRows?: number
+  /** Límite de caracteres; el contador aparece al llegar al 80 %. */
+  maxLength?: number
+  /** Borrador controlado. */
+  value?: string
+  /** Cambio del borrador (controlado o no): sirve para avisar «escribiendo…». */
+  onChange?: (text: string) => void
+  /** Por qué el compositor está deshabilitado («Sin conexión»). */
+  disabledReason?: React.ReactNode
+  className?: string
 }
 
 export interface ChatWindowContact {
@@ -977,7 +1034,12 @@ export interface ChatWindowProps<TContact extends ChatWindowContact = ChatWindow
   messagesLabel?: string | number
   onlineLabel?: string | number
   offlineLabel?: string | number
-  labels?: Pick<ChatLabels, 'window' | 'empty' | 'phone' | 'video' | 'menu' | 'messages' | 'online' | 'offline'>
+  labels?: Pick<ChatLabels, 'window' | 'empty' | 'phone' | 'video' | 'menu' | 'messages' | 'online' | 'offline' | 'back' | 'loading'>
+  /** Volver a la lista: el botón aparece cuando `.gcu-chat` es angosto (una columna). */
+  onBack?: () => void
+  /** Historial cargando: skeleton y `aria-busy` en el log. */
+  loading?: boolean
+  className?: string
 }
 
 export interface SidebarNavItem {

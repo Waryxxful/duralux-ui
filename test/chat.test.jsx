@@ -3,10 +3,10 @@ import { readFileSync } from 'node:fs'
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, test, vi } from 'vitest'
-import { ChatBubble, ChatTypingIndicator } from '../src/components/chat/ChatBubble.jsx'
-import { ChatInputBar } from '../src/components/chat/ChatInputBar.jsx'
-import { ChatSidebar } from '../src/components/chat/ChatSidebar.jsx'
-import { ChatWindow } from '../src/components/chat/ChatWindow.jsx'
+import { ChatBubble, ChatTypingIndicator } from '../src/components/chat/ChatBubble'
+import { ChatInputBar } from '../src/components/chat/ChatInputBar'
+import { ChatSidebar } from '../src/components/chat/ChatSidebar'
+import { ChatWindow } from '../src/components/chat/ChatWindow'
 
 const CONTACTS = [
   {
@@ -34,6 +34,8 @@ const CONTACT = {
   role: 'Diseñadora UI',
 }
 
+// Corrección documentada (lote L7): la lista seleccionable pasó a listbox/option (APG); cada contacto sigue
+// siendo un <button> dentro de su <li>, pero con role="option", así que se busca por ese rol.
 describe('ChatSidebar', () => {
   test('expone nombres y estado, y selecciona contactos con teclado', async () => {
     const user = userEvent.setup()
@@ -44,8 +46,8 @@ describe('ChatSidebar', () => {
     const search = screen.getByRole('searchbox', { name: 'Buscar conversaciones' })
     expect(search).toBeInTheDocument()
 
-    const ana = screen.getByRole('button', { name: 'Ana Martínez' })
-    const carlos = screen.getByRole('button', { name: 'Carlos Ruiz' })
+    const ana = screen.getByRole('option', { name: 'Ana Martínez' })
+    const carlos = screen.getByRole('option', { name: 'Carlos Ruiz' })
     expect(ana).not.toHaveAttribute('aria-current')
     expect(ana).not.toHaveAttribute('aria-pressed')
     expect(ana).toHaveAccessibleName('Ana Martínez')
@@ -139,22 +141,22 @@ describe('ChatSidebar', () => {
       <ChatSidebar contacts={CONTACTS} selectedId="ana" onSelect={onSelect} />,
     )
 
-    const ana = screen.getByRole('button', { name: 'Ana Martínez' })
+    const ana = screen.getByRole('option', { name: 'Ana Martínez' })
     ana.focus()
     await user.keyboard('{ArrowDown}')
 
-    const carlos = screen.getByRole('button', { name: 'Carlos Ruiz' })
+    const carlos = screen.getByRole('option', { name: 'Carlos Ruiz' })
     expect(carlos).toHaveFocus()
     expect(carlos).toHaveAttribute('tabindex', '0')
 
     rerender(
       <ChatSidebar contacts={[CONTACTS[1], CONTACTS[0]]} selectedId="ana" onSelect={onSelect} />,
     )
-    expect(screen.getByRole('button', { name: 'Carlos Ruiz' })).toHaveFocus()
-    expect(screen.getByRole('button', { name: 'Carlos Ruiz' })).toHaveAttribute('tabindex', '0')
+    expect(screen.getByRole('option', { name: 'Carlos Ruiz' })).toHaveFocus()
+    expect(screen.getByRole('option', { name: 'Carlos Ruiz' })).toHaveAttribute('tabindex', '0')
 
     rerender(<ChatSidebar contacts={[CONTACTS[0]]} selectedId="ana" onSelect={onSelect} />)
-    const remaining = screen.getByRole('button', { name: 'Ana Martínez' })
+    const remaining = screen.getByRole('option', { name: 'Ana Martínez' })
     expect(remaining).toHaveFocus()
     expect(remaining).toHaveAttribute('tabindex', '0')
   })
@@ -171,7 +173,7 @@ describe('ChatSidebar', () => {
 
     render(<ChatSidebar contacts={proxiedContacts} onSelect={vi.fn()} />)
     const readsAfterRender = reads
-    await user.click(screen.getByRole('button', { name: 'Ana Martínez' }))
+    await user.click(screen.getByRole('option', { name: 'Ana Martínez' }))
 
     expect(reads).toBe(readsAfterRender)
   })
@@ -183,8 +185,8 @@ describe('ChatSidebar', () => {
       <ChatSidebar contacts={CONTACTS} selectedId="ana" onSelect={onSelect} />,
     )
 
-    const ana = screen.getByRole('button', { name: 'Ana Martínez' })
-    const carlos = screen.getByRole('button', { name: 'Carlos Ruiz' })
+    const ana = screen.getByRole('option', { name: 'Ana Martínez' })
+    const carlos = screen.getByRole('option', { name: 'Carlos Ruiz' })
     expect(ana).toHaveAttribute('tabindex', '0')
     expect(carlos).toHaveAttribute('tabindex', '-1')
 
@@ -198,8 +200,8 @@ describe('ChatSidebar', () => {
     expect(ana).toHaveAttribute('aria-current', 'true')
 
     rerender(<ChatSidebar contacts={CONTACTS} selectedId="carlos" onSelect={onSelect} />)
-    expect(screen.getByRole('button', { name: 'Carlos Ruiz' })).toHaveAttribute('aria-current', 'true')
-    expect(screen.getByRole('button', { name: 'Ana Martínez' })).not.toHaveAttribute('aria-current')
+    expect(screen.getByRole('option', { name: 'Carlos Ruiz' })).toHaveAttribute('aria-current', 'true')
+    expect(screen.getByRole('option', { name: 'Ana Martínez' })).not.toHaveAttribute('aria-current')
   })
 })
 
