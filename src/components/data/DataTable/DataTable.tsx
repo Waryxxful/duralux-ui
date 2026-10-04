@@ -336,7 +336,7 @@ export function DataTable<T extends object = AnyRow>(props: DataTableProps<T>) {
         {...tableProps}
         ref={tableRef}
         columns={tableColumns}
-        rows={hasRows ? pageEntries : EMPTY_ARRAY}
+        rows={hasRows && !showError ? pageEntries : EMPTY_ARRAY}
         rowKey={pageRowKey}
         loading={loading}
         loadingRows={loadingRows}
