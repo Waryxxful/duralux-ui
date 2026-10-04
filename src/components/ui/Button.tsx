@@ -31,15 +31,15 @@ interface ButtonContentProps {
 /** Contenido común: el spinner ocupa el lugar del ícono inicial y el texto se conserva. */
 function ButtonContent({ loading, startIcon, icon, endIcon, children }: ButtonContentProps) {
   const leading = loading
-    ? <span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />
+    ? <span className="spinner-border spinner-border-sm me-2 gcu-button__icon--start" aria-hidden="true" />
     : startIcon
-      ? renderIconSlot(startIcon, { className: 'me-2' })
-      : icon && <i className={`${icon} me-2`} aria-hidden="true" />
+      ? renderIconSlot(startIcon, { className: 'me-2 gcu-button__icon--start' })
+      : icon && <i className={`${icon} me-2 gcu-button__icon--start`} aria-hidden="true" />
   return (
     <>
       {leading}
       {children}
-      {!loading && renderIconSlot(endIcon, { className: 'ms-2' })}
+      {!loading && renderIconSlot(endIcon, { className: 'ms-2 gcu-button__icon--end' })}
     </>
   )
 }

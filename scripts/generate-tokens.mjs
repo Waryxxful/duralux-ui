@@ -16,7 +16,7 @@ const WIDGET_COLOR_NAMES = ['primary', 'success', 'danger', 'warning', 'info', '
 const STAT_COLOR_NAMES = WIDGET_COLOR_NAMES.filter(name => name !== 'dark')
 const TONES = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'teal', 'indigo']
 const THEMES = ['light', 'dark', 'navy']
-const THEME_COLOR_KEYS = ['text', 'muted', 'text-subtle', 'text-inverse', 'primary-text', 'code', 'surface', 'surface-subtle', 'surface-raised', 'surface-sunken', 'overlay', 'border', 'border-strong', 'focus', 'focus-ring-color']
+const THEME_COLOR_KEYS = ['text', 'muted', 'text-subtle', 'text-inverse', 'primary-text', 'code', 'surface', 'surface-subtle', 'surface-raised', 'surface-sunken', 'overlay', 'border', 'border-strong', 'focus', 'focus-ring-color', 'image-outline']
 // Pares texto/fondo que deben cumplir AA (4,5:1) en cada tema.
 const TEXT_ON = ['surface', 'surface-subtle', 'surface-raised']
 const TEXT_KEYS = ['text', 'muted', 'primary-text', 'code']
@@ -137,7 +137,8 @@ function scaleDeclarations(tokens) {
 
 function themeDeclarations(tokens, theme) {
   const r = resolveTheme(tokens, theme)
-  const d = THEME_COLOR_KEYS.map(key => `--gcu-${key}:${r[key]}`)
+  // color-scheme: controles nativos (file input, scrollbars, date) y lienzo siguen al tema.
+  const d = [`color-scheme:${theme === 'light' ? 'light' : 'dark'}`, ...THEME_COLOR_KEYS.map(key => `--gcu-${key}:${r[key]}`)]
   for (const tone of TONES) {
     d.push(`--gcu-status-${tone}:${r[`status-${tone}`]}`)
     d.push(`--gcu-${tone}-soft:${r[`${tone}-soft`]}`)

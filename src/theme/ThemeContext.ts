@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
 import { log } from '../utils/log';
+import { designTokens } from '../generated/tokens';
 
 /** Preferencia del usuario. `system` sigue `prefers-color-scheme`. */
 export type ThemeMode = 'light' | 'dark' | 'navy' | 'system';
@@ -68,6 +69,15 @@ export function resolveTheme(mode: ThemeMode, prefersDark: boolean): ResolvedThe
 export function applyThemeToDocument(resolved: ResolvedTheme, root: HTMLElement = document.documentElement): void {
   root.setAttribute('data-gcu-theme', resolved);
   root.classList.toggle('app-skin-dark', resolved !== 'light');
+  // HTML Background (Craft): la barra del navegador móvil toma el color del lienzo del tema.
+  const doc = root.ownerDocument;
+  let meta = doc.head.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (!meta) {
+    meta = doc.createElement('meta');
+    meta.name = 'theme-color';
+    doc.head.appendChild(meta);
+  }
+  meta.content = designTokens.themes[resolved].colors['surface-subtle'];
 }
 
 export function parseStoredMini(value: string | null): boolean | null {

@@ -41,3 +41,11 @@ describe('Button refinado (receta de componente 2.3)', () => {
     expect(screen.getByRole('button')).toHaveClass('gcu-button')
   })
 })
+
+describe('Button — alineación óptica (Craft)', () => {
+  test('marca el ícono inicial y final para compensar su aire interno', () => {
+    const { container } = render(<Button startIcon="plus" endIcon="external-link">Abrir</Button>)
+    expect(container.querySelector('.gcu-button__icon--start')).not.toBeNull()
+    expect(container.querySelector('.gcu-button__icon--end')).not.toBeNull()
+  })
+})

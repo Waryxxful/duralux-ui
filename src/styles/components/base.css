@@ -1,0 +1,17 @@
+/* Base Craft (craft.gustavofior.com): detalles globales que nadie nota pero se sienten.
+   Solo tokens; los valores (10 %, 200px, .08) son los recomendados por cada concepto. */
+
+/* HTML Background — el lienzo del documento sigue al tema: sin franja blanca al rebotar el scroll. */
+html{background-color:var(--gcu-surface-subtle)}
+
+/* Image Outlines — un borde interior casi invisible le da forma a imágenes y avatares
+   sobre cualquier fondo (negro 10 % en claro, blanco 10 % en oscuro y navy). */
+.avatar-image img,img.gcu-media,.gcu-media img{outline:1px solid var(--gcu-image-outline);outline-offset:-1px}
+
+/* Noise — grano en mosaico para superficies de color (Spotlight, tarjetas de color, bandas).
+   isolation evita que el grano se mezcle con lo que hay detrás de la superficie. */
+.gcu-grain{position:relative;isolation:isolate;overflow:hidden}
+.gcu-grain::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");background-size:200px 200px;background-repeat:repeat;opacity:.08;mix-blend-mode:overlay}
+
+/* Hover Restraint — lo que se recorre con el puntero muchas veces por minuto cambia al instante. */
+.nxl-navigation .nxl-link,.nxl-navigation .nxl-item,.dropdown-item,.list-group-item-action,.nav-tabs .nav-link,.table-hover > tbody > tr,.table-hover > tbody > tr > *{transition:none}

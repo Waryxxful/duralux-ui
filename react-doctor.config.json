@@ -1,8 +1,21 @@
 {
   "ignore": {
-    "files": ["tools/oxlint/anti-slop/**", "scripts/**", "test-types/**"],
+    "files": [
+      "tools/oxlint/anti-slop/**",
+      "scripts/**",
+      "test-types/**",
+      ".claude/**",
+      ".superpowers/**"
+    ],
     "overrides": [
-      { "files": ["test/**"], "rules": ["anti-slop/no-module-mocking"] }
+      {
+        "files": [
+          "test/**"
+        ],
+        "rules": [
+          "anti-slop/no-module-mocking"
+        ]
+      }
     ]
   }
 }

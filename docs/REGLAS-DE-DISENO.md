@@ -97,3 +97,17 @@ El gate `audit-contract` bloquea los patrones prohibidos.
 - Botones de solo icono con `label` (se usa como `aria-label` y `title`).
 - Modales con foco atrapado y retorno de foco; `Esc` cierra; el fondo no se desplaza.
 - Respuestas asíncronas y toasts anunciados con `aria-live`.
+
+## 11. Detalles de oficio (Craft)
+
+Conceptos de [Craft](https://craft.gustavofior.com) incorporados al sistema. Valores exactos del sitio; no inventar otros.
+
+| Concepto | Regla en @duralux/ui | Dónde vive |
+|---|---|---|
+| [Números tabulares](https://craft.gustavofior.com/tabular-numbers) | Cifras que cambian y columnas numéricas (alineadas a la derecha) con `tabular-nums`; en texto corrido, proporcionales | `td.text-end`, `.gcu-tabular`, `[data-numeric]` |
+| [Alineación óptica](https://craft.gustavofior.com/optical-alignment) | El lado del ícono en un botón lleva 2 px menos; íconos sueltos se centran por peso visual (prueba del desenfoque) | `.gcu-button__icon--start/--end` |
+| [Grano](https://craft.gustavofior.com/noise) | Superficies de color grandes (Spotlight, bandas, tarjetas de color) con grano en mosaico de 200 px al 8 % en `overlay`, aislado | `.gcu-grain` |
+| [Contornos de imagen](https://craft.gustavofior.com/image-outlines) | Imágenes y avatares con borde interior de 1 px: negro 10 % en claro, blanco 10 % en oscuro y navy | `--gcu-image-outline`, `.avatar-image img`, `.gcu-media` |
+| [Radios anidados](https://craft.gustavofior.com/nested-border-radius) | Radio interior = radio exterior − separación: `max(0px, calc(<exterior> - <separación>))` | regla de componente |
+| [Fondo del documento](https://craft.gustavofior.com/html-background) | `html` pinta `--gcu-surface-subtle`; `color-scheme` por tema; `meta theme-color` sigue al tema resuelto | `base.css`, tokens, `applyThemeToDocument` |
+| [Contención del hover](https://craft.gustavofior.com/hover-restraint) | Lo frecuente es instantáneo: hover de botones, navegación, ítems de menú, pestañas y filas sin transición; los tooltips esperan 400–700 ms el primero y los vecinos aparecen al instante; modales (infrecuentes) sí animan | `button.css`, `base.css` |
