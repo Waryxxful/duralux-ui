@@ -52,3 +52,11 @@ describe('ColoredStatCard refinado (lote L4)', () => {
     expect(screen.getByText('Sin datos para este periodo')).toBeInTheDocument()
   })
 })
+
+describe('ColoredStatCard — bg="bg-light" conserva su significado (superficie clara)', () => {
+  test('bg-light se traduce al tono light, no a un relleno oscuro', () => {
+    const { container } = render(<ColoredStatCard value="12" label="Pendientes" bg="bg-light" />)
+    expect(container.querySelector('.gcu-colored-stat--light')).not.toBeNull()
+    expect(container.querySelector('.gcu-colored-stat--dark')).toBeNull()
+  })
+})

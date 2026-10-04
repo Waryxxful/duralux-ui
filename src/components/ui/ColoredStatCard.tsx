@@ -35,9 +35,10 @@ export const ColoredStatCard = /* @__PURE__ */ forwardRef<HTMLDivElement, Colore
   if (trend !== undefined || trendUp !== undefined) {
     deprecate('coloredstatcard-trend', 'las props `trend`/`trendUp` de ColoredStatCard se reemplazan por `delta` ({ value: número, unit, label }).')
   }
-  // `neutral` no es una superficie de color: cae en `dark`, que sí cumple AA con blanco.
+  // `bg-light` (API histórica) es una superficie clara con texto del tema; otro `neutral` cae en `dark` (AA con blanco).
   const parsedTone: IndicatorTone = resolveTone('ColoredStatCard', tone, bg, 'primary')
-  const resolvedTone = parsedTone === 'neutral' ? 'dark' : parsedTone
+  const isLegacyLight = parsedTone === 'neutral' && String(bg ?? '').includes('light')
+  const resolvedTone = isLegacyLight ? 'light' : parsedTone === 'neutral' ? 'dark' : parsedTone
   const formattedDelta = formatDelta('ColoredStatCard', delta) ?? formatLegacyTrend(trend, trendUp)
   const showMeta = !loading && Boolean(formattedDelta || context || isEmptyIndicatorValue(value))
 
