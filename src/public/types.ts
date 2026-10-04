@@ -1552,3 +1552,174 @@ export interface DashGridRowProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export type { SemanticVariant, StatusVariant }
+
+// ── 2.5 · Lote N1: controles y estructura ─────────────────────────────────────
+
+export type TooltipPlacement = 'top' | 'bottom' | 'start' | 'end'
+
+export interface TooltipProps {
+  /** Texto breve que complementa al disparador. Nunca es la única fuente de la información. */
+  content: React.ReactNode
+  /** Un único elemento enfocable (botón, enlace, input). Recibe `aria-describedby` mientras el tooltip está visible. */
+  children: React.ReactElement
+  placement?: TooltipPlacement
+  /** Espera del primer tooltip en ms (se acota a 400–700). Los vecinos aparecen al instante. */
+  delay?: number
+  /** Controlado: visible o no. */
+  open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  disabled?: boolean
+  className?: string
+  id?: string
+}
+
+export type SegmentedValue = string | number
+
+export interface SegmentedOption<V extends SegmentedValue = string> {
+  value: V
+  label: React.ReactNode
+  icon?: IconSlot
+  disabled?: boolean
+}
+
+export interface SegmentedProps<V extends SegmentedValue = string>
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
+  /** 2 a 5 opciones cortas y excluyentes. Con más, usa Select o RadioGroup. */
+  options: ReadonlyArray<V | SegmentedOption<V>>
+  value?: V
+  defaultValue?: V
+  onChange?: (value: V) => void
+  /** `name` de los radios nativos (participa en formularios). Por defecto se genera uno. */
+  name?: string
+  size?: 'sm' | 'md'
+  /** Ocupa todo el ancho del contenedor con opciones de igual ancho. */
+  fullWidth?: boolean
+  disabled?: boolean
+}
+
+export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
+  label: React.ReactNode
+  /** Consecuencia del cambio, bajo la etiqueta («Se notifica al supervisor»). */
+  description?: React.ReactNode
+  size?: 'sm' | 'md'
+}
+
+export interface FieldsetProps extends React.FieldsetHTMLAttributes<HTMLFieldSetElement> {
+  legend: React.ReactNode
+  /** Ayuda bajo la leyenda; se asocia con `aria-describedby`. */
+  description?: React.ReactNode
+  /** Error del grupo: texto que se anuncia y se asocia con `aria-describedby`. */
+  error?: React.ReactNode
+  /** Campos en 1 columna, o 2 desde 32rem de ancho del contenedor. */
+  columns?: 1 | 2
+  /** Oculta la leyenda a la vista (sigue siendo el nombre del grupo). */
+  hideLegend?: boolean
+}
+
+export interface RadioGroupOption {
+  value: string
+  label: React.ReactNode
+  description?: React.ReactNode
+  disabled?: boolean
+}
+
+export interface RadioGroupProps
+  extends Omit<React.FieldsetHTMLAttributes<HTMLFieldSetElement>, 'onChange' | 'defaultValue'> {
+  legend: React.ReactNode
+  options: ReadonlyArray<RadioGroupOption>
+  name?: string
+  value?: string
+  defaultValue?: string
+  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement>) => void
+  /** `horizontal` vuelve a vertical cuando el contenedor mide menos de 28rem. */
+  orientation?: 'vertical' | 'horizontal'
+  helpText?: React.ReactNode
+  error?: React.ReactNode
+  required?: boolean
+}
+
+export interface ChoiceCardProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'title'> {
+  title: React.ReactNode
+  description?: React.ReactNode
+  icon?: IconSlot
+  /** `radio` para elegir una opción del grupo (mismo `name`); `checkbox` para varias. */
+  type?: 'radio' | 'checkbox'
+  error?: boolean
+}
+
+export interface AccordionItem {
+  value: string
+  title: React.ReactNode
+  content: React.ReactNode
+  disabled?: boolean
+}
+
+export interface AccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
+  items: ReadonlyArray<AccordionItem>
+  /** Permite varias secciones abiertas a la vez. */
+  multiple?: boolean
+  value?: ReadonlyArray<string>
+  defaultValue?: ReadonlyArray<string>
+  onChange?: (value: string[]) => void
+  /** Nivel del encabezado que envuelve cada botón (patrón APG). */
+  headingLevel?: 2 | 3 | 4 | 5 | 6
+  /** Sin borde exterior ni radio: para usar dentro de una card. */
+  flush?: boolean
+}
+
+export type DrawerSize = 'sm' | 'md' | 'lg'
+
+export interface DrawerProps extends Omit<React.HTMLAttributes<HTMLDialogElement>, 'title' | 'children'> {
+  open?: boolean
+  onClose?: () => void
+  title: React.ReactNode
+  description?: React.ReactNode
+  children?: React.ReactNode
+  /** Acciones fijas al pie (la primaria a la derecha). */
+  footer?: React.ReactNode
+  size?: DrawerSize
+  side?: 'end' | 'start'
+  closeOnEscape?: boolean
+  closeOnBackdrop?: boolean
+}
+
+export interface DividerProps extends React.HTMLAttributes<HTMLElement> {
+  /** Texto en medio de la línea («o continúa con»). Solo horizontal. */
+  label?: React.ReactNode
+  orientation?: 'horizontal' | 'vertical'
+  align?: 'start' | 'center'
+}
+
+export interface KbdProps extends React.HTMLAttributes<HTMLElement> {
+  /** Combinación de teclas: `['Ctrl', 'K']` se lee «Ctrl + K». */
+  keys?: ReadonlyArray<string>
+}
+
+export interface SpinnerProps extends React.HTMLAttributes<HTMLSpanElement> {
+  size?: 'sm' | 'md' | 'lg'
+  /** Texto para lectores de pantalla. `null` lo vuelve decorativo (cuando otro elemento anuncia la carga). */
+  label?: string | null
+  tone?: 'primary' | 'muted' | 'current'
+}
+
+export interface SkeletonProps extends React.HTMLAttributes<HTMLSpanElement> {
+  variant?: 'text' | 'circle' | 'block'
+  width?: number | string
+  height?: number | string
+  /** Líneas de texto (solo `text`); la última queda más corta. */
+  lines?: number
+}
+
+export type TagTone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+
+export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
+  tone?: TagTone
+  icon?: IconSlot
+  size?: 'sm' | 'md'
+  /** Muestra el botón para quitar el tag. */
+  onRemove?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  /** Nombre accesible del botón de quitar. Por defecto «Quitar {texto}». */
+  removeLabel?: string
+  disabled?: boolean
+}

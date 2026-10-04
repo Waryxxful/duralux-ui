@@ -1,0 +1,26 @@
+/* Drawer (gcu-drawer): <dialog open> lateral sobre la pila modal. Elevación 4; overlay
+   --gcu-overlay; z-index --gcu-z-drawer (Modal queda encima). Entra con gcu-enter y sale más
+   rápido (--gcu-duration-fast). Cabecera y pie fijos; el cuerpo se desplaza y es contenedor. */
+.gcu-drawer-root{position:fixed;inset:0;z-index:var(--gcu-z-drawer)}
+.gcu-drawer__overlay{position:absolute;inset:0;inline-size:100%;block-size:100%;margin:0;padding:0;border:0;background-color:var(--gcu-overlay);cursor:default;animation:gcu-drawer-fade var(--gcu-duration-base) var(--gcu-ease-enter)}
+.gcu-drawer{--gcu-drawer-w:32rem;position:absolute;inset-block:0;inset-inline-start:auto;inset-inline-end:0;display:flex;flex-direction:column;inline-size:min(var(--gcu-drawer-w),100vw);max-inline-size:100vw;block-size:100%;max-block-size:none;margin:0;padding:0;border:0;border-inline-start:1px solid var(--gcu-border);background-color:var(--gcu-surface-raised);color:var(--gcu-text);box-shadow:var(--gcu-shadow-4);animation:gcu-enter var(--gcu-duration-base) var(--gcu-ease-enter)}
+.gcu-drawer:focus{outline:0}
+.gcu-drawer--sm{--gcu-drawer-w:24rem}
+.gcu-drawer--lg{--gcu-drawer-w:48rem}
+.gcu-drawer--start{inset-inline-start:0;inset-inline-end:auto;border-inline-start:0;border-inline-end:1px solid var(--gcu-border)}
+.gcu-drawer-root[data-state="closing"]{pointer-events:none}
+.gcu-drawer-root[data-state="closing"] .gcu-drawer{animation:gcu-exit var(--gcu-duration-fast) var(--gcu-ease-exit) forwards}
+.gcu-drawer-root[data-state="closing"] .gcu-drawer__overlay{animation:gcu-drawer-fade-out var(--gcu-duration-fast) var(--gcu-ease-exit) forwards}
+.gcu-drawer__header{display:flex;flex:none;align-items:flex-start;gap:var(--gcu-space-3);padding:var(--gcu-space-4) var(--gcu-space-5);border-bottom:1px solid var(--gcu-border)}
+.gcu-drawer__heading{flex:1 1 auto;min-inline-size:0}
+.gcu-drawer__title{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-lg);line-height:var(--gcu-line-height-lg);font-weight:var(--gcu-font-weight-semibold);text-wrap:balance}
+.gcu-drawer__description{margin:var(--gcu-space-0-5) 0 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-drawer__close{flex:none;margin-block-start:var(--gcu-space-0-5)}
+.gcu-drawer__body{container-type:inline-size;flex:1 1 auto;min-block-size:0;padding:var(--gcu-space-5)}
+.gcu-drawer__footer{display:flex;flex:none;flex-wrap:wrap;justify-content:flex-end;gap:var(--gcu-space-2);padding:var(--gcu-space-3) var(--gcu-space-5);border-top:1px solid var(--gcu-border);background-color:var(--gcu-surface-raised)}
+/* Ayuda de disposición: campos en 2 columnas cuando el cuerpo mide 28rem o más. */
+.gcu-drawer-columns{display:grid;gap:var(--gcu-space-3)}
+@container (min-width:28rem){.gcu-drawer-columns{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@keyframes gcu-drawer-fade{from{opacity:0}to{opacity:1}}
+@keyframes gcu-drawer-fade-out{from{opacity:1}to{opacity:0}}
+@media (prefers-reduced-motion:reduce){.gcu-drawer,.gcu-drawer__overlay,.gcu-drawer-root[data-state="closing"] .gcu-drawer,.gcu-drawer-root[data-state="closing"] .gcu-drawer__overlay{animation:none}}

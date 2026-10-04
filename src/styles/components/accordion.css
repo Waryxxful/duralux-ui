@@ -1,0 +1,21 @@
+/* Accordion (gcu-accordion): patrón APG. La altura se anima con grid-template-rows 0fr → 1fr
+   (sin medir en JS); cerrado queda inert y visibility:hidden al terminar la transición.
+   Títulos con hover instantáneo; con reduced-motion todo es inmediato (tokens). */
+.gcu-accordion{container-type:inline-size;border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface)}
+.gcu-accordion--flush{border:0;border-radius:0;background-color:transparent}
+.gcu-accordion__item+.gcu-accordion__item{border-top:1px solid var(--gcu-border)}
+.gcu-accordion__heading{margin:0;font-size:inherit;line-height:inherit}
+.gcu-accordion__trigger{display:flex;align-items:center;gap:var(--gcu-space-3);inline-size:100%;min-block-size:var(--gcu-control-h-lg);padding:var(--gcu-space-3) var(--gcu-space-4);border:0;border-radius:max(0px,calc(var(--gcu-radius-lg) - 1px));background:transparent;color:var(--gcu-text);font:inherit;font-size:var(--gcu-font-size-base);line-height:var(--gcu-line-height-base);font-weight:var(--gcu-font-weight-semibold);text-align:start;cursor:pointer;transition:none}
+.gcu-accordion--flush .gcu-accordion__trigger{padding-inline:0;border-radius:0}
+.gcu-accordion__title{flex:1 1 auto;min-inline-size:0;text-wrap:balance}
+.gcu-accordion__chevron{flex:none;color:var(--gcu-muted);transition:transform var(--gcu-duration-base) var(--gcu-ease-standard)}
+.gcu-accordion__item[data-state="open"] .gcu-accordion__chevron{transform:rotate(180deg)}
+@media (hover:hover){.gcu-accordion__trigger:hover:not(:disabled){background-color:var(--gcu-surface-subtle)}.gcu-accordion--flush .gcu-accordion__trigger:hover:not(:disabled){background-color:transparent;color:var(--gcu-primary-text)}}
+.gcu-accordion__trigger:focus-visible{position:relative;z-index:1;outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-accordion__trigger:disabled{color:var(--gcu-text-subtle);cursor:not-allowed}
+.gcu-accordion__panel{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows var(--gcu-duration-base) var(--gcu-ease-standard),visibility 0s linear var(--gcu-duration-base)}
+.gcu-accordion__panel[data-state="open"]{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows var(--gcu-duration-base) var(--gcu-ease-standard),visibility 0s}
+.gcu-accordion__clip{min-block-size:0;overflow:hidden}
+.gcu-accordion__body{padding:0 var(--gcu-space-4) var(--gcu-space-4);color:var(--gcu-text);font-size:var(--gcu-font-size-base);line-height:var(--gcu-line-height-base)}
+.gcu-accordion--flush .gcu-accordion__body{padding-inline:0}
+@media (forced-colors:active){.gcu-accordion__trigger:focus-visible{outline:2px solid currentColor}}
