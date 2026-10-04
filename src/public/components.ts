@@ -65,6 +65,9 @@ export { RankList } from '../components/composition/RankList'
 export { QuickTiles } from '../components/composition/QuickTiles'
 export { ProcessSteps } from '../components/composition/ProcessSteps'
 export { AppStatusCard } from '../components/composition/AppStatusCard'
+export { Spotlight } from '../components/composition/Spotlight'
+export { WelcomeBand } from '../components/composition/WelcomeBand'
+export { DashGrid } from '../components/composition/DashGrid'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -263,4 +266,11 @@ export type {
   ProcessStepsProps,
   AppStatus,
   AppStatusCardProps,
+  ColorSurfaceTone,
+  SpotlightProps,
+  WelcomeBandProps,
+  WelcomeBandStat,
+  DashGridSpan,
+  DashGridProps,
+  DashGridRowProps,
 } from './types'

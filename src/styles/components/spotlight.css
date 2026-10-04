@@ -1,0 +1,25 @@
+/* Spotlight y WelcomeBand: superficies de color con grano (.gcu-grain) y texto blanco (--gcu-on-darken).
+   Rellenos profundos de la paleta (≈ 7:1 con blanco) que no cambian entre claro, oscuro y navy,
+   igual que ColoredStatCard. Una por página cada una. Sin .card / .bg-*: el tema les fuerza prioridad. */
+.gcu-spotlight,.gcu-welcome-band{--gcu-surface-fill:var(--gcu-primary-600);height:100%;border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface-fill);color:var(--gcu-on-darken);box-shadow:var(--gcu-shadow-1)}
+.gcu-spotlight--primary,.gcu-welcome-band--primary{--gcu-surface-fill:var(--gcu-primary-600)}
+.gcu-spotlight--indigo,.gcu-welcome-band--indigo{--gcu-surface-fill:var(--gcu-indigo-600)}
+.gcu-spotlight--dark,.gcu-welcome-band--dark{--gcu-surface-fill:var(--gcu-slate-800)}
+.gcu-spotlight--danger,.gcu-welcome-band--danger{--gcu-surface-fill:var(--gcu-danger-700)}
+.gcu-spotlight--success,.gcu-welcome-band--success{--gcu-surface-fill:var(--gcu-success-800)}
+.gcu-spotlight--info,.gcu-welcome-band--info{--gcu-surface-fill:var(--gcu-info-800)}
+.gcu-spotlight--teal,.gcu-welcome-band--teal{--gcu-surface-fill:var(--gcu-teal-800)}
+
+/* Spotlight: etiqueta, cifra grande, variación sobre vidrio sombreado, contexto y gráfico. */
+.gcu-spotlight__body{display:flex;flex-direction:column;gap:var(--gcu-space-2);height:100%;padding:var(--gcu-space-5)}
+.gcu-spotlight__label{margin:0;font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium)}
+.gcu-spotlight .gcu-stat__value,.gcu-spotlight .gcu-stat__unit,.gcu-spotlight .gcu-stat__context,.gcu-spotlight .gcu-stat-delta__label{color:inherit}
+.gcu-spotlight .gcu-spotlight__value{font-size:var(--gcu-font-size-3xl);line-height:var(--gcu-line-height-3xl);min-height:var(--gcu-line-height-3xl)}
+.gcu-spotlight__meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2) var(--gcu-space-3)}
+.gcu-spotlight .gcu-stat-delta__value.gcu-spotlight__glass{border:1px solid color-mix(in srgb,currentColor 22%,transparent);background-color:rgba(var(--gcu-darken-rgb),.14);color:inherit}
+.gcu-spotlight__chart{margin-top:auto;padding-top:var(--gcu-space-2);min-width:0}
+.gcu-spotlight .gcu-skeleton{opacity:.4}
+
+@container (min-width: 20rem){
+  .gcu-spotlight__body{padding:var(--gcu-space-6)}
+}

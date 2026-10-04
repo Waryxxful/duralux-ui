@@ -1,0 +1,18 @@
+/* WelcomeBand: texto (antetítulo, título que nombra la tarea, bajada y acciones) y cifras sobre vidrio.
+   El relleno, el grano y el texto blanco son los de spotlight.css (mismas superficies de color). */
+.gcu-welcome-band__body{display:flex;flex-direction:column;gap:var(--gcu-space-5);padding:var(--gcu-space-5)}
+.gcu-welcome-band__text{display:flex;flex-direction:column;gap:var(--gcu-space-2);min-width:0;max-width:68ch}
+.gcu-welcome-band__eyebrow{margin:0;font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-caps);text-transform:uppercase}
+.gcu-welcome-band__title{margin:0;color:inherit;font-size:var(--gcu-font-size-xl);line-height:var(--gcu-line-height-xl);font-weight:var(--gcu-font-weight-semibold);text-wrap:balance}
+.gcu-welcome-band__lede{margin:0;font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-welcome-band__actions{display:flex;flex-wrap:wrap;gap:var(--gcu-space-2);margin-top:var(--gcu-space-2)}
+.gcu-welcome-band__stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(7rem,1fr));gap:var(--gcu-space-3);margin:0}
+.gcu-welcome-band__stat{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);padding:var(--gcu-space-3);border:1px solid color-mix(in srgb,currentColor 22%,transparent);border-radius:var(--gcu-radius-md);background-color:rgba(var(--gcu-darken-rgb),.14)}
+.gcu-welcome-band__stat dt{font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium)}
+.gcu-welcome-band__stat dd{margin:0;font-size:var(--gcu-font-size-xl);line-height:var(--gcu-line-height-xl);font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums}
+
+@container (min-width: 42rem){
+  .gcu-welcome-band__body{flex-direction:row;align-items:center;justify-content:space-between;gap:var(--gcu-space-8);padding:var(--gcu-space-6) var(--gcu-space-8)}
+  .gcu-welcome-band__title{font-size:var(--gcu-font-size-2xl);line-height:var(--gcu-line-height-2xl)}
+  .gcu-welcome-band__stats{flex:0 0 auto;grid-auto-flow:column;grid-auto-columns:minmax(7rem,auto);grid-template-columns:none}
+}
