@@ -13,7 +13,7 @@ Una guía por app consumidora. Cada guía indica el SHA que fija hoy, qué cambi
 | Tablero TI | `tablero-ti/frontend` | `b2f945d` | 2.0.0 | remoto | sí | [tablero-ti.md](tablero-ti.md) |
 | Dashboard de cupos | `dashboard-cupos` | `b2f945d` | 2.0.0 | remoto | no | [dashboard-cupos.md](dashboard-cupos.md) |
 | Chat (dock) | `chat/frontend` | `b2f945d` | 2.0.0 | remoto | no | [chat.md](chat.md) |
-| Chat (copia antigua) | `chat-frontend` | `b2f945d` | 2.0.0 | remoto | no | [chat-frontend.md](chat-frontend.md) |
+| Chat remoto (`chat-remote`) | `chat-frontend` | `b2f945d` | 2.0.0 | remoto | no | [chat-frontend.md](chat-frontend.md) |
 | WSP Platform | `wsp_platform/frontend` | `2b968ad` | 2.0.0 | remoto | no | [wsp_platform.md](wsp_platform.md) |
 | WSP Demo | `wsp_demo/frontend` | `89b1681` | 1.0.0 | remoto | no | [wsp_demo.md](wsp_demo.md) |
 | WSP Pompeyo | `wsp_pompeyo/frontend` | `file:./vendor/duralux-ui` (dist del 2026-06-26) | anterior a 1.0 | remoto | no | [wsp_pompeyo.md](wsp_pompeyo.md) |
