@@ -1729,9 +1729,17 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
 /** Estado de un paso, herramienta o tarea de un agente. Siempre se muestra con texto e ícono, nunca solo color. */
 export type AgentStepStatus = 'queued' | 'running' | 'done' | 'failed'
 
+export interface ReasoningStep {
+  id: string
+  text: React.ReactNode
+}
+
+/** Un paso de razonamiento: texto simple o `{ id, text }` cuando el contenido no es texto. */
+export type ReasoningStepInput = string | ReasoningStep
+
 export interface ReasoningTraceProps extends Omit<React.HTMLAttributes<HTMLDetailsElement>, 'children' | 'onToggle'> {
   /** Pasos del razonamiento, en orden. */
-  steps: ReadonlyArray<React.ReactNode>
+  steps: ReadonlyArray<ReasoningStepInput>
   /** Segundos que tardó en razonar (al terminar). Mientras `thinking`, se cuenta en vivo. */
   seconds?: number
   /** Está razonando: se abre, cuenta el tiempo y muestra un paso pendiente. */

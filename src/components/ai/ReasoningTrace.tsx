@@ -2,8 +2,8 @@ import { forwardRef, useEffect, useState } from 'react'
 import type * as React from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
-import { isArray } from '../../utils/typeGuards'
-import type { ReasoningTraceProps } from '../../public/types'
+import { isArray, isObject } from '../../utils/typeGuards'
+import type { ReasoningStep, ReasoningStepInput, ReasoningTraceProps } from '../../public/types'
 
 /** Segundos transcurridos mientras `active`; vuelve a 0 al reactivarse. Privado de este archivo. */
 function useLiveSeconds(active: boolean): number {
@@ -18,8 +18,20 @@ function useLiveSeconds(active: boolean): number {
   return seconds
 }
 
+/** Clave estable por paso: `id` si lo trae; si es texto, el texto y su número de aparición. */
+function keyedSteps(steps: ReadonlyArray<ReasoningStepInput>): Array<{ key: string; text: React.ReactNode }> {
+  const seen = new Map<string, number>()
+  return steps.map((step) => {
+    const isObj = isObject(step) && 'text' in step && 'id' in step
+    const base = isObj ? `id:${(step as ReasoningStep).id}` : `t:${String(step)}`
+    const count = (seen.get(base) ?? 0) + 1
+    seen.set(base, count)
+    return { key: `${base}#${count}`, text: isObj ? (step as ReasoningStep).text : (step as React.ReactNode) }
+  })
+}
+
 /**
- * ReasoningTrace — razonamiento del asistente, plegable, con tiempo y pasos numerados.
+ * ReasoningTrace —razonamiento del asistente, plegable, con tiempo y pasos numerados.
  *
  * - `<details>` nativo: teclado y lector de pantalla sin ARIA extra.
  * - thinking: se abre solo, cuenta el tiempo en vivo y muestra un paso pendiente; si la persona
@@ -42,10 +54,13 @@ export const ReasoningTrace = /* @__PURE__ */ forwardRef<HTMLDetailsElement, Rea
   const live = useLiveSeconds(thinking)
   const shownSeconds = thinking ? live : seconds ?? 0
   const [open, setOpen] = useState(defaultOpen || thinking)
-
-  useEffect(() => {
+  const [prevThinking, setPrevThinking] = useState(thinking)
+  // Al empezar a pensar se abre; se ajusta durante el render (sin efecto) para no pintar cerrado un cuadro.
+  if (thinking !== prevThinking) {
+    setPrevThinking(thinking)
     if (thinking) setOpen(true)
-  }, [thinking])
+  }
+  const keyed = keyedSteps(list)
 
   const handleToggle = (event: React.SyntheticEvent<HTMLDetailsElement>) => {
     const next = event.currentTarget.open
@@ -70,11 +85,10 @@ export const ReasoningTrace = /* @__PURE__ */ forwardRef<HTMLDetailsElement, Rea
         <i className="feather-chevron-down gcu-ai-reasoning__chevron" aria-hidden="true" />
       </summary>
       <ol className="gcu-ai-reasoning__steps">
-        {list.map((step, index) => (
-          // Los pasos del razonamiento no tienen id propio y solo se agregan al final: el índice es estable.
-          <li key={`paso-${index}`} className="gcu-ai-reasoning__step">
-            <span className="gcu-ai-reasoning__n gcu-tabular" aria-hidden="true">{index + 1}</span>
-            <span className="gcu-ai-reasoning__text">{step}</span>
+        {keyed.map((step, position) => (
+          <li key={step.key} className="gcu-ai-reasoning__step">
+            <span className="gcu-ai-reasoning__n gcu-tabular" aria-hidden="true">{position + 1}</span>
+            <span className="gcu-ai-reasoning__text">{step.text}</span>
           </li>
         ))}
         {thinking && (
