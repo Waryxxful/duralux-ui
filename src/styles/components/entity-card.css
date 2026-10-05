@@ -21,8 +21,11 @@
 .gcu-entity-card--interactive:has(.gcu-entity-card__link:focus-visible){box-shadow:var(--gcu-focus-ring)}
 .gcu-entity-card--interactive{transition:box-shadow var(--gcu-duration-fast) var(--gcu-ease-standard)}
 @media (hover:hover){.gcu-entity-card--interactive:hover{box-shadow:var(--gcu-shadow-2)}.gcu-entity-card--interactive:hover .gcu-entity-card__link{color:var(--gcu-primary-text)}}
-.gcu-entity-card--inactive .gcu-entity-card__head,.gcu-entity-card--inactive .gcu-entity-card__stats{opacity:.72}
+/* Inactiva: se atenúa el título (el texto secundario ya es --gcu-muted, AA); sin opacidad, que bajaba el contraste de lo secundario. */
+.gcu-entity-card--inactive .gcu-entity-card__title{color:var(--gcu-muted)}
 
 @container (min-width: 24rem){
   .gcu-entity-card__stats{grid-template-columns:repeat(auto-fit,minmax(6rem,1fr))}
 }
+/* Pie con el color del tema: la regla .card .card-footer de la plantilla fija un gris de claro. */
+.card.gcu-entity-card .gcu-entity-card__footer{color:var(--gcu-text)}
