@@ -59,6 +59,17 @@ export function callOptionKey(id: CallId): string {
   return String(id).replace(/[^A-Za-z0-9_-]/g, '_')
 }
 
+/** Atajo del reproductor: Espacio o K reproduce/pausa; J retrocede; L adelanta. */
+export function playerKeyAction(key: string): 'toggle' | 'back' | 'forward' | null {
+  switch (key.toLowerCase()) {
+    case ' ':
+    case 'k': return 'toggle'
+    case 'j': return 'back'
+    case 'l': return 'forward'
+    default: return null
+  }
+}
+
 /** Siguiente velocidad del ciclo (vuelve a la primera al final). */
 export function nextRate(rates: ReadonlyArray<number>, current: number): number {
   if (rates.length === 0) return 1

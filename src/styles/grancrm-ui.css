@@ -57,6 +57,11 @@
 @import "./components/accordion.css";
 @import "./components/drawer.css";
 @import "./components/primitives.css";
+/* 2.7 dominios */
+@import "./components/criterion-row.css";
+@import "./components/transcript.css";
+@import "./components/audio-player.css";
+@import "./components/call-list.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */

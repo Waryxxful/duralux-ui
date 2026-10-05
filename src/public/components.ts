@@ -82,6 +82,12 @@ export { Switch } from '../components/form/Switch'
 export { Fieldset } from '../components/form/Fieldset'
 export { RadioGroup } from '../components/form/RadioGroup'
 export { ChoiceCard } from '../components/form/ChoiceCard'
+// 2.7 dominios
+export { CriterionRow } from '../components/domain/quality/CriterionRow'
+export { Transcript } from '../components/domain/quality/Transcript'
+export { AudioPlayer } from '../components/domain/quality/AudioPlayer'
+export { CallRow } from '../components/domain/quality/CallRow'
+export { CallList } from '../components/domain/quality/CallList'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -309,4 +315,33 @@ export type {
   SkeletonProps,
   TagTone,
   TagProps,
+} from './types'
+
+// 2.7 dominios
+export type {
+  CriterionResult,
+  QualityCriterion,
+  CriterionRowProps,
+  TranscriptSpeaker,
+  TranscriptTurn,
+  TranscriptProps,
+  AudioMark,
+  AudioPlayerProps,
+  CallId,
+  CallSummary,
+  CallRowProps,
+  CallListProps,
+  TargetBarProps,
+  QueueCardProps,
+  AgentPresence,
+  AgentPresenceState,
+  AgentStatusBoardProps,
+  HeatmapProps,
+  ContactFact,
+  ContactCardProps,
+  PipelineDeal,
+  PipelineStage,
+  PipelineBoardProps,
+  FunnelStep,
+  FunnelProps,
 } from './types'

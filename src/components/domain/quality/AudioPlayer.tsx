@@ -6,7 +6,7 @@ import { isFiniteNumber } from '../../../utils/typeGuards'
 import type { AudioMark, AudioPlayerProps } from '../../../public/types'
 import { IconButton } from '../../ui/Button'
 import { clamp, formatDuration, spokenDuration } from '../internal/duration'
-import { nextRate, waveHeights } from './qualityModel'
+import { nextRate, playerKeyAction, waveHeights } from './qualityModel'
 
 const DEFAULT_RATES: ReadonlyArray<number> = [1, 1.25, 1.5, 2]
 const WAVE_BARS = 72
@@ -127,17 +127,11 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
     const target = event.target
     // Los botones y la barra ya responden a sus teclas nativas.
     if (target instanceof HTMLButtonElement || target instanceof HTMLInputElement) return
-    const key = event.key.toLowerCase()
-    if (key === ' ' || key === 'k') {
-      event.preventDefault()
-      toggle()
-    } else if (key === 'j') {
-      event.preventDefault()
-      seek(position - skipSeconds)
-    } else if (key === 'l') {
-      event.preventDefault()
-      seek(position + skipSeconds)
-    }
+    const action = playerKeyAction(event.key)
+    if (!action) return
+    event.preventDefault()
+    if (action === 'toggle') toggle()
+    else seek(position + (action === 'forward' ? skipSeconds : -skipSeconds))
   }
 
   const progress = duration > 0 ? (position / duration) * 100 : 0
@@ -237,19 +231,7 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
       >
         {rateFormat.format(rate)}×
       </button>
-      {markList.length > 0 && (
-        <ul className="gcu-audio__marks" aria-label="Momentos marcados">
-          {markList.map((mark) => (
-            <li key={`jump-${mark.at}-${mark.label}`}>
-              <button type="button" className="gcu-audio__jump" onClick={() => jumpToMark(mark)}>
-                <span className="gcu-audio__jump-time gcu-tabular">{formatDuration(mark.at)}</span>
-                <span className="visually-hidden">: </span>
-                {mark.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <AudioMarkList marks={markList} onJump={jumpToMark} />
       {failed && (
         <p className="gcu-audio__error" role="alert">
           No se pudo reproducir la grabación. Revisa tu conexión y vuelve a intentarlo.
@@ -258,3 +240,21 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
     </div>
   )
 })
+
+/** Botones para saltar a cada momento marcado («1:23 Promesa incumplida»). */
+function AudioMarkList({ marks, onJump }: { marks: ReadonlyArray<AudioMark>; onJump: (mark: AudioMark) => void }) {
+  if (marks.length === 0) return null
+  return (
+    <ul className="gcu-audio__marks" aria-label="Momentos marcados">
+      {marks.map((mark) => (
+        <li key={`jump-${mark.at}-${mark.label}`}>
+          <button type="button" className="gcu-audio__jump" onClick={() => onJump(mark)}>
+            <span className="gcu-audio__jump-time gcu-tabular">{formatDuration(mark.at)}</span>
+            <span className="visually-hidden">: </span>
+            {mark.label}
+          </button>
+        </li>
+      ))}
+    </ul>
+  )
+}
