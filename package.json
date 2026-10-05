@@ -63,8 +63,6 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "typecheck:public": "tsc -p test-types/tsconfig.json",
     "prepare": "npm run build:prepare",
-    "dev:demo": "vite --config demo/vite.config.js",
-    "preview:demo": "vite preview --config demo/vite.config.js",
     "doctor": "react-doctor",
     "gate:doctor": "node scripts/check-doctor.mjs",
     "storybook": "storybook dev -p 6006 --no-open",

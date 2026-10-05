@@ -107,7 +107,7 @@ function sourceFiles(root) {
   return files
 }
 
-export function collectSourceFiles(roots = ['src', 'demo/src'], cwd = process.cwd()) {
+export function collectSourceFiles(roots = ['src'], cwd = process.cwd()) {
   return roots.flatMap((root) => sourceFiles(resolve(cwd, root)))
 }
 
@@ -132,7 +132,7 @@ export function auditText(source, file = '<text>') {
   return violations
 }
 
-export function auditContract({ roots = ['src', 'demo/src'], cwd = process.cwd() } = {}) {
+export function auditContract({ roots = ['src'], cwd = process.cwd() } = {}) {
   const files = collectSourceFiles(roots, cwd)
   const violations = files
     .filter((file) => resolve(file) !== AUDIT_SCRIPT_PATH)

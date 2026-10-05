@@ -1,6 +1,5 @@
 node_modules/
 dist/
-demo/dist/
 .DS_Store
 .impeccable/
 storybook-static
