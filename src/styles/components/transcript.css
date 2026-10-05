@@ -1,0 +1,19 @@
+/* Transcript: turnos con quién habla en texto, marca de tiempo tabular y turno citado
+   con borde de inicio + etiqueta «Turno citado» (forma y texto, no solo color). */
+.gcu-transcript{position:relative;border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface)}
+.gcu-transcript:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-transcript__list{display:flex;flex-direction:column;gap:var(--gcu-space-2);margin:0;padding:var(--gcu-space-3);list-style:none}
+.gcu-transcript__skeleton{height:var(--gcu-space-10)}
+.gcu-transcript__empty{margin:0;padding:var(--gcu-space-6) var(--gcu-space-4);color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);text-align:center}
+.gcu-turn{display:flex;flex-direction:column;gap:var(--gcu-space-1);max-width:min(100%,68ch);padding:var(--gcu-space-2) var(--gcu-space-3);border-radius:var(--gcu-radius-lg);border:1px solid transparent}
+.gcu-turn--agent{align-self:flex-start;background-color:var(--gcu-surface-sunken)}
+.gcu-turn--client{align-self:flex-end;background-color:var(--gcu-primary-soft)}
+.gcu-turn--flagged{border-color:var(--gcu-warning-border);border-inline-start:3px solid var(--gcu-status-warning)}
+.gcu-turn__head{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-turn__who{font-weight:var(--gcu-font-weight-semibold);color:var(--gcu-text)}
+.gcu-turn__time{padding:0;border:0;background:none;color:var(--gcu-muted);font-size:inherit;line-height:inherit}
+button.gcu-turn__time{color:var(--gcu-primary-text);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+button.gcu-turn__time:focus-visible{outline:0;border-radius:var(--gcu-radius-xs);box-shadow:var(--gcu-focus-ring)}
+.gcu-turn__flag{padding:0 var(--gcu-space-1);border-radius:var(--gcu-radius-sm);background-color:var(--gcu-warning-soft);color:var(--gcu-warning-text);font-weight:var(--gcu-font-weight-medium)}
+.gcu-turn__text{color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);overflow-wrap:anywhere}
+.gcu-turn__mark{padding:0 var(--gcu-space-0-5);border-radius:var(--gcu-radius-xs);background-color:var(--gcu-warning-soft);color:var(--gcu-warning-text)}

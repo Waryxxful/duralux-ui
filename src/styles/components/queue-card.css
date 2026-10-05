@@ -1,0 +1,15 @@
+/* QueueCard: tres cifras en vivo + nivel de servicio. Crítica: borde de inicio + texto (Severity).
+   Angosta: las cifras van en dos columnas; desde 20rem, en tres. */
+.gcu-queue{position:relative;height:100%;margin-bottom:0}
+.gcu-queue--critical::before{content:"";position:absolute;inset-block:0;inset-inline-start:0;width:3px;border-start-start-radius:inherit;border-end-start-radius:inherit;background-color:var(--gcu-status-danger);pointer-events:none}
+.gcu-queue__body{display:flex;flex-direction:column;gap:var(--gcu-space-3)}
+.gcu-queue__head{display:flex;align-items:center;justify-content:space-between;gap:var(--gcu-space-2);min-width:0}
+.gcu-queue__name{margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--gcu-text);font-size:var(--gcu-font-size-md);line-height:var(--gcu-line-height-md);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-queue__stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gcu-space-3);margin:0}
+.gcu-queue__stat dt{display:flex;align-items:center;gap:var(--gcu-space-1);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium)}
+.gcu-queue__stat dd{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-xl);line-height:var(--gcu-line-height-xl);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-queue__stat--bad dd{color:var(--gcu-danger-text)}
+
+@container (min-width: 20rem){
+  .gcu-queue__stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+}

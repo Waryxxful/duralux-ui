@@ -85,6 +85,19 @@ export { PageHeader } from '../components/layout/PageHeader'
 export { AuthLayout } from '../components/layout/AuthLayout'
 export { ThemeToggle } from '../components/shell/ThemeToggle'
 export { CommandPalette } from '../components/shell/CommandPalette'
+// 2.7 dominios
+export { CriterionRow } from '../components/domain/quality/CriterionRow'
+export { Transcript } from '../components/domain/quality/Transcript'
+export { AudioPlayer } from '../components/domain/quality/AudioPlayer'
+export { CallRow } from '../components/domain/quality/CallRow'
+export { CallList } from '../components/domain/quality/CallList'
+export { TargetBar } from '../components/domain/operations/TargetBar'
+export { QueueCard } from '../components/domain/operations/QueueCard'
+export { AgentStatusBoard } from '../components/domain/operations/AgentStatusBoard'
+export { Heatmap } from '../components/domain/operations/Heatmap'
+export { ContactCard } from '../components/domain/crm/ContactCard'
+export { PipelineBoard } from '../components/domain/crm/PipelineBoard'
+export { Funnel } from '../components/domain/crm/Funnel'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -312,4 +325,33 @@ export type {
   ThemeToggleProps,
   CommandPaletteItem,
   CommandPaletteProps,
+} from './types'
+
+// 2.7 dominios
+export type {
+  CriterionResult,
+  QualityCriterion,
+  CriterionRowProps,
+  TranscriptSpeaker,
+  TranscriptTurn,
+  TranscriptProps,
+  AudioMark,
+  AudioPlayerProps,
+  CallId,
+  CallSummary,
+  CallRowProps,
+  CallListProps,
+  TargetBarProps,
+  QueueCardProps,
+  AgentPresence,
+  AgentPresenceState,
+  AgentStatusBoardProps,
+  HeatmapProps,
+  ContactFact,
+  ContactCardProps,
+  PipelineDeal,
+  PipelineStage,
+  PipelineBoardProps,
+  FunnelStep,
+  FunnelProps,
 } from './types'

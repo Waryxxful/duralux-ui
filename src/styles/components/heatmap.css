@@ -1,0 +1,21 @@
+/* Heatmap: tabla con escala de 5 niveles de --gcu-status-primary mezclado sobre la superficie.
+   Niveles 0–3 con texto del tema; el 4 (relleno pleno) con texto inverso: AA en los tres temas.
+   El máximo lleva borde además del tono. La tabla se desplaza dentro de su contenedor. */
+.gcu-heatmap{--gcu-heat-ink:var(--gcu-status-primary);display:flex;flex-direction:column;gap:var(--gcu-space-3);min-width:0}
+.gcu-heatmap__scroll{max-width:100%}
+.gcu-heatmap__table{border-collapse:separate;border-spacing:2px;font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-heatmap__caption{caption-side:top;padding:0 0 var(--gcu-space-2);color:var(--gcu-text);font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-semibold);text-align:start}
+.gcu-heatmap__col,.gcu-heatmap__row{padding:var(--gcu-space-1);color:var(--gcu-muted);font-weight:var(--gcu-font-weight-medium);white-space:nowrap}
+.gcu-heatmap__col{text-align:center}
+.gcu-heatmap__row{text-align:start;padding-inline-end:var(--gcu-space-2)}
+.gcu-heatmap__cell{min-width:var(--gcu-control-h-md);height:var(--gcu-control-h-sm);padding:0 var(--gcu-space-1);border-radius:var(--gcu-radius-sm);color:var(--gcu-text);font-variant-numeric:tabular-nums;text-align:center}
+.gcu-heatmap__cell--empty{background-color:var(--gcu-surface-sunken);color:var(--gcu-muted)}
+.gcu-heatmap__cell--l0{background-color:color-mix(in srgb,var(--gcu-heat-ink) 6%,var(--gcu-surface))}
+.gcu-heatmap__cell--l1{background-color:color-mix(in srgb,var(--gcu-heat-ink) 18%,var(--gcu-surface))}
+.gcu-heatmap__cell--l2{background-color:color-mix(in srgb,var(--gcu-heat-ink) 30%,var(--gcu-surface))}
+.gcu-heatmap__cell--l3{background-color:color-mix(in srgb,var(--gcu-heat-ink) 42%,var(--gcu-surface))}
+.gcu-heatmap__cell--l4{background-color:var(--gcu-heat-ink);color:var(--gcu-text-inverse);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-heatmap__cell--max{box-shadow:inset 0 0 0 2px var(--gcu-text)}
+.gcu-heatmap__legend{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-1) var(--gcu-space-3);margin:0;padding:0;list-style:none;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-heatmap__legend-item{display:inline-flex;align-items:center;gap:var(--gcu-space-1)}
+.gcu-heatmap__swatch{display:inline-block;width:var(--gcu-space-3);height:var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-xs)}

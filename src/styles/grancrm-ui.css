@@ -60,6 +60,18 @@
 @import "./components/navigation.css";
 @import "./components/command-palette.css";
 @import "./components/shell-layout.css";
+/* 2.7 dominios */
+@import "./components/criterion-row.css";
+@import "./components/transcript.css";
+@import "./components/audio-player.css";
+@import "./components/call-list.css";
+@import "./components/target-bar.css";
+@import "./components/queue-card.css";
+@import "./components/agent-status-board.css";
+@import "./components/heatmap.css";
+@import "./components/contact-card.css";
+@import "./components/pipeline-board.css";
+@import "./components/funnel.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */

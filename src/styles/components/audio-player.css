@@ -1,0 +1,27 @@
+/* AudioPlayer: controles, barra nativa (con onda decorativa opcional detrás), tiempo tabular,
+   velocidad y marcas. Angosto: la barra ocupa su propia fila; desde 28rem todo va en una línea. */
+.gcu-audio{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"controls time rate" "track track track" "marks marks marks" "error error error";align-items:center;gap:var(--gcu-space-2) var(--gcu-space-3);padding:var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface)}
+.gcu-audio:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-audio__controls{grid-area:controls;display:flex;align-items:center;gap:var(--gcu-space-1)}
+.gcu-audio__track{grid-area:track;position:relative;display:flex;align-items:center;min-width:0;height:var(--gcu-control-h-md)}
+.gcu-audio__wave{position:absolute;inset:0;display:flex;align-items:center;gap:1px;pointer-events:none}
+.gcu-audio__wave i{flex:1;min-width:1px;border-radius:var(--gcu-radius-xs);background-color:var(--gcu-border-strong)}
+.gcu-audio__wave i.is-played{background-color:var(--gcu-status-primary)}
+.gcu-audio__mark{position:absolute;top:0;bottom:0;width:2px;margin-inline-start:-1px;border-radius:var(--gcu-radius-xs);background-color:var(--gcu-status-danger);pointer-events:none}
+.gcu-audio__mark::before{content:"";position:absolute;top:calc(var(--gcu-space-1) * -1);left:50%;width:var(--gcu-space-2);height:var(--gcu-space-2);background-color:var(--gcu-status-danger);transform:translateX(-50%) rotate(45deg)}
+.gcu-audio__range{position:relative;width:100%;height:var(--gcu-space-1);margin:0;border-radius:var(--gcu-radius-full);appearance:none;background:linear-gradient(to right,var(--gcu-status-primary) var(--gcu-audio-progress,0%),var(--gcu-border-strong) var(--gcu-audio-progress,0%));cursor:pointer}
+.gcu-audio--wave .gcu-audio__range{height:100%;background:transparent}
+.gcu-audio__range::-webkit-slider-thumb{appearance:none;width:var(--gcu-space-4);height:var(--gcu-space-4);border:2px solid var(--gcu-surface);border-radius:var(--gcu-radius-full);background-color:var(--gcu-status-primary);box-shadow:var(--gcu-shadow-1)}
+.gcu-audio__range::-moz-range-thumb{width:var(--gcu-space-4);height:var(--gcu-space-4);border:2px solid var(--gcu-surface);border-radius:var(--gcu-radius-full);background-color:var(--gcu-status-primary);box-shadow:var(--gcu-shadow-1)}
+.gcu-audio__range:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-audio__time{grid-area:time;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);white-space:nowrap}
+.gcu-audio__rate{grid-area:rate;min-width:var(--gcu-control-h-lg)}
+.gcu-audio__marks{grid-area:marks;display:flex;flex-wrap:wrap;gap:var(--gcu-space-1) var(--gcu-space-2);margin:0;padding:0;list-style:none}
+.gcu-audio__jump{display:inline-flex;align-items:center;gap:var(--gcu-space-1);padding:var(--gcu-space-0-5) var(--gcu-space-2);border:1px solid var(--gcu-danger-border);border-radius:var(--gcu-radius-full);background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);cursor:pointer}
+.gcu-audio__jump:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-audio__jump-time{font-weight:var(--gcu-font-weight-semibold)}
+.gcu-audio__error{grid-area:error;margin:0;color:var(--gcu-danger-text);font-size:var(--gcu-font-size-sm)}
+
+@container (min-width: 28rem){
+  .gcu-audio{grid-template-columns:auto minmax(0,1fr) auto auto;grid-template-areas:"controls track time rate" "marks marks marks marks" "error error error error"}
+}
