@@ -36,6 +36,6 @@ Verifica visualmente en Storybook (`npm run storybook`) en claro, oscuro y navy.
 
 ## Referencias
 
-- `docs/PRINCIPIOS.md`, `docs/REGLAS-DE-DISENO.md`, `docs/TOKENS.md`, `docs/ICONOGRAFIA.md`
+- `docs/PRINCIPIOS.md`, `docs/REGLAS-DE-DISENO.md`, `docs/PATRONES.md` (estructura de página), `docs/TOKENS.md`, `docs/ICONOGRAFIA.md`
 - `tokens/tokens.json` (fuente de tokens)
 - `docs/auditoria/DEFECTOS.md` (defectos conocidos)
