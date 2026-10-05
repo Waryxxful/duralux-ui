@@ -5,16 +5,13 @@ import type { VoiceInputProps } from '../../public/types'
 import { formatCountdown } from './internal/aiFormat'
 import { useElapsed } from './internal/useElapsed'
 
-type SpeechGlobals = { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }
-
 let warnedUnsupported = false
 
 /** ¿El navegador tiene Web Speech API? Solo en el cliente (en SSR se asume que no). */
-export function hasSpeechRecognition(): boolean {
-  if (typeof window === 'undefined') return false
-  // SAFETY: SpeechRecognition no está en lib.dom; se consulta como propiedad opcional.
-  const w = window as unknown as SpeechGlobals
-  return Boolean(w.SpeechRecognition || w.webkitSpeechRecognition)
+function hasSpeechRecognition(): boolean {
+  if (!('window' in globalThis)) return false
+  // SpeechRecognition no está en lib.dom: se consulta como propiedad del global.
+  return 'SpeechRecognition' in globalThis || 'webkitSpeechRecognition' in globalThis
 }
 
 /**

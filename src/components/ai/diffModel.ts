@@ -85,7 +85,12 @@ export function keyedDiff(parts: ReadonlyArray<DiffPart>): Array<DiffPart & { ke
 }
 
 /** Cantidad de fragmentos agregados y borrados. */
-export function diffStats(parts: ReadonlyArray<DiffPart>): { added: number; removed: number } {
+export interface DiffStats {
+  added: number
+  removed: number
+}
+
+export function diffStats(parts: ReadonlyArray<DiffPart>): DiffStats {
   let added = 0
   let removed = 0
   for (const part of parts) {

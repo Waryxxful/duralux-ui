@@ -415,6 +415,8 @@ export type {
   SuggestionBannerProps,
   // 2.8 IA agente y contenido
   AgentStepStatus,
+  AiJsonValue,
+  AiToolArgs,
   ReasoningStep,
   ReasoningStepInput,
   ReasoningTraceProps,

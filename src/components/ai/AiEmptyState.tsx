@@ -19,6 +19,7 @@ export const AiEmptyState = /* @__PURE__ */ forwardRef<HTMLDivElement, AiEmptySt
   ref,
 ) {
   if (suggestions.length > 4) log.warn(`AiEmptyState: ${suggestions.length} sugerencias; muestra 3 o 4 para no abrumar.`)
+  // SAFETY: headingLevel está tipado 2 | 3 | 4, así que la etiqueta es h2, h3 o h4.
   const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4'
   return (
     <div {...rest} ref={ref} className={cx('gcu-ai-empty', 'gcu-container', align === 'center' && 'gcu-ai-empty--center', className)}>

@@ -14,11 +14,11 @@ const MODES: ReadonlyArray<{ mode: ThemeToggleMode; label: string; icon: string 
   { mode: 'system', label: 'Sistema', icon: 'monitor' },
 ];
 
-const RESOLVED_LABEL: Record<ThemeToggleResolved, string> = {
+const RESOLVED_LABEL = {
   light: 'claro',
   dark: 'oscuro',
   navy: 'azul marino',
-};
+} satisfies Record<ThemeToggleResolved, string>;
 
 /** El aviso «sin ThemeProvider» se emite una sola vez, no en cada render. */
 const warnedWithoutProvider = { value: false };

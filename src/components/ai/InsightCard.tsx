@@ -7,6 +7,8 @@ import type { InsightCardProps } from '../../public/types'
 
 type BarStyle = React.CSSProperties & { '--gcu-ai-bar': string }
 
+const barStyle = (height: string): BarStyle => ({ '--gcu-ai-bar': height })
+
 /** Alturas relativas al rango real (20–100 %) para que la variación se vea aunque los valores sean parecidos. */
 function barHeights(series: ReadonlyArray<number>): Array<{ key: string; height: string; last: boolean }> {
   const values = series.filter((value) => isFiniteNumber(value))
@@ -65,7 +67,7 @@ export const InsightCard = /* @__PURE__ */ forwardRef<HTMLElement, InsightCardPr
               <span
                 key={bar.key}
                 className={cx('gcu-ai-insight__bar', bar.last && 'gcu-ai-insight__bar--last')}
-                style={{ '--gcu-ai-bar': bar.height } as BarStyle}
+                style={barStyle(bar.height)}
               />
             ))}
           </span>

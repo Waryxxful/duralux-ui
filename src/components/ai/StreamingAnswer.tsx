@@ -1,4 +1,4 @@
-import { Fragment, forwardRef, useEffect, useId, useMemo, useRef } from 'react'
+import { Fragment, forwardRef, useEffect, useId, useMemo, useState } from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import type { AiSource, StreamingAnswerProps } from '../../public/types'
@@ -34,10 +34,14 @@ export const StreamingAnswer = /* @__PURE__ */ forwardRef<HTMLDivElement, Stream
 }, ref) {
   const idPrefix = `gcu-ai-src-${useId().replace(/:/g, '')}`
   const byId = useMemo(() => new Map(sources.map((source) => [source.id, source])), [sources])
-  const blocks = splitBlocks(text)
-  const wasStreaming = useRef(streaming)
-  if (streaming) wasStreaming.current = true
-  const announced = wasStreaming.current ? completedBlocks(text, streaming) : []
+  // Respuesta que crece por el final: la posición de cada bloque es su identidad.
+  const blocks = splitBlocks(text).map((value, order) => ({ id: `bloque-${order}`, value }))
+  // Solo se anuncian bloques de una respuesta que se vio generarse (no de una ya completa al montar).
+  const [wasStreaming, setWasStreaming] = useState(streaming)
+  if (streaming && !wasStreaming) setWasStreaming(true)
+  const announced = wasStreaming
+    ? completedBlocks(text, streaming).map((value, order) => ({ id: `anuncio-${order}`, value }))
+    : []
 
   useEffect(() => {
     if (streaming) return
@@ -54,14 +58,15 @@ export const StreamingAnswer = /* @__PURE__ */ forwardRef<HTMLDivElement, Stream
       <div className="gcu-ai-answer__text" aria-busy={streaming || undefined}>
         {blocks.map((block, index) => {
           const last = index === blocks.length - 1
+          const parts = parseCitations(block.value).map((part, order) => ({ ...part, key: `${block.id}-${order}` }))
           return (
-            <p key={`bloque-${index}`} className="gcu-ai-answer__block">
-              {parseCitations(block).map((part, i) => {
-                if (part.kind === 'text') return <Fragment key={i}>{part.value}</Fragment>
+            <p key={block.id} className="gcu-ai-answer__block">
+              {parts.map((part) => {
+                if (part.kind === 'text') return <Fragment key={part.key}>{part.value}</Fragment>
                 const source = byId.get(part.id)
                 return source
-                  ? <Citation key={i} source={source} targetId={streaming ? undefined : `${idPrefix}-${source.id}`} />
-                  : <Fragment key={i}>[{part.id}]</Fragment>
+                  ? <Citation key={part.key} source={source} targetId={streaming ? undefined : `${idPrefix}-${source.id}`} />
+                  : <Fragment key={part.key}>[{part.id}]</Fragment>
               })}
               {streaming && last && <span className="gcu-ai-answer__caret" aria-hidden="true" />}
             </p>
@@ -70,7 +75,7 @@ export const StreamingAnswer = /* @__PURE__ */ forwardRef<HTMLDivElement, Stream
         {streaming && blocks.length === 0 && <span className="gcu-ai-answer__caret" aria-hidden="true" />}
       </div>
       <div className="visually-hidden" aria-live="polite" data-testid="ai-answer-live">
-        {announced.map((block, index) => <p key={index}>{spokenBlock(block)}</p>)}
+        {announced.map((block) => <p key={block.id}>{spokenBlock(block.value)}</p>)}
       </div>
       {!streaming && blocks.length > 0 && (
         <SourceList sources={sources} idPrefix={idPrefix} emptyText={noSourcesText} className="gcu-ai-answer__sources" />

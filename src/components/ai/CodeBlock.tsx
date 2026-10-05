@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useId, useMemo, useState } from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
-import { isFiniteNumber, isString } from '../../utils/typeGuards'
+import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 import { Button, IconButton } from '../ui/Button'
 import type { CodeBlockProps } from '../../public/types'
 
@@ -20,7 +20,7 @@ function copyWithFallback(text: string): boolean {
   doc.body.appendChild(area)
   try {
     area.select()
-    return typeof doc.execCommand === 'function' && doc.execCommand('copy')
+    return isFunction(doc.execCommand) && doc.execCommand('copy')
   } catch {
     return false
   } finally {
@@ -29,9 +29,9 @@ function copyWithFallback(text: string): boolean {
 }
 
 /** Intenta `navigator.clipboard`; si falta o rechaza, usa el fallback. Nunca registra el contenido. */
-export async function copyText(text: string): Promise<boolean> {
+async function copyText(text: string): Promise<boolean> {
   const clipboard = globalThis.navigator?.clipboard
-  if (clipboard && typeof clipboard.writeText === 'function') {
+  if (clipboard && isFunction(clipboard.writeText)) {
     try {
       await clipboard.writeText(text)
       return true

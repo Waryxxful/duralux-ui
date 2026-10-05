@@ -6,20 +6,20 @@ import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import type { PageHeaderBreadcrumb, PageHeaderProps } from '../../public/types'
 
-function hasContent(value: unknown): boolean {
+function hasContent(value: React.ReactNode): boolean {
   if (value === null || value === undefined || value === false || value === true) return false
   if (isString(value)) return value.trim() !== ''
   if (isArray(value)) return value.some(hasContent)
   return true
 }
 
-function hasActionContent(value: unknown): boolean {
+function hasActionContent(value: React.ReactNode): boolean {
   // Numeric zero is a valid React child in general, but it is not an action
   // and should not create an empty action toolbar.
   return !isFiniteNumber(value) && hasContent(value)
 }
 
-function safeKey(value: unknown, fallback: string): string {
+function safeKey(value: React.ReactNode | React.Key, fallback: string): string {
   let token: string
   try {
     token = String(value ?? '')
@@ -30,7 +30,7 @@ function safeKey(value: unknown, fallback: string): string {
   return token || fallback
 }
 
-type CrumbWithIdentity = PageHeaderBreadcrumb & { id?: unknown; key?: unknown }
+type CrumbWithIdentity = PageHeaderBreadcrumb & { id?: React.Key; key?: React.Key }
 
 function breadcrumbKeys(items: ReadonlyArray<CrumbWithIdentity>): string[] {
   const seen = new Map<string, number>()
@@ -56,7 +56,7 @@ function useStuck(enabled: boolean, sentinel: React.RefObject<HTMLDivElement | n
   useEffect(() => {
     const sentinelElement = sentinel.current
     if (!enabled || !sentinelElement) return undefined
-    if (typeof IntersectionObserver === 'undefined') {
+    if (!('IntersectionObserver' in globalThis)) {
       log.debug('PageHeader: sin IntersectionObserver; la sombra al hacer scroll queda desactivada.')
       return undefined
     }

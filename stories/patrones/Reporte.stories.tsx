@@ -3,9 +3,9 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import { ActiveFilters, Button, Card, DashGrid, DataTable, FormField, PageHeader, Segmented, Select, StatGroup, log } from '../../src'
 import type { ActiveFilter, DataTableColumn } from '../../src'
-import { DateRangeFilter } from '../../src/antd'
+import { DateRangeFilter, DuraluxAntdProvider } from '../../src/antd'
 import { TrendLine } from '../../src/charts/apex'
-import { ConAntd, DIAS, conShell, miles, mss, pct, temaDe, tresTemas } from './soporte'
+import { DIAS, conShell, miles, mss, pct, temaDe, tresTemas } from './soporte'
 import type { DiaReporte, TemaPatron } from './soporte'
 
 const COLUMNAS: ReadonlyArray<DataTableColumn<DiaReporte>> = [
@@ -48,7 +48,7 @@ function ReporteNivelServicio({ tema }: { tema: TemaPatron }) {
           <DashGrid.Row layout={[12]}>
             <Card title="Filtros" subtitle="El reporte se recalcula al cambiar el período o la campaña">
               <div className="sb-patron-stack">
-                <ConAntd tema={tema}>
+                <DuraluxAntdProvider theme={tema}>
                   <div className="sb-patron-filtros">
                     <FormField label="Período" htmlFor="reporte-periodo">
                       <DateRangeFilter id="reporte-periodo" defaultValue={[dayjs('2026-09-21'), dayjs('2026-10-04')]} />
@@ -66,7 +66,7 @@ function ReporteNivelServicio({ tema }: { tema: TemaPatron }) {
                       { value: 'semana', label: 'Por semana' },
                     ]} />
                   </div>
-                </ConAntd>
+                </DuraluxAntdProvider>
                 <ActiveFilters filters={filtros} onRemove={quitar} onClear={() => setFiltros([])} resultCount={DIAS.length} />
               </div>
             </Card>

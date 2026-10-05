@@ -18,15 +18,18 @@ function useLiveSeconds(active: boolean): number {
   return seconds
 }
 
+function isReasoningStep(step: ReasoningStepInput): step is ReasoningStep {
+  return isObject(step) && 'text' in step && 'id' in step
+}
+
 /** Clave estable por paso: `id` si lo trae; si es texto, el texto y su número de aparición. */
 function keyedSteps(steps: ReadonlyArray<ReasoningStepInput>): Array<{ key: string; text: React.ReactNode }> {
   const seen = new Map<string, number>()
   return steps.map((step) => {
-    const isObj = isObject(step) && 'text' in step && 'id' in step
-    const base = isObj ? `id:${(step as ReasoningStep).id}` : `t:${String(step)}`
+    const base = isReasoningStep(step) ? `id:${step.id}` : `t:${String(step)}`
     const count = (seen.get(base) ?? 0) + 1
     seen.set(base, count)
-    return { key: `${base}#${count}`, text: isObj ? (step as ReasoningStep).text : (step as React.ReactNode) }
+    return { key: `${base}#${count}`, text: isReasoningStep(step) ? step.text : step }
   })
 }
 

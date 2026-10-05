@@ -57,6 +57,7 @@ export const ModelSelector = /* @__PURE__ */ forwardRef<HTMLElement, ModelSelect
   }))
   return (
     <RadioGroup
+      // SAFETY: rest son atributos HTML genéricos; RadioGroup los aplica a su <fieldset>.
       {...(rest as Omit<React.FieldsetHTMLAttributes<HTMLFieldSetElement>, 'onChange' | 'defaultValue'>)}
       // SAFETY: el ref público es HTMLElement; RadioGroup reenvía a un <fieldset>.
       ref={ref as React.Ref<HTMLFieldSetElement>}

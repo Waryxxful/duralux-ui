@@ -2334,6 +2334,12 @@ export interface SuggestionBannerProps extends Omit<React.HTMLAttributes<HTMLDiv
 /** Estado de un paso, herramienta o tarea de un agente. Siempre se muestra con texto e ícono, nunca solo color. */
 export type AgentStepStatus = 'queued' | 'running' | 'done' | 'failed'
 
+/** Valor serializable a JSON: lo que puede viajar como argumento de una herramienta. */
+export type AiJsonValue = string | number | boolean | null | ReadonlyArray<AiJsonValue> | { readonly [key: string]: AiJsonValue | undefined }
+
+/** Argumentos o parámetros de una herramienta del asistente (JSON). */
+export type AiToolArgs = { readonly [key: string]: AiJsonValue | undefined }
+
 export interface ReasoningStep {
   id: string
   text: React.ReactNode
@@ -2364,7 +2370,7 @@ export interface AgentStep {
   status: AgentStepStatus
   seconds?: number
   /** Argumentos de la llamada (se muestran como JSON; nunca se registran en logs). */
-  args?: Record<string, unknown>
+  args?: AiToolArgs
   result?: React.ReactNode
   /** Llamadas que corrieron en paralelo dentro de este paso. */
   parallel?: ReadonlyArray<AgentStep>
@@ -2382,7 +2388,7 @@ export interface ToolChipProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   tool: string
   status: AgentStepStatus
   seconds?: number
-  args?: Record<string, unknown>
+  args?: AiToolArgs
   result?: React.ReactNode
   defaultOpen?: boolean
 }
@@ -2391,7 +2397,7 @@ export interface ToolChipProps extends Omit<React.HTMLAttributes<HTMLDivElement>
 export interface ApprovalIntent {
   id?: string
   tool?: string
-  params?: Record<string, unknown>
+  params?: AiToolArgs
 }
 
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected'
@@ -2407,7 +2413,7 @@ export interface ApprovalCardProps extends Omit<React.HTMLAttributes<HTMLElement
   /** Herramienta que ejecutaría la acción (se muestra en mono). */
   tool?: string
   /** Parámetros de la acción: viajan en la intención y se muestran con `showParams`. Nunca se registran en logs. */
-  params?: Record<string, unknown>
+  params?: AiToolArgs
   showParams?: boolean
   /** Quién preparó la acción. Por defecto «Asistente». */
   drafter?: React.ReactNode

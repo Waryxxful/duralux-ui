@@ -1,10 +1,11 @@
+import { isString } from '../../../utils/typeGuards'
 /** Modelo puro de StreamingAnswer: bloques (párrafos) y marcas de cita `[n]`. */
 
 export type AnswerPart = { kind: 'text'; value: string } | { kind: 'cite'; id: number }
 
 /** Separa el texto en bloques por línea en blanco; descarta bloques vacíos. */
 export function splitBlocks(text: string): string[] {
-  if (typeof text !== 'string' || text.trim() === '') return []
+  if (!isString(text) || text.trim() === '') return []
   return text.split(/\n[ \t]*\n+/).map((block) => block.trim()).filter((block) => block !== '')
 }
 

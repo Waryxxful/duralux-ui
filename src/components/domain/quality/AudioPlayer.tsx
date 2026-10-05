@@ -61,8 +61,11 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
     setPlaying(false)
     setLoadedDuration(null)
     setFailed(false)
-    positionRef.current = 0
   }
+  // El ref de la simulación vuelve a 0 con la grabación (antes del efecto que lo lee).
+  useEffect(() => {
+    positionRef.current = 0
+  }, [src])
 
   // La simulación (sin `src`) termina sola al llegar al final.
   const simulatedEnd = !src && duration > 0 && position >= duration

@@ -6,7 +6,7 @@ export const DOCTOR_MIN = 75
 
 const score = doctorScore()
 if (score < DOCTOR_MIN) {
-  console.error(`[doctor] react-doctor ${score}/100 < mínimo ${DOCTOR_MIN}. Corré \`npm run doctor\` para ver los hallazgos.`)
+  console.error(`[doctor] react-doctor ${score}/100 < mínimo ${DOCTOR_MIN}. Ejecuta \`npm run doctor\` para ver los hallazgos.`)
   process.exitCode = 1
 } else {
   console.log(`[doctor] react-doctor ${score}/100 (mínimo ${DOCTOR_MIN}): OK`)

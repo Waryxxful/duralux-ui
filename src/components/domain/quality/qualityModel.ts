@@ -97,7 +97,7 @@ export interface HighlightPart {
 }
 
 export function splitHighlights(text: string, terms: ReadonlyArray<string> | undefined): HighlightPart[] {
-  const clean = (terms ?? []).map((term) => term.trim()).filter(Boolean)
+  const clean = (terms ?? []).flatMap((term) => (term.trim() ? [term.trim()] : []))
   if (clean.length === 0 || text === '') return [{ text, hit: false, start: 0 }]
   const escaped = clean.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   const pattern = new RegExp(`(${escaped.join('|')})`, 'gi')

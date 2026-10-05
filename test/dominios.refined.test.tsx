@@ -72,8 +72,10 @@ describe('CallList (2.7 dominios)', () => {
     const options = screen.getAllByRole('option')
     expect(options.map((option) => option.tabIndex)).toEqual([-1, 0, -1])
     options[1]?.focus()
+    // SAFETY: getAllByRole devolvió tres opciones (verificado arriba con tabIndex).
     fireEvent.keyDown(options[1] as HTMLElement, { key: 'End' })
     expect(options[2]).toHaveFocus()
+    // SAFETY: misma lista de tres opciones.
     fireEvent.keyDown(options[2] as HTMLElement, { key: 'Enter' })
     expect(onSelect).toHaveBeenCalledWith(3)
   })

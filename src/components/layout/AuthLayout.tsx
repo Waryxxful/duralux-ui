@@ -1,9 +1,10 @@
 import { forwardRef, useId } from 'react'
+import type * as React from 'react'
 import { isString } from '../../utils/typeGuards'
 import { Icon } from '../ui/Icon'
 import type { AuthLayoutProps } from '../../public/types'
 
-function hasNode(value: unknown): boolean {
+function hasNode(value: React.ReactNode): boolean {
   if (value === null || value === undefined || value === false || value === true) return false
   return isString(value) ? value.trim() !== '' : true
 }

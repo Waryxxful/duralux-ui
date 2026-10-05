@@ -1,8 +1,6 @@
 import type { Decorator, StoryObj } from '@storybook/react-vite'
-import type * as React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import { AppLayout } from '../../src'
-import { DuraluxAntdProvider } from '../../src/antd'
 import './patrones.css'
 
 /**
@@ -12,7 +10,7 @@ import './patrones.css'
 
 export type TemaPatron = 'light' | 'dark' | 'navy'
 
-export const temaDe = (valor: unknown): TemaPatron => (valor === 'dark' || valor === 'navy' ? valor : 'light')
+export const temaDe = (valor: string | undefined): TemaPatron => (valor === 'dark' || valor === 'navy' ? valor : 'light')
 
 const NAV = [
   { type: 'caption' as const, label: 'Operación' },
@@ -58,13 +56,15 @@ export const conShell = (ruta: string): Decorator => (Story, ctx) => {
   )
 }
 
-/** Proveedor antd con el tema activo (DateRangeFilter, Splitter). */
-export function ConAntd({ tema, children }: { tema: TemaPatron; children: React.ReactNode }) {
-  return <DuraluxAntdProvider theme={tema}>{children}</DuraluxAntdProvider>
-}
 
 /** Las tres variantes de tema de cada patrón: claro (por defecto), oscuro y navy. */
-export function tresTemas<T>(base: StoryObj<T> = {}): { Claro: StoryObj<T>; Oscuro: StoryObj<T>; Navy: StoryObj<T> } {
+export interface TresTemas<T> {
+  Claro: StoryObj<T>
+  Oscuro: StoryObj<T>
+  Navy: StoryObj<T>
+}
+
+export function tresTemas<T>(base: StoryObj<T> = {}): TresTemas<T> {
   return {
     Claro: { ...base, name: 'Claro', globals: { theme: 'light' } },
     Oscuro: { ...base, name: 'Oscuro', globals: { theme: 'dark' } },

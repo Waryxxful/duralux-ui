@@ -3,7 +3,8 @@ import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import { isArray } from '../../utils/typeGuards'
 import type { TaskRowsProps } from '../../public/types'
-import { AgentStatusBadge, AgentStatusIcon, resolveAgentStatus } from './internal/agentStatus'
+import { AgentStatusBadge, AgentStatusIcon } from './internal/agentStatus'
+import { resolveAgentStatus } from './internal/agentStatusModel'
 
 /**
  * TaskRows — tareas en vivo de un agente con métrica, estado en texto y notas plegables.

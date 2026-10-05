@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { isFiniteNumber } from '../../../utils/typeGuards'
 
 const TICK_MS = 1000
 
@@ -13,7 +14,7 @@ export function useElapsed(active = true, startedAt?: number): number {
       setSeconds(0)
       return undefined
     }
-    const origin = typeof startedAt === 'number' && Number.isFinite(startedAt) ? startedAt : Date.now()
+    const origin = isFiniteNumber(startedAt) ? startedAt : Date.now()
     const update = () => setSeconds(Math.max(0, Math.floor((Date.now() - origin) / 1000)))
     update()
     const timer = setInterval(update, TICK_MS)

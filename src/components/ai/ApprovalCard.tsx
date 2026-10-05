@@ -4,7 +4,7 @@ import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import { Button } from '../ui/Button'
 import type { ApprovalCardProps, ApprovalIntent, ApprovalStatus } from '../../public/types'
-import { formatArgs } from './internal/agentStatus'
+import { formatArgs } from './internal/agentStatusModel'
 
 const DECIDED_TEXT = {
   approved: 'Aprobado. Se envió tu aprobación; el sistema te avisará el resultado.',

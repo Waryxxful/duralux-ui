@@ -2,7 +2,8 @@ import { forwardRef, useId, useState } from 'react'
 import { cx } from '../../utils/cx'
 import { isFiniteNumber } from '../../utils/typeGuards'
 import type { ToolChipProps } from '../../public/types'
-import { AGENT_STATUS_TEXT, AgentStatusIcon, formatArgs, resolveAgentStatus } from './internal/agentStatus'
+import { AgentStatusIcon } from './internal/agentStatus'
+import { AGENT_STATUS_TEXT, formatArgs, resolveAgentStatus } from './internal/agentStatusModel'
 
 /**
  * ToolChip — llamada a una herramienta del agente, compacta y expandible.

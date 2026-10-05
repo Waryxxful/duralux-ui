@@ -286,13 +286,13 @@ export function collectActiveGroupKeys(sections: ResolvedNavCoreSection[]): stri
 export function buildGroupKeysByParent(sections: (NavCoreSection & { key: string; items: KeyedNavCoreItem[] })[]): Map<string, string[]> {
   const map = new Map<string, string[]>();
   sections.forEach(section => {
-    const rootGroups = section.items.filter(item => item.children?.length).map(item => item.key);
+    const rootGroups = section.items.flatMap(item => (item.children?.length ? [item.key] : []));
     map.set(section.key, rootGroups);
 
     const walk = (items: KeyedNavCoreItem[]) => {
       items.forEach(item => {
         if (item.children?.length) {
-          const childGroups = item.children.filter(child => child.children?.length).map(child => child.key);
+          const childGroups = item.children.flatMap(child => (child.children?.length ? [child.key] : []));
           map.set(item.key, childGroups);
           walk(item.children);
         }

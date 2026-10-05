@@ -3,7 +3,8 @@ import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import { isArray, isFiniteNumber } from '../../utils/typeGuards'
 import type { AgentStepsProps } from '../../public/types'
-import { AgentStatusBadge, AgentStatusIcon, formatArgs, resolveAgentStatus } from './internal/agentStatus'
+import { AgentStatusBadge, AgentStatusIcon } from './internal/agentStatus'
+import { formatArgs, resolveAgentStatus } from './internal/agentStatusModel'
 import { ToolChip } from './ToolChip'
 
 /**
