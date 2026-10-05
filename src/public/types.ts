@@ -2076,3 +2076,255 @@ export interface FunnelProps extends Omit<React.HTMLAttributes<HTMLOListElement>
   /** Nombre accesible. Por defecto «Embudo de conversión». */
   label?: string
 }
+
+// 2.8 IA conversación ─────────────────────────────────────────────────────────
+
+export type AiAvatarSize = 'sm' | 'md' | 'lg'
+
+export interface AiAvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** 24 / 32 / 48 px. Por defecto `md`. */
+  size?: AiAvatarSize
+  /** Si comunica algo («Asistente»), se anuncia como imagen. Sin `label` es decorativo (`aria-hidden`). */
+  label?: string
+  /** El asistente está trabajando: el gradiente gira lento (fijo con reduced-motion). */
+  busy?: boolean
+}
+
+export type AiMessageSender = 'user' | 'assistant'
+
+export interface AiMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** Quién habla: la persona (derecha) o el asistente (izquierda, con AiAvatar). */
+  sender: AiMessageSender
+  /** Nombre visible. Por defecto «Tú» o «Asistente». */
+  name?: string
+  /** Hora visible («10:42»). */
+  time?: string
+  /** Acciones bajo la respuesta (normalmente `MessageActions`). */
+  actions?: React.ReactNode
+  /** Avatar propio de la persona; el del asistente siempre es AiAvatar. */
+  avatar?: React.ReactNode
+  children?: React.ReactNode
+}
+
+export type AiFeedbackValue = 'up' | 'down'
+
+export interface MessageActionsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onCopy'> {
+  /** Texto que copia «Copiar respuesta». Nunca se registra en logs. */
+  text: string
+  onCopy?: () => void
+  /** Pide otra respuesta (la app decide; el componente solo emite la intención). */
+  onRegenerate?: () => void
+  /** Valoración de la respuesta. */
+  onFeedback?: (value: AiFeedbackValue) => void
+  /** Valoración controlada; si falta, la recuerda el componente. */
+  feedback?: AiFeedbackValue | null
+  /** `ghost`: íconos sueltos · `pill`: agrupados en una píldora. */
+  variant?: 'ghost' | 'pill'
+}
+
+export interface AiEmptyStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  title: React.ReactNode
+  description?: React.ReactNode
+  /** Preguntas sugeridas (3 a 4, concretas, del dominio). */
+  suggestions?: ReadonlyArray<string>
+  onPick?: (suggestion: string) => void
+  align?: 'start' | 'center'
+  /** Nivel del título (h2–h4). Por defecto 2. */
+  headingLevel?: 2 | 3 | 4
+}
+
+export interface PromptComposerProps
+  extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit' | 'children' | 'onChange' | 'defaultValue'> {
+  /** Emite la pregunta (ya recortada) y los adjuntos. Enter envía; Shift+Enter salta de línea. */
+  onSubmit: (text: string, files: File[]) => void
+  /** Hay una respuesta generándose: el botón pasa a «Detener respuesta». */
+  busy?: boolean
+  onStop?: () => void
+  /** Nombre accesible del campo. Por defecto «Pregunta al asistente». */
+  label?: string
+  placeholder?: string
+  /** Texto inicial (por ejemplo, la pregunta conservada tras un error). */
+  defaultValue?: string
+  /** Avisa cada cambio del texto (sin registrar su contenido). */
+  onTextChange?: (text: string) => void
+  maxLength?: number
+  /** Muestra el botón de adjuntar. Por defecto `true`. */
+  allowAttachments?: boolean
+  /** Tipos aceptados del input de archivo. */
+  accept?: string
+  /** Controles extra en la barra (ModelSelector segmentado, VoiceInput…). */
+  tools?: React.ReactNode
+  disabled?: boolean
+  /** Por qué no se puede escribir (texto visible), p. ej. cuota agotada. */
+  disabledReason?: React.ReactNode
+  /** `default`: dos líneas y barra · `minimal`: una línea. */
+  variant?: 'default' | 'minimal'
+}
+
+export interface ThinkingIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Texto visible y anunciado. Por defecto «El asistente está pensando». */
+  label?: string
+  variant?: 'dots' | 'bar'
+}
+
+export interface AiLoaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Qué está haciendo, con su cifra: «Analizando 1.284 llamadas». */
+  label: React.ReactNode
+  /** Inicio de la espera (ms epoch). Por defecto, el montaje. */
+  startedAt?: number
+  /** Muestra «Cancelar» (la app detiene la tarea). */
+  onCancel?: () => void
+}
+
+export interface AiSource {
+  /** Número de la cita: `[n]` en el texto. */
+  id: number
+  title: string
+  /** Origen corto: «Informe diario · Cobranza», «crm.intouch.cl». */
+  domain?: string
+  excerpt?: string
+  /** Enlace externo a la fuente (se abre en otra pestaña). */
+  href?: string
+}
+
+export interface CitationProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
+  source: AiSource
+  /** id del elemento de SourceList al que salta la cita. */
+  targetId?: string
+}
+
+export interface SourceListProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
+  sources: ReadonlyArray<AiSource>
+  /** Prefijo de los ids de cada fuente (`<prefijo>-<n>`), para que las citas salten a ellas. */
+  idPrefix?: string
+  /** Nombre accesible de la lista. Por defecto «Fuentes». */
+  label?: string
+  /** Texto cuando no hay fuentes. */
+  emptyText?: React.ReactNode
+}
+
+export interface StreamingAnswerProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Texto con marcas `[n]` para las citas; los bloques se separan con una línea en blanco. */
+  text: string
+  sources?: ReadonlyArray<AiSource>
+  /** Se está generando: cursor visible y solo se anuncian los bloques terminados. */
+  streaming?: boolean
+  /** Preguntas de seguimiento al terminar. */
+  followUps?: ReadonlyArray<string>
+  onFollowUp?: (question: string) => void
+  /** Texto cuando la respuesta terminó sin fuentes. */
+  noSourcesText?: React.ReactNode
+}
+
+export interface AiErrorStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title' | 'role'> {
+  title?: React.ReactNode
+  description?: React.ReactNode
+  /** Pregunta original, conservada a la vista para reintentar sin reescribir. */
+  prompt?: string
+  onRetry: () => void
+  retrying?: boolean
+  /** Devuelve la pregunta al compositor para editarla. */
+  onEditPrompt?: () => void
+  variant?: 'card' | 'inline'
+}
+
+export interface QuotaBannerProps extends React.HTMLAttributes<HTMLDivElement> {
+  used: number
+  limit: number
+  /** Segundos hasta que se reinicia la cuota (cuenta regresiva visible). */
+  resetInSeconds: number
+  /** Pide más cupo (la app decide; el componente solo emite la intención). */
+  onRequestMore?: () => void
+  variant?: 'banner' | 'compact'
+}
+
+export interface AiModelOption {
+  value: string
+  label: string
+  /** «Recomendado», «Más lento». */
+  badge?: string
+  description?: string
+  disabled?: boolean
+}
+
+export interface ModelSelectorProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onChange' | 'defaultValue'> {
+  models: ReadonlyArray<AiModelOption>
+  value?: string
+  defaultValue?: string
+  onChange?: (value: string) => void
+  /** `list`: radios con descripción · `segmented`: 2 a 5 opciones cortas. */
+  variant?: 'list' | 'segmented'
+  /** Nombre del grupo. Por defecto «Modelo». */
+  label?: string
+}
+
+export interface UsageMeterProps extends React.HTMLAttributes<HTMLElement> {
+  /** Tokens de la pregunta (contexto incluido). */
+  promptTokens: number
+  /** Tokens de la respuesta. */
+  completionTokens: number
+  /** Tamaño de la ventana de contexto. */
+  limit: number
+  /** Costo por 1.000 tokens en dólares; si falta, no se muestra el costo. */
+  costPer1k?: number
+  variant?: 'bar' | 'inline'
+}
+
+export interface VoiceInputProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onToggle'> {
+  /** Está dictando (la captura la hace la app). */
+  recording: boolean
+  onToggle: () => void
+  /** Texto del botón en reposo. Por defecto «Dictar pregunta». */
+  label?: string
+  /** Fuerza el aviso de navegador sin dictado (stories y pruebas). */
+  forceUnsupported?: boolean
+  /** Aviso cuando el navegador no tiene Web Speech API. */
+  unsupportedText?: React.ReactNode
+  disabled?: boolean
+}
+
+export interface AiThread {
+  id: string
+  title: string
+  /** Grupo por fecha: «Hoy», «Ayer», «Últimos 7 días». */
+  group: string
+  pinned?: boolean
+}
+
+export interface AiHistoryProps extends Omit<React.HTMLAttributes<HTMLElement>, 'onSelect'> {
+  threads: ReadonlyArray<AiThread>
+  activeId?: string
+  onSelect: (id: string) => void
+  onNew?: () => void
+  compact?: boolean
+  loading?: boolean
+  /** Texto cuando no hay conversaciones. */
+  emptyText?: React.ReactNode
+}
+
+export interface AiMemoryItem {
+  id: string | number
+  text: string
+}
+
+export interface MemoryChipsProps extends React.HTMLAttributes<HTMLElement> {
+  items: ReadonlyArray<AiMemoryItem>
+  /** Pide olvidar un recuerdo (la app decide). */
+  onRemove?: (id: AiMemoryItem['id']) => void
+  /** Pide guardar un recuerdo nuevo (la app decide). */
+  onAdd?: (text: string) => void
+  /** `panel`: con título y formulario · `row`: solo los chips. */
+  variant?: 'panel' | 'row'
+}
+
+export interface SuggestionBannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** La sugerencia, con su cifra: «Mueve 3 ejecutivos de Ventas a Cobranza». */
+  title: React.ReactNode
+  /** En qué se basa: «Cobranza tiene 18 llamadas en espera; Ventas, 2». */
+  basis?: React.ReactNode
+  /** Emite la intención de aplicar; nunca ejecuta (si tiene efecto, la app abre ApprovalCard). */
+  onApply: () => void
+  onDismiss: () => void
+  applyLabel?: string
+  variant?: 'inline' | 'floating'
+}

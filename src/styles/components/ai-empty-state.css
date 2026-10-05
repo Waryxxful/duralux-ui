@@ -1,0 +1,15 @@
+/* AiEmptyState y chips de sugerencias (también las preguntas de seguimiento de StreamingAnswer).
+   Chips: hover instantáneo con puntero (Craft «Hover restraint»). Solo tokens. */
+.gcu-ai-empty{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-3);padding:var(--gcu-space-6) var(--gcu-space-4)}
+.gcu-ai-empty--center{align-items:center;text-align:center}
+.gcu-ai-empty__title{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-xl);line-height:var(--gcu-line-height-xl);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-tight);text-wrap:balance}
+.gcu-ai-empty__text{max-inline-size:56ch;margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);text-wrap:pretty}
+.gcu-ai-empty--center .gcu-ai-suggestions{justify-content:center}
+
+.gcu-ai-suggestions{display:flex;flex-direction:column;gap:var(--gcu-space-2);margin:0;padding:0;list-style:none;inline-size:100%}
+@container (min-width: 32rem){.gcu-ai-suggestions{flex-direction:row;flex-wrap:wrap}}
+.gcu-ai-suggestion{inline-size:100%;padding:var(--gcu-space-2) var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);color:var(--gcu-text);font:inherit;font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);text-align:start;cursor:pointer}
+@container (min-width: 32rem){.gcu-ai-suggestion{inline-size:auto}}
+@media (hover:hover){.gcu-ai-suggestion:hover{border-color:var(--gcu-primary-border);background-color:var(--gcu-primary-soft)}}
+.gcu-ai-suggestion:active{transform:scale(var(--gcu-press-scale))}
+.gcu-ai-suggestion:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}

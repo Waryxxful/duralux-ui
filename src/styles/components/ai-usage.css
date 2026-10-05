@@ -1,0 +1,27 @@
+/* QuotaBanner y UsageMeter: cupo y uso de contexto. Cifras tabulares; el tono va con texto. */
+.gcu-ai-meter{position:relative;display:block;overflow:hidden;inline-size:100%;block-size:calc(var(--gcu-space-1) + var(--gcu-space-0-5));border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface-sunken)}
+.gcu-ai-meter__fill{position:absolute;inset-block:0;inset-inline-start:0;border-radius:inherit;background-color:var(--gcu-status-primary)}
+.gcu-ai-meter--warning .gcu-ai-meter__fill,.gcu-ai-quota--warning .gcu-ai-meter__fill{background-color:var(--gcu-status-warning)}
+.gcu-ai-quota--danger .gcu-ai-meter__fill{background-color:var(--gcu-status-danger)}
+
+.gcu-ai-quota__grid{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--gcu-space-2) var(--gcu-space-3)}
+.gcu-ai-quota{padding:var(--gcu-space-3) var(--gcu-space-4);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-quota--warning{border-color:var(--gcu-warning-border);background-color:var(--gcu-warning-soft)}
+.gcu-ai-quota--danger{border-color:var(--gcu-danger-border);background-color:var(--gcu-danger-soft)}
+.gcu-ai-quota--compact{padding:var(--gcu-space-2) var(--gcu-space-3);border:0;background-color:transparent}
+.gcu-ai-quota__label{color:var(--gcu-text);font-weight:var(--gcu-font-weight-medium)}
+.gcu-ai-quota__value,.gcu-ai-quota__timer{font-variant-numeric:tabular-nums}
+.gcu-ai-quota .gcu-ai-meter{grid-column:1 / -1}
+.gcu-ai-quota__reset{color:var(--gcu-muted)}
+.gcu-ai-quota__action{justify-self:end}
+@container (min-width: 36rem){
+  .gcu-ai-quota--banner .gcu-ai-quota__grid{grid-template-columns:auto auto minmax(6rem,1fr) auto auto}
+  .gcu-ai-quota--banner .gcu-ai-meter{grid-column:auto}
+}
+
+.gcu-ai-usage{display:flex;flex-direction:column;gap:var(--gcu-space-2);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-usage--inline{display:inline;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-variant-numeric:tabular-nums}
+.gcu-ai-usage__row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--gcu-space-2)}
+.gcu-ai-usage__label{color:var(--gcu-text);font-weight:var(--gcu-font-weight-medium)}
+.gcu-ai-usage__value{color:var(--gcu-text);font-variant-numeric:tabular-nums}
+.gcu-ai-usage__detail{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-variant-numeric:tabular-nums}

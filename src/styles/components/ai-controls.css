@@ -1,0 +1,21 @@
+/* ModelSelector y VoiceInput: controles del asistente. Barras de voz decorativas, quietas con reduced-motion. */
+.gcu-ai-models__label{display:inline-flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2)}
+.gcu-ai-models__badge{font-weight:var(--gcu-font-weight-medium)}
+
+.gcu-ai-voice{display:inline-flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-1)}
+.gcu-ai-voice__button{display:inline-flex;align-items:center;gap:var(--gcu-space-2);min-block-size:var(--gcu-control-h-sm);padding:0 var(--gcu-space-3);border:1px solid var(--gcu-border-strong);border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface);color:var(--gcu-text);font:inherit;font-size:var(--gcu-font-size-sm);cursor:pointer}
+@media (hover:hover){.gcu-ai-voice__button:not(:disabled):hover{background-color:var(--gcu-surface-subtle)}}
+.gcu-ai-voice__button:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-ai-voice__button:disabled{color:var(--gcu-muted);cursor:not-allowed}
+.gcu-ai-voice--on .gcu-ai-voice__button{border-color:var(--gcu-danger-border);background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-ai-voice__bars{display:none;align-items:center;gap:var(--gcu-space-0-5);block-size:var(--gcu-space-4)}
+.gcu-ai-voice--on .gcu-ai-voice__bars{display:inline-flex}
+.gcu-ai-voice__bars i{inline-size:var(--gcu-space-0-5);block-size:100%;border-radius:var(--gcu-radius-full);background-color:currentColor;transform-origin:center;animation:gcu-ai-voice-bar calc(var(--gcu-duration-slow) * 3) var(--gcu-ease-standard) infinite alternate}
+.gcu-ai-voice__bars i:nth-child(2){animation-delay:calc(var(--gcu-duration-fast) * 1)}
+.gcu-ai-voice__bars i:nth-child(3){animation-delay:calc(var(--gcu-duration-fast) * 2)}
+.gcu-ai-voice__bars i:nth-child(4){animation-delay:calc(var(--gcu-duration-fast) * 3)}
+.gcu-ai-voice__bars i:nth-child(5){animation-delay:calc(var(--gcu-duration-fast) * 4)}
+@keyframes gcu-ai-voice-bar{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
+@media (prefers-reduced-motion:reduce){.gcu-ai-voice__bars i{animation:none;transform:scaleY(.6)}}
+.gcu-ai-voice__time{font-variant-numeric:tabular-nums}
+.gcu-ai-voice__note{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
