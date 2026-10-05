@@ -55,8 +55,33 @@ function splitLines(source: string): Array<{ number: number; offset: number; tex
 type CopyState ='idle' | 'copied' | 'failed'
 const COPY_MESSAGE = { idle: '', copied: 'Código copiado.', failed: 'No se pudo copiar. Selecciona el texto y cópialo con Ctrl+C.' } satisfies Record<CopyState, string>
 
+interface CodeCaptionProps {
+  filename?: string
+  language?: string
+  copy: CopyState
+  onCopy: () => void
+}
+
+/** Encabezado: nombre o lenguaje, botón copiar y el resultado anunciado en `status`. */
+function CodeCaption({ filename, language, copy, onCopy }: CodeCaptionProps) {
+  return (
+    <figcaption className="gcu-ai-code__caption">
+      <span className="gcu-ai-code__name">{filename ?? language ?? 'Código'}</span>
+      {filename && language && <span className="gcu-ai-code__lang">{language}</span>}
+      <IconButton
+        icon={copy === 'copied' ? 'check' : 'copy'}
+        label={copy === 'copied' ? 'Copiado' : 'Copiar código'}
+        size="sm"
+        className="gcu-ai-code__copy"
+        onClick={onCopy}
+      />
+      <span className="visually-hidden" role="status">{COPY_MESSAGE[copy]}</span>
+    </figcaption>
+  )
+}
+
 /**
- * CodeBlock — bloque de código o texto técnico con nombre de archivo, copiar, números de línea y plegado.
+ * CodeBlock —bloque de código o texto técnico con nombre de archivo, copiar, números de línea y plegado.
  *
  * - Sin resaltado de sintaxis (sin dependencias): monoespaciada, con números opcionales que no se copian.
  * - Copiar: Clipboard API con fallback (textarea + execCommand). El resultado se anuncia en `status`.
@@ -99,18 +124,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLElement, CodeBlockProps>
 
   return (
     <figure {...rest} ref={ref} className={cx('gcu-ai-code', numbered && 'gcu-ai-code--numbered', className)}>
-      <figcaption className="gcu-ai-code__caption">
-        <span className="gcu-ai-code__name">{filename ?? language ?? 'Código'}</span>
-        {filename && language && <span className="gcu-ai-code__lang">{language}</span>}
-        <IconButton
-          icon={copy === 'copied' ? 'check' : 'copy'}
-          label={copy === 'copied' ? 'Copiado' : 'Copiar código'}
-          size="sm"
-          className="gcu-ai-code__copy"
-          onClick={() => { void handleCopy() }}
-        />
-        <span className="visually-hidden" role="status">{COPY_MESSAGE[copy]}</span>
-      </figcaption>
+      <CodeCaption filename={filename} language={language} copy={copy} onCopy={() => { void handleCopy() }} />
       {copy === 'failed' && <p className="gcu-ai-code__error">{COPY_MESSAGE.failed}</p>}
       <pre id={codeId} className="gcu-ai-code__pre" tabIndex={0} aria-label={filename ? `Código de ${filename}` : 'Código'}>
         <code>

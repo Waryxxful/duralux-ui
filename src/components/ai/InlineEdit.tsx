@@ -31,7 +31,7 @@ export const InlineEdit = /* @__PURE__ */ forwardRef<HTMLDivElement, InlineEditP
   ...rest
 }, ref) {
   const parts = useMemo(() => keyedDiff(wordDiff(original, suggestion)), [original, suggestion])
-  const textRef = useRef<HTMLParagraphElement | null>(null)
+  const textRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (autoFocus) textRef.current?.focus()
@@ -73,7 +73,7 @@ export const InlineEdit = /* @__PURE__ */ forwardRef<HTMLDivElement, InlineEditP
         <i className="feather-edit-3" aria-hidden="true" />
         <span>{instruction ?? 'Sugerencia del asistente'}</span>
       </div>
-      <p
+      <div
         ref={textRef}
         className="gcu-ai-inline__text"
         role="textbox"
@@ -88,7 +88,7 @@ export const InlineEdit = /* @__PURE__ */ forwardRef<HTMLDivElement, InlineEditP
           if (kind === 'del') return <del key={key} className="gcu-ai-inline__del">{text}</del>
           return <span key={key}>{text}</span>
         })}
-      </p>
+      </div>
       <p className="gcu-ai-inline__hint">Enter acepta · Esc descarta</p>
       <div className="gcu-ai-inline__actions">
         <Button variant="light-brand" size="sm" startIcon="x" onClick={reject}>{rejectLabel}</Button>
