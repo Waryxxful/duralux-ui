@@ -2,6 +2,39 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## 3.0.0 — Retiro de APIs deprecadas
+
+Versión mayor sin componentes nuevos ni cambios visuales: se borra todo lo que 2.1–2.8 marcaron con `deprecate()` o `@deprecated`. Guía completa y usos por app en `docs/migracion/README.md` («De 2.x a 3.0»).
+
+### Cambios incompatibles
+
+| Retirado | Componente | Reemplazo |
+|---|---|---|
+| `headerRight` | `Card` | `actions` |
+| `noPad` | `Card`, `ChartCard` | `noPadding` |
+| `elementRef` | `Card` | `ref` |
+| `outline` | `Button`, `LinkButton`, `IconButton` | Quitar (ya se ignoraba); `variant="light-brand"` |
+| `trend` y tipo `StatsCardTrend` | `StatsCard` | `delta` (`IndicatorDelta`) |
+| `iconBg` | `StatsCard` | `tone` |
+| `bg` | `ColoredStatCard` | `tone` (`bg-light` sin equivalente: `StatsCard`/`KpiCard`) |
+| `trend`, `trendUp` | `ColoredStatCard` | `delta` |
+| `icon`, `prefix` | `Input` | `startAddon` |
+| `invalid` | `Input`, `Select`, `Textarea`, `Checkbox`, `Radio` | `error` |
+| `hint` | `FormField` | `helpText` |
+| `iconBg` (ítem) | `Timeline` | `variant` |
+| `striped` | `Table` | Quitar (ya se ignoraba) |
+| `header`, `renderHeader` / `renderBody` | `Table` | `head` / `body` |
+| `ariaLabel` | `Table` | `aria-label` |
+| `ResponsiveTable`, `ResponsiveTableProps` | — | `Table`, `TableProps` |
+
+- Se elimina la clase `.gcu-colored-stat--light` (solo se alcanzaba con `bg="bg-light"`).
+- `deprecate()` sigue exportado para las deprecaciones de 3.x. Se mantienen `Timeline.color`/`time`, `TableColumn.header`, `Tabs.ariaLabel` y el mapeo con aviso de variantes no canónicas de `Button`: no estaban deprecados.
+- `gate:package` exige ahora una versión 3.x.
+
+### Migración
+
+- Module Federation: shell, plataformas, call_reviews, e-learning y tablero-ti declaran `requiredVersion: '^2.0.0'`; pasa a `'^3.0.0'` en el mismo ciclo. Un remoto compilado contra 2.x que recibe la 3.0 del shell pierde en silencio las props retiradas, y si usa `ResponsiveTable` deja de renderizar. Migra los remotos (con 2.8) antes de subir el shell.
+
 ## 2.8.0 — Componentes de IA
 
 Lotes IA1 e IA2. API aditiva. Los componentes solo emiten intenciones: ninguno ejecuta acciones ni llama a un modelo; toda acción con efecto pasa por `ApprovalCard`.
