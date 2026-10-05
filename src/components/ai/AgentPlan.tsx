@@ -35,7 +35,7 @@ export const AgentPlan = /* @__PURE__ */ forwardRef<HTMLElement, AgentPlanProps>
   const remove = (id: string) => {
     if (!editable) return
     log.debug('AgentPlan: paso quitado del plan.')
-    onChange(list.filter((step) => step.id !== id))
+    onChange?.(list.filter((step) => step.id !== id))
   }
 
   const approve = () => {

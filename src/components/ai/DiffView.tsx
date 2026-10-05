@@ -79,7 +79,7 @@ export const DiffView = /* @__PURE__ */ forwardRef<HTMLDivElement, DiffViewProps
     ? (name: string, accepted: boolean) => {
       if (decisions === undefined) setInner((current) => ({ ...current, [name]: accepted }))
       log.debug(`DiffView: archivo ${accepted ? 'aceptado' : 'rechazado'}.`)
-      onDecide(name, accepted)
+      onDecide?.(name, accepted)
     }
     : undefined
 

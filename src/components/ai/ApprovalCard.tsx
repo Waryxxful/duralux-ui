@@ -7,7 +7,7 @@ import type { ApprovalCardProps, ApprovalIntent, ApprovalStatus } from '../../pu
 import { formatArgs } from './internal/agentStatus'
 
 const DECIDED_TEXT = {
-  approved: 'Aprobado. El sistema hará la acción y te avisará el resultado.',
+  approved: 'Aprobado. Se envió tu aprobación; el sistema te avisará el resultado.',
   rejected: 'Descartado. No se hará ningún cambio.',
 } satisfies Record<Exclude<ApprovalStatus, 'pending'>, string>
 

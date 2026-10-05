@@ -4,11 +4,15 @@ import { afterEach, describe, expect, test, vi } from 'vitest'
 import { ApprovalCard, DiffView, InlineEdit, lineDiff, wordDiff } from '../src'
 import { log } from '../src/utils/log'
 
-afterEach(() => vi.restoreAllMocks())
+afterEach(() => {
+  vi.restoreAllMocks()
+  vi.unstubAllGlobals()
+})
 
 describe('ApprovalCard (2.8 agente)', () => {
   test('no ejecuta: emite la intención una sola vez y anuncia la decisión', async () => {
-    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(() => Promise.reject(new Error('no debe llamarse')))
+    const fetchSpy = vi.fn()
+    vi.stubGlobal('fetch', fetchSpy)
     const infoSpy = vi.spyOn(log, 'info').mockImplementation(() => {})
     const onApprove = vi.fn()
     const onReject = vi.fn()

@@ -1884,7 +1884,7 @@ export interface WebResult {
   reading?: boolean
 }
 
-export interface WebResultsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface WebResultsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'results'> {
   query: string
   results: ReadonlyArray<WebResult>
   /** Total de resultados encontrados (puede ser mayor que los recibidos). */
