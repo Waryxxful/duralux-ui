@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type * as React from 'react'
 import { cx } from '../../../utils/cx'
 import { log } from '../../../utils/log'
@@ -51,39 +51,46 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
   // Barras decorativas de posición fija: su posición es su identidad.
   const bars = useMemo(() => waveHeights(WAVE_BARS).map((height, order) => ({ id: `bar-${order}`, order, height })), [])
   const markList = marks ?? []
+  const positionRef = useRef(0)
 
-  // Nueva grabación: vuelve al inicio.
-  useEffect(() => {
+  // Nueva grabación: vuelve al inicio (ajuste durante el render, sin efecto).
+  const [trackedSrc, setTrackedSrc] = useState(src)
+  if (trackedSrc !== src) {
+    setTrackedSrc(src)
     setPosition(0)
     setPlaying(false)
     setLoadedDuration(null)
     setFailed(false)
-  }, [src])
+    positionRef.current = 0
+  }
+
+  // La simulación (sin `src`) termina sola al llegar al final.
+  const simulatedEnd = !src && duration > 0 && position >= duration
+  const isPlaying = playing && !simulatedEnd
+
+  /** Única vía para mover la posición: actualiza el estado y avisa al consumidor en el mismo evento. */
+  const updatePosition = useCallback((seconds: number) => {
+    positionRef.current = seconds
+    setPosition(seconds)
+    onTimeChange?.(seconds)
+  }, [onTimeChange])
 
   // Sin audio real: simula el avance para demos y vistas previas.
   useEffect(() => {
-    if (!playing || src) return undefined
+    if (!isPlaying || src) return undefined
     const timer = setInterval(() => {
-      setPosition((current) => {
-        const next = Math.min(duration, current + 0.5 * rate)
-        if (next >= duration) setPlaying(false)
-        return next
-      })
+      updatePosition(Math.min(duration, positionRef.current + 0.5 * rate))
     }, 500)
     return () => clearInterval(timer)
-  }, [playing, rate, duration, src])
+  }, [isPlaying, rate, duration, src, updatePosition])
 
   useEffect(() => {
     if (audio.current) audio.current.playbackRate = rate
   }, [rate, src])
 
-  useEffect(() => {
-    onTimeChange?.(position)
-  }, [position, onTimeChange])
-
   const seek = (seconds: number) => {
     const next = clamp(seconds, 0, duration)
-    setPosition(next)
+    updatePosition(next)
     if (audio.current) audio.current.currentTime = next
   }
 
@@ -91,8 +98,12 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
     const element = audio.current
     // Con audio real el estado lo dictan los eventos play/pause (también los controles del sistema).
     if (!element) {
-      if (!playing && position >= duration) setPosition(0)
-      setPlaying(!playing)
+      if (isPlaying) {
+        setPlaying(false)
+        return
+      }
+      if (simulatedEnd) updatePosition(0)
+      setPlaying(true)
       return
     }
     if (playing) {
@@ -153,7 +164,7 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
             // Streams sin metadatos entregan NaN o Infinity: se conserva la duración conocida.
             setLoadedDuration(Number.isFinite(value) && value > 0 ? value : null)
           }}
-          onTimeUpdate={(event) => setPosition(event.currentTarget.currentTime)}
+          onTimeUpdate={(event) => updatePosition(event.currentTarget.currentTime)}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
           onEnded={() => setPlaying(false)}
@@ -172,8 +183,8 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
           onClick={() => seek(position - skipSeconds)}
         />
         <IconButton
-          icon={playing ? 'pause' : 'play'}
-          label={playing ? 'Pausar' : 'Reproducir'}
+          icon={isPlaying ? 'pause' : 'play'}
+          label={isPlaying ? 'Pausar' : 'Reproducir'}
           variant="primary"
           onClick={toggle}
           disabled={failed}

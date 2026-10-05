@@ -1,0 +1,24 @@
+/* CriterionRow: glifo del resultado (✓ ✕ –) + texto; el color solo acompaña.
+   Angosta: el resultado, los puntos y la evidencia bajan bajo el criterio; desde 32rem van a la derecha. */
+.gcu-criterion{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--gcu-space-2) var(--gcu-space-3);padding:var(--gcu-space-3) 0;border-bottom:1px solid var(--gcu-border);color:var(--gcu-text)}
+.gcu-criterion:last-child{border-bottom:0}
+.gcu-criterion__glyph{display:inline-flex;align-items:center;justify-content:center;width:var(--gcu-space-6);height:var(--gcu-space-6);border-radius:var(--gcu-radius-full);font-size:var(--gcu-font-size-sm);background-color:var(--gcu-secondary-soft);color:var(--gcu-secondary-text)}
+.gcu-criterion--cumple .gcu-criterion__glyph{background-color:var(--gcu-success-soft);color:var(--gcu-success-text)}
+.gcu-criterion--no_cumple .gcu-criterion__glyph{background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-criterion__body{min-width:0}
+.gcu-criterion__name{font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium);text-wrap:balance}
+.gcu-criterion__why{margin:var(--gcu-space-1) 0 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);max-width:68ch}
+.gcu-criterion__quote{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--gcu-space-1) var(--gcu-space-2);margin:var(--gcu-space-2) 0 0;padding-inline-start:var(--gcu-space-3);border-inline-start:2px solid var(--gcu-border-strong);color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-criterion__quote q{quotes:"«" "»"}
+.gcu-criterion__turn{padding:0;border:0;background:none;color:var(--gcu-primary-text);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-medium);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.gcu-criterion__turn:focus-visible{outline:0;border-radius:var(--gcu-radius-xs);box-shadow:var(--gcu-focus-ring)}
+.gcu-criterion__meta{grid-column:2;display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-1) var(--gcu-space-3);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-criterion__result{font-weight:var(--gcu-font-weight-semibold);color:var(--gcu-text)}
+.gcu-criterion--cumple .gcu-criterion__result{color:var(--gcu-success-text)}
+.gcu-criterion--no_cumple .gcu-criterion__result{color:var(--gcu-danger-text)}
+.gcu-criterion__evidence--weak{color:var(--gcu-warning-text);font-weight:var(--gcu-font-weight-medium)}
+
+@container (min-width: 32rem){
+  .gcu-criterion{grid-template-columns:auto minmax(0,1fr) auto}
+  .gcu-criterion__meta{grid-column:3;flex-direction:column;align-items:flex-end;text-align:end}
+}
