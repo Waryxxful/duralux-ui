@@ -2,6 +2,44 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## 2.8.0 — Componentes de IA
+
+Lotes IA1 e IA2. API aditiva. Los componentes solo emiten intenciones: ninguno ejecuta acciones ni llama a un modelo; toda acción con efecto pasa por `ApprovalCard`.
+
+### Conversación (IA1)
+AiAvatar, AiMessage, MessageActions, AiEmptyState, PromptComposer (con `AI_DISCLAIMER`), ThinkingIndicator, AiLoader, Citation, SourceList, StreamingAnswer (anuncia por bloques completos), AiErrorState, QuotaBanner, ModelSelector, UsageMeter, VoiceInput (se deshabilita con aviso sin Web Speech API), AiHistory, MemoryChips y SuggestionBanner.
+
+### Agente y contenido (IA2)
+ReasoningTrace, AgentSteps, ToolChip, ApprovalCard, TaskRows, AgentPlan, StatusTracker, WebResults, InlineEdit, DiffView (`wordDiff`, `lineDiff`), CodeBlock (copiar con alternativa sin Clipboard API) e InsightCard. Tipos `AiToolArgs`/`AiJsonValue` para argumentos de herramientas (JSON).
+
+### Transversal
+- Un solo saneador de enlaces (`utils/safeHref`): solo http/https o rutas relativas; el aviso por log no incluye la URL. Lo usan el shell (CommandPalette, AppSwitcher, notificaciones, perfil, navegación) y la IA (Citation, SourceList, WebResults).
+- Patrón «Asistente» en Storybook con AiHistory, AiMessage, PromptComposer, pasos del agente y aprobación.
+- Foco visible también en modo de alto contraste en los componentes de 2.7–2.8; contraste AA del menú lateral en oscuro y navy y del nombre de la persona en el header de `AppLayout`.
+- react-doctor 81/100.
+
+## 2.7.0 — Componentes de dominio
+
+Lote D7 (`src/components/domain`). API aditiva.
+
+- **Calidad:** CriterionRow, Transcript, AudioPlayer (simula el avance sin `src`), CallRow y CallList (listbox con foco itinerante).
+- **Operación:** TargetBar, QueueCard, AgentStatusBoard y Heatmap (desplazable con teclado en pantallas angostas).
+- **CRM:** ContactCard, PipelineBoard (mover entre etapas con arrastre o teclado) y Funnel.
+
+## 2.6.0 — Shell, layout y patrones de página
+
+Lotes P1, P2 y DOC. Sin cambios de API en lo existente.
+
+### Cambios visibles
+- **`PageHeader` es sticky por defecto** y muestra sombra solo cuando queda pegado al hacer scroll (`sticky={false}` lo desactiva). Ya no hace falta `className="sticky-top"`.
+- **`ShellHeader` dividido en piezas** exportadas por separado (`AppSwitcher`, `TenantSwitcher`, `NotificationsMenu`, `ProfileMenu`, `ThemeToggle`); mismas props que 2.5. `themeMenu` (opcional) cambia el botón sol / luna por el menú de cuatro modos.
+- **Demo Vite retirada** (`demo/`, `dev:demo`, `preview:demo`): Storybook cubre sus páginas. `scripts/audit/capture.mjs` ahora trabaja solo con Storybook (`--storybook`, por defecto http://localhost:6006).
+
+### Nuevo
+- `CommandPalette` (Ctrl/Cmd + K, búsqueda sin tildes, «Recientes»), `ThemeToggle`, `PageHeader` y `AuthLayout` en TSX; los adaptadores de navegación salen de `Sidebar` y `ShellNav` a módulos propios.
+- Ocho patrones de página en Storybook (Cola primero, Reporte, Directorio, Tabla operativa, Bandeja, Espacio de trabajo, Ajustes, Acceso) y `docs/PATRONES.md`.
+- Documentación: `AGENTS.md`, `docs/manifest.json` / `docs/MANIFEST.md` y guías de migración por app en `docs/migracion/`.
+
 ## 2.5.0 — Componentes nuevos, DataTable sobre TanStack y antd ampliado
 
 Lotes N1, N2, N3 y 2.5.1 (sub-specs `2026-10-04-2-5-componentes-nuevos-design.md` y `2026-10-04-2-5-1-antd-ampliado-design.md`). API aditiva: nada se rompe.
