@@ -9,6 +9,8 @@
 $gcu-dark-palettes: (
 	dark: (
 		color: #8b8d98,
+		// Texto principal (= --gcu-text del tema): lo usan .text-body y todo lo que lee --bs-body-color.
+		text: $token-dark-text,
 		dark: #0e0f12,
 		darker: #17181d,
 		hover: #26272e,
@@ -25,6 +27,7 @@ $gcu-dark-palettes: (
 	),
 	navy: (
 		color: #b1b4c0,
+		text: $token-navy-text,
 		dark: #121a2d,
 		darker: #0f172a,
 		hover: #1c2438,
@@ -54,6 +57,12 @@ $gcu-dark-palettes: (
 	$navigation-hover-color: map-get($p, navigation-hover-color);
 	$navigation-border-color: map-get($p, navigation-border-color);
 	$header-brand-color: map-get($p, header-brand-color);
+	$dark-theme-text: map-get($p, text);
+	// Bootstrap deja --bs-body-color en el gris del claro en todos los temas: .text-body y
+	// cualquier componente que lea la variable quedaban a ~2,5:1 sobre el fondo oscuro. Se remapea
+	// al texto del tema (≈15:1 en oscuro y navy); el claro no cambia.
+	--bs-body-color: #{$dark-theme-text};
+	--bs-body-color-rgb: #{red($dark-theme-text)}, #{green($dark-theme-text)}, #{blue($dark-theme-text)};
 		a,
 		.h1,
 		.h2,

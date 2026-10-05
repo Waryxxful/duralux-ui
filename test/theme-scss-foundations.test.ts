@@ -39,6 +39,11 @@ describe('theme.scss — fundaciones 2.1', () => {
     expect(css).toMatch(/html\.app-skin-dark [^{]*\{[^}]*#0e0f12/)
   })
 
+  test('oscuro y navy remapean --bs-body-color al texto del tema (.text-body con contraste AA)', () => {
+    expect(css).toMatch(/html\.app-skin-dark \{[^}]*--bs-body-color-rgb: 226, 232, 240/)
+    expect(rulesFor('html.app-skin-dark[data-gcu-theme=navy] {')).toContain('--bs-body-color: #e2e8f0')
+  })
+
   test('no depende de Google Fonts y declara Inter Variable autoalojada primero', () => {
     expect(css).not.toContain('fonts.googleapis.com')
     expect(css).toMatch(/font-family:\s*"Inter Variable"/)

@@ -2,6 +2,13 @@
 
 Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe el contenido del commit de preparación; la publicación requiere crear el tag `v2.0.0` después de que CI valide el commit.
 
+## Sin publicar
+
+### Correcciones
+
+- **Fuente `Inter`**: `grancrm-ui.css` declara también la familia `"Inter"` (alias de los mismos woff2 de Inter Variable). En 2.x la cargaba Google Fonts con ese nombre y las apps la siguen pidiendo en JS (p. ej. `fontFamily` de ApexCharts); sin alias caía a `system-ui`, la leyenda de Apex pasaba a dos líneas y el área de trazado de los gráficos con meta quedaba ~25 px más baja.
+- **`.text-body` en oscuro y navy**: el tema remapea `--bs-body-color`/`--bs-body-color-rgb` al texto del tema (`--gcu-text`). Antes quedaba el gris del claro (#4b5563, ~2,5:1 sobre el fondo oscuro); ahora ≈15:1. El claro no cambia.
+
 ## 3.0.0 — Retiro de APIs deprecadas
 
 Versión mayor sin componentes nuevos ni cambios visuales: se borra todo lo que 2.1–2.8 marcaron con `deprecate()` o `@deprecated`. Guía completa y usos por app en `docs/migracion/README.md` («De 2.x a 3.0»).
