@@ -130,6 +130,10 @@ const meta: Meta = {
 }
 export default meta
 
-export const { Claro, Oscuro, Navy } = tresTemas<StoryObj>()
+// Exportaciones explícitas: el indexador de Storybook ignora las desestructuradas.
+const temas = tresTemas<StoryObj>()
+export const Claro = temas.Claro
+export const Oscuro = temas.Oscuro
+export const Navy = temas.Navy
 
 export const Vacia: StoryObj = { name: 'Vacía', render: () => <BandejaCalidad vacia /> }
