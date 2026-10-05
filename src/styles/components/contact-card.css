@@ -1,0 +1,24 @@
+/* ContactCard: identidad, datos de contacto, etiquetas y cifras. Responde a su contenedor:
+   angosta, cifras en 2 columnas; desde 28rem, 3. */
+.gcu-contact{margin-bottom:0}
+.gcu-contact__body{display:flex;flex-direction:column;gap:var(--gcu-space-4)}
+.gcu-contact__head{display:flex;align-items:center;gap:var(--gcu-space-3);min-width:0}
+.gcu-contact__head .gcu-avatar,.gcu-contact__head .avatar-text,.gcu-contact__head .avatar-image{flex:none}
+.gcu-contact__who{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-0-5);min-width:0}
+.gcu-contact__name{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-lg);line-height:var(--gcu-line-height-lg);font-weight:var(--gcu-font-weight-semibold);text-wrap:balance}
+.gcu-contact__subtitle{color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-contact__status{margin-top:var(--gcu-space-1)}
+.gcu-contact__skeleton{height:var(--gcu-space-16)}
+.gcu-contact__meta{display:flex;flex-direction:column;gap:var(--gcu-space-2);margin:0;padding:0;list-style:none;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-contact__meta li{display:flex;align-items:center;gap:var(--gcu-space-2);min-width:0}
+.gcu-contact__meta i{flex:none;color:var(--gcu-muted)}
+.gcu-contact__mono{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs)}
+.gcu-contact__tags{display:flex;flex-wrap:wrap;gap:var(--gcu-space-1);margin:0;padding:0;list-style:none}
+.gcu-contact__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gcu-space-3);margin:0;padding-top:var(--gcu-space-3);border-top:1px solid var(--gcu-border)}
+.gcu-contact__fact dt{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium)}
+.gcu-contact__fact dd{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-md);line-height:var(--gcu-line-height-md);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-contact__actions{display:flex;flex-wrap:wrap;gap:var(--gcu-space-2);padding:var(--gcu-space-3) var(--gcu-space-4)}
+
+@container (min-width: 28rem){
+  .gcu-contact__facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+}

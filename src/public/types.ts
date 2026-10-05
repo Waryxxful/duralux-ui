@@ -1932,9 +1932,10 @@ export interface ContactFact {
   value: React.ReactNode
 }
 
-export interface ContactCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title' | 'children'> {
+export interface ContactCardProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title' | 'children' | 'role'> {
   name: string
   company?: string
+  /** Cargo del contacto («Jefa de compras»); no es el rol ARIA (la ficha es una `section`). */
   role?: string
   email?: string
   phone?: string

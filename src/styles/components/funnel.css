@@ -1,0 +1,13 @@
+/* Funnel: etiqueta, barra proporcional al primer paso, cifra y conversión desde el anterior.
+   Angosto: la barra baja a su propia fila; desde 28rem va todo en una línea. */
+.gcu-funnel{display:flex;flex-direction:column;gap:var(--gcu-space-3);margin:0;padding:0;list-style:none}
+.gcu-funnel__step{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"label value conv" "bar bar bar";align-items:center;gap:var(--gcu-space-1) var(--gcu-space-3)}
+.gcu-funnel__label{grid-area:label;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-medium)}
+.gcu-funnel__bar{grid-area:bar;display:block;height:var(--gcu-space-3);border-radius:var(--gcu-radius-sm);background-color:var(--gcu-surface-sunken)}
+.gcu-funnel__fill{display:block;height:100%;border-radius:inherit;background-color:var(--gcu-status-primary)}
+.gcu-funnel__value{grid-area:value;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-semibold);text-align:end}
+.gcu-funnel__conv{grid-area:conv;min-width:3.5em;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);text-align:end}
+
+@container (min-width: 28rem){
+  .gcu-funnel__step{grid-template-columns:minmax(6rem,10rem) minmax(0,1fr) auto auto;grid-template-areas:"label bar value conv"}
+}
