@@ -51,6 +51,8 @@ export interface ShellHeaderProps {
   themeMenu?: boolean;
 }
 
+const NO_NOTIFICATIONS: Notificacion[] = [];
+
 // ─── ShellHeader Component ────────────────────────────────────────────────────
 
 /**
@@ -84,7 +86,7 @@ export function ShellHeader({
   avatarUrl,
   profileHref,
   onNavigateProfile,
-  notifications = [],
+  notifications = NO_NOTIFICATIONS,
   onMarkAllRead,
   onNotificationClick,
   themeMenu = false,

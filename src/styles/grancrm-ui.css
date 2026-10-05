@@ -57,6 +57,9 @@
 @import "./components/accordion.css";
 @import "./components/drawer.css";
 @import "./components/primitives.css";
+@import "./components/navigation.css";
+@import "./components/command-palette.css";
+@import "./components/shell-layout.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */

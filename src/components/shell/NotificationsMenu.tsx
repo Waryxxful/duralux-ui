@@ -9,6 +9,9 @@ import { resolveNotificationsHref, tiempoRelativo } from './shellHeaderModel';
 import { safeHref } from '../../utils/safeHref';
 import { useControllableOpen, useDesktopHover } from './internal/useDesktopHover';
 
+const NO_NOTIFICATIONS: Notificacion[] = [];
+const NO_APPS: AppManifestEntry[] = [];
+
 export interface NotificationsMenuProps {
   notifications?: Notificacion[];
   /** Sin callback no se muestra «Marcar como leído». */
@@ -37,10 +40,10 @@ export interface NotificationsMenuProps {
  * - El ref apunta al contenedor del dropdown.
  */
 export const NotificationsMenu = /* @__PURE__ */ forwardRef<HTMLDivElement, NotificationsMenuProps>(function NotificationsMenu({
-  notifications = [],
+  notifications = NO_NOTIFICATIONS,
   onMarkAllRead,
   onNotificationClick,
-  apps = [],
+  apps = NO_APPS,
   appHref,
   notificationsHref: notificationsHrefProp,
   open: openProp,
