@@ -88,6 +88,10 @@ export { Transcript } from '../components/domain/quality/Transcript'
 export { AudioPlayer } from '../components/domain/quality/AudioPlayer'
 export { CallRow } from '../components/domain/quality/CallRow'
 export { CallList } from '../components/domain/quality/CallList'
+export { TargetBar } from '../components/domain/operations/TargetBar'
+export { QueueCard } from '../components/domain/operations/QueueCard'
+export { AgentStatusBoard } from '../components/domain/operations/AgentStatusBoard'
+export { Heatmap } from '../components/domain/operations/Heatmap'
 import type {
   AlertProps,
   AppLayoutProps,

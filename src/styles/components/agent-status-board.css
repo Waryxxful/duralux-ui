@@ -1,0 +1,32 @@
+/* AgentStatusBoard: presencia con forma + texto (se entiende en escala de grises).
+   disponible = punto · en llamada = cuadrado · post llamada = triángulo · en pausa = anillo · desconectado = raya.
+   La grilla responde a su contenedor: 1 columna, 2 desde 36rem, 3 desde 56rem. */
+.gcu-agents{container-type:inline-size;display:flex;flex-direction:column;gap:var(--gcu-space-3)}
+.gcu-agents__summary{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2) var(--gcu-space-4);margin:0;padding:0;list-style:none;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm)}
+.gcu-agents__total{color:var(--gcu-text);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-agents__count{display:inline-flex;align-items:center;gap:var(--gcu-space-1)}
+.gcu-agents__grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--gcu-space-2);margin:0;padding:0;list-style:none}
+.gcu-agents__skeleton{height:var(--gcu-space-12)}
+.gcu-agents__empty{margin:0;padding:var(--gcu-space-6) var(--gcu-space-4);color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);text-align:center}
+.gcu-agent{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"person time" "state state";align-items:center;gap:var(--gcu-space-1) var(--gcu-space-3);width:100%;padding:var(--gcu-space-2) var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);color:var(--gcu-text);font:inherit;text-align:start}
+.gcu-agent .gcu-person{grid-area:person}
+.gcu-agent--action{cursor:pointer}
+@media (hover:hover){.gcu-agent--action:hover{background-color:var(--gcu-surface-sunken)}}
+.gcu-agent--action:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-agent__state{grid-area:state;display:inline-flex;align-items:center;gap:var(--gcu-space-1);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium)}
+.gcu-agent__time{grid-area:time;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
+.gcu-agent__time--long{padding:0 var(--gcu-space-1);border-radius:var(--gcu-radius-sm);background-color:var(--gcu-warning-soft);color:var(--gcu-warning-text);font-weight:var(--gcu-font-weight-semibold)}
+
+.gcu-presence{flex:none;display:inline-block;box-sizing:border-box;width:var(--gcu-space-2);height:var(--gcu-space-2)}
+.gcu-presence--disponible{border-radius:var(--gcu-radius-full);background-color:var(--gcu-status-success)}
+.gcu-presence--en_llamada{border-radius:var(--gcu-radius-xs);background-color:var(--gcu-status-primary)}
+.gcu-presence--post_llamada{width:0;height:0;border-inline:calc(var(--gcu-space-2) / 2 + 1px) solid transparent;border-bottom:var(--gcu-space-2) solid var(--gcu-status-info)}
+.gcu-presence--en_pausa{border:2px solid var(--gcu-status-warning);border-radius:var(--gcu-radius-full)}
+.gcu-presence--desconectado{height:2px;border-radius:var(--gcu-radius-xs);background-color:var(--gcu-muted)}
+
+@container (min-width: 36rem){
+  .gcu-agents__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@container (min-width: 56rem){
+  .gcu-agents__grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
