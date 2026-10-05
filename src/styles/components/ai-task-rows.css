@@ -4,7 +4,7 @@
 .gcu-ai-tasks__row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);padding:var(--gcu-space-2) var(--gcu-space-3);font-size:var(--gcu-font-size-sm)}
 summary.gcu-ai-tasks__row{cursor:pointer;list-style:none}
 summary.gcu-ai-tasks__row::-webkit-details-marker{display:none}
-summary.gcu-ai-tasks__row:focus-visible{outline:none;box-shadow:inset var(--gcu-focus-ring)}
+summary.gcu-ai-tasks__row:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:-2px}
 @media (hover:hover){summary.gcu-ai-tasks__row:hover{background-color:var(--gcu-surface-sunken)}}
 .gcu-ai-tasks__title{flex:1 1 12rem;min-inline-size:0;color:var(--gcu-text);font-weight:var(--gcu-font-weight-medium);text-wrap:pretty}
 .gcu-ai-tasks__metric{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}

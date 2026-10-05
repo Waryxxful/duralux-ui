@@ -57,6 +57,16 @@
 @import "./components/accordion.css";
 @import "./components/drawer.css";
 @import "./components/primitives.css";
+/* 2.8 IA agente y contenido */
+@import "./components/ai-agent-status.css";
+@import "./components/ai-reasoning-trace.css";
+@import "./components/ai-agent-steps.css";
+@import "./components/ai-tool-chip.css";
+@import "./components/ai-approval-card.css";
+@import "./components/ai-task-rows.css";
+@import "./components/ai-agent-plan.css";
+@import "./components/ai-status-tracker.css";
+@import "./components/ai-web-results.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */

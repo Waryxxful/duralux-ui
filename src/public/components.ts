@@ -82,6 +82,15 @@ export { Switch } from '../components/form/Switch'
 export { Fieldset } from '../components/form/Fieldset'
 export { RadioGroup } from '../components/form/RadioGroup'
 export { ChoiceCard } from '../components/form/ChoiceCard'
+// 2.8 IA agente y contenido
+export { ReasoningTrace } from '../components/ai/ReasoningTrace'
+export { AgentSteps } from '../components/ai/AgentSteps'
+export { ToolChip } from '../components/ai/ToolChip'
+export { ApprovalCard } from '../components/ai/ApprovalCard'
+export { TaskRows } from '../components/ai/TaskRows'
+export { AgentPlan } from '../components/ai/AgentPlan'
+export { StatusTracker } from '../components/ai/StatusTracker'
+export { WebResults } from '../components/ai/WebResults'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -309,4 +318,31 @@ export type {
   SkeletonProps,
   TagTone,
   TagProps,
+  // 2.8 IA agente y contenido
+  AgentStepStatus,
+  ReasoningStep,
+  ReasoningStepInput,
+  ReasoningTraceProps,
+  AgentStep,
+  AgentStepsProps,
+  ToolChipProps,
+  ApprovalIntent,
+  ApprovalStatus,
+  ApprovalCardProps,
+  AgentTask,
+  TaskRowsProps,
+  AgentPlanStep,
+  AgentPlanProps,
+  StatusTrackerStage,
+  StatusTrackerProps,
+  WebResult,
+  WebResultsProps,
+  InlineEditProps,
+  DiffPartKind,
+  DiffPart,
+  DiffFile,
+  DiffViewProps,
+  CodeBlockProps,
+  InsightDelta,
+  InsightCardProps,
 } from './types'
