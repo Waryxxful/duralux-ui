@@ -305,8 +305,6 @@ export interface ChartCardProps extends Omit<ChartStateProps, 'theme' | 'ariaLab
   actions?: ReadonlyArray<ChartCardAction>
   /** Cuerpo a ras (sin padding). */
   noPadding?: boolean
-  /** @deprecated Usa `noPadding`. */
-  noPad?: boolean
   /** Nivel del título (h2–h6) para respetar el orden de encabezados del contenedor. Por defecto 3. */
   headingLevel?: ChartCardHeadingLevel
   children?: React.ReactNode

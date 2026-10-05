@@ -2,7 +2,6 @@ import { createRef } from 'react'
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import { Table } from '../src/components/data/Table'
-import { ResponsiveTable } from '../src/components/data/ResponsiveTable'
 
 afterEach(() => vi.restoreAllMocks())
 
@@ -112,13 +111,6 @@ describe('Table refinada (receta de componente 2.3)', () => {
     expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('stickyHeader'))
   })
 
-  test('striped se ignora y se avisa como deprecado', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    render(<Table columns={columns} rows={rows} rowKey="id" striped />)
-    expect(screen.getByRole('table')).not.toHaveClass('table-striped')
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('striped'))
-  })
-
   test('las filas mantienen el contenido (sin regresión del render por columna)', () => {
     render(<Table columns={[{ key: 'agente', header: 'Agente', render: (row: Fila) => <strong>{row.agente}</strong> }]} rows={rows} rowKey="id" />)
     const body = screen.getAllByRole('rowgroup')[1]
@@ -127,13 +119,3 @@ describe('Table refinada (receta de componente 2.3)', () => {
   })
 })
 
-describe('ResponsiveTable (alias deprecado)', () => {
-  test('reenvía ref, conserva un solo contenedor y avisa que se use Table', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const ref = createRef<HTMLTableElement>()
-    const { container } = render(<ResponsiveTable ref={ref} columns={columns} rows={rows} rowKey="id" />)
-    expect(ref.current).toBeInstanceOf(HTMLTableElement)
-    expect(container.querySelectorAll('.table-responsive')).toHaveLength(1)
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('ResponsiveTable'))
-  })
-})

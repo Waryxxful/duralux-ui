@@ -1,9 +1,8 @@
-import { Fragment, forwardRef, useCallback } from 'react'
+import { Fragment, forwardRef } from 'react'
 import type * as React from 'react'
 import { CardLoader } from './CardLoader'
 import { IconButton } from './Button'
 import { cx } from '../../utils/cx'
-import { deprecate } from '../../utils/log'
 import { isArray, isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 import type { CardProps } from '../../public/types'
 
@@ -23,14 +22,6 @@ function callbackAction(
   if (isFunction<typeof callback, () => void>(callback)) return <IconButton icon={icon} label={label} size="sm" onClick={callback} />
   if (isFunction<typeof node, () => void>(node)) return <IconButton icon={icon} label={label} size="sm" onClick={node} />
   return hasContent(node) ? node : null
-}
-
-function assignRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
-  if (isFunction<React.Ref<T>, (node: T | null) => void>(ref)) ref(value)
-  else if (ref) {
-    // SAFETY: un ref no funcional y no nulo es un objeto ref con `current` escribible.
-    (ref as React.MutableRefObject<T | null>).current = value
-  }
 }
 
 function SkeletonBody({ rows }: { rows: number }) {
@@ -53,17 +44,14 @@ function SkeletonBody({ rows }: { rows: number }) {
  * - loading: overlay con CardLoader; con `loadingVariant="skeleton"` el cuerpo muestra filas skeleton.
  * - onRefresh / onRemove / onExpand: acciones genéricas (IconButton con nombre en español).
  * - interactive: hover con elevación 2 (solo con puntero real) y cursor de acción.
- * - Deprecados: headerRight (usa actions), noPad (usa noPadding), elementRef (usa ref).
  */
 export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({
   title,
   subtitle,
   actions,
-  headerRight,
   footer,
   stretch,
   noPadding,
-  noPad,
   interactive = false,
   loading = false,
   loadingVariant = 'overlay',
@@ -80,27 +68,15 @@ export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(functi
   expandLabel = 'Expandir',
   bodyClassName = '',
   className = '',
-  elementRef,
   children,
   ...rest
 }, ref) {
-  if (headerRight !== undefined) deprecate('card-headerRight', 'la prop `headerRight` de Card; usa `actions`.')
-  if (noPad !== undefined) deprecate('card-noPad', 'la prop `noPad` de Card; usa `noPadding`.')
-  if (elementRef !== undefined) deprecate('card-elementRef', 'la prop `elementRef` de Card; usa `ref`.')
-
-  const setRoot = useCallback((node: HTMLDivElement | null) => {
-    assignRef(ref, node)
-    assignRef(elementRef, node)
-  }, [ref, elementRef])
-
-  const right = actions ?? headerRight
-  const flush = noPadding ?? noPad
   const genericActions = [
     callbackAction(onRefresh, refresh, refreshLabel, 'refresh-cw'),
     callbackAction(onRemove, remove, removeLabel, 'trash-2'),
     callbackAction(onExpand, expand, expandLabel, 'maximize-2'),
   ].filter(Boolean).map((action, index) => <Fragment key={`card-action-${index}`}>{action}</Fragment>)
-  const showActions = hasContent(right) || genericActions.length > 0
+  const showActions = hasContent(actions) || genericActions.length > 0
   const showHeader = hasContent(title) || hasContent(subtitle) || showActions
   const isLoading = Boolean(loading)
   const skeleton = isLoading && loadingVariant === 'skeleton'
@@ -108,7 +84,7 @@ export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(functi
   return (
     <div
       {...rest}
-      ref={setRoot}
+      ref={ref}
       className={cx(
         'card',
         'gcu-card',
@@ -129,14 +105,14 @@ export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(functi
             </div>
             {showActions && (
               <div className="card-header-action">
-                {hasContent(right) && right}
+                {hasContent(actions) && actions}
                 {genericActions}
               </div>
             )}
           </div>
         </div>
       )}
-      <div className={cx('card-body', flush && 'p-0', bodyClassName)}>
+      <div className={cx('card-body', noPadding && 'p-0', bodyClassName)}>
         {skeleton ? <SkeletonBody rows={skeletonRows} /> : children}
       </div>
       {hasContent(footer) && <div className="card-footer">{footer}</div>}

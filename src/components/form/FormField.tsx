@@ -1,7 +1,7 @@
 import { Fragment, cloneElement, forwardRef, isValidElement, useId } from 'react'
 import type * as React from 'react'
 import { cx } from '../../utils/cx'
-import { deprecate, log } from '../../utils/log'
+import { log } from '../../utils/log'
 import { isBoolean, isFunction, isString } from '../../utils/typeGuards'
 import type { FormFieldProps } from '../../public/types'
 import { Checkbox } from './Checkbox'
@@ -76,16 +76,14 @@ function appendUnique(values: string[], next: string[]): string[] {
  * - Un único control (nativo o de este paquete, incluidos los compuestos con marcador
  *   `duraluxFormControl`) recibe id, required, aria-describedby y aria-invalid.
  * - Con varios hijos no se inventa la asociación: usa `htmlFor` o el render-prop `(id) => nodo`.
- * - helpText: ayuda bajo el control. `hint` está deprecado.
+ * - helpText: ayuda bajo el control.
  * - El ref apunta a la fila contenedora.
  */
 export const FormField = /* @__PURE__ */ forwardRef<HTMLDivElement, FormFieldProps>(function FormField(
-  { label, htmlFor, required, error, helpText, hint, className, children },
+  { label, htmlFor, required, error, helpText, className, children },
   ref,
 ) {
-  if (hint !== undefined) deprecate('formfield-hint', 'la prop `hint` de FormField es un alias; usa `helpText`.')
   const generatedId = useId()
-  const help = helpText ?? hint
   const isRenderProp = isFunction<FormFieldProps['children'], (id: string) => React.ReactNode>(children)
   const fallbackId = htmlFor ?? generatedId
   const renderedContent: React.ReactNode = isFunction<FormFieldProps['children'], (id: string) => React.ReactNode>(children)
@@ -107,7 +105,7 @@ export const FormField = /* @__PURE__ */ forwardRef<HTMLDivElement, FormFieldPro
   const errorId = `${generatedId}-error`
   const helpId = `${generatedId}-help`
   const hasError = hasContent(error)
-  const hasHelp = hasContent(help)
+  const hasHelp = hasContent(helpText)
   const appliesRequired = Boolean(
     required
     && isSingleControl
@@ -144,7 +142,7 @@ export const FormField = /* @__PURE__ */ forwardRef<HTMLDivElement, FormFieldPro
         </div>
         <div className="gcu-form-field__control-col">
           {content}
-          {hasHelp && <div id={helpId} className="gcu-form-field__help">{help}</div>}
+          {hasHelp && <div id={helpId} className="gcu-form-field__help">{helpText}</div>}
           {hasError && (
             <div id={errorId} className="gcu-form-field__error" role="alert" aria-live="polite">
               {error}

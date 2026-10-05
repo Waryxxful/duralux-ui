@@ -86,12 +86,9 @@ test('StatsCard keeps progress output finite and exposed as progressbar semantic
 })
 
 test('Input and Textarea hide decorative icons and do not leave class whitespace', () => {
-  const { rerender } = render(<Input icon="feather-user" aria-label="Name" />)
+  const { rerender } = render(<Input aria-label="Name" />)
   const input = screen.getByRole('textbox', { name: 'Name' })
   expect(input.className).toBe('form-control')
-
-  const inputIcon = render(<Input icon="feather-user" aria-label="Name with icon" />).container.querySelector('i')
-  expect(inputIcon).toHaveAttribute('aria-hidden', 'true')
 
   rerender(<Textarea icon="feather-align-left" aria-label="Description" />)
   const textarea = screen.getByRole('textbox', { name: 'Description' })

@@ -29,7 +29,7 @@ const meta: Meta<typeof StatsCard> = {
   parameters: {
     docs: {
       description: {
-        component: 'KPI con ícono, cifra, variación y contexto. **Toda cifra lleva meta, variación o tendencia**: usa `delta` (número con signo, unidad y flecha; nunca solo color) y `context`. Un número en `value` se formatea en es-CL con cifras tabulares. Responde a su contenedor: en celdas angostas la variación baja bajo la cifra. `trend` e `iconBg` están deprecados.',
+        component: 'KPI con ícono, cifra, variación y contexto. **Toda cifra lleva meta, variación o tendencia**: usa `delta` (número con signo, unidad y flecha; nunca solo color) y `context`. Un número en `value` se formatea en es-CL con cifras tabulares. Responde a su contenedor: en celdas angostas la variación baja bajo la cifra.',
       },
     },
   },

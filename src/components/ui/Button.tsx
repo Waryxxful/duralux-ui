@@ -3,7 +3,6 @@ import type * as React from 'react'
 import { cx } from '../../utils/cx'
 import { isString } from '../../utils/typeGuards'
 import { renderIconSlot } from '../../utils/iconSlot'
-import { deprecate } from '../../utils/log'
 import type { ButtonProps, IconButtonProps, LinkButtonProps } from '../../public/types'
 import { resolveVariant } from './buttonVariants'
 
@@ -47,14 +46,13 @@ function ButtonContent({ loading, startIcon, icon, endIcon, children }: ButtonCo
 /**
  * Button — acción con variantes canónicas Duralux, tamaños sm/md/lg y estado de carga.
  *
- * - variant: sólido semántico | "light-brand" (secundario) | suave "light-{tono}". `outline` está deprecado.
+ * - variant: sólido semántico | "light-brand" (secundario) | suave "light-{tono}".
  * - loading: spinner en lugar del ícono inicial; conserva el texto (sin salto de ancho), deshabilita y marca aria-busy.
  * - startIcon / endIcon: nombre Feather o icono Tabler (`<IconX />`).
  * - as / href: se renderiza como ancla u otro elemento; deshabilitado fuera de <button> bloquea eventos.
  */
 export const Button = /* @__PURE__ */ forwardRef<HTMLElement, ButtonProps>(function Button({
   variant = 'primary',
-  outline = false,
   size = undefined,
   loading = false,
   icon = null,
@@ -74,7 +72,6 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLElement, ButtonProps>(funct
   tabIndex = undefined,
   ...props
 }, ref) {
-  if (outline) deprecate('button-outline', 'la prop `outline` de Button se ignora; usa variant="light-brand".')
   const tone = resolveVariant(variant)
   const isDisabled = disabled || loading
   const isNativeTag = isString(Tag)
@@ -124,7 +121,6 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLElement, ButtonProps>(funct
 export const LinkButton = /* @__PURE__ */ forwardRef<HTMLAnchorElement, LinkButtonProps>(function LinkButton({
   href,
   variant = 'primary',
-  outline = false,
   size = undefined,
   loading = false,
   icon = null,
@@ -135,7 +131,6 @@ export const LinkButton = /* @__PURE__ */ forwardRef<HTMLAnchorElement, LinkButt
   onClick,
   ...props
 }, ref) {
-  if (outline) deprecate('linkbutton-outline', 'la prop `outline` de LinkButton se ignora; usa variant="light-brand".')
   const tone = resolveVariant(variant)
   return (
     <a
@@ -155,10 +150,9 @@ export const LinkButton = /* @__PURE__ */ forwardRef<HTMLAnchorElement, LinkButt
 
 /** IconButton — botón de solo icono; `label` es obligatorio y se usa como aria-label y title. */
 export const IconButton = /* @__PURE__ */ forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
-  { icon, label, variant, size, outline, className = '', type = 'button', ...rest },
+  { icon, label, variant, size, className = '', type = 'button', ...rest },
   ref,
 ) {
-  if (outline) deprecate('iconbutton-outline', 'la prop `outline` de IconButton se ignora; usa variant="light-brand".')
   const { 'aria-label': _ariaLabel, title: _title, ...forwardedProps } = rest
   const tone = resolveVariant(variant || 'light-brand')
   return (

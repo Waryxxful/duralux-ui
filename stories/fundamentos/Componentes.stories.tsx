@@ -25,13 +25,13 @@ export const Resumen: StoryObj = {
         <div className="sb-panel">
           <div className="row g-3 align-items-end">
             <div className="col-md-4">
-              <FormField label="Campaña" htmlFor="sb-campana"><Input id="sb-campana" placeholder="Buscar campaña" icon="feather-search" /></FormField>
+              <FormField label="Campaña" htmlFor="sb-campana"><Input id="sb-campana" placeholder="Buscar campaña" startAddon={<i className="feather-search" aria-hidden="true" />} /></FormField>
             </div>
             <div className="col-md-3">
               <FormField label="Estado" htmlFor="sb-estado"><Select id="sb-estado" options={['Activa', 'Pausada', 'Finalizada']} /></FormField>
             </div>
             <div className="col-md-3">
-              <FormField label="Responsable" htmlFor="sb-resp" error="Selecciona un responsable"><Input id="sb-resp" invalid placeholder="Sin asignar" /></FormField>
+              <FormField label="Responsable" htmlFor="sb-resp" error="Selecciona un responsable"><Input id="sb-resp" error placeholder="Sin asignar" /></FormField>
             </div>
             <div className="col-md-2 d-flex" style={{ paddingBottom: 26 }}>
               <Button variant="primary" className="w-100">Aplicar</Button>

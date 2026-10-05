@@ -36,13 +36,9 @@ describe('ChartCard refinado', () => {
     expect(ref.current).toHaveAttribute('aria-labelledby', screen.getByRole('heading').id)
   })
 
-  test('noPadding deja el cuerpo a ras; noPad sigue funcionando con aviso de deprecación', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const { container, rerender } = render(<ChartCard title="A" noPadding>x</ChartCard>)
+  test('noPadding deja el cuerpo a ras', () => {
+    const { container } = render(<ChartCard title="A" noPadding>x</ChartCard>)
     expect(container.querySelector('.card-body')).toHaveClass('p-0')
-    rerender(<ChartCard title="A" noPad>x</ChartCard>)
-    expect(container.querySelector('.card-body')).toHaveClass('p-0')
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('noPad'))
   })
 
   test('los estados usan los componentes de feedback y marcan aria-busy al cargar', () => {

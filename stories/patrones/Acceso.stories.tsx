@@ -30,10 +30,10 @@ function FormularioAcceso({ errorInicial = false }: { errorInicial?: boolean }) 
         </Alert>
       ) : null}
       <FormField label="Correo" htmlFor="acceso-correo" required>
-        <Input id="acceso-correo" type="email" autoComplete="username" defaultValue="paula.herrera@in-touchcrm.cl" invalid={error} />
+        <Input id="acceso-correo" type="email" autoComplete="username" defaultValue="paula.herrera@in-touchcrm.cl" error={error} />
       </FormField>
-      <FormField label="Contraseña" htmlFor="acceso-clave" required hint={<a href="#recuperar">¿Olvidaste tu contraseña?</a>}>
-        <Input id="acceso-clave" type="password" autoComplete="current-password" invalid={error} />
+      <FormField label="Contraseña" htmlFor="acceso-clave" required helpText={<a href="#recuperar">¿Olvidaste tu contraseña?</a>}>
+        <Input id="acceso-clave" type="password" autoComplete="current-password" error={error} />
       </FormField>
       <Checkbox id="acceso-recordar" label="Mantener la sesión en este equipo" />
       <Button type="submit" variant="primary" loading={enviando} className="w-100">Ingresar</Button>

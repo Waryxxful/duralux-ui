@@ -34,12 +34,6 @@ describe('Checkbox refinado (receta de componente 2.3)', () => {
     expect(box).toBeChecked()
   })
 
-  test('invalid legacy avisa deprecación con [duralux]', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    render(<Checkbox label="Legacy" invalid />)
-    expect(screen.getByRole('checkbox')).toHaveClass('is-invalid')
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('Checkbox'))
-  })
 })
 
 describe('Radio refinado (receta de componente 2.3)', () => {

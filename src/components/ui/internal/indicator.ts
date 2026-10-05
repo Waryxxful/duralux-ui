@@ -127,19 +127,6 @@ export function formatDelta(component: string, delta: IndicatorDelta | undefined
   }
 }
 
-/**
- * Tendencia legada (`{ value: '36,8%', up: true }` o `trend` + `trendUp`): el texto ya viene
- * formateado; solo se le antepone el signo si no lo trae, para que la variación nunca dependa del color.
- */
-export function formatLegacyTrend(value: string | number | null | undefined, up: boolean | undefined): FormattedDelta | null {
-  if (value === undefined || value === null || value === '') return null
-  const raw = String(value).trim()
-  // Igual que la API original: sin `up` (o `trendUp`) la tendencia es a la baja.
-  const direction: DeltaDirection = up ? 'up' : 'down'
-  const signed = /^[+\-−]/.test(raw) ? raw.replace(/^-/, MINUS) : `${direction === 'up' ? '+' : MINUS}${raw}`
-  return { text: signed, direction, sentiment: direction === 'up' ? 'positive' : 'negative', spoken: SPOKEN[direction] }
-}
-
 /** Presencia de un nodo opcional: descarta `null`, `undefined`, `false` y texto vacío. */
 export function hasIndicatorContent(node: React.ReactNode): boolean {
   return !isEmptyIndicatorValue(node)

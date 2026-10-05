@@ -4,7 +4,7 @@ import { cx } from '../../utils/cx'
 import { isArray, isFiniteNumber, isObject, isString } from '../../utils/typeGuards'
 import type { SelectOption, SelectProps, SelectValue } from '../../public/types'
 import { valueToken } from './internal/selectCoreModel'
-import { ariaInvalidFor, resolveInvalid, sizeClass, warnOnce } from './internal/fieldState'
+import { ariaInvalidFor, sizeClass, warnOnce } from './internal/fieldState'
 
 const MAX_OPTION_COUNT = 10000
 
@@ -83,12 +83,11 @@ function normalizeNativeOptions(options: SelectProps['options']): NativeOption[]
  *
  * - options: `[{ value, label, disabled }]` o `[string | number]`; las inválidas se descartan con aviso.
  * - placeholder: primera opción vacía y deshabilitada.
- * - error: borde y `aria-invalid`. `invalid` está deprecado.
+ * - error: borde y `aria-invalid`.
  * - controlSize: alturas 32 / 36 / 40 px. El atributo nativo `size` (filas visibles) se conserva.
  */
 export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>(function Select({
   options = [],
-  invalid,
   error,
   controlSize,
   className = '',
@@ -97,7 +96,7 @@ export const Select = /* @__PURE__ */ forwardRef<HTMLSelectElement, SelectProps>
   'aria-invalid': ariaInvalid,
   ...props
 }, ref) {
-  const isInvalid = resolveInvalid('Select', invalid, error)
+  const isInvalid = Boolean(error)
   const normalizedOptions = normalizeNativeOptions(options)
   return (
     <select

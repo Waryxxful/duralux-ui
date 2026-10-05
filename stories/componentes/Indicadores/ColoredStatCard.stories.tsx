@@ -19,7 +19,7 @@ const meta: Meta<typeof ColoredStatCard> = {
   parameters: {
     docs: {
       description: {
-        component: 'Cifra destacada sobre una superficie de color con grano (Craft «Noise»). Los rellenos son pasos profundos de la paleta (≈ 7:1 con blanco) que no cambian entre claro, oscuro y navy; el ícono y la variación van sobre vidrio sombreado. Úsala para la cifra que manda en la vista, no para cuatro tarjetas iguales. `bg`, `trend` y `trendUp` están deprecados.',
+        component: 'Cifra destacada sobre una superficie de color con grano (Craft «Noise»). Los rellenos son pasos profundos de la paleta (≈ 7:1 con blanco) que no cambian entre claro, oscuro y navy; el ícono y la variación van sobre vidrio sombreado. Úsala para la cifra que manda en la vista, no para cuatro tarjetas iguales.',
       },
     },
   },

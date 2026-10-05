@@ -22,7 +22,6 @@ export { EmptyState } from '../components/feedback/EmptyState'
 export { Icon } from '../components/ui/Icon'
 export { Card } from '../components/ui/Card'
 export { Table } from '../components/data/Table'
-export { ResponsiveTable } from '../components/data/ResponsiveTable'
 export { Pagination } from '../components/data/Pagination'
 export { DataTableToolbar } from '../components/data/DataTableToolbar'
 export { StatsCard } from '../components/ui/StatsCard'
@@ -257,7 +256,6 @@ export type {
   ProgressProps,
   ProgressRingProps,
   RadioProps,
-  ResponsiveTableProps,
   DataTableToolbarProps,
   DataTableToolbarContext,
   SelectProps,
@@ -281,7 +279,6 @@ export type {
   ChartMetricsFooterProps,
   QuickLinkGridProps,
   StatsCardProps,
-  StatsCardTrend,
   StatsCardProgress,
   IndicatorTone,
   IndicatorDelta,

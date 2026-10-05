@@ -82,7 +82,7 @@ function DirectorioCampanas() {
               <div style={{ minInlineSize: '16rem' }}>
                 <Input
                   type="search"
-                  icon="feather-search"
+                  startAddon={<i className="feather-search" aria-hidden="true" />}
                   placeholder="Buscar campaña"
                   aria-label="Buscar campaña"
                   value={busqueda}

@@ -34,13 +34,6 @@ describe('FormField refinado (receta de componente 2.3)', () => {
     expect(screen.getByRole('textbox', { name: 'Monto' })).toBeInTheDocument()
   })
 
-  test('hint legacy funciona y avisa deprecación con [duralux]', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    render(<FormField label="Correo" hint="Usa el corporativo"><Input /></FormField>)
-    expect(screen.getByRole('textbox', { name: 'Correo' })).toHaveAccessibleDescription('Usa el corporativo')
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('`hint`'))
-  })
-
   test('el error y la ayuda usan las clases del componente (tokens)', () => {
     render(<FormField label="RUT" error="RUT inválido"><Input /></FormField>)
     const error = screen.getByText('RUT inválido')

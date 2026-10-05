@@ -1,18 +1,7 @@
 import type * as React from 'react'
-import { deprecate, log } from '../../../utils/log'
+import { log } from '../../../utils/log'
 import { isFunction } from '../../../utils/typeGuards'
 import type { ControlSize } from '../../../public/types'
-
-/**
- * Estado de error común de los controles de formulario.
- * `invalid` es el alias legacy de `error`: sigue funcionando y avisa una sola vez.
- */
-export function resolveInvalid(component: string, invalid: boolean | undefined, error: boolean | string | undefined): boolean {
-  if (invalid !== undefined) {
-    deprecate(`${component.toLowerCase()}-invalid`, `la prop \`invalid\` de ${component} es un alias; usa \`error\`.`)
-  }
-  return Boolean(invalid || error)
-}
 
 /** `aria-invalid` explícito del consumidor gana; si no, se marca solo cuando hay error. */
 export function ariaInvalidFor(

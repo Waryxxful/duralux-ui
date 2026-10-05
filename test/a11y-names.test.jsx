@@ -5,10 +5,10 @@ import { DataTable } from '../src/components/data/DataTable'
 
 describe('nombres accesibles (verificación final 2.1)', () => {
   test('la tendencia de StatsCard se anuncia con texto, sin aria-label en un div sin rol (DX-007)', () => {
-    const { container } = render(<StatsCard label="Leads" value="120" icon="feather-users" trend={{ up: true, value: '+12%' }} />)
+    const { container } = render(<StatsCard label="Leads" value="120" icon="feather-users" delta={{ value: 12, unit: '%' }} />)
     expect(container.querySelector('div[aria-label]')).toBeNull()
     expect(container.textContent).toContain('Sube')
-    expect(container.textContent).toContain('+12%')
+    expect(container.textContent).toMatch(/\+12\s%/)
   })
 
   test('la paginación de DataTable tiene un nombre propio, distinto de una paginación suelta (DX-005)', () => {

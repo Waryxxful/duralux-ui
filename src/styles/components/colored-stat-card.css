@@ -12,7 +12,6 @@
 .gcu-colored-stat--indigo{--gcu-colored-stat-fill:var(--gcu-indigo-600)}
 .gcu-colored-stat--dark{--gcu-colored-stat-fill:var(--gcu-slate-800)}
 /* bg="bg-light" histórico: superficie hundida con el texto del tema (sin grano visible sobre claro). */
-.gcu-colored-stat--light{--gcu-colored-stat-fill:var(--gcu-surface-sunken);color:var(--gcu-text);border:1px solid var(--gcu-border)}
 
 .gcu-colored-stat__body{display:flex;flex-direction:column;gap:var(--gcu-space-3);padding:var(--gcu-space-5)}
 /* Angosta: el ícono va arriba y la cifra y su etiqueta usan todo el ancho. */

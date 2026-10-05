@@ -1,17 +1,14 @@
 import { forwardRef } from 'react'
 import { cx } from '../../utils/cx'
-import { deprecate } from '../../utils/log'
-import type { ColoredStatCardProps, IndicatorTone } from '../../public/types'
-import { formatDelta, formatLegacyTrend, isEmptyIndicatorValue, resolveTone } from './internal/indicator'
+import type { ColoredStatCardProps } from '../../public/types'
+import { formatDelta, isEmptyIndicatorValue, resolveTone } from './internal/indicator'
 import { IndicatorContext, IndicatorDeltaChip, IndicatorGlyph, IndicatorValue } from './internal/IndicatorParts'
 
 /**
  * ColoredStatCard — cifra destacada sobre una superficie de color con grano (Craft «Noise»).
  *
  * - tone: relleno profundo de la paleta con texto blanco AA (≈ 7:1) en claro, oscuro y navy.
- *   `bg` (clase `bg-{tono}`) está deprecado: se traduce al tono y la clase no llega al DOM,
- *   porque `.bg-*` de Bootstrap y `.card` / `.avatar-text` del tema oscuro usan prioridad forzada.
- * - delta: variación con signo, unidad y flecha sobre vidrio sombreado. `trend`/`trendUp` deprecados.
+ * - delta: variación con signo, unidad y flecha sobre vidrio sombreado.
  * - chart: mini gráfico opcional al pie.
  * Estilos: src/styles/components/colored-stat-card.css e indicator.css.
  */
@@ -22,24 +19,16 @@ export const ColoredStatCard = /* @__PURE__ */ forwardRef<HTMLDivElement, Colore
   tone,
   delta,
   context,
-  trend,
-  trendUp,
-  bg,
   chart,
   loading = false,
   emptyText,
   className,
   ...rest
 }, ref) {
-  if (bg !== undefined) deprecate('coloredstatcard-bg', 'la prop `bg` de ColoredStatCard se reemplaza por `tone` ("primary", "success"…).')
-  if (trend !== undefined || trendUp !== undefined) {
-    deprecate('coloredstatcard-trend', 'las props `trend`/`trendUp` de ColoredStatCard se reemplazan por `delta` ({ value: número, unit, label }).')
-  }
-  // `bg-light` (API histórica) es una superficie clara con texto del tema; otro `neutral` cae en `dark` (AA con blanco).
-  const parsedTone: IndicatorTone = resolveTone('ColoredStatCard', tone, bg, 'primary')
-  const isLegacyLight = parsedTone === 'neutral' && String(bg ?? '').includes('light')
-  const resolvedTone = isLegacyLight ? 'light' : parsedTone === 'neutral' ? 'dark' : parsedTone
-  const formattedDelta = formatDelta('ColoredStatCard', delta) ?? formatLegacyTrend(trend, trendUp)
+  // `neutral` no es un relleno válido (el tipo lo excluye); si llega desde JS cae en `dark` (AA con blanco).
+  const parsedTone = resolveTone('ColoredStatCard', tone, undefined, 'primary')
+  const resolvedTone = parsedTone === 'neutral' ? 'dark' : parsedTone
+  const formattedDelta = formatDelta('ColoredStatCard', delta)
   const showMeta = !loading && Boolean(formattedDelta || context || isEmptyIndicatorValue(value))
 
   return (

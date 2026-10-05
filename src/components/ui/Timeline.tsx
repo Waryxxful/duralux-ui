@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import type * as React from 'react'
 import { cx } from '../../utils/cx'
-import { deprecate, log } from '../../utils/log'
+import { log } from '../../utils/log'
 import { isArray, isString } from '../../utils/typeGuards'
 import type { TimelineItem, TimelineProps } from '../../public/types'
 import { EventTime } from './internal/EventTime'
@@ -66,7 +66,7 @@ function buildKeys(items: ReadonlyArray<TimelineItem>): string[] {
  * items: [{ id, title, description, date | time, icon, variant (alias legado: color), user: { name, avatar } }]
  * - date: Date | ISO | epoch → «hace 5 minutos», con la fecha completa (dd-mm-aaaa HH:mm) en `title`.
  * - time: texto libre legado (se respeta tal cual).
- * - variant: tono del marcador con tokens suaves. `iconBg` (clase) está deprecado.
+ * - variant: tono del marcador con tokens suaves.
  * - now: instante de referencia para el tiempo relativo (tests, capturas).
  * En contenedores angostos la hora pasa bajo el título (container query).
  */
@@ -81,10 +81,9 @@ export const Timeline = /* @__PURE__ */ forwardRef<HTMLUListElement, TimelinePro
     <ul ref={ref} className={cx('gcu-timeline', 'list-unstyled', 'mb-0', className)} aria-label={ariaLabel}>
       {list.map((item, i) => {
         const { tone } = resolveTone(item?.variant ?? item?.color ?? 'primary', 'Timeline')
-        if (item?.iconBg) deprecate('timeline-iconBg', 'el campo `iconBg` de Timeline; usa `variant`.')
         return (
           <li key={keys[i]} className="gcu-timeline__item">
-            <div className={cx('gcu-timeline__marker', `gcu-timeline__marker--${tone}`, item?.iconBg)}>
+            <div className={cx('gcu-timeline__marker', `gcu-timeline__marker--${tone}`)}>
               <i className={item?.icon || 'feather-activity'} aria-hidden="true"></i>
             </div>
             <div className="gcu-timeline__body">

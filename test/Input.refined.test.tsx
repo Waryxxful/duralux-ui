@@ -30,13 +30,4 @@ describe('Input refinado (receta de componente 2.3)', () => {
     expect(screen.getByRole('textbox', { name: 'Bloqueado' })).toBeDisabled()
   })
 
-  test('las props legacy invalid/icon/prefix siguen funcionando y avisan deprecación con [duralux]', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    render(<><Input aria-label="Legacy" invalid /><Input aria-label="Con ícono" icon="feather-user" /><Input aria-label="Con prefijo" prefix="$" /></>)
-    expect(screen.getByRole('textbox', { name: 'Legacy' })).toHaveClass('is-invalid')
-    expect(screen.getByRole('textbox', { name: 'Con ícono' }).closest('.input-group')).not.toBeNull()
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('`invalid`'))
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('`icon`'))
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('`prefix`'))
-  })
 })

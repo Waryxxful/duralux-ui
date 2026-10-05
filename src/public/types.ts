@@ -16,7 +16,6 @@ export interface ApiFetchOptions extends RequestInit {
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: SemanticVariant
-  outline?: boolean
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
   icon?: string | null
@@ -31,7 +30,6 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 export interface LinkButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
   variant?: SemanticVariant
-  outline?: boolean
   size?: 'sm' | 'md' | 'lg'
   loading?: boolean
   icon?: string | null
@@ -46,7 +44,6 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
   label: string
   variant?: SemanticTone
   size?: 'sm' | 'md' | 'lg'
-  outline?: boolean
 }
 
 /** Icono de slot: nombre Feather (string) o elemento SVG (p. ej. `<IconRobot />` de @tabler/icons-react). */
@@ -76,14 +73,10 @@ export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 't
   title?: React.ReactNode
   subtitle?: React.ReactNode
   actions?: React.ReactNode
-  headerRight?: React.ReactNode
   footer?: React.ReactNode
   noPadding?: boolean
-  noPad?: boolean
   stretch?: boolean
   bodyClassName?: string
-  /** @deprecated usa `ref`. */
-  elementRef?: React.Ref<HTMLDivElement>
   /** Hover con elevación 2 y cursor de acción. */
   interactive?: boolean
   loading?: boolean
@@ -209,14 +202,12 @@ export type ControlSize = 'sm' | 'md' | 'lg'
 
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: React.ReactNode
-  invalid?: boolean
   error?: boolean | string
   indeterminate?: boolean
 }
 
 export interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: React.ReactNode
-  invalid?: boolean
   error?: boolean | string
 }
 
@@ -335,17 +326,13 @@ export interface FormFieldProps {
   required?: boolean
   error?: React.ReactNode
   helpText?: React.ReactNode
-  hint?: React.ReactNode
   className?: string
   children: React.ReactNode | ((id: string) => React.ReactNode)
 }
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
-  icon?: string
-  prefix?: React.ReactNode
   startAddon?: React.ReactNode
   endAddon?: React.ReactNode
-  invalid?: boolean
   error?: boolean | string
   /** Altura del control; el atributo nativo `size` (ancho en caracteres) se conserva. */
   controlSize?: ControlSize
@@ -359,7 +346,6 @@ export interface SelectOption {
 
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   options?: ReadonlyArray<SelectValue | SelectOption>
-  invalid?: boolean
   error?: boolean | string
   placeholder?: React.ReactNode
   /** Altura del control; el atributo nativo `size` (filas visibles) se conserva. */
@@ -368,7 +354,6 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   icon?: string
-  invalid?: boolean
   error?: boolean | string
   controlSize?: ControlSize
 }
@@ -413,16 +398,12 @@ export interface TableProps<T = unknown> extends Omit<React.TableHTMLAttributes<
   emptyMessage?: React.ReactNode
   loading?: boolean
   caption?: React.ReactNode
-  ariaLabel?: string
   className?: string
   hover?: boolean
   responsive?: boolean
   wrapperClassName?: string
   head?: TableSlot<T>
   body?: TableSlot<T>
-  header?: TableSlot<T>
-  renderHeader?: TableSlot<T>
-  renderBody?: TableSlot<T>
   children?: TableSlot<T>
   'aria-label'?: string
   'aria-labelledby'?: string
@@ -601,8 +582,6 @@ export interface PaginationProps {
   totalItems?: number
 }
 
-export interface ResponsiveTableProps<T = unknown> extends TableProps<T> {}
-
 export type TabKey = string | number
 
 export interface TabItem<K extends TabKey = TabKey> {
@@ -726,12 +705,6 @@ export interface IndicatorDelta {
 /** Ícono de un indicador: clase completa (`feather-users`), nombre Feather (`users`) o un SVG Tabler. */
 export type IndicatorIcon = string | React.ReactElement
 
-/** @deprecated Usa `IndicatorDelta` con la prop `delta`. */
-export interface StatsCardTrend {
-  value: string
-  up?: boolean
-}
-
 export interface StatsCardProgress {
   value: number
   max?: number
@@ -741,8 +714,6 @@ export interface StatsCardProgress {
 
 export interface StatsCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title' | 'color'> {
   icon?: IndicatorIcon
-  /** @deprecated Usa `tone`. Clases del ícono (`bg-soft-info text-info`); se siguen aplicando. */
-  iconBg?: string
   /** Tono del ícono con los roles `--gcu-{tono}-soft` / `--gcu-{tono}-text`. */
   tone?: IndicatorTone
   /** Cifra principal. Un número se formatea en es-CL (2.840 · 4,3). `null` muestra el estado vacío. */
@@ -752,8 +723,6 @@ export interface StatsCardProps extends Omit<React.HTMLAttributes<HTMLDivElement
   delta?: IndicatorDelta
   /** Contexto visible de la cifra: «meta 80 %», «de 120 agentes». */
   context?: React.ReactNode
-  /** @deprecated Usa `delta`. */
-  trend?: StatsCardTrend
   progress?: StatsCardProgress
   footer?: React.ReactNode
   onFooter?: () => void
@@ -784,12 +753,6 @@ export interface ColoredStatCardProps extends Omit<React.HTMLAttributes<HTMLDivE
   tone?: Exclude<IndicatorTone, 'neutral'>
   delta?: IndicatorDelta
   context?: React.ReactNode
-  /** @deprecated Usa `delta`. */
-  trend?: string
-  /** @deprecated Usa `delta` (el signo de `value` define la flecha). */
-  trendUp?: boolean
-  /** @deprecated Usa `tone`. Clase `bg-{tono}`: se traduce al tono equivalente. */
-  bg?: string
   chart?: React.ReactNode
   loading?: boolean
   emptyText?: React.ReactNode
@@ -888,8 +851,6 @@ export interface TimelineItem {
   icon?: string
   /** Tono del marcador. */
   variant?: SemanticTone
-  /** @deprecated usa `variant`. */
-  iconBg?: string
   /** Alias legado de `variant`. */
   color?: string
   user?: { name?: React.ReactNode; avatar?: string }

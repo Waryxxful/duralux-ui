@@ -34,24 +34,6 @@ test.each([
   expect(screen.getByLabelText('Nombre legal')).toHaveAttribute('aria-invalid', 'false')
 })
 
-test('the invalid alias reaches every native form control', () => {
-  render(
-    <>
-      <Input invalid aria-label="Nombre" />
-      <Textarea invalid aria-label="Comentarios" />
-      <Select invalid aria-label="Estado" options={['One']} />
-      <Checkbox invalid label="Checkbox" />
-      <Radio invalid label="Radio" />
-    </>,
-  )
-
-  expect(screen.getByLabelText('Nombre')).toHaveAttribute('aria-invalid', 'true')
-  expect(screen.getByLabelText('Comentarios')).toHaveAttribute('aria-invalid', 'true')
-  expect(screen.getByLabelText('Estado')).toHaveAttribute('aria-invalid', 'true')
-  expect(screen.getByLabelText('Checkbox')).toHaveAttribute('aria-invalid', 'true')
-  expect(screen.getByLabelText('Radio')).toHaveAttribute('aria-invalid', 'true')
-})
-
 test('FormField keeps generated semantics when a composite input has addons', () => {
   render(
     <FormField label="Amount" required error="Amount is required">

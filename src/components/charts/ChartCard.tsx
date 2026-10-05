@@ -8,7 +8,7 @@ import {
 } from './chartA11yModel'
 import { ChartState } from './chartA11y'
 import { cx } from '../../utils/cx'
-import { deprecate, log } from '../../utils/log'
+import { log } from '../../utils/log'
 import {
   isArray,
   isFiniteNumber,
@@ -82,7 +82,7 @@ function resolveHeadingTag(level: ChartCardHeadingLevel | undefined) {
  *   del contenedor (DX-006); la tipografía de título de card no cambia con el nivel.
  * - El título nombra la sección y también la figura del gráfico que va dentro.
  * - actions: [{ id?, label, onClick }] en un menú; las inválidas se descartan.
- * - noPadding: cuerpo a ras. `noPad` está deprecado.
+ * - noPadding: cuerpo a ras.
  * - loading / empty / error: skeleton, EmptyState y ErrorState con reintento.
  * Estilos: src/styles/components/chart.css.
  */
@@ -91,7 +91,6 @@ export const ChartCard = /* @__PURE__ */ forwardRef<HTMLElement, ChartCardProps>
   subtitle,
   actions = [],
   noPadding,
-  noPad,
   headingLevel,
   children,
   loading = false,
@@ -107,13 +106,11 @@ export const ChartCard = /* @__PURE__ */ forwardRef<HTMLElement, ChartCardProps>
   className,
   style,
 }, ref) {
-  if (noPad !== undefined) deprecate('chartcard-noPad', 'la prop `noPad` de ChartCard; usa `noPadding`.')
   const titleId = `chart-card-title-${safeIdPart(useId())}`
   const hasTitle = hasMeaningfulTitle(title)
   const normalizedActions = normalizeActions(actions)
   const state = loading ? 'loading' : error ? 'error' : empty ? 'empty' : null
   const headingTag = resolveHeadingTag(headingLevel)
-  const flush = noPadding ?? noPad
 
   return (
     <ChartCardTitleContext.Provider value={hasTitle ? titleId : null}>
@@ -155,7 +152,7 @@ export const ChartCard = /* @__PURE__ */ forwardRef<HTMLElement, ChartCardProps>
           )}
         </div>
         <div
-          className={cx('card-body', 'gcu-chart-card__body', flush && 'p-0')}
+          className={cx('card-body', 'gcu-chart-card__body', noPadding && 'p-0')}
           aria-busy={loading || undefined}
         >
           {state ? (

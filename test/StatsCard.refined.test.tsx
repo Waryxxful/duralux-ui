@@ -39,33 +39,16 @@ describe('StatsCard refinado (lote L4)', () => {
     expect(delta).toHaveClass('gcu-stat-delta--positive')
   })
 
-  test('trend legado sigue funcionando: antepone el signo y avisa la deprecación', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const { container } = render(<StatsCard value="120" label="Leads" trend={{ value: '12%', up: false }} />)
-    expect(container.querySelector('.gcu-stat-delta')).toHaveTextContent(/Baja\s*−12%/)
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('trend'))
-  })
-
-  test('trend legado sin `up` conserva el sentido original (baja)', () => {
-    vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const { container } = render(<StatsCard value="120" label="Leads" trend={{ value: '12%' }} />)
-    expect(container.querySelector('.gcu-stat-delta')).toHaveTextContent(/Baja\s*\u221212%/)
-  })
-
   test('la cifra principal no se redondea: solo se le da formato es-CL', () => {
     const { container } = render(<StatsCard value={99.99} label="Disponibilidad" />)
     expect(container.querySelector('.gcu-stat__value')).toHaveTextContent('99,99')
   })
 
-  test('tone pinta el ícono con roles semánticos; iconBg legado se respeta y se depreca', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const { container, rerender } = render(<StatsCard icon="feather-users" tone="info" value={1} label="Agentes" />)
+  test('tone pinta el ícono con roles semánticos', () => {
+    const { container } = render(<StatsCard icon="feather-users" tone="info" value={1} label="Agentes" />)
     expect(container.querySelector('.gcu-stat__icon')).toHaveClass('gcu-stat__icon--info')
     expect(container.querySelector('.gcu-stat__icon .feather-users')).toHaveAttribute('aria-hidden', 'true')
-    rerender(<StatsCard icon="feather-users" iconBg="bg-soft-info text-info" value={1} label="Agentes" />)
-    expect(container.querySelector('.gcu-stat__icon')).toHaveClass('bg-soft-info', 'text-info')
     expect(container.querySelector('.gcu-stat__icon')).not.toHaveClass('avatar-text')
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('iconBg'))
   })
 
   test('DX-020: el progreso usa <progress> nativo, no role="progressbar"', () => {

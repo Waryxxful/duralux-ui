@@ -51,12 +51,6 @@ describe('Timeline refinado (receta de componente 2.3)', () => {
     expect(marker?.querySelector('i')).toHaveAttribute('aria-hidden', 'true')
   })
 
-  test('iconBg sigue aplicándose, deprecado', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const { container } = render(<Timeline items={[{ id: 1, title: 'X', iconBg: 'bg-soft-success' }]} />)
-    expect(container.querySelector('.gcu-timeline__marker')).toHaveClass('bg-soft-success')
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('iconBg'))
-  })
 })
 
 describe('ActivityFeed refinado', () => {

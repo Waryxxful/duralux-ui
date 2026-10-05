@@ -13,14 +13,6 @@ describe('Card refinado (receta de componente 2.3)', () => {
     expect(ref.current).toHaveClass('card', 'gcu-card')
   })
 
-  test('elementRef sigue funcionando, deprecado', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const ref = createRef<HTMLDivElement>()
-    render(<Card elementRef={ref}>Cuerpo</Card>)
-    expect(ref.current).toHaveClass('card')
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('elementRef'))
-  })
-
   test('acciones genéricas con nombres en español (DX-029)', () => {
     render(<Card title="Ventas" onRefresh={() => {}} onRemove={() => {}} onExpand={() => {}}>Cuerpo</Card>)
     expect(screen.getByRole('button', { name: 'Actualizar' })).toBeInTheDocument()

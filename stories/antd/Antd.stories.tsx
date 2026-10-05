@@ -59,7 +59,7 @@ export const BarraDeFiltros: Story = {
     <DuraluxAntdProvider theme={themeOf(String(globals.theme ?? 'light'))}>
       <Card title="Llamadas" subtitle="Filtra por período, campaña y área">
         <div className="d-flex flex-wrap gap-2 align-items-center">
-          <div style={{ width: 240 }}><Input placeholder="Buscar agente o campaña" icon="feather-search" aria-label="Buscar agente o campaña" /></div>
+          <div style={{ width: 240 }}><Input placeholder="Buscar agente o campaña" startAddon={<i className="feather-search" aria-hidden="true" />} aria-label="Buscar agente o campaña" /></div>
           <DateRangeFilter style={{ width: 260 }} />
           <TreeSelect style={{ width: 220 }} treeData={[{ title: 'Ventas', value: 'ventas', children: [{ title: 'Fibra', value: 'fibra' }, { title: 'Móvil', value: 'movil' }] }, { title: 'Cobranza', value: 'cobranza' }]} />
           <Cascader style={{ width: 200 }} options={[{ label: 'Chile', value: 'cl', children: [{ label: 'Santiago', value: 'scl' }] }]} />

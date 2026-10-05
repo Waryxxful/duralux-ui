@@ -1,34 +1,29 @@
 import { forwardRef } from 'react'
 import { cx } from '../../utils/cx'
-import { deprecate } from '../../utils/log'
 import { isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 import type { StatsCardProps } from '../../public/types'
 import { normalizeProgress } from './internal/progress.js'
-import { formatDelta, formatLegacyTrend, resolveTone } from './internal/indicator'
+import { formatDelta, resolveTone } from './internal/indicator'
 import { IndicatorContext, IndicatorDeltaChip, IndicatorGlyph, IndicatorValue } from './internal/IndicatorParts'
-
-const LEGACY_DEFAULT_ICON_BG = 'bg-gray-200'
 
 /**
  * StatsCard — KPI con ícono, cifra, etiqueta, variación, contexto y progreso opcional.
  *
  * - value: un número se formatea en es-CL con cifras tabulares; `null` muestra el estado vacío.
- * - delta: variación con signo, unidad y flecha («+4 pts vs. semana pasada»). `trend` está deprecado.
+ * - delta: variación con signo, unidad y flecha («+4 pts vs. semana pasada»).
  * - context: lo que le da sentido a la cifra («Meta 80 %»). Toda cifra necesita meta, variación o tendencia.
- * - tone: color del ícono con roles semánticos. `iconBg` (clases) está deprecado pero se respeta.
+ * - tone: color del ícono con roles semánticos.
  * - progress: `<progress>` nativo (DX-020). loading: skeleton + aria-busy.
  * - Responde a su contenedor (`.gcu-container`): en una celda angosta la variación baja bajo la cifra.
  * Estilos: src/styles/components/stats-card.css e indicator.css.
  */
 export const StatsCard = /* @__PURE__ */ forwardRef<HTMLDivElement, StatsCardProps>(function StatsCard({
   icon,
-  iconBg,
   tone,
   value,
   label,
   delta,
   context,
-  trend,
   progress,
   footer,
   onFooter,
@@ -37,12 +32,8 @@ export const StatsCard = /* @__PURE__ */ forwardRef<HTMLDivElement, StatsCardPro
   className,
   ...rest
 }, ref) {
-  if (trend) deprecate('statscard-trend', 'la prop `trend` de StatsCard se reemplaza por `delta` ({ value: número, unit, label }).')
-  const hasLegacyIconBg = isString(iconBg) && iconBg !== LEGACY_DEFAULT_ICON_BG
-  if (hasLegacyIconBg) deprecate('statscard-iconbg', 'la prop `iconBg` de StatsCard se reemplaza por `tone` ("primary", "info"…).')
-
-  const resolvedTone = resolveTone('StatsCard', tone, iconBg, 'neutral')
-  const formattedDelta = formatDelta('StatsCard', delta) ?? formatLegacyTrend(trend?.value, trend?.up)
+  const resolvedTone = resolveTone('StatsCard', tone, undefined, 'neutral')
+  const formattedDelta = formatDelta('StatsCard', delta)
   const hasFooter = footer !== undefined && footer !== null && footer !== false
   const normalizedProgress = progress ? normalizeProgress(progress.value, progress.max) : null
   const progressLabel = progress && (isString(progress.label) || isFiniteNumber(progress.label))
@@ -60,7 +51,7 @@ export const StatsCard = /* @__PURE__ */ forwardRef<HTMLDivElement, StatsCardPro
       <div className="card-body gcu-stats-card__body">
         <div className="gcu-stats-card__main">
           {icon && (
-            <span className={cx('gcu-stat__icon', `gcu-stat__icon--${resolvedTone}`, 'avatar-lg', hasLegacyIconBg && iconBg)}>
+            <span className={cx('gcu-stat__icon', `gcu-stat__icon--${resolvedTone}`, 'avatar-lg')}>
               <IndicatorGlyph icon={icon} />
             </span>
           )}

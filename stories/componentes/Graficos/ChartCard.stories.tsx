@@ -33,7 +33,7 @@ const meta: Meta<typeof ChartCard> = {
   parameters: {
     docs: {
       description: {
-        component: 'Card para un gráfico: título, subtítulo con el contexto de la cifra y menú de acciones. `headingLevel` (h3 por defecto) ajusta el nivel del título al orden de encabezados de la página sin cambiar su tamaño. El título nombra también la figura del gráfico. `loading`, `empty` y `error` usan skeleton, EmptyState y ErrorState. `noPad` está deprecado: usa `noPadding`.',
+        component: 'Card para un gráfico: título, subtítulo con el contexto de la cifra y menú de acciones. `headingLevel` (h3 por defecto) ajusta el nivel del título al orden de encabezados de la página sin cambiar su tamaño. El título nombra también la figura del gráfico. `loading`, `empty` y `error` usan skeleton, EmptyState y ErrorState. `noPadding` deja el cuerpo a ras.',
       },
     },
   },

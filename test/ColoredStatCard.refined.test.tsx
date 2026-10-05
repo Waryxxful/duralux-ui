@@ -28,20 +28,6 @@ describe('ColoredStatCard refinado (lote L4)', () => {
     expect(delta).toHaveTextContent(/Baja\s*−2\spts/)
   })
 
-  test('bg legado se traduce al tono y avisa la deprecación', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    render(<ColoredStatCard bg="bg-warning" value={1} label="X" data-testid="c" />)
-    expect(screen.getByTestId('c')).toHaveClass('gcu-colored-stat--warning')
-    expect(warn).toHaveBeenCalledWith('[duralux]', expect.stringContaining('bg'))
-  })
-
-  test('trend + trendUp legados: signo y flecha aunque el texto no traiga signo', () => {
-    vi.spyOn(console, 'warn').mockImplementation(() => {})
-    const { container } = render(<ColoredStatCard value={1} label="X" trend="12%" trendUp />)
-    expect(container.querySelector('.gcu-stat-delta')).toHaveTextContent(/Sube\s*\+12%/)
-    expect(container.querySelector('.feather-arrow-up-right')).toHaveAttribute('aria-hidden', 'true')
-  })
-
   test('cifra es-CL tabular, carga con aria-busy y vacío con explicación', () => {
     const { container, rerender } = render(<ColoredStatCard value={1240000} label="Recaudado" data-testid="c" />)
     expect(container.querySelector('.gcu-stat__value')).toHaveTextContent('1.240.000')
@@ -53,10 +39,3 @@ describe('ColoredStatCard refinado (lote L4)', () => {
   })
 })
 
-describe('ColoredStatCard — bg="bg-light" conserva su significado (superficie clara)', () => {
-  test('bg-light se traduce al tono light, no a un relleno oscuro', () => {
-    const { container } = render(<ColoredStatCard value="12" label="Pendientes" bg="bg-light" />)
-    expect(container.querySelector('.gcu-colored-stat--light')).not.toBeNull()
-    expect(container.querySelector('.gcu-colored-stat--dark')).toBeNull()
-  })
-})

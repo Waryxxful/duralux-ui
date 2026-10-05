@@ -10,7 +10,7 @@ import {
 } from './tableModel'
 import { EmptyState } from '../feedback/EmptyState'
 import { cx } from '../../utils/cx'
-import { deprecate, log } from '../../utils/log'
+import { log } from '../../utils/log'
 import { isArray, isFiniteNumber, isFunction, isString } from '../../utils/typeGuards'
 import type { TableColumn, TableProps, TableRowEntry, TableSlot, TableSlotContext } from '../../public/types'
 
@@ -50,10 +50,6 @@ function invokeSlot<T>(slot: TableSlot<T> | undefined, fallback: React.ReactNode
 }
 
 /** Props que el runtime JS aceptaba sin estar en el tipo público: se consumen sin llegar al DOM. */
-interface LegacyTableProps {
-  striped?: boolean
-}
-
 function normalizeLoadingRows(value: number | undefined) {
   if (!isFiniteNumber(value)) return DEFAULT_LOADING_ROWS
   return Math.min(Math.max(1, Math.floor(value)), MAX_LOADING_ROWS)
@@ -106,7 +102,7 @@ function LoadingBody({ columns, colSpan, rows }: LoadingBodyProps) {
  * - stickyHeader: encabezado fijo dentro del contenedor (alto `maxHeight`), con sombra solo al hacer scroll.
  * - responsive: el contenedor desplaza en horizontal dentro de sí; `false` si quien llama ya tiene uno.
  */
-const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknown> & LegacyTableProps>(function Table({
+const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknown>>(function Table({
   columns = EMPTY_ARRAY,
   rows = EMPTY_ARRAY,
   rowKey = DEFAULT_ROW_KEY,
@@ -115,9 +111,7 @@ const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknow
   loading = false,
   loadingRows,
   caption,
-  ariaLabel,
   className,
-  striped,
   hover = true,
   responsive = true,
   wrapperClassName,
@@ -126,22 +120,12 @@ const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknow
   maxHeight,
   head,
   body,
-  header,
-  renderHeader,
-  renderBody,
   children,
   'aria-label': ariaLabelProp,
   'aria-labelledby': ariaLabelledBy,
   'aria-busy': ariaBusy,
   ...tableProps
 }, ref) {
-  // Duralux usa table-hover como tratamiento canónico: `striped` se consume sin llegar al DOM.
-  if (striped !== undefined) deprecate('table-prop-rayado', 'la prop `striped` de Table se ignora; las tablas Duralux usan solo `table-hover`.')
-  if (header !== undefined) deprecate('table-header', 'la prop `header` de Table se renombró a `head`.')
-  if (renderHeader !== undefined) deprecate('table-render-header', 'la prop `renderHeader` de Table se renombró a `head`.')
-  if (renderBody !== undefined) deprecate('table-render-body', 'la prop `renderBody` de Table se renombró a `body`.')
-  if (ariaLabel !== undefined) deprecate('table-arialabel', 'la prop `ariaLabel` de Table se renombró a `aria-label`.')
-
   const normalizedColumns: ReadonlyArray<TableColumn<unknown>> = isArray(columns) ? columns : EMPTY_ARRAY
   const normalizedRows: ReadonlyArray<unknown> = isArray(rows) ? rows : EMPTY_ARRAY
   const rowKeyHistoryRef = useRef(new Map())
@@ -203,12 +187,8 @@ const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknow
     emptyMessage,
   }), [emptyMessage, loading, normalizedColumns, normalizedRows, rowEntries])
 
-  const headerSlot = head !== undefined
-    ? head
-    : header !== undefined
-      ? header
-      : renderHeader
-  const bodySlot = body !== undefined ? body : renderBody
+  const headerSlot = head
+  const bodySlot = body
   const hasChildren = children !== undefined
 
   const defaultHeader = useMemo(() => {
@@ -300,7 +280,7 @@ const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknow
       {...tableProps}
       ref={ref}
       className={tableCls}
-      aria-label={ariaLabelProp ?? ariaLabel}
+      aria-label={ariaLabelProp}
       aria-labelledby={ariaLabelledBy}
       aria-busy={loading ? 'true' : ariaBusy}
     >
@@ -314,7 +294,7 @@ const TableBase = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps<unknow
   if (!responsive) return table
 
   const scrollFocusable = hasStickyContainer || overflowing
-  const regionLabel = ariaLabelProp ?? ariaLabel ?? (isString(caption) ? caption : undefined)
+  const regionLabel = ariaLabelProp ?? (isString(caption) ? caption : undefined)
 
   return (
     <div

@@ -1,19 +1,18 @@
 import { forwardRef, useId } from 'react'
 import { cx } from '../../utils/cx'
 import type { RadioProps } from '../../public/types'
-import { ariaInvalidFor, resolveInvalid } from './internal/fieldState'
+import { ariaInvalidFor } from './internal/fieldState'
 
 /**
  * Radio — `.form-check` de Bootstrap con label asociado.
  *
  * - id: respeta el del consumidor; si no hay, genera uno estable con useId.
  * - Agrupa por `name`; las flechas mueven la selección (comportamiento nativo).
- * - error: borde y label en danger del tema. `invalid` está deprecado.
+ * - error: borde y label en danger del tema.
  * - El ref apunta al `<input type="radio">` nativo.
  */
 export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(function Radio({
   label,
-  invalid,
   error,
   className,
   id: idProp,
@@ -22,7 +21,7 @@ export const Radio = /* @__PURE__ */ forwardRef<HTMLInputElement, RadioProps>(fu
 }, ref) {
   const autoId = useId()
   const id = idProp ?? autoId
-  const isInvalid = resolveInvalid('Radio', invalid, error)
+  const isInvalid = Boolean(error)
 
   return (
     <div className={cx('form-check', className)}>

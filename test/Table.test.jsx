@@ -1,11 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { expect, test } from 'vitest'
-import { ResponsiveTable } from '../src/components/data/ResponsiveTable.jsx'
 import { Table } from '../src/components/data/Table.jsx'
 
 const columns = [{ key: 'name', header: 'Nombre', render: row => row.name }]
 
-test('Table owns the responsive Duralux wrapper and ResponsiveTable stays a single-wrapper alias', () => {
+test('Table owns the responsive Duralux wrapper', () => {
   const props = {
     columns,
     rows: [{ id: 1, name: 'Ada' }],
@@ -13,26 +12,12 @@ test('Table owns the responsive Duralux wrapper and ResponsiveTable stays a sing
     wrapperClassName: 'mi-wrapper',
   }
 
-  const { container, rerender } = render(<Table {...props} />)
+  const { container } = render(<Table {...props} />)
   const wrapper = container.querySelector('.table-responsive')
 
   expect(wrapper).toHaveClass('mi-wrapper')
   expect(wrapper.querySelector('table')).toHaveClass('table', 'table-hover')
   expect(container.querySelectorAll('.table-responsive')).toHaveLength(1)
-
-  rerender(<ResponsiveTable {...props} />)
-  expect(container.querySelectorAll('.table-responsive')).toHaveLength(1)
-  expect(container.querySelector('table')).toHaveClass('table', 'table-hover')
-})
-
-test('Table consumes the legacy striped prop without exposing a non-canonical striped table', () => {
-  const { container } = render(
-    <Table columns={columns} rows={[{ id: 1, name: 'Ada' }]} rowKey="id" striped />,
-  )
-
-  const table = container.querySelector('table')
-  expect(table).not.toHaveClass('table-striped')
-  expect(table).not.toHaveAttribute('striped')
 })
 
 test('Table exposes responsive={false} for callers with their own overflow surface', () => {
