@@ -76,6 +76,10 @@ export const InlineEdit = /* @__PURE__ */ forwardRef<HTMLDivElement, InlineEditP
       <p
         ref={textRef}
         className="gcu-ai-inline__text"
+        role="textbox"
+        aria-readonly="true"
+        aria-multiline="true"
+        aria-label="Texto sugerido"
         tabIndex={0}
         aria-keyshortcuts="Enter Escape"
       >
