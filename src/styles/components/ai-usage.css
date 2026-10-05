@@ -11,6 +11,7 @@
 .gcu-ai-quota--compact{padding:var(--gcu-space-2) var(--gcu-space-3);border:0;background-color:transparent}
 .gcu-ai-quota__label{color:var(--gcu-text);font-weight:var(--gcu-font-weight-medium)}
 .gcu-ai-quota__value,.gcu-ai-quota__timer{font-variant-numeric:tabular-nums}
+.gcu-ai-quota__value{color:var(--gcu-text)}
 .gcu-ai-quota .gcu-ai-meter{grid-column:1 / -1}
 .gcu-ai-quota__reset{color:var(--gcu-muted)}
 .gcu-ai-quota__action{justify-self:end}

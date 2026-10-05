@@ -24,3 +24,8 @@
 .gcu-auth__error-icon{flex:none;margin-block-start:var(--gcu-space-0-5)}
 .gcu-auth__footer{margin-block-start:var(--gcu-space-6);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);text-align:center}
 @media (forced-colors:active){.gcu-auth__error{border-color:CanvasText}}
+
+/* Header de AppLayout: el botón de perfil hereda el color del header de la plantilla (casi blanco)
+   y el nombre de la persona no se leía en el tema claro. */
+.nxl-header .gcu-header-icon-button > .fs-13{color:var(--gcu-text)}
+.nxl-header .gcu-header-icon-button > .feather-chevron-down{color:var(--gcu-muted)}

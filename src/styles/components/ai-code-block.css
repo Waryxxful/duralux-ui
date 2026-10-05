@@ -6,7 +6,7 @@
 .gcu-ai-code__copy{flex:none}
 .gcu-ai-code__error{margin:0;padding:var(--gcu-space-1) var(--gcu-space-3);background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text);font-size:var(--gcu-font-size-xs)}
 .gcu-ai-code__pre{margin:0;padding:var(--gcu-space-3);overflow:auto;color:var(--gcu-code);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-sm);tab-size:2}
-.gcu-ai-code__pre:focus-visible{outline:none;box-shadow:inset 0 0 0 2px var(--gcu-focus-ring-color)}
+.gcu-ai-code__pre:focus-visible{outline:2px solid transparent;box-shadow:inset 0 0 0 2px var(--gcu-focus-ring-color)}
 .gcu-ai-code__pre code{color:inherit;font:inherit}
 .gcu-ai-code__line{display:block;white-space:pre}
 .gcu-ai-code__n{display:inline-block;min-inline-size:var(--gcu-space-6);margin-inline-end:var(--gcu-space-3);color:var(--gcu-text-subtle);text-align:end;user-select:none}

@@ -2,7 +2,7 @@
 .gcu-ai-reasoning{color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
 .gcu-ai-reasoning__summary{display:inline-flex;align-items:center;gap:var(--gcu-space-2);padding:var(--gcu-space-1) var(--gcu-space-2);margin-inline-start:calc(var(--gcu-space-2) * -1);border-radius:var(--gcu-radius-md);cursor:pointer;list-style:none;color:var(--gcu-muted);font-weight:var(--gcu-font-weight-medium)}
 .gcu-ai-reasoning__summary::-webkit-details-marker{display:none}
-.gcu-ai-reasoning__summary:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+.gcu-ai-reasoning__summary:focus-visible{outline:2px solid transparent;box-shadow:var(--gcu-focus-ring)}
 @media (hover:hover){.gcu-ai-reasoning__summary:hover{background-color:var(--gcu-surface-sunken);color:var(--gcu-text)}}
 .gcu-ai-reasoning__icon{color:var(--gcu-primary-text)}
 .gcu-ai-reasoning__hint{font-weight:var(--gcu-font-weight-regular)}

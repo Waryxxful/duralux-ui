@@ -12,4 +12,4 @@
 @container (min-width: 32rem){.gcu-ai-suggestion{inline-size:auto}}
 @media (hover:hover){.gcu-ai-suggestion:hover{border-color:var(--gcu-primary-border);background-color:var(--gcu-primary-soft)}}
 .gcu-ai-suggestion:active{transform:scale(var(--gcu-press-scale))}
-.gcu-ai-suggestion:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-ai-suggestion:focus-visible{outline:2px solid transparent;box-shadow:var(--gcu-focus-ring)}

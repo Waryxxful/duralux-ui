@@ -39,7 +39,8 @@ export const Heatmap = /* @__PURE__ */ forwardRef<HTMLDivElement, HeatmapProps>(
 
   return (
     <div {...rest} ref={ref} className={cx('gcu-heatmap', className)}>
-      <div className="gcu-heatmap__scroll gcu-scroll">
+      {/* Desplazable en pantallas angostas: enfocable para moverse con el teclado (WCAG 2.1.1). */}
+      <div className="gcu-heatmap__scroll gcu-scroll" tabIndex={0} role="region" aria-label={`${label} (desplazable)`}>
         <table className="gcu-heatmap__table">
           <caption className={cx('gcu-heatmap__caption', hideLabel && 'visually-hidden')}>{label}</caption>
           <thead>

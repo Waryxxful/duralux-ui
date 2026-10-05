@@ -11,7 +11,7 @@
 .gcu-criterion__quote{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--gcu-space-1) var(--gcu-space-2);margin:var(--gcu-space-2) 0 0;padding-inline-start:var(--gcu-space-3);border-inline-start:2px solid var(--gcu-border-strong);color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
 .gcu-criterion__quote q{quotes:"«" "»"}
 .gcu-criterion__turn{padding:0;border:0;background:none;color:var(--gcu-primary-text);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-medium);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
-.gcu-criterion__turn:focus-visible{outline:0;border-radius:var(--gcu-radius-xs);box-shadow:var(--gcu-focus-ring)}
+.gcu-criterion__turn:focus-visible{outline:2px solid transparent;border-radius:var(--gcu-radius-xs);box-shadow:var(--gcu-focus-ring)}
 .gcu-criterion__meta{grid-column:2;display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-1) var(--gcu-space-3);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
 .gcu-criterion__result{font-weight:var(--gcu-font-weight-semibold);color:var(--gcu-text)}
 .gcu-criterion--cumple .gcu-criterion__result{color:var(--gcu-success-text)}

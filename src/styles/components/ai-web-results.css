@@ -11,7 +11,7 @@
 .gcu-ai-web__body{display:flex;flex:1;flex-direction:column;gap:var(--gcu-space-0-5);min-inline-size:0}
 .gcu-ai-web__title{color:var(--gcu-text);font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-medium);text-decoration:none;overflow-wrap:anywhere}
 a.gcu-ai-web__title{color:var(--gcu-primary-text)}
-a.gcu-ai-web__title:focus-visible{outline:none;border-radius:var(--gcu-radius-xs);box-shadow:var(--gcu-focus-ring)}
+a.gcu-ai-web__title:focus-visible{outline:2px solid transparent;border-radius:var(--gcu-radius-xs);box-shadow:var(--gcu-focus-ring)}
 @media (hover:hover){a.gcu-ai-web__title:hover{text-decoration:underline;text-underline-offset:2px}}
 .gcu-ai-web__external{margin-inline-start:var(--gcu-space-1);font-size:var(--gcu-font-size-xs)}
 .gcu-ai-web__domain{color:var(--gcu-muted);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs)}

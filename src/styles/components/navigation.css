@@ -7,8 +7,11 @@
 .nxl-navigation .nxl-link[aria-current="page"]::before{content:"";position:absolute;inset-block:var(--gcu-space-2);inset-inline-start:0;inline-size:3px;border-radius:var(--gcu-radius-full);background-color:var(--gcu-primary)}
 .nxl-navigation .nxl-link[aria-current="page"] .nxl-micon{color:var(--gcu-primary-text)}
 /* Foco visible con el anillo del sistema (doble anillo: separa del fondo en los tres temas). */
-.nxl-navigation .nxl-link:focus-visible,.nxl-navigation .b-brand:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+.nxl-navigation .nxl-link:focus-visible,.nxl-navigation .b-brand:focus-visible{outline:2px solid transparent;box-shadow:var(--gcu-focus-ring)}
 @media (forced-colors:active){
   .nxl-navigation .nxl-link[aria-current="page"]::before{background-color:Highlight}
   .nxl-navigation .nxl-link:focus-visible,.nxl-navigation .b-brand:focus-visible{outline:2px solid Highlight}
 }
+
+/* Títulos de sección del menú: el gris fijo de la plantilla (#67758a) queda bajo AA en oscuro. */
+.nxl-navigation .navbar-content .nxl-caption.nxl-item > span:not(.badge){color:var(--gcu-muted)}

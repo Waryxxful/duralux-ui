@@ -19,3 +19,4 @@
 .gcu-heatmap__legend{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-1) var(--gcu-space-3);margin:0;padding:0;list-style:none;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
 .gcu-heatmap__legend-item{display:inline-flex;align-items:center;gap:var(--gcu-space-1)}
 .gcu-heatmap__swatch{display:inline-block;width:var(--gcu-space-3);height:var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-xs)}
+.gcu-heatmap__scroll:focus-visible{outline:2px solid var(--gcu-primary);outline-offset:2px}

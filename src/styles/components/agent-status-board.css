@@ -12,7 +12,7 @@
 .gcu-agent .gcu-person{grid-area:person}
 .gcu-agent--action{cursor:pointer}
 @media (hover:hover){.gcu-agent--action:hover{background-color:var(--gcu-surface-sunken)}}
-.gcu-agent--action:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-agent--action:focus-visible{outline:2px solid transparent;box-shadow:var(--gcu-focus-ring)}
 .gcu-agent__state{grid-area:state;display:inline-flex;align-items:center;gap:var(--gcu-space-1);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);font-weight:var(--gcu-font-weight-medium)}
 .gcu-agent__time{grid-area:time;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
 .gcu-agent__time--long{padding:0 var(--gcu-space-1);border-radius:var(--gcu-radius-sm);background-color:var(--gcu-warning-soft);color:var(--gcu-warning-text);font-weight:var(--gcu-font-weight-semibold)}

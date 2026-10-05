@@ -9,7 +9,7 @@
 .gcu-ai-history--compact .gcu-ai-history__item{padding-block:var(--gcu-space-1)}
 .gcu-ai-history__item i{flex:none;color:var(--gcu-muted)}
 @media (hover:hover){.gcu-ai-history__item:hover{background-color:var(--gcu-surface-subtle)}}
-.gcu-ai-history__item:focus-visible{outline:0;box-shadow:inset 0 0 0 2px var(--gcu-focus-ring-color)}
+.gcu-ai-history__item:focus-visible{outline:2px solid transparent;box-shadow:inset 0 0 0 2px var(--gcu-focus-ring-color)}
 .gcu-ai-history__item--active{background-color:var(--gcu-primary-soft);box-shadow:inset 3px 0 0 var(--gcu-status-primary);font-weight:var(--gcu-font-weight-medium)}
 .gcu-ai-history__title{overflow:hidden;min-width:0;text-overflow:ellipsis;white-space:nowrap}
 .gcu-ai-history__skeleton{padding:var(--gcu-space-2)}
