@@ -37,6 +37,7 @@ export const AiErrorState = /* @__PURE__ */ forwardRef<HTMLDivElement, AiErrorSt
       aria-labelledby={titleId}
       className={cx('gcu-ai-error', 'gcu-container', `gcu-ai-error--${variant}`, className)}
     >
+      <div className="gcu-ai-error__grid">
       <span className="gcu-ai-error__icon"><i className="feather-alert-triangle" aria-hidden="true" /></span>
       <div className="gcu-ai-error__body">
         <p id={titleId} className="gcu-ai-error__title">{title}</p>
@@ -52,6 +53,7 @@ export const AiErrorState = /* @__PURE__ */ forwardRef<HTMLDivElement, AiErrorSt
           <Button variant="light-brand" size="sm" onClick={onEditPrompt}>Editar pregunta</Button>
         )}
         <Button variant="light-brand" size="sm" startIcon="refresh-cw" loading={retrying} onClick={onRetry}>Reintentar</Button>
+      </div>
       </div>
     </div>
   )

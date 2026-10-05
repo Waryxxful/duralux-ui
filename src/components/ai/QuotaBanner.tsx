@@ -27,6 +27,7 @@ export const QuotaBanner = /* @__PURE__ */ forwardRef<HTMLDivElement, QuotaBanne
   const minutes = Math.max(1, Math.ceil(left / 60))
   return (
     <div {...rest} ref={ref} className={cx('gcu-ai-quota', 'gcu-container', `gcu-ai-quota--${variant}`, `gcu-ai-quota--${tone}`, className)}>
+      <div className="gcu-ai-quota__grid">
       <span className="gcu-ai-quota__label">{tone === 'danger' ? 'Llegaste al límite de consultas de hoy' : 'Consultas de hoy'}</span>
       <span className="gcu-ai-quota__value">{used.toLocaleString('es-CL')}/{limit.toLocaleString('es-CL')}</span>
       <span
@@ -47,6 +48,7 @@ export const QuotaBanner = /* @__PURE__ */ forwardRef<HTMLDivElement, QuotaBanne
       {isFunction(onRequestMore) && variant === 'banner' && (
         <Button variant="light-brand" size="sm" className="gcu-ai-quota__action" onClick={onRequestMore}>Pedir más cupo</Button>
       )}
+      </div>
     </div>
   )
 })

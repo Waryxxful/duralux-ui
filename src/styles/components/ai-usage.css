@@ -4,7 +4,8 @@
 .gcu-ai-meter--warning .gcu-ai-meter__fill,.gcu-ai-quota--warning .gcu-ai-meter__fill{background-color:var(--gcu-status-warning)}
 .gcu-ai-quota--danger .gcu-ai-meter__fill{background-color:var(--gcu-status-danger)}
 
-.gcu-ai-quota{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--gcu-space-2) var(--gcu-space-3);padding:var(--gcu-space-3) var(--gcu-space-4);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-quota__grid{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:var(--gcu-space-2) var(--gcu-space-3)}
+.gcu-ai-quota{padding:var(--gcu-space-3) var(--gcu-space-4);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
 .gcu-ai-quota--warning{border-color:var(--gcu-warning-border);background-color:var(--gcu-warning-soft)}
 .gcu-ai-quota--danger{border-color:var(--gcu-danger-border);background-color:var(--gcu-danger-soft)}
 .gcu-ai-quota--compact{padding:var(--gcu-space-2) var(--gcu-space-3);border:0;background-color:transparent}
@@ -14,7 +15,7 @@
 .gcu-ai-quota__reset{color:var(--gcu-muted)}
 .gcu-ai-quota__action{justify-self:end}
 @container (min-width: 36rem){
-  .gcu-ai-quota--banner{grid-template-columns:auto auto minmax(6rem,1fr) auto auto}
+  .gcu-ai-quota--banner .gcu-ai-quota__grid{grid-template-columns:auto auto minmax(6rem,1fr) auto auto}
   .gcu-ai-quota--banner .gcu-ai-meter{grid-column:auto}
 }
 

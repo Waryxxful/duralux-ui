@@ -18,7 +18,8 @@ export const SuggestionBanner = /* @__PURE__ */ forwardRef<HTMLDivElement, Sugge
   ref,
 ) {
   return (
-    <div {...rest} ref={ref} role="status" className={cx('gcu-ai-suggest', `gcu-ai-suggest--${variant}`, className)}>
+    <div {...rest} ref={ref} role="status" className={cx('gcu-ai-suggest', 'gcu-container', `gcu-ai-suggest--${variant}`, className)}>
+      <div className="gcu-ai-suggest__grid">
       <AiAvatar size="sm" />
       <div className="gcu-ai-suggest__text">
         <p className="gcu-ai-suggest__title"><span className="visually-hidden">Sugerencia del asistente: </span>{title}</p>
@@ -27,6 +28,7 @@ export const SuggestionBanner = /* @__PURE__ */ forwardRef<HTMLDivElement, Sugge
       <div className="gcu-ai-suggest__actions">
         <Button variant="light-brand" size="sm" onClick={onDismiss}>Descartar</Button>
         <Button variant="primary" size="sm" onClick={onApply}>{applyLabel}</Button>
+      </div>
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
 import { log } from '../../../utils/log'
 
 const ALLOWED = new Set(['http:', 'https:'])
+let warned = false
 
 /**
  * Enlace seguro de una fuente del asistente. Las fuentes vienen del modelo o de tools: no son
@@ -17,6 +18,9 @@ export function safeSourceHref(href: string | undefined | null): string | undefi
   } catch {
     // URL inválida: cae al aviso.
   }
-  log.warn('Fuente del asistente con enlace no permitido (solo http/https); se muestra sin enlace.')
+  if (!warned) {
+    warned = true
+    log.warn('Fuente del asistente con enlace no permitido (solo http/https); se muestra sin enlace.')
+  }
   return undefined
 }
