@@ -1,4 +1,5 @@
 import { forwardRef, useId, useState } from 'react'
+import type * as React from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import { Button } from '../ui/Button'
@@ -10,8 +11,42 @@ const DECIDED_TEXT = {
   rejected: 'Descartado. No se hará ningún cambio.',
 } satisfies Record<Exclude<ApprovalStatus, 'pending'>, string>
 
+interface ApprovalFooterProps {
+  status: ApprovalStatus
+  blockedId: string | undefined
+  disabledReason: React.ReactNode
+  destructive: boolean
+  approveLabel: string
+  rejectLabel: string
+  onDecide: (next: Exclude<ApprovalStatus, 'pending'>) => void
+}
+
+/** Botones de decisión mientras está pendiente; después, la decisión anunciada en `status`. */
+function ApprovalFooter({ status, blockedId, disabledReason, destructive, approveLabel, rejectLabel, onDecide }: ApprovalFooterProps) {
+  if (status !== 'pending') {
+    return (
+      <p className="gcu-ai-approval__decided" role="status">
+        <i className={status === 'approved' ? 'feather-check' : 'feather-x'} aria-hidden="true" />
+        {DECIDED_TEXT[status]}
+      </p>
+    )
+  }
+  const blocked = blockedId !== undefined
+  return (
+    <div className="gcu-ai-approval__actions">
+      {blocked && <p id={blockedId} className="gcu-ai-approval__blocked">{disabledReason}</p>}
+      <Button variant="light-brand" size="sm" onClick={() => onDecide('rejected')} disabled={blocked} aria-describedby={blockedId}>
+        {rejectLabel}
+      </Button>
+      <Button variant={destructive ? 'danger' : 'primary'} size="sm" onClick={() => onDecide('approved')} disabled={blocked} aria-describedby={blockedId}>
+        {approveLabel}
+      </Button>
+    </div>
+  )
+}
+
 /**
- * ApprovalCard — aprobación humana antes de una acción con efecto (enviar, actualizar, reasignar).
+ * ApprovalCard —aprobación humana antes de una acción con efecto (enviar, actualizar, reasignar).
  *
  * - El componente NUNCA ejecuta la acción: muestra qué se hará y emite la intención con
  *   `onApprove(intent)` u `onReject(intent)`. Quien consume decide y ejecuta en el servidor.
@@ -74,22 +109,15 @@ export const ApprovalCard = /* @__PURE__ */ forwardRef<HTMLElement, ApprovalCard
         Preparado por {drafter}
         {tool && <> · <span className="gcu-ai-approval__tool">{tool}</span></>}
       </p>
-      {status === 'pending' ? (
-        <div className="gcu-ai-approval__actions">
-          {blocked && <p id={`${baseId}-blocked`} className="gcu-ai-approval__blocked">{disabledReason}</p>}
-          <Button variant="light-brand" size="sm" onClick={() => decide('rejected')} disabled={blocked} aria-describedby={blocked ? `${baseId}-blocked` : undefined}>
-            {rejectLabel}
-          </Button>
-          <Button variant={destructive ? 'danger' : 'primary'} size="sm" onClick={() => decide('approved')} disabled={blocked} aria-describedby={blocked ? `${baseId}-blocked` : undefined}>
-            {approveLabel}
-          </Button>
-        </div>
-      ) : (
-        <p className="gcu-ai-approval__decided" role="status">
-          <i className={status === 'approved' ? 'feather-check' : 'feather-x'} aria-hidden="true" />
-          {DECIDED_TEXT[status]}
-        </p>
-      )}
+      <ApprovalFooter
+        status={status}
+        blockedId={blocked ? `${baseId}-blocked` : undefined}
+        disabledReason={disabledReason}
+        destructive={destructive}
+        approveLabel={approveLabel}
+        rejectLabel={rejectLabel}
+        onDecide={decide}
+      />
     </section>
   )
 })

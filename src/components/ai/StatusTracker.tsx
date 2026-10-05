@@ -3,10 +3,15 @@ import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
 import { isArray, isFiniteNumber, isString } from '../../utils/typeGuards'
 import { ProcessSteps } from '../composition/ProcessSteps'
-import type { StatusTrackerProps } from '../../public/types'
+import type { StatusTrackerProps, StatusTrackerStage } from '../../public/types'
 
-function stageText(label: unknown): string {
-  return isString(label) ? label : ''
+/** Frase única que se anuncia: «Etapa 2 de 4: Procesando.», «Falló la etapa…» o «Listo…». */
+function trackerSentence(list: ReadonlyArray<StatusTrackerStage>, index: number, failed: boolean): string {
+  if (list.length === 0) return 'Sin etapas para mostrar.'
+  if (index >= list.length) return 'Listo: todas las etapas terminaron.'
+  const label = list[index]?.label
+  const name = isString(label) && label ? `: ${label}` : ''
+  return failed ? `Falló la etapa ${index + 1} de ${list.length}${name}.` : `Etapa ${index + 1} de ${list.length}${name}.`
 }
 
 /**
@@ -32,14 +37,7 @@ export const StatusTracker = /* @__PURE__ */ forwardRef<HTMLDivElement, StatusTr
   if (!isArray(stages)) log.warn('StatusTracker: `stages` debe ser un arreglo; se muestra vacío.')
   if (!isFiniteNumber(current)) log.warn(`StatusTracker: current debe ser un número (recibido: ${String(current)}).`)
   const index = Math.max(0, Math.min(list.length, isFiniteNumber(current) ? Math.trunc(current) : 0))
-  const finished = list.length > 0 && index >= list.length
-  const stage = list[Math.min(index, list.length - 1)]
-  const name = stage ? stageText(stage.label) : ''
-  const sentence = finished
-    ? 'Listo: todas las etapas terminaron.'
-    : failed
-      ? `Falló la etapa ${index + 1} de ${list.length}${name ? `: ${name}` : ''}.`
-      : `Etapa ${index + 1} de ${list.length}${name ? `: ${name}` : ''}.`
+  const sentence = trackerSentence(list, index, failed)
   const percent = list.length ? Math.round((index / list.length) * 100) : 0
 
   return (

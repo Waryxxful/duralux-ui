@@ -1,0 +1,9 @@
+/* Estado de pasos del agente (compartido por AgentSteps, ToolChip y TaskRows): ícono con tono semántico.
+   El texto del estado va aparte (Badge o visually-hidden): el color nunca es la única señal. */
+.gcu-ai-status-icon{display:inline-flex;flex:none;font-size:var(--gcu-font-size-sm);line-height:1}
+.gcu-ai-status-icon--queued{color:var(--gcu-muted)}
+.gcu-ai-status-icon--running{color:var(--gcu-primary-text)}
+.gcu-ai-status-icon--done{color:var(--gcu-success-text)}
+.gcu-ai-status-icon--failed{color:var(--gcu-danger-text)}
+.gcu-ai-status-icon--spin{animation:gcu-spin 1s linear infinite}
+@media (prefers-reduced-motion:reduce){.gcu-ai-status-icon--spin{animation:none}}
