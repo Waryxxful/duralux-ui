@@ -29,3 +29,11 @@
 2. Migrar los formularios de proyecto y tarea a `FormField` + `/antd`.
 3. Pasar `app.css` y `views.css` a tokens.
 4. Validar en DEV en tres temas.
+
+## Bloqueos para 3.0
+
+Usos de APIs retiradas en 3.0 (relevado el 2026-10-05). Reemplazos en `README.md` («De 2.x a 3.0»).
+
+| API retirada | Dónde |
+|---|---|
+| `StatsCard iconBg` | `src/components/projects/ProjectsOverview.jsx:165,168,171,174` |

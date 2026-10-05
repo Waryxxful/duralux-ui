@@ -21,3 +21,7 @@ Uso acotado de `@duralux/ui` (6 imports): la migración es solo cambio de SHA y 
 
 1. Decidir si sigue vigente (ver arriba).
 2. Si sigue: subir SHA, limpiar `styles.css` y `avatar.ts`, validar en tres temas.
+
+## Bloqueos para 3.0
+
+Ninguno: no usa APIs retiradas en 3.0 (relevado el 2026-10-05).

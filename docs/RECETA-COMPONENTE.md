@@ -8,7 +8,7 @@ Cómo se refina o se crea un componente de `@duralux/ui`. El ejemplar es **Butto
 
 1. **Test primero.** Escribe el comportamiento nuevo en `test/<Componente>.refined.test.tsx` y míralo fallar con `npm test -- <archivo>` (nunca `npx vitest`).
 2. **TSX con tipos reales.** El componente pasa a `.tsx`, con `forwardRef` hacia el elemento nativo y las props de `src/public/types.ts`. En `src/public/components.ts` se exporta tal cual (`export { X } from '…'`), sin `asComponent`.
-3. **API congelada.** Solo se agregan props. Lo que cambia de nombre o se ignora pasa por `deprecate('<clave>', '<qué usar>')`; se elimina en 3.0.
+3. **API congelada.** Solo se agregan props. Lo que cambia de nombre o se ignora pasa por `deprecate('<clave>', '<qué usar>')`; se elimina en la siguiente mayor (lo deprecado en 2.x se retiró en 3.0).
 4. **CSS propio.** Las reglas del componente viven en `src/styles/components/<nombre>.css`, con una línea `@import` al inicio de `grancrm-ui.css`. Solo tokens `var(--gcu-*)`: sin hex, sin `!important`, sin `.app-skin-dark` (los tokens ya cambian por tema). Las reglas viejas del componente se **borran** de `grancrm-ui.css` y del SCSS oscuro cuando el archivo nuevo las cubre: el presupuesto CSS solo baja.
 5. **Detalles de oficio** (`docs/REGLAS-DE-DISENO.md` §11, Craft): hover frecuente sin transición, números tabulares en cifras que cambian, radios anidados, contornos de imagen, alineación óptica de íconos. Responsivo por contenedor (§12): `.gcu-container` + `@container`, no breakpoints de viewport.
 6. **Estados completos** (`docs/REGLAS-DE-DISENO.md` §6): hover con puntero, presión, `:focus-visible`, disabled explicado, loading sin salto de ancho, vacío y error cuando aplique.

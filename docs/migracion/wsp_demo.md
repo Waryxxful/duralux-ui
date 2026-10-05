@@ -24,3 +24,13 @@ Salta de 1.0 a 2.5: además de lo de `README.md`, revisar los cambios de 2.0 (ti
 2. Subir el SHA, reinstalar, compilar y corregir tipos.
 3. `antd@^6` + `dayjs@^1.11` y `DuraluxAntdProvider` para horarios y periodo.
 4. Validar en tres temas.
+
+## Bloqueos para 3.0
+
+Usos de APIs retiradas en 3.0 (relevado el 2026-10-05). Reemplazos en `README.md` («De 2.x a 3.0»).
+
+| API retirada | Dónde |
+|---|---|
+| `StatsCard iconBg` | `src/pages/DashboardPage.tsx:200,215,224,236,310,318,326,334` |
+| `StatsCard trend` | `src/pages/DashboardPage.tsx:200,215,224` |
+| `FormField hint` | `src/panels/LlmConfigPanel.tsx:77,84`, `src/panels/ScrapingConfigPanel.tsx:66,74,79`, `src/panels/ScrapingLlmConfigPanel.tsx:70,77` |

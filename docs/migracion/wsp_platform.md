@@ -12,3 +12,7 @@ Ninguno: 8 archivos fuente y un solo import de `@duralux/ui`, sin hex, overrides
 
 1. Cambiar el SHA, reinstalar limpio y compilar.
 2. Revisión visual en DEV en claro, oscuro y navy (cambios globales de Bootstrap de 2.1).
+
+## Bloqueos para 3.0
+
+Ninguno: no usa APIs retiradas en 3.0 (relevado el 2026-10-05).

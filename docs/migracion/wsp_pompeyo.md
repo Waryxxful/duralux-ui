@@ -30,3 +30,18 @@ Es la app más atrasada y la única que viola la regla «siempre vía git, nunca
 3. Compilar y corregir tipos y exports.
 4. `/antd` para fechas y horarios; `Table` para paneles.
 5. Validar en tres temas.
+
+## Bloqueos para 3.0
+
+Usos de APIs retiradas en 3.0 (relevado el 2026-10-05). Reemplazos en `README.md` («De 2.x a 3.0»).
+
+| API retirada | Dónde |
+|---|---|
+| `Card headerRight` | `src/pages/DashboardPage.tsx:222,247,274`, `src/panels/AdvisorsPanel.tsx:77`, `src/panels/BranchesPanel.tsx:77`, `src/panels/FiltersPanel.tsx:66`, `src/panels/LogsPanel.tsx:62`, `src/panels/PromptPanel.tsx:48`, `src/panels/QuickResponsesPanel.tsx:76`, `src/panels/ServicePricesPanel.tsx:138`, `src/panels/SnippetsPanel.tsx:59` |
+| `StatsCard iconBg` | `src/pages/DashboardPage.tsx:113,128,137,149` |
+| `StatsCard trend` | `src/pages/DashboardPage.tsx:113,128,137` |
+| `Button outline` | `src/panels/AdvisorsPanel.tsx:103`, `src/panels/AstaraConfigPanel.tsx:117`, `src/panels/AuditPanel.tsx:86,91`, `src/panels/BotStatePanel.tsx:38`, `src/panels/BranchesPanel.tsx:103`, `src/panels/FiltersPanel.tsx:93`, `src/panels/LlmConfigPanel.tsx:94`, `src/panels/LogsPanel.tsx:65,131,136`, `src/panels/PromptPanel.tsx:62`, `src/panels/QuickResponsesPanel.tsx:106`, `src/panels/ServicePricesPanel.tsx:165,193,223`, `src/panels/SnippetsPanel.tsx:85` |
+| `FormField hint` | `src/panels/AstaraConfigPanel.tsx:84,95`, `src/panels/HandoffPanel.tsx:203`, `src/panels/LlmConfigPanel.tsx:75,85`, `src/panels/QuickResponsesPanel.tsx:113,121` |
+| `Input icon` | `src/panels/AstaraConfigPanel.tsx:89,103,107`, `src/panels/FiltersPanel.tsx:99`, `src/panels/LlmConfigPanel.tsx:90` |
+
+Usa una copia vendorizada anterior a 1.0: estos usos solo bloquean cuando pase a fijar un SHA de 3.x.

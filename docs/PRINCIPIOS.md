@@ -5,7 +5,7 @@
 ## Los ocho principios
 
 1. **Tokens como única fuente de verdad.** Color, tipografía, espaciado, radios, elevación, movimiento y capas salen de `tokens/tokens.json`. Ningún componente usa hex, px mágicos ni `!important`. El gate `audit-contract` impide que crezca la deuda (presupuesto por archivo).
-2. **Compatibilidad hacia atrás.** Lo que cambia se depreca en 2.x con `deprecate()` (aviso único en consola, solo en desarrollo) y se elimina en 3.0. El contrato shell ↔ satélite (`src/contract.ts`) no cambia en 2.x.
+2. **Compatibilidad hacia atrás.** Lo que cambia se depreca dentro de una serie mayor con `deprecate()` (aviso único en consola, solo en desarrollo) y se elimina en la siguiente mayor: lo deprecado en 2.x se retiró en 3.0. El contrato shell ↔ satélite (`src/contract.ts`) no cambia.
 3. **API consistente.** `variant`, `tone` y `size` significan lo mismo en todos los componentes. Todos aceptan `className` y reenvían `ref` cuando hay un elemento nativo.
 4. **Accesible por defecto.** WCAG 2.2 AA: contraste verificado en build, `:focus-visible` siempre visible, operación completa con teclado y patrones ARIA APG.
 5. **Densidad operativa.** Pensado para pantallas de trabajo con mucha información: controles de 36 px, tablas compactas, números tabulares. No es una librería de landings.

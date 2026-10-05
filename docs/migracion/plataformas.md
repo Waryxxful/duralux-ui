@@ -32,3 +32,17 @@
 2. Agregar `antd@^6` y `dayjs@^1.11`; montar `DuraluxAntdProvider` en `ModuloReportePage` y reemplazar los inputs date.
 3. Pasar CSS de reportes, toasts y hints a tokens; borrar `page-header-sticky.css`.
 4. Probar `DataTable` y validar en DEV en tres temas.
+
+## Bloqueos para 3.0
+
+Usos de APIs retiradas en 3.0 (relevado el 2026-10-05). Reemplazos en `README.md` («De 2.x a 3.0»).
+
+| API retirada | Dónde |
+|---|---|
+| `ChartCard noPad` | `src/components/ReportPanels.tsx:1879` |
+| `Input invalid` | `src/components/mantenedor/CampanasContent.tsx:484,523,536`, `src/components/mantenedor/CuentasContent.tsx:344`, `src/components/mantenedor/TiposCampanaContent.tsx:484`, `src/components/mantenedor/UsuariosContent.tsx:470,533,551`, `src/pages/ModuloReportePage.tsx:232,241,341,352,361,411,414`, `src/pages/ProductividadPage.tsx:571,585` |
+| `Select invalid` | `src/components/mantenedor/CampanasContent.tsx:472,495,507`, `src/components/mantenedor/TiposCampanaContent.tsx:460,472`, `src/components/mantenedor/UsuariosContent.tsx:575`, `src/pages/ModuloReportePage.tsx:152,168,199,256,267,389`, `src/pages/ProductividadPage.tsx:450,461,472,483,505` |
+| `ColoredStatCard bg` | `src/pages/ProductividadPage.tsx:395,403,413,421`, `src/pages/ReportesHubPage.tsx:21,29,37` |
+| `ResponsiveTable` | `src/pages/ProductividadPage.tsx:620` |
+
+Los `bg` son literales `bg-{tono}` o un mapa por estado: pasan a `tone` con el mismo nombre de tono. `ResponsiveTable` (`ProductividadPage.tsx:620`) rompe el render si el shell sube a 3.0 antes que esta app.

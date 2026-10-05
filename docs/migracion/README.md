@@ -1,4 +1,4 @@
-# Migración de apps a @duralux/ui 2.5
+# Migración de apps a @duralux/ui (2.5 y 3.0)
 
 Una guía por app consumidora. Cada guía indica el SHA que fija hoy, qué cambia al subir y los patrones detectados con `grep` en su código (relevado el 2026-10-04, solo lectura). La ejecución de cada migración es aparte (spec maestro §10): estas guías no se aplican solas.
 
@@ -43,6 +43,58 @@ Detalle en `CHANGELOG.md`. Lo que más afecta a las apps:
 6. **Componentes nuevos (2.5).** Tooltip, Segmented, Switch, Drawer, Skeleton, Tag, KpiCard, StatGroup, DescriptionList, BulkBar, ActiveFilters, EntityCard, etc. Ver `docs/manifest.json`.
 7. **antd (2.2, 2.5.1).** `@duralux/ui/antd` con `DuraluxAntdProvider`, `DatePicker`, `DateRangeFilter`, `TimePicker`, `TimeRangePicker`, `NumberInput`, `TreeSelect`, `FileDrop`, etc. Requiere `antd@^6` y `dayjs@^1.11` en la app. Reemplaza `<input type="date|time|datetime-local">` y los `<select>` de «Últimos N días». Nunca importar `antd` directo.
 8. **PageHeader sticky.** Hoy la regla es `PageHeader className="sticky-top"` (`PAGE-STRUCTURE.md`). En **2.6** (pendiente de integración) PageHeader será sticky por defecto con sombra al hacer scroll: al subir a 2.6 se quita `sticky-top` y todo CSS sticky propio del encabezado.
+
+## De 2.x a 3.0
+
+3.0 retira todo lo que 2.1–2.8 marcaron como deprecado. No hay componentes nuevos ni cambios visuales: solo se borran props, campos, tipos y un componente. En 2.x cada uso avisaba en consola (`[duralux] Deprecado: …`); en 3.0 el aviso desaparece y el uso deja de funcionar. En TypeScript falla el typecheck; en JavaScript la prop se ignora o, si el componente reenvía el resto de props, llega al DOM como atributo desconocido.
+
+### Reemplazos
+
+| Retirado (2.x) | Componente | Reemplazo en 3.0 |
+|---|---|---|
+| `headerRight` | `Card` | `actions` |
+| `noPad` | `Card`, `ChartCard` | `noPadding` (`noPad={false}`: quitar la prop) |
+| `elementRef` | `Card` | `ref` (Card reenvía el ref al `<div class="card">`) |
+| `outline` | `Button`, `LinkButton`, `IconButton` | Quitar la prop (ya se ignoraba). Secundario: `variant="light-brand"`; destructivo: `variant="danger"` |
+| `trend` (`{ value, up }`) y tipo `StatsCardTrend` | `StatsCard` | `delta={{ value: número, unit, label, goodWhen }}` |
+| `iconBg` | `StatsCard` | `tone` (`"primary"`, `"info"`, `"success"`, `"warning"`, `"danger"`, `"teal"`…). `bg-soft-info text-info` → `tone="info"` |
+| `bg` | `ColoredStatCard` | `tone` (`bg-primary` → `tone="primary"`). `bg-light` ya no tiene equivalente: usa `StatsCard` o `KpiCard` |
+| `trend` + `trendUp` | `ColoredStatCard` | `delta={{ value: número, unit }}` (el signo define la flecha) |
+| `icon` | `Input` | `startAddon={<i className="feather-…" aria-hidden="true" />}` |
+| `prefix` | `Input` | `startAddon` |
+| `invalid` | `Input`, `Select`, `Textarea`, `Checkbox`, `Radio` | `error` (booleano o texto) o el `error` de `FormField` |
+| `hint` | `FormField` | `helpText` |
+| `iconBg` (campo del ítem) | `Timeline` | `variant` (o `color`, alias que se mantiene) |
+| `striped` | `Table` | Quitar la prop (ya se ignoraba; el canon es `table-hover`) |
+| `header`, `renderHeader` | `Table` | `head` |
+| `renderBody` | `Table` | `body` |
+| `ariaLabel` | `Table` | `aria-label` |
+| `ResponsiveTable` y tipo `ResponsiveTableProps` | — | `Table` y `TableProps` (Table ya trae el contenedor con scroll) |
+
+`deprecate()` sigue exportado para las deprecaciones de 3.x. `Timeline.color`, `Timeline.time`, `TableColumn.header`, `Tabs.ariaLabel` y el mapeo de variantes no canónicas de `Button` (`outline-primary` → `light-brand`, con aviso) no estaban deprecados y se mantienen.
+
+### Module Federation
+
+- Shell, plataformas, call_reviews, e-learning y tablero-ti comparten `@duralux/ui` como singleton con `requiredVersion: '^2.0.0'`. Al subir a 3.0 hay que cambiarlo a `'^3.0.0'` en los cinco `vite.config` en el mismo ciclo.
+- Un remoto compartido que siga compilado contra 2.x recibe la 3.0 del shell en runtime. Las props retiradas fallan en silencio (se pierden acciones de cabecera, estilos de error o tonos), pero **`ResponsiveTable` rompe el render**: el import llega como `undefined`. Ningún remoto compartido puede usar `ResponsiveTable` cuando el shell suba.
+- Orden: migrar primero los usos de cada remoto compartido (con 2.8, donde las APIs nuevas ya existen), desplegar, y recién entonces subir el SHA del shell y de todos a 3.0.
+
+### Usos por app (relevado el 2026-10-05, solo lectura)
+
+| App | Usos que bloquean 3.0 |
+|---|---|
+| grancrm-shell | 8: `Card noPad` (1), `Input icon` (7) |
+| plataformas | 43: `Input invalid` (17), `Select invalid` (17), `ColoredStatCard bg` (7), `ChartCard noPad` (1), `ResponsiveTable` (1) |
+| call_reviews | 12: `ResponsiveTable` (9), `Card elementRef` vía `DuraluxBridge` (1), `Button outline` (1), `Timeline iconBg` (1) |
+| e-learning | 21: `Card headerRight` (14), `Table ariaLabel` (6), `StatsCard iconBg` (1) |
+| tablero-ti | 4: `StatsCard iconBg` |
+| dashboard-cupos | 3 sitios: `StatsCard iconBg` (5 objetos que llegan por spread), `Card headerRight` y `noPad` |
+| wsp_demo | 18: `StatsCard iconBg` (8) y `trend` (3), `FormField hint` (7) |
+| wsp_pompeyo | 47 (copia vendorizada anterior a 1.0): `Button outline` (17), `Card headerRight` (11), `FormField hint` (7), `Input icon` (5), `StatsCard iconBg` (4) y `trend` (3) |
+| scraper | 15: `ColoredStatCard bg` (8) y `trend`/`trendUp` (2), `StatsCard iconBg` (4), `Timeline iconBg` (1) |
+| chat, chat-frontend, wsp_platform | Ninguno |
+
+El detalle por archivo está en la guía de cada app («Bloqueos para 3.0»).
 
 ## Pasos comunes
 

@@ -23,3 +23,15 @@ Salta de 1.0 a 2.5. `DataTable` (7 usos) pasa a TanStack con la misma API; `Tabl
 1. Subir el SHA, reinstalar, compilar y corregir tipos.
 2. Reemplazar props deprecadas y hex.
 3. Probar `DataTable` (orden, paginación, acciones) y validar en tres temas.
+
+## Bloqueos para 3.0
+
+Usos de APIs retiradas en 3.0 (relevado el 2026-10-05). Reemplazos en `README.md` («De 2.x a 3.0»).
+
+| API retirada | Dónde |
+|---|---|
+| `ColoredStatCard bg` | `src/pages/JobDetailPage.tsx:197,205,213,221`, `src/pages/ProyectosListPage.tsx:26,34,42,52` |
+| `StatsCard iconBg` | `src/pages/ProyectoDetailPage.tsx:100,108,116,124` |
+| `ColoredStatCard trend` | `src/pages/ProyectosListPage.tsx:42,52` |
+| `ColoredStatCard trendUp` | `src/pages/ProyectosListPage.tsx:42,52` |
+| `Timeline iconBg` | `src/pages/ProyectoDetailPage.tsx:142` |

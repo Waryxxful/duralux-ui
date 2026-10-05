@@ -27,3 +27,12 @@
 2. Corregir voseo, `noPad` y selects nativos.
 3. Pasar los CSS del asistente y de notificaciones a tokens; quitar los overrides `.app-skin-dark`.
 4. Validar en DEV en claro, oscuro y navy con cada remoto montado.
+
+## Bloqueos para 3.0
+
+Usos de APIs retiradas en 3.0 (relevado el 2026-10-05). Reemplazos en `README.md` («De 2.x a 3.0»).
+
+| API retirada | Dónde |
+|---|---|
+| `Card noPad` | `src/components/hub/AppCard.tsx:27` |
+| `Input icon` | `src/pages/UserSettings/PasswordTab.tsx:167,191,246`, `src/pages/UserSettings/ProfileTab.tsx:282,294,306,323` |

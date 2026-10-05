@@ -1,7 +1,7 @@
 {
   "$comment": "Catálogo legible por máquina de @duralux/ui. Fuente: src/public/components.ts, src/index.ts, src/public/apex.ts, src/public/recharts.ts y src/antd/index.ts. Al agregar o deprecar un componente, actualiza este archivo en el mismo commit.",
   "package": "@duralux/ui",
-  "version": "2.8.0",
+  "version": "3.0.0",
   "entrypoints": {
     "@duralux/ui": "Componentes, layout, shell, tema, log, apiFetch, contrato",
     "@duralux/ui/charts/apex": "Gráficos ApexCharts (peer opcional apexcharts/react-apexcharts)",
@@ -17,8 +17,8 @@
     { "name": "DropdownMenu", "import": "@duralux/ui", "category": "accion", "use": "Contenido de menú de Dropdown.", "avoid": "Uso suelto fuera de Dropdown.", "alternative": "Dropdown" },
     { "name": "ConfirmDialog", "import": "@duralux/ui", "category": "feedback", "use": "Confirmar acciones destructivas o irreversibles, nombrando el objeto.", "avoid": "Formularios o contenido largo; window.confirm.", "alternative": "Modal" },
 
-    { "name": "FormField", "import": "@duralux/ui", "category": "formulario", "use": "Envolver todo control con etiqueta, ayuda y error; grilla que se adapta al contenedor.", "avoid": "Etiquetas e inputs sueltos; prop hint (deprecada).", "alternative": "Fieldset para agrupar varios campos" },
-    { "name": "Input", "import": "@duralux/ui", "category": "formulario", "use": "Texto, email, número simple, búsqueda. controlSize sm/md/lg.", "avoid": "Fechas (type=date), números con formato es-CL; props invalid, icon y prefix (deprecadas).", "alternative": "DatePicker o NumberInput de @duralux/ui/antd; InputGroup para prefijos" },
+    { "name": "FormField", "import": "@duralux/ui", "category": "formulario", "use": "Envolver todo control con etiqueta, ayuda y error; grilla que se adapta al contenedor.", "avoid": "Etiquetas e inputs sueltos.", "alternative": "Fieldset para agrupar varios campos" },
+    { "name": "Input", "import": "@duralux/ui", "category": "formulario", "use": "Texto, email, número simple, búsqueda. controlSize sm/md/lg.", "avoid": "Fechas (type=date), números con formato es-CL. Ícono o prefijo: startAddon; error: error.", "alternative": "DatePicker o NumberInput de @duralux/ui/antd; InputGroup para prefijos" },
     { "name": "Textarea", "import": "@duralux/ui", "category": "formulario", "use": "Texto multilínea.", "avoid": "Compositor de chat.", "alternative": "ChatInputBar" },
     { "name": "Select", "import": "@duralux/ui", "category": "formulario", "use": "Elegir un valor de una lista corta (hasta ~15 opciones).", "avoid": "Listas largas con búsqueda; rangos de fecha predefinidos; 2–5 opciones visibles.", "alternative": "SearchableSelect, DateRangeFilter, Segmented o RadioGroup" },
     { "name": "SearchableSelect", "import": "@duralux/ui", "category": "formulario", "use": "Un valor de una lista larga con búsqueda; name publica input oculto para submit nativo.", "avoid": "Selección múltiple; jerarquías.", "alternative": "MultiSelect, TreeSelect (antd)" },
@@ -35,7 +35,6 @@
 
     { "name": "DataTable", "import": "@duralux/ui", "category": "dato", "use": "Listado operativo: orden múltiple, selección, acciones de fila, columnas visibles, density, stickyHeader, virtualized, error+onRetry, renderBulkActions (TanStack Table).", "avoid": "Tablas de lectura de pocas filas; antd Table.", "alternative": "Table" },
     { "name": "Table", "import": "@duralux/ui", "category": "dato", "use": "Tabla simple de lectura: columns[].numeric, density, stickyHeader+maxHeight, emptyState, loadingRows.", "avoid": "Orden, selección o acciones masivas; <table> crudo.", "alternative": "DataTable" },
-    { "name": "ResponsiveTable", "import": "@duralux/ui", "category": "dato", "status": "deprecated", "use": "Solo código existente (alias deprecado).", "avoid": "Código nuevo.", "alternative": "Table" },
     { "name": "Pagination", "import": "@duralux/ui", "category": "dato", "use": "Paginar listados externos a DataTable; pageSize/totalItems («11–20 de 248»).", "avoid": "Dentro de DataTable (ya pagina).", "alternative": "DataTable" },
     { "name": "DataTableToolbar", "import": "@duralux/ui", "category": "dato", "use": "Barra de búsqueda, filtros y acciones sobre una tabla.", "avoid": "Filtros de página completa.", "alternative": "ActiveFilters + DateRangeFilter" },
     { "name": "BulkBar", "import": "@duralux/ui", "category": "dato", "use": "Acciones sobre filas seleccionadas.", "avoid": "Acciones de una sola fila.", "alternative": "Acciones de fila de DataTable" },
@@ -44,9 +43,9 @@
     { "name": "DescriptionList", "import": "@duralux/ui", "category": "dato", "use": "Pares etiqueta/valor de una entidad.", "avoid": "Muchas entidades comparadas.", "alternative": "Table" },
     { "name": "KpiCard", "import": "@duralux/ui", "category": "dato", "use": "Una cifra clave con meta, variación o tendencia.", "avoid": "Cifras sin contexto; varias cifras hermanas.", "alternative": "StatGroup" },
     { "name": "StatGroup", "import": "@duralux/ui", "category": "dato", "use": "Fila de cifras relacionadas en una sola superficie.", "avoid": "Una cifra protagonista.", "alternative": "KpiCard, ScoreHero" },
-    { "name": "StatsCard", "import": "@duralux/ui", "category": "dato", "use": "Indicador con icono, delta y context (tableros existentes).", "avoid": "Props iconBg y trend (deprecadas).", "alternative": "KpiCard" },
+    { "name": "StatsCard", "import": "@duralux/ui", "category": "dato", "use": "Indicador con icono, delta y context (tableros existentes).", "avoid": "Cifras sin delta ni context.", "alternative": "KpiCard" },
     { "name": "MiniStatCard", "import": "@duralux/ui", "category": "dato", "use": "Indicador compacto en grillas densas.", "avoid": "Cifra protagonista.", "alternative": "KpiCard" },
-    { "name": "ColoredStatCard", "import": "@duralux/ui", "category": "dato", "use": "Indicador destacado con relleno de color (AA).", "avoid": "Más de uno o dos por vista; props bg, trend, trendUp (deprecadas).", "alternative": "KpiCard" },
+    { "name": "ColoredStatCard", "import": "@duralux/ui", "category": "dato", "use": "Indicador destacado con relleno de color (AA).", "avoid": "Más de uno o dos por vista.", "alternative": "KpiCard" },
     { "name": "StatCard", "import": "@duralux/ui", "category": "dato", "use": "Extra GranCRM heredado del shell.", "avoid": "Código nuevo.", "alternative": "KpiCard" },
     { "name": "ChartMetricsFooter", "import": "@duralux/ui", "category": "dato", "use": "Métricas resumen bajo un gráfico.", "avoid": "Fuera de una card de gráfico.", "alternative": "StatGroup" },
     { "name": "Severity", "import": "@duralux/ui", "category": "dato", "use": "Nivel de severidad con forma, color y texto (severityOf calcula el nivel).", "avoid": "Estados de proceso.", "alternative": "Badge, StatusBadge" },
@@ -54,10 +53,10 @@
     { "name": "ScoreHero", "import": "@duralux/ui", "category": "dato", "use": "Puntaje protagonista de una vista.", "avoid": "Listas de puntajes.", "alternative": "Score" },
     { "name": "Person", "import": "@duralux/ui", "category": "dato", "use": "Persona con avatar, nombre y rol/meta.", "avoid": "Solo la imagen.", "alternative": "Avatar" },
     { "name": "RankList", "import": "@duralux/ui", "category": "dato", "use": "Ranking con posición y valor (top agentes, campañas).", "avoid": "Datos sin orden significativo.", "alternative": "List" },
-    { "name": "Timeline", "import": "@duralux/ui", "category": "dato", "use": "Secuencia de eventos con tiempo relativo.", "avoid": "Pasos de un proceso; prop iconBg (deprecada).", "alternative": "ProcessSteps, ActivityFeed" },
+    { "name": "Timeline", "import": "@duralux/ui", "category": "dato", "use": "Secuencia de eventos con tiempo relativo.", "avoid": "Pasos de un proceso.", "alternative": "ProcessSteps, ActivityFeed" },
     { "name": "ActivityFeed", "import": "@duralux/ui", "category": "dato", "use": "Actividad reciente de usuarios o sistema.", "avoid": "Historial con detalle por evento.", "alternative": "Timeline" },
 
-    { "name": "Card", "import": "@duralux/ui", "category": "presentacion", "use": "Superficie de contenido con título y acciones; interactive, loadingVariant=\"skeleton\".", "avoid": "Props elementRef, headerRight y noPad (deprecadas); cards anidadas.", "alternative": "EntityCard (entidad), KpiCard (cifra)" },
+    { "name": "Card", "import": "@duralux/ui", "category": "presentacion", "use": "Superficie de contenido con título y acciones; interactive, loadingVariant=\"skeleton\".", "avoid": "Cards anidadas.", "alternative": "EntityCard (entidad), KpiCard (cifra)" },
     { "name": "CardHeader", "import": "@duralux/ui", "category": "presentacion", "use": "Extra GranCRM: cabecera de card heredada.", "avoid": "Código nuevo.", "alternative": "Card (title/actions)" },
     { "name": "CardBody", "import": "@duralux/ui", "category": "presentacion", "use": "Extra GranCRM: cuerpo de card heredado.", "avoid": "Código nuevo.", "alternative": "Card" },
     { "name": "CardFooter", "import": "@duralux/ui", "category": "presentacion", "use": "Extra GranCRM: pie de card heredado.", "avoid": "Código nuevo.", "alternative": "Card" },
@@ -121,7 +120,7 @@
     { "name": "TrendLine", "import": "@duralux/ui/charts/apex", "category": "grafico", "use": "Tendencia con meta.", "avoid": "Distribuciones.", "alternative": "Donut" },
     { "name": "Gauge", "import": "@duralux/ui/charts/apex", "category": "grafico", "use": "Valor contra escala.", "avoid": "Varias series.", "alternative": "ProgressRing" },
     { "name": "Donut", "import": "@duralux/ui/charts/apex", "category": "grafico", "use": "Distribución de pocas categorías.", "avoid": "Más de 6 categorías.", "alternative": "BarChartWidget, RankList" },
-    { "name": "ChartCard", "import": "@duralux/ui/charts/apex | @duralux/ui/charts/recharts", "category": "grafico", "use": "Card de gráfico con headingLevel, acciones y estados.", "avoid": "Prop noPad (deprecada).", "alternative": "Card" },
+    { "name": "ChartCard", "import": "@duralux/ui/charts/apex | @duralux/ui/charts/recharts", "category": "grafico", "use": "Card de gráfico con headingLevel, acciones y estados.", "avoid": "Usarla para contenido que no es un gráfico.", "alternative": "Card" },
     { "name": "AreaChartWidget", "import": "@duralux/ui/charts/recharts", "category": "grafico", "use": "Área (Recharts).", "avoid": "Apps sin recharts instalado.", "alternative": "ApexChart" },
     { "name": "BarChartWidget", "import": "@duralux/ui/charts/recharts", "category": "grafico", "use": "Barras (Recharts).", "avoid": "Apps sin recharts instalado.", "alternative": "ApexChart" },
     { "name": "LineChartWidget", "import": "@duralux/ui/charts/recharts", "category": "grafico", "use": "Líneas (Recharts).", "avoid": "Apps sin recharts instalado.", "alternative": "TrendLine" },
@@ -149,7 +148,7 @@
     { "name": "ImagePreview", "import": "@duralux/ui/antd", "category": "presentacion", "use": "Miniatura con visor (alt obligatorio).", "avoid": "Avatares.", "alternative": "Avatar" },
 
     { "name": "log", "import": "@duralux/ui", "category": "utilidad", "use": "Logging con prefijo [duralux]; en producción solo error.", "avoid": "console.* directo en componentes.", "alternative": "—" },
-    { "name": "deprecate", "import": "@duralux/ui", "category": "utilidad", "use": "Aviso único de deprecación en desarrollo.", "avoid": "Romper la API en 2.x.", "alternative": "—" },
+    { "name": "deprecate", "import": "@duralux/ui", "category": "utilidad", "use": "Aviso único de deprecación en desarrollo.", "avoid": "Romper la API dentro de una serie mayor (3.x).", "alternative": "—" },
     { "name": "apiFetch", "import": "@duralux/ui", "category": "utilidad", "use": "fetch con CSRF y credenciales same-origin; emite SESSION_EXPIRED_EVENT.", "avoid": "fetch directo a la API de Django.", "alternative": "—" },
 
     { "name": "AppSwitcher", "import": "@duralux/ui", "category": "shell", "since": "2.6.0", "use": "Mega-menú «Módulos» del header: apps del manifest agrupadas por categoría." },

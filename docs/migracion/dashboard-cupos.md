@@ -27,3 +27,13 @@
 2. Reemplazar la detección de tema y la paleta propia de Apex.
 3. Pasar tablas y props deprecadas.
 4. Validar en DEV en tres temas.
+
+## Bloqueos para 3.0
+
+Usos de APIs retiradas en 3.0 (relevado el 2026-10-05). Reemplazos en `README.md` («De 2.x a 3.0»).
+
+| API retirada | Dónde |
+|---|---|
+| `Card headerRight` | `src/components/PivotTable.jsx:27` |
+| `Card noPad` | `src/components/PivotTable.jsx:27` |
+| `StatsCard iconBg` (objetos con spread) | `src/components/CuposOverview.jsx:35,41,47,53,59` (render en `:78`) |

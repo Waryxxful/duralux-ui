@@ -22,7 +22,7 @@ Empieza por la necesidad, no por el nombre. Si dudas, busca en `docs/manifest.js
 | Necesito… | Usa | No uses |
 |---|---|---|
 | **Dato:** listado operativo con orden, selección o acciones | `DataTable` (+ `BulkBar`, `ActiveFilters`) | `<table>` crudo, `Table` si hay orden/selección |
-| Dato: tabla simple de lectura | `Table` | `ResponsiveTable` (deprecado) |
+| Dato: tabla simple de lectura | `Table` | `<table>` crudo |
 | Dato: una cifra con contexto | `KpiCard`, `StatGroup`, `StatsCard` | número suelto sin meta ni variación |
 | Dato: pares etiqueta/valor | `DescriptionList` | grilla manual de `<div>` |
 | Dato: tendencia o distribución | `ChartCard` + `charts/apex` (`TrendLine`, `Sparkline`, `Donut`, `Gauge`) | colores hex en opciones del gráfico |
@@ -63,7 +63,7 @@ Si falta un componente genérico, se agrega en esta librería, no en la app.
 - **Tree-shaking:** en la librería, todo `forwardRef`/`memo`/`Object.assign` a nivel de módulo lleva `/* @__PURE__ */`; nada de asignaciones sueltas a nivel de módulo.
 - **Sin `import()` dinámicos en la librería:** rompen los remotos de Module Federation (`gate:bundle` lo verifica). Las apps pueden usar `lazy()` en sus rutas.
 - **Temas:** `ThemeProvider` maneja `light | dark | navy | system` y fija `data-gcu-theme` en `<html>`. No toques `.app-skin-dark` a mano; para un subárbol usa `ThemeScope`. Para saber si la UI está oscura usa `dark` o `resolved`, no `mode === 'dark'`.
-- **API congelada en 2.x:** solo se agregan props; lo reemplazado pasa por `deprecate()` y se elimina en 3.0. `src/contract.ts` no cambia.
+- **API congelada en 3.x:** solo se agregan props; lo reemplazado pasa por `deprecate()` y se elimina en la siguiente mayor (4.0). 3.0 retiró todo lo deprecado en 2.x (tabla en `docs/migracion/README.md`). `src/contract.ts` no cambia.
 
 ## Receta para un componente
 

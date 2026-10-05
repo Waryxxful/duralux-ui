@@ -65,7 +65,7 @@ export default function App({ contractVersion, basename, apiBase, session, bus }
 
 ```tsx
 import {
-  PageHeader, Card, Button, Badge, Table, ResponsiveTable,
+  PageHeader, Card, Button, Badge, Table,
   EmptyState, LoadingState, FormField, Input, Modal, apiFetch,
 } from '@duralux/ui';
 ```

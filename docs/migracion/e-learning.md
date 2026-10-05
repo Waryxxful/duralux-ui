@@ -29,3 +29,13 @@
 2. Agregar `antd@^6` y `dayjs@^1.11`, `DuraluxAntdProvider` en la raíz y reemplazar los inputs date.
 3. Reemplazar `headerRight` e `iconBg`.
 4. Validar en DEV en tres temas.
+
+## Bloqueos para 3.0
+
+Usos de APIs retiradas en 3.0 (relevado el 2026-10-05). Reemplazos en `README.md` («De 2.x a 3.0»).
+
+| API retirada | Dónde |
+|---|---|
+| `Card headerRight` | `src/paginas/Asignaciones.tsx:176`, `src/paginas/Aula.tsx:129`, `src/paginas/DetalleCurso.tsx:20`, `src/paginas/Evaluacion.tsx:74,90`, `src/paginas/FichaAgente.tsx:117,131`, `src/paginas/GestionCursos.tsx:325`, `src/paginas/MiAprendizaje.tsx:190`, `src/paginas/Panel.tsx:103,117`, `src/paginas/Reportes.tsx:99,114`, `src/paginas/Resultado.tsx:196` |
+| `Table ariaLabel` | `src/paginas/DetalleCurso.tsx:21`, `src/paginas/FichaAgente.tsx:118`, `src/paginas/GestionCursos.tsx:300`, `src/paginas/MiAprendizaje.tsx:191`, `src/paginas/Panel.tsx:104`, `src/paginas/Resultado.tsx:220` |
+| `StatsCard iconBg` | `src/paginas/Panel.tsx:96` |

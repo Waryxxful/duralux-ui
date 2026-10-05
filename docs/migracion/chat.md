@@ -25,3 +25,7 @@
 2. Reemplazar burbujas, separadores y compositor propios por los de 2.4 si los hay.
 3. Pasar `dock.css` y `styles.css` a tokens.
 4. Validar en DEV en tres temas.
+
+## Bloqueos para 3.0
+
+Ninguno: no usa APIs retiradas en 3.0 (relevado el 2026-10-05).
