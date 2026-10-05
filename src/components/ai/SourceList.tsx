@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 import type * as React from 'react'
 import { cx } from '../../utils/cx'
 import type { SourceListProps } from '../../public/types'
-import { safeSourceHref } from './internal/safeSourceHref'
+import { safeHref } from '../../utils/safeHref'
 
 /**
  * SourceList — fuentes (notas al pie) de una respuesta del asistente, numeradas como sus citas `[n]`.
@@ -28,7 +28,7 @@ export const SourceList = /* @__PURE__ */ forwardRef<HTMLElement, SourceListProp
     // SAFETY: el ref público es HTMLElement; la raíz es un <ol>.
     <ol {...rest} ref={ref as React.Ref<HTMLOListElement>} className={cx('gcu-ai-sources', className)} aria-label={label}>
       {sources.map((source) => {
-        const href = safeSourceHref(source.href)
+        const href = safeHref(source.href)
         return (
         <li key={source.id} id={idPrefix ? `${idPrefix}-${source.id}` : undefined} className="gcu-ai-sources__item" tabIndex={idPrefix ? -1 : undefined}>
           <span className="gcu-ai-sources__n" aria-hidden="true">{source.id}</span>

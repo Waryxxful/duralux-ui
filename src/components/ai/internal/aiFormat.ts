@@ -9,14 +9,8 @@ export function formatElapsed(totalSeconds: number): string {
   return `${minutes} min ${rest} s`
 }
 
-/** Cuenta regresiva «4:05» o «1:04:05». */
-export function formatCountdown(totalSeconds: number): string {
-  const s = Math.max(0, Math.floor(Number.isFinite(totalSeconds) ? totalSeconds : 0))
-  const h = Math.floor(s / 3600)
-  const m = Math.floor((s % 3600) / 60)
-  const sec = String(s % 60).padStart(2, '0')
-  return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${sec}` : `${m}:${sec}`
-}
+/** Cuenta regresiva «4:05» o «1:04:05»: mismo formato que las duraciones de 2.7. */
+export { formatDuration as formatCountdown } from '../../domain/internal/duration'
 
 /** «840», «12,4 k», «128 k». */
 export function formatTokens(n: number): string {

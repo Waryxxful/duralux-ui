@@ -1,18 +1,11 @@
 import { forwardRef, useState } from 'react'
 import { cx } from '../../utils/cx'
 import { log } from '../../utils/log'
+import { safeHref } from '../../utils/safeHref'
 import { isArray, isFiniteNumber, isNonEmptyString } from '../../utils/typeGuards'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import type { WebResultsProps } from '../../public/types'
-
-/** Solo http(s): un `href` con otro esquema (javascript:, data:) no se renderiza como enlace. */
-function safeHref(href: string | undefined): string | null {
-  if (!isNonEmptyString(href)) return null
-  if (/^https?:\/\//i.test(href)) return href
-  log.warn('WebResults: se ignoró un enlace que no es http(s).')
-  return null
-}
 
 /**
  * WebResults — búsqueda del asistente en la web o en la base de conocimiento: consulta, total,

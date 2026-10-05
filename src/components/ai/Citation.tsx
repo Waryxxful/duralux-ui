@@ -3,7 +3,7 @@ import type * as React from 'react'
 import { cx } from '../../utils/cx'
 import type { CitationProps } from '../../public/types'
 import { Tooltip } from '../ui/Tooltip'
-import { safeSourceHref } from './internal/safeSourceHref'
+import { safeHref } from '../../utils/safeHref'
 
 /**
  * Citation — marca de cita `[n]` en una respuesta, con vista previa de la fuente (Tooltip:
@@ -19,7 +19,7 @@ export const Citation = /* @__PURE__ */ forwardRef<HTMLElement, CitationProps>(f
   { source, targetId, className, ...rest },
   ref,
 ) {
-  const href = safeSourceHref(source.href)
+  const href = safeHref(source.href)
   const name = `Fuente ${source.id}: ${source.title}`
   const preview = (
     <span className="gcu-ai-citation__preview">
