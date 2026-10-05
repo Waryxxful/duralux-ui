@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 import { cx } from '../../../utils/cx'
 import { log } from '../../../utils/log'
 import { isFiniteNumber, isFunction } from '../../../utils/typeGuards'
-import type { CriterionRowProps } from '../../../public/types'
+import type { CriterionResult, CriterionRowProps, QualityCriterion } from '../../../public/types'
 import { CRITERION_LABEL, GRAVE_LABEL, WEAK_EVIDENCE, toCriterionResult } from './qualityModel'
 
 const GLYPH = {
@@ -29,10 +29,6 @@ export const CriterionRow = /* @__PURE__ */ forwardRef<HTMLDivElement, Criterion
 }, ref) {
   const result = toCriterionResult(criterion.result) ?? 'no_aplica'
   if (result !== criterion.result) log.warn(`CriterionRow: resultado desconocido "${String(criterion.result)}"; se usa "no_aplica".`)
-  const label = criterion.grave ? GRAVE_LABEL[result] : CRITERION_LABEL[result]
-  const showPoints = !criterion.grave && result !== 'no_aplica' && isFiniteNumber(criterion.points)
-  const evidence = isFiniteNumber(criterion.evidence) ? Math.round(criterion.evidence) : null
-  const weak = evidence !== null && evidence < WEAK_EVIDENCE
   const canShowTurn = isFiniteNumber(criterion.turn) && isFunction(onShowTurn)
 
   return (
@@ -63,19 +59,27 @@ export const CriterionRow = /* @__PURE__ */ forwardRef<HTMLDivElement, Criterion
           </p>
         )}
       </div>
-      <div className="gcu-criterion__meta">
-        <span className="gcu-criterion__result">{label}</span>
-        {showPoints && (
-          <span className="gcu-criterion__points gcu-tabular">
-            {criterion.points}{isFiniteNumber(criterion.maxPoints) ? `/${criterion.maxPoints}` : ''} pts
-          </span>
-        )}
-        {evidence !== null && (
-          <span className={cx('gcu-criterion__evidence', 'gcu-tabular', weak && 'gcu-criterion__evidence--weak')}>
-            {weak ? `Evidencia débil (${evidence} %)` : `Evidencia ${evidence} %`}
-          </span>
-        )}
-      </div>
+      <CriterionMeta criterion={criterion} result={result} />
     </div>
   )
 })
+
+/** Resultado en texto, puntos y evidencia (columna derecha; abajo cuando la fila es angosta). */
+function CriterionMeta({ criterion, result }: { criterion: QualityCriterion; result: CriterionResult }) {
+  const label = criterion.grave ? GRAVE_LABEL[result] : CRITERION_LABEL[result]
+  const showPoints = !criterion.grave && result !== 'no_aplica' && isFiniteNumber(criterion.points)
+  const maxPoints = isFiniteNumber(criterion.maxPoints) ? `/${criterion.maxPoints}` : ''
+  const evidence = isFiniteNumber(criterion.evidence) ? Math.round(criterion.evidence) : null
+  const weak = evidence !== null && evidence < WEAK_EVIDENCE
+  return (
+    <div className="gcu-criterion__meta">
+      <span className="gcu-criterion__result">{label}</span>
+      {showPoints && <span className="gcu-criterion__points gcu-tabular">{criterion.points}{maxPoints} pts</span>}
+      {evidence !== null && (
+        <span className={cx('gcu-criterion__evidence', 'gcu-tabular', weak && 'gcu-criterion__evidence--weak')}>
+          {weak ? `Evidencia débil (${evidence} %)` : `Evidencia ${evidence} %`}
+        </span>
+      )}
+    </div>
+  )
+}

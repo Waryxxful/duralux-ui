@@ -78,11 +78,30 @@ export function waveHeights(bars: number, seed = 7): number[] {
 }
 
 /** Parte un texto en tramos con y sin resaltar según los términos (sin distinguir mayúsculas). */
-export function splitHighlights(text: string, terms: ReadonlyArray<string> | undefined): Array<{ text: string; hit: boolean }> {
+export interface HighlightPart {
+  text: string
+  hit: boolean
+  /** Posición del tramo en el texto: clave estable mientras el texto no cambie. */
+  start: number
+}
+
+export function splitHighlights(text: string, terms: ReadonlyArray<string> | undefined): HighlightPart[] {
   const clean = (terms ?? []).map((term) => term.trim()).filter(Boolean)
-  if (clean.length === 0 || text === '') return [{ text, hit: false }]
+  if (clean.length === 0 || text === '') return [{ text, hit: false, start: 0 }]
   const escaped = clean.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
   const pattern = new RegExp(`(${escaped.join('|')})`, 'gi')
   const lower = new Set(clean.map((term) => term.toLowerCase()))
-  return text.split(pattern).filter((part) => part !== '').map((part) => ({ text: part, hit: lower.has(part.toLowerCase()) }))
+  const parts: HighlightPart[] = []
+  let start = 0
+  for (const part of text.split(pattern)) {
+    if (part === '') continue
+    parts.push({ text: part, hit: lower.has(part.toLowerCase()), start })
+    start += part.length
+  }
+  return parts
+}
+
+/** Clave estable de un turno: quién habla, cuándo y su orden en la conversación. */
+export function turnKey(speaker: string, at: number | undefined, order: number): string {
+  return `${order}-${speaker}-${at ?? 'x'}`
 }

@@ -4,7 +4,7 @@ import { assignRef } from '../../../utils/assignRef'
 import { isArray, isFiniteNumber, isFunction } from '../../../utils/typeGuards'
 import type { TranscriptProps } from '../../../public/types'
 import { formatDuration } from '../internal/duration'
-import { splitHighlights } from './qualityModel'
+import { splitHighlights, turnKey } from './qualityModel'
 
 const SKELETON_TURNS = ['a', 'b', 'c', 'd']
 
@@ -34,6 +34,8 @@ export const Transcript = /* @__PURE__ */ forwardRef<HTMLDivElement, TranscriptP
 }, ref) {
   const box = useRef<HTMLDivElement | null>(null)
   const list = isArray(turns) ? turns : []
+  // El orden de los turnos es fijo y es lo que cita un criterio (`flagged`, `turn`).
+  const keyedTurns = list.map((turn, order) => ({ turn, index: order, id: turnKey(turn.speaker, turn.at, order) }))
 
   useEffect(() => {
     if (!isFiniteNumber(flagged)) return
@@ -66,13 +68,12 @@ export const Transcript = /* @__PURE__ */ forwardRef<HTMLDivElement, TranscriptP
         <p className="gcu-transcript__empty">Esta llamada no tiene transcripción. Revisa el audio o vuelve a intentarlo más tarde.</p>
       ) : (
         <ol className="gcu-transcript__list">
-          {list.map((turn, index) => {
+          {keyedTurns.map(({ turn, index, id }) => {
             const who = turn.speaker === 'agent' ? agentLabel : clientLabel
             const isFlagged = flagged === index
             return (
               <li
-                // El orden de los turnos es fijo: el índice es su identidad (y lo que cita un criterio).
-                key={index}
+                key={id}
                 data-turn={index}
                 className={cx('gcu-turn', turn.speaker === 'agent' ? 'gcu-turn--agent' : 'gcu-turn--client', isFlagged && 'gcu-turn--flagged')}
               >
@@ -95,11 +96,10 @@ export const Transcript = /* @__PURE__ */ forwardRef<HTMLDivElement, TranscriptP
                   {isFlagged && <span className="gcu-turn__flag">Turno citado</span>}
                 </span>
                 <span className="gcu-turn__text">
-                  {splitHighlights(turn.text, highlight).map((part, partIndex) => (
+                  {splitHighlights(turn.text, highlight).map((part) => (
                     part.hit
-                      // Tramos derivados del texto: su posición es estable mientras el texto no cambie.
-                      ? <mark key={partIndex} className="gcu-turn__mark">{part.text}</mark>
-                      : <span key={partIndex}>{part.text}</span>
+                      ? <mark key={part.start} className="gcu-turn__mark">{part.text}</mark>
+                      : <span key={part.start}>{part.text}</span>
                   ))}
                 </span>
               </li>
