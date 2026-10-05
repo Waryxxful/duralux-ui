@@ -46,7 +46,7 @@ function ApprovalFooter({ status, blockedId, disabledReason, destructive, approv
 }
 
 /**
- * ApprovalCard —aprobación humana antes de una acción con efecto (enviar, actualizar, reasignar).
+ * ApprovalCard — aprobación humana antes de una acción con efecto (enviar, actualizar, reasignar).
  *
  * - El componente NUNCA ejecuta la acción: muestra qué se hará y emite la intención con
  *   `onApprove(intent)` u `onReject(intent)`. Quien consume decide y ejecuta en el servidor.

@@ -31,7 +31,7 @@ function keyedSteps(steps: ReadonlyArray<ReasoningStepInput>): Array<{ key: stri
 }
 
 /**
- * ReasoningTrace —razonamiento del asistente, plegable, con tiempo y pasos numerados.
+ * ReasoningTrace — razonamiento del asistente, plegable, con tiempo y pasos numerados.
  *
  * - `<details>` nativo: teclado y lector de pantalla sin ARIA extra.
  * - thinking: se abre solo, cuenta el tiempo en vivo y muestra un paso pendiente; si la persona

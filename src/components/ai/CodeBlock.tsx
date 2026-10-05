@@ -81,7 +81,7 @@ function CodeCaption({ filename, language, copy, onCopy }: CodeCaptionProps) {
 }
 
 /**
- * CodeBlock —bloque de código o texto técnico con nombre de archivo, copiar, números de línea y plegado.
+ * CodeBlock — bloque de código o texto técnico con nombre de archivo, copiar, números de línea y plegado.
  *
  * - Sin resaltado de sintaxis (sin dependencias): monoespaciada, con números opcionales que no se copian.
  * - Copiar: Clipboard API con fallback (textarea + execCommand). El resultado se anuncia en `status`.
