@@ -1,0 +1,17 @@
+/* ReasoningTrace: razonamiento plegable con tiempo y pasos numerados. Solo tokens. */
+.gcu-ai-reasoning{color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-reasoning__summary{display:inline-flex;align-items:center;gap:var(--gcu-space-2);padding:var(--gcu-space-1) var(--gcu-space-2);margin-inline-start:calc(var(--gcu-space-2) * -1);border-radius:var(--gcu-radius-md);cursor:pointer;list-style:none;color:var(--gcu-muted);font-weight:var(--gcu-font-weight-medium)}
+.gcu-ai-reasoning__summary::-webkit-details-marker{display:none}
+.gcu-ai-reasoning__summary:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+@media (hover:hover){.gcu-ai-reasoning__summary:hover{background-color:var(--gcu-surface-sunken);color:var(--gcu-text)}}
+.gcu-ai-reasoning__icon{color:var(--gcu-primary-text)}
+.gcu-ai-reasoning__hint{font-weight:var(--gcu-font-weight-regular)}
+.gcu-ai-reasoning__chevron{transition:transform var(--gcu-duration-fast) var(--gcu-ease-standard)}
+.gcu-ai-reasoning[open] .gcu-ai-reasoning__chevron{transform:rotate(180deg)}
+.gcu-ai-reasoning__steps{display:flex;flex-direction:column;gap:var(--gcu-space-2);margin:var(--gcu-space-2) 0 0;padding:0 0 0 var(--gcu-space-3);border-inline-start:2px solid var(--gcu-border);list-style:none}
+.gcu-ai-reasoning__step{display:flex;gap:var(--gcu-space-2);max-inline-size:68ch}
+.gcu-ai-reasoning__n{flex:none;min-inline-size:var(--gcu-space-4);color:var(--gcu-text-subtle);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-reasoning__text{color:var(--gcu-muted);text-wrap:pretty}
+/* Paso pendiente: barra con brillo (gcu-shimmer global); quieta con reduced-motion. */
+.gcu-ai-reasoning__pending{display:block;inline-size:min(12rem,60%);block-size:var(--gcu-space-3);margin-block-start:var(--gcu-space-1);border-radius:var(--gcu-radius-sm);background:linear-gradient(90deg,var(--gcu-border) 25%,var(--gcu-surface-sunken) 37%,var(--gcu-border) 63%);background-size:400% 100%;animation:gcu-shimmer 1.4s var(--gcu-ease-standard) infinite}
+@media (prefers-reduced-motion:reduce){.gcu-ai-reasoning__pending{animation:none}.gcu-ai-reasoning__chevron{transition:none}}

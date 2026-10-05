@@ -117,6 +117,20 @@ export { VoiceInput } from '../components/ai/VoiceInput'
 export { AiHistory } from '../components/ai/AiHistory'
 export { MemoryChips } from '../components/ai/MemoryChips'
 export { SuggestionBanner } from '../components/ai/SuggestionBanner'
+// 2.8 IA agente y contenido
+export { ReasoningTrace } from '../components/ai/ReasoningTrace'
+export { AgentSteps } from '../components/ai/AgentSteps'
+export { ToolChip } from '../components/ai/ToolChip'
+export { ApprovalCard } from '../components/ai/ApprovalCard'
+export { TaskRows } from '../components/ai/TaskRows'
+export { AgentPlan } from '../components/ai/AgentPlan'
+export { StatusTracker } from '../components/ai/StatusTracker'
+export { WebResults } from '../components/ai/WebResults'
+export { InlineEdit } from '../components/ai/InlineEdit'
+export { DiffView } from '../components/ai/DiffView'
+export { CodeBlock } from '../components/ai/CodeBlock'
+export { InsightCard } from '../components/ai/InsightCard'
+export { wordDiff, lineDiff } from '../components/ai/diffModel'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -399,4 +413,31 @@ export type {
   AiMemoryItem,
   MemoryChipsProps,
   SuggestionBannerProps,
+  // 2.8 IA agente y contenido
+  AgentStepStatus,
+  ReasoningStep,
+  ReasoningStepInput,
+  ReasoningTraceProps,
+  AgentStep,
+  AgentStepsProps,
+  ToolChipProps,
+  ApprovalIntent,
+  ApprovalStatus,
+  ApprovalCardProps,
+  AgentTask,
+  TaskRowsProps,
+  AgentPlanStep,
+  AgentPlanProps,
+  StatusTrackerStage,
+  StatusTrackerProps,
+  WebResult,
+  WebResultsProps,
+  InlineEditProps,
+  DiffPartKind,
+  DiffPart,
+  DiffFile,
+  DiffViewProps,
+  CodeBlockProps,
+  InsightDelta,
+  InsightCardProps,
 } from './types'

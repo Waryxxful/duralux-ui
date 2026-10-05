@@ -1,0 +1,19 @@
+/* AgentSteps: línea de tiempo de herramientas con marcador por estado, conector y detalle. */
+.gcu-ai-steps{display:flex;flex-direction:column;gap:var(--gcu-space-4);margin:0;padding:0;list-style:none}
+.gcu-ai-steps__item{position:relative;display:flex;gap:var(--gcu-space-3);min-inline-size:0}
+.gcu-ai-steps__item:not(:last-child)::after{content:"";position:absolute;inset-block-start:calc(var(--gcu-control-h-xs) + var(--gcu-space-1));inset-block-end:calc(var(--gcu-space-3) * -1);inset-inline-start:calc(var(--gcu-control-h-xs) / 2 - 1px);inline-size:2px;background-color:var(--gcu-border)}
+.gcu-ai-steps__marker{display:inline-flex;flex:none;align-items:center;justify-content:center;inline-size:var(--gcu-control-h-xs);block-size:var(--gcu-control-h-xs);border:2px solid var(--gcu-border-strong);border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-ai-steps__item--running .gcu-ai-steps__marker{border-color:var(--gcu-status-primary);background-color:var(--gcu-primary-soft)}
+.gcu-ai-steps__item--done .gcu-ai-steps__marker{border-color:var(--gcu-success-border);background-color:var(--gcu-success-soft)}
+.gcu-ai-steps__item--failed .gcu-ai-steps__marker{border-color:var(--gcu-danger-border);background-color:var(--gcu-danger-soft)}
+.gcu-ai-steps__body{display:flex;flex:1;flex-direction:column;gap:var(--gcu-space-1);min-inline-size:0}
+.gcu-ai-steps__head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--gcu-space-1) var(--gcu-space-2)}
+.gcu-ai-steps__title{color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium);text-wrap:pretty}
+.gcu-ai-steps__meta{display:inline-flex;align-items:center;gap:var(--gcu-space-2)}
+.gcu-ai-steps__time{color:var(--gcu-muted);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-steps__tool{overflow:hidden;color:var(--gcu-muted);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs);text-overflow:ellipsis;white-space:nowrap}
+.gcu-ai-steps__json{max-block-size:10rem;margin:0;padding:var(--gcu-space-2);overflow:auto;border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface-sunken);color:var(--gcu-text);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs);white-space:pre-wrap;overflow-wrap:anywhere}
+.gcu-ai-steps__result{color:var(--gcu-text);font-size:var(--gcu-font-size-sm)}
+.gcu-ai-steps__parallel{display:flex;flex-wrap:wrap;gap:var(--gcu-space-1)}
+.gcu-ai-steps--compact{gap:var(--gcu-space-2)}
+.gcu-ai-steps--compact .gcu-ai-steps__item:not(:last-child)::after{inset-block-end:calc(var(--gcu-space-1) * -1)}

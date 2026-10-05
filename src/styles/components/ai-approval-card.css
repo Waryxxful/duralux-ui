@@ -1,0 +1,21 @@
+/* ApprovalCard: aprobación humana antes de una acción con efecto. Borde de acento a la izquierda
+   para distinguirla del contenido del hilo; destructiva en tono de peligro. */
+.gcu-ai-approval{display:flex;flex-direction:column;gap:var(--gcu-space-2);padding:var(--gcu-space-4);border:1px solid var(--gcu-border);border-inline-start:3px solid var(--gcu-status-warning);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);box-shadow:var(--gcu-shadow-1)}
+.gcu-ai-approval--destructive{border-inline-start-color:var(--gcu-status-danger)}
+.gcu-ai-approval--approved{border-inline-start-color:var(--gcu-status-success)}
+.gcu-ai-approval--rejected{border-inline-start-color:var(--gcu-border-strong)}
+.gcu-ai-approval__eyebrow{display:inline-flex;align-items:center;gap:var(--gcu-space-1);color:var(--gcu-warning-text);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-caps);text-transform:uppercase}
+.gcu-ai-approval--approved .gcu-ai-approval__eyebrow,.gcu-ai-approval--rejected .gcu-ai-approval__eyebrow{color:var(--gcu-muted)}
+.gcu-ai-approval__title{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-md);line-height:var(--gcu-line-height-md);font-weight:var(--gcu-font-weight-semibold);text-wrap:balance}
+.gcu-ai-approval__description{max-inline-size:68ch;margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-approval__detail{padding:var(--gcu-space-3);border-radius:max(0px,calc(var(--gcu-radius-lg) - var(--gcu-space-2)));background-color:var(--gcu-surface-sunken);color:var(--gcu-text);font-size:var(--gcu-font-size-sm)}
+.gcu-ai-approval__params{max-block-size:10rem;margin:0;padding:var(--gcu-space-2);overflow:auto;border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface-sunken);color:var(--gcu-text);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs);white-space:pre-wrap;overflow-wrap:anywhere}
+.gcu-ai-approval__by{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-approval__tool{font-family:var(--gcu-font-mono)}
+.gcu-ai-approval__actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:var(--gcu-space-2);margin-block-start:var(--gcu-space-1)}
+.gcu-ai-approval__blocked{flex:1 1 100%;margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-approval__decided{display:flex;align-items:center;gap:var(--gcu-space-2);margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-sm)}
+.gcu-ai-approval--approved .gcu-ai-approval__decided i{color:var(--gcu-success-text)}
+.gcu-ai-approval--rejected .gcu-ai-approval__decided i{color:var(--gcu-muted)}
+/* En contenedores angostos los botones ocupan el ancho (objetivo táctil cómodo). */
+@container (max-width: 24rem){.gcu-ai-approval__actions > .btn{flex:1 1 0}}

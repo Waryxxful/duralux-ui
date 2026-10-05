@@ -1,0 +1,18 @@
+/* AgentPlan: plan de varios pasos revisable antes de aprobar. */
+.gcu-ai-plan{display:flex;flex-direction:column;gap:var(--gcu-space-3);padding:var(--gcu-space-4);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);box-shadow:var(--gcu-shadow-1)}
+.gcu-ai-plan__header{display:flex;flex-direction:column;gap:var(--gcu-space-1)}
+.gcu-ai-plan__eyebrow{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-caps);text-transform:uppercase}
+.gcu-ai-plan__title{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-md);line-height:var(--gcu-line-height-md);font-weight:var(--gcu-font-weight-semibold);text-wrap:balance}
+.gcu-ai-plan__list{display:flex;flex-direction:column;margin:0;padding:0;list-style:none}
+.gcu-ai-plan__item{display:flex;align-items:flex-start;gap:var(--gcu-space-3);padding-block:var(--gcu-space-2);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-plan__item + .gcu-ai-plan__item{border-block-start:1px solid var(--gcu-border)}
+.gcu-ai-plan__n{display:inline-flex;flex:none;align-items:center;justify-content:center;inline-size:var(--gcu-control-h-xs);block-size:var(--gcu-control-h-xs);border-radius:var(--gcu-radius-full);background-color:var(--gcu-primary-soft);color:var(--gcu-primary-text);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-ai-plan__text{flex:1;min-inline-size:0;padding-block-start:var(--gcu-space-0-5);color:var(--gcu-text);text-wrap:pretty}
+.gcu-ai-plan__tool{color:var(--gcu-muted);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-plan__remove{flex:none}
+.gcu-ai-plan__empty{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm)}
+.gcu-ai-plan__footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--gcu-space-2)}
+.gcu-ai-plan__status{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm)}
+.gcu-ai-plan__status:empty{display:none}
+.gcu-ai-plan__actions{display:flex;gap:var(--gcu-space-2);margin-inline-start:auto}
+@container (max-width: 24rem){.gcu-ai-plan__actions{inline-size:100%}.gcu-ai-plan__actions > .btn{flex:1 1 0}}

@@ -1,0 +1,11 @@
+/* StatusTracker: frase de estado anunciada + etapas (ProcessSteps vertical) o barra mínima. */
+.gcu-ai-tracker{display:flex;flex-direction:column;gap:var(--gcu-space-3)}
+.gcu-ai-tracker__status{margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-tracker__sentence{font-weight:var(--gcu-font-weight-medium)}
+.gcu-ai-tracker__detail{color:var(--gcu-muted)}
+.gcu-ai-tracker--failed .gcu-ai-tracker__sentence{color:var(--gcu-danger-text)}
+.gcu-ai-tracker--minimal{gap:var(--gcu-space-2)}
+.gcu-ai-tracker__bar{display:block;block-size:var(--gcu-space-1);overflow:hidden;border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface-sunken)}
+.gcu-ai-tracker__fill{display:block;block-size:100%;border-radius:inherit;background-color:var(--gcu-status-primary);transition:inline-size var(--gcu-duration-base) var(--gcu-ease-standard)}
+.gcu-ai-tracker--failed .gcu-ai-tracker__fill{background-color:var(--gcu-status-danger)}
+@media (prefers-reduced-motion:reduce){.gcu-ai-tracker__fill{transition:none}}

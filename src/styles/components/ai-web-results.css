@@ -1,0 +1,21 @@
+/* WebResults: consulta del asistente, resultados y el que está leyendo. */
+.gcu-ai-web{display:flex;flex-direction:column;gap:var(--gcu-space-2)}
+.gcu-ai-web__query{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-1) var(--gcu-space-2);margin:0;font-size:var(--gcu-font-size-sm)}
+.gcu-ai-web__icon{color:var(--gcu-muted)}
+.gcu-ai-web__text{color:var(--gcu-text);font-weight:var(--gcu-font-weight-medium)}
+.gcu-ai-web__count{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-web__list{display:flex;flex-direction:column;gap:var(--gcu-space-1);margin:0;padding:0;list-style:none}
+.gcu-ai-web__item{display:flex;align-items:flex-start;gap:var(--gcu-space-2);padding:var(--gcu-space-2);border:1px solid transparent;border-radius:var(--gcu-radius-md)}
+.gcu-ai-web__item--reading{border-color:var(--gcu-primary-border);background-color:var(--gcu-primary-soft)}
+.gcu-ai-web__favicon{display:inline-flex;flex:none;align-items:center;justify-content:center;inline-size:var(--gcu-space-6);block-size:var(--gcu-space-6);border-radius:var(--gcu-radius-sm);background-color:var(--gcu-surface-sunken);box-shadow:inset 0 0 0 1px var(--gcu-image-outline);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-ai-web__body{display:flex;flex:1;flex-direction:column;gap:var(--gcu-space-0-5);min-inline-size:0}
+.gcu-ai-web__title{color:var(--gcu-text);font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-medium);text-decoration:none;overflow-wrap:anywhere}
+a.gcu-ai-web__title{color:var(--gcu-primary-text)}
+a.gcu-ai-web__title:focus-visible{outline:none;border-radius:var(--gcu-radius-xs);box-shadow:var(--gcu-focus-ring)}
+@media (hover:hover){a.gcu-ai-web__title:hover{text-decoration:underline;text-underline-offset:2px}}
+.gcu-ai-web__external{margin-inline-start:var(--gcu-space-1);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-web__domain{color:var(--gcu-muted);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-web__snippet{display:-webkit-box;overflow:hidden;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.gcu-ai-web__reading{flex:none}
+.gcu-ai-web__empty{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm)}
+.gcu-ai-web__more{align-self:flex-start;padding-inline:0}

@@ -1,0 +1,16 @@
+/* TaskRows: tareas en vivo del agente con métrica, estado en texto y notas plegables. */
+.gcu-ai-tasks{display:flex;flex-direction:column;margin:0;padding:0;border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);list-style:none}
+.gcu-ai-tasks__item + .gcu-ai-tasks__item{border-block-start:1px solid var(--gcu-border)}
+.gcu-ai-tasks__row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);padding:var(--gcu-space-2) var(--gcu-space-3);font-size:var(--gcu-font-size-sm)}
+summary.gcu-ai-tasks__row{cursor:pointer;list-style:none}
+summary.gcu-ai-tasks__row::-webkit-details-marker{display:none}
+summary.gcu-ai-tasks__row:focus-visible{outline:2px solid var(--gcu-focus-ring-color);outline-offset:-2px}
+@media (hover:hover){summary.gcu-ai-tasks__row:hover{background-color:var(--gcu-surface-sunken)}}
+.gcu-ai-tasks__title{flex:1 1 12rem;min-inline-size:0;color:var(--gcu-text);font-weight:var(--gcu-font-weight-medium);text-wrap:pretty}
+.gcu-ai-tasks__metric{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-tasks__chevron{color:var(--gcu-muted);transition:transform var(--gcu-duration-fast) var(--gcu-ease-standard)}
+.gcu-ai-tasks__details[open] .gcu-ai-tasks__chevron{transform:rotate(180deg)}
+.gcu-ai-tasks__notes{padding:0 var(--gcu-space-3) var(--gcu-space-3) calc(var(--gcu-space-3) + var(--gcu-space-6));color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-tasks__empty{padding:var(--gcu-space-3);color:var(--gcu-muted);font-size:var(--gcu-font-size-sm)}
+.gcu-ai-tasks--compact .gcu-ai-tasks__row{padding-block:var(--gcu-space-1)}
+@media (prefers-reduced-motion:reduce){.gcu-ai-tasks__chevron{transition:none}}

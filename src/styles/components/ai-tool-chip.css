@@ -1,0 +1,19 @@
+/* ToolChip: llamada a herramienta compacta (chip) que se expande a argumentos y resultado. */
+.gcu-ai-tool{display:inline-flex;flex-direction:column;align-items:flex-start;gap:var(--gcu-space-1);max-inline-size:100%;vertical-align:top}
+.gcu-ai-tool__chip{display:inline-flex;align-items:center;gap:var(--gcu-space-1);max-inline-size:100%;min-block-size:var(--gcu-control-h-xs);padding:0 var(--gcu-space-2);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface);color:var(--gcu-text);font-family:var(--gcu-font-sans);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+button.gcu-ai-tool__chip{cursor:pointer}
+button.gcu-ai-tool__chip:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+@media (hover:hover){button.gcu-ai-tool__chip:hover{background-color:var(--gcu-surface-sunken)}}
+button.gcu-ai-tool__chip:active{transform:scale(var(--gcu-press-scale))}
+.gcu-ai-tool__glyph{color:var(--gcu-muted)}
+.gcu-ai-tool__name{overflow:hidden;font-family:var(--gcu-font-mono);text-overflow:ellipsis;white-space:nowrap}
+.gcu-ai-tool__time{color:var(--gcu-muted)}
+.gcu-ai-tool__chevron{color:var(--gcu-muted);transition:transform var(--gcu-duration-fast) var(--gcu-ease-standard)}
+.gcu-ai-tool--open .gcu-ai-tool__chevron{transform:rotate(180deg)}
+.gcu-ai-tool--failed .gcu-ai-tool__chip{border-color:var(--gcu-danger-border)}
+.gcu-ai-tool__panel{inline-size:min(32rem,100%);padding:var(--gcu-space-2);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-md);background-color:var(--gcu-surface-sunken);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-tool__panel[hidden]{display:none}
+.gcu-ai-tool__json{max-block-size:12rem;margin:0;overflow:auto;color:var(--gcu-text);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs);white-space:pre-wrap;overflow-wrap:anywhere}
+.gcu-ai-tool__result{margin-block-start:var(--gcu-space-2);color:var(--gcu-text)}
+.gcu-ai-tool__json + .gcu-ai-tool__result{padding-block-start:var(--gcu-space-2);border-block-start:1px solid var(--gcu-border)}
+@media (prefers-reduced-motion:reduce){.gcu-ai-tool__chevron{transition:none}button.gcu-ai-tool__chip:active{transform:none}}
