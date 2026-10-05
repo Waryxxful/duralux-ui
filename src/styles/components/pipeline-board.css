@@ -2,7 +2,7 @@
    El tablero se desplaza en horizontal dentro de su contenedor; la columna destino se marca
    con borde discontinuo (forma) además del tono. */
 .gcu-pipeline{min-width:0}
-.gcu-pipeline__columns{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(15rem,1fr);gap:var(--gcu-space-3);padding-bottom:var(--gcu-space-2)}
+.gcu-pipeline__columns{margin:0;padding-inline:0;list-style:none;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(15rem,1fr);gap:var(--gcu-space-3);padding-bottom:var(--gcu-space-2)}
 .gcu-pipeline__col{display:flex;flex-direction:column;gap:var(--gcu-space-2);min-width:0;padding:var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-xl);background-color:var(--gcu-surface-sunken)}
 .gcu-pipeline__col--over{border-style:dashed;border-color:var(--gcu-status-primary);background-color:var(--gcu-primary-soft)}
 .gcu-pipeline__head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--gcu-space-2);min-width:0}

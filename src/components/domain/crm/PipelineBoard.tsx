@@ -75,6 +75,13 @@ export const PipelineBoard = /* @__PURE__ */ forwardRef<HTMLDivElement, Pipeline
   const [announcement, setAnnouncement] = useState('')
   const cards = useRef(new Map<string, HTMLButtonElement>())
   const pendingFocus = useRef<string | null>(null)
+  // Oportunidades agrupadas por etapa en una sola pasada.
+  const byStage = new Map<string, PipelineDeal[]>()
+  for (const deal of dealList) {
+    const group = byStage.get(deal.stage)
+    if (group) group.push(deal)
+    else byStage.set(deal.stage, [deal])
+  }
 
   // Tras mover con teclado la tarjeta se vuelve a montar en otra columna: el foco la sigue.
   useEffect(() => {
@@ -120,15 +127,14 @@ export const PipelineBoard = /* @__PURE__ */ forwardRef<HTMLDivElement, Pipeline
       {movable && (
         <p id={hintId} className="visually-hidden">Usa Alt y las flechas izquierda o derecha para mover la oportunidad de etapa.</p>
       )}
-      <div className="gcu-pipeline__columns gcu-scroll" role="list" aria-label={label}>
+      <ul className="gcu-pipeline__columns gcu-scroll" aria-label={label}>
         {stageList.map((stage) => {
-          const list = dealList.filter((deal) => deal.stage === stage.key)
+          const list = byStage.get(stage.key) ?? []
           const total = list.reduce((sum, deal) => sum + deal.value, 0)
           const headingId = `${hintId}-${stage.key}`
           return (
-            <section
+            <li
               key={stage.key}
-              role="listitem"
               aria-labelledby={headingId}
               className={cx('gcu-pipeline__col', over === stage.key && 'gcu-pipeline__col--over')}
               onDragOver={(event) => {
@@ -172,10 +178,10 @@ export const PipelineBoard = /* @__PURE__ */ forwardRef<HTMLDivElement, Pipeline
                   <p className="gcu-pipeline__empty">{movable ? 'Sin oportunidades. Arrastra una aquí.' : 'Sin oportunidades en esta etapa.'}</p>
                 )}
               </div>
-            </section>
+            </li>
           )
         })}
-      </div>
+      </ul>
       <p className="visually-hidden" aria-live="polite" role="status">{announcement}</p>
     </div>
   )
