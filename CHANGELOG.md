@@ -139,8 +139,8 @@ Primera entrega de la serie 2.x (spec `docs/superpowers/specs/2026-10-03-duralux
 
 ### Cambios incompatibles
 
-- Los componentes y motores de charts ya no se exportan desde `@duralux/ui`. Actualizá los imports a `@duralux/ui/charts/apex` o `@duralux/ui/charts/recharts`.
-- `apexcharts`, `react-apexcharts` y `recharts` son peer dependencies opcionales. Instalá sólo los peers del subpath que uses.
+- Los componentes y motores de charts ya no se exportan desde `@duralux/ui`. Actualiza los imports a `@duralux/ui/charts/apex` o `@duralux/ui/charts/recharts`.
+- `apexcharts`, `react-apexcharts` y `recharts` son peer dependencies opcionales. Instala solo los peers del subpath que uses.
 - El paquete declara ESM (`"type": "module"`) y mantiene entradas CJS mediante `exports`; los consumidores deben importar subpaths públicos, no archivos internos de `dist/`.
 - Las declaraciones públicas ahora reflejan los contratos reales. En particular, labels y placeholders de selects avanzados son texto (`string | number`), y `renderValue` de `SearchableSelect` debe devolver texto porque se muestra en un input nativo.
 - `FormField` ya no infiere que cualquier wrapper React es un control. Los wrappers propios que reenvían props deben declarar `duraluxFormControl = true`; los wrappers visuales dejan de recibir atributos de input por accidente.

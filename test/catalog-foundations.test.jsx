@@ -6,8 +6,8 @@ import { Card } from '../src/components/ui/Card.jsx'
 import { CardLoader } from '../src/components/ui/CardLoader.jsx'
 import { Timeline } from '../src/components/ui/Timeline.jsx'
 import { Footer } from '../src/components/layout/Footer.jsx'
-import { AuthLayout } from '../src/components/layout/AuthLayout.jsx'
-import { PageHeader } from '../src/components/layout/PageHeader.jsx'
+import { AuthLayout } from '../src/components/layout/AuthLayout'
+import { PageHeader } from '../src/components/layout/PageHeader'
 import { StatCard } from '../src/components/shell/GranCrmExtras.tsx'
 
 test('CardLoader is a named public status and Card composes one overlay spinner', () => {

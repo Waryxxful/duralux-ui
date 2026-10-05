@@ -21,7 +21,7 @@ describe('SearchableSelect', () => {
     const onChange = vi.fn()
     const { container } = render(
       <form>
-        <FormField label="País" required helpText="Elegí uno">
+        <FormField label="País" required helpText="Elige uno">
           <SearchableSelect name="country" options={OPTIONS} onChange={onChange} />
         </FormField>
       </form>,

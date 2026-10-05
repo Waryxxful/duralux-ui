@@ -1,6 +1,7 @@
-// Capturas + axe de la demo por tema (Fase 0 y verificación final).
-// Uso: node scripts/audit/capture.mjs --base http://localhost:5200 --out <dir> [--themes light,dark,navy] [--routes a,b]
-//      node scripts/audit/capture.mjs --storybook http://localhost:6006 --out <dir>   (todas las stories, tema por globals)
+// Capturas + axe de las stories de Storybook por tema (la demo Vite se retiró en 2.6).
+// Uso: node scripts/audit/capture.mjs [--storybook http://localhost:6006] --out <dir>
+//        [--themes light,dark,navy] [--routes patrones-,ia-]   (--routes filtra ids de story por prefijo)
+// Storybook debe estar corriendo (npm run storybook) o servido desde build-storybook.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
@@ -8,33 +9,41 @@ const PLAYWRIGHT = process.env.PLAYWRIGHT_PATH
   ?? '/home/pancho/.nvm/versions/node/v24.17.0/lib/node_modules/@playwright/cli/node_modules/playwright/index.mjs'
 const { chromium } = await import(PLAYWRIGHT)
 
-const ROUTES = [
-  '', 'buttons', 'cards', 'badges', 'modals', 'tabs', 'avatars', 'alerts', 'timeline',
-  'connection-card', 'activity-feed', 'progress', 'stats-cards', 'datatable', 'charts',
-  'recharts', 'forms', 'chat', 'layout', 'feedback',
-]
-
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(`--${name}`)
   return i === -1 ? fallback : process.argv[i + 1]
 }
-const base = arg('base', 'http://localhost:5200').replace(/\/$/, '')
+const log = (...m) => console.log('[capture]', ...m)
+if (process.argv.includes('--base')) {
+  console.error('[capture] --base ya no existe: la demo Vite se retiró. Usa --storybook <url> (por defecto http://localhost:6006).')
+  process.exit(2)
+}
+const storybook = arg('storybook', 'http://localhost:6006').replace(/\/$/, '')
 const out = resolve(arg('out', 'audit-out'))
 const themes = arg('themes', 'light,dark').split(',')
-const storybook = arg('storybook', null)?.replace(/\/$/, '')
-let routes = arg('routes', null)?.split(',') ?? ROUTES
-if (storybook) {
+const filters = arg('routes', null)?.split(',').filter(Boolean) ?? []
+
+let index
+try {
   // index.json de Storybook: una entrada por story (las páginas MDX son type "docs").
-  const index = await (await fetch(`${storybook}/index.json`)).json()
-  routes = Object.values(index.entries).filter(e => e.type === 'story').map(e => e.id)
+  index = await (await fetch(`${storybook}/index.json`)).json()
+} catch (error) {
+  console.error(`[capture] No se pudo leer ${storybook}/index.json (${error.message}). Levanta Storybook o pasa --storybook <url>.`)
+  process.exit(2)
 }
-const urlFor = (route, theme) => storybook
-  ? `${storybook}/iframe.html?id=${route}&viewMode=story&globals=theme:${theme}`
-  : `${base}/${route}`
+const routes = Object.values(index.entries)
+  .filter(e => e.type === 'story')
+  .map(e => e.id)
+  .filter(id => filters.length === 0 || filters.some(f => id.startsWith(f)))
+if (routes.length === 0) {
+  console.error('[capture] Ninguna story coincide con --routes.')
+  process.exit(2)
+}
+log(`${routes.length} stories × ${themes.length} temas`)
+const urlFor = (route, theme) => `${storybook}/iframe.html?id=${route}&viewMode=story&globals=theme:${theme}`
 const axeSource = readFileSync(resolve('node_modules/axe-core/axe.min.js'), 'utf8')
 
 mkdirSync(out, { recursive: true })
-const log = (...m) => console.log('[capture]', ...m)
 
 const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome', headless: true })
 try {
@@ -48,7 +57,7 @@ try {
     const axeResults = {}
 
     for (const route of routes) {
-      const name = route || 'intro'
+      const name = route
       errors.length = 0
       await page.goto(urlFor(route, theme), { waitUntil: 'networkidle' })
       await page.waitForTimeout(400)
