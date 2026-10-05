@@ -1,5 +1,7 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Icon } from '../ui/Icon';
+import { Tooltip } from '../ui/Tooltip';
+import { useThemeOptional } from '../../theme/ThemeContext';
 import {
   assignStableKeys,
   assignStableSectionKeys,
@@ -116,6 +118,46 @@ function ItemText({ label }: { label: React.ReactNode }) {
   return <span className="nxl-mtext">{label}</span>;
 }
 
+function matchesFocusVisible(element: Element): boolean {
+  try {
+    return element.matches(':focus-visible');
+  } catch {
+    return true;
+  }
+}
+
+/**
+ * Tooltip del mini-menú: en mini el puntero ya expande el menú (hover del tema), así que el
+ * tooltip solo aparece con foco de teclado, cuando el texto del ítem está oculto.
+ */
+function MiniTooltip({ label, enabled, children }: { label: string; enabled: boolean; children: React.ReactElement }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Tooltip
+      content={label}
+      placement="end"
+      disabled={!enabled}
+      open={enabled && open}
+      onOpenChange={(next) => {
+        if (!next) {
+          setOpen(false);
+          return;
+        }
+        const active = globalThis.document?.activeElement;
+        setOpen(Boolean(active?.closest('.nxl-navigation')) && Boolean(active && matchesFocusVisible(active)));
+      }}
+    >
+      {children}
+    </Tooltip>
+  );
+}
+
+/** Ítems navegables visibles (fuera de submenús cerrados) en orden de documento. */
+function visibleNavLinks(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>('a.nxl-link, button.nxl-link'))
+    .filter(element => !element.closest('[inert]') && element.tabIndex !== -1);
+}
+
 function SubmenuArrow() {
   return (
     <span className="nxl-arrow">
@@ -133,6 +175,8 @@ interface NavItemRowProps {
   hiddenByAncestor: boolean;
   ancestorTriggerRef?: React.RefObject<HTMLButtonElement | null>;
   suppressFocusRestore?: boolean;
+  /** Mini-menú activo: los ítems de primer nivel muestran su nombre en un tooltip con foco. */
+  miniTooltips?: boolean;
 }
 
 function NavItemRow({
@@ -144,6 +188,7 @@ function NavItemRow({
   hiddenByAncestor,
   ancestorTriggerRef,
   suppressFocusRestore = false,
+  miniTooltips = false,
 }: NavItemRowProps) {
   const submenuId = `nav-submenu-${useId().replace(/:/g, '')}`;
   const submenuRef = useRef<HTMLUListElement>(null);
@@ -153,6 +198,10 @@ function NavItemRow({
   const open = hasChildren && !item.disabled && openKeys.has(item.key);
   const submenuHidden = hiddenByAncestor || !open || Boolean(item.disabled);
   const tabIndex = hiddenByAncestor ? -1 : undefined;
+  const tooltipEnabled = miniTooltips && parentKey === '' && !item.disabled;
+  const withTooltip = (element: React.ReactElement) => (
+    <MiniTooltip label={String(item.label)} enabled={tooltipEnabled}>{element}</MiniTooltip>
+  );
 
   useEffect(() => {
     const element = submenuRef.current;
@@ -203,7 +252,7 @@ function NavItemRow({
           <span className="nxl-link" aria-disabled="true">
             {groupContent}
           </span>
-        ) : (
+        ) : withTooltip(
           <button
             ref={triggerRef}
             type="button"
@@ -218,7 +267,7 @@ function NavItemRow({
             })}
           >
             {groupContent}
-          </button>
+          </button>,
         )}
 
         <ul
@@ -265,7 +314,7 @@ function NavItemRow({
   if (item.action) {
     return (
       <li className={`nxl-item${item.active ? ' active' : ''}`}>
-        <button
+        {withTooltip(<button
           type="button"
           className="nxl-link gcu-nav-action"
           tabIndex={tabIndex}
@@ -276,7 +325,7 @@ function NavItemRow({
           }}
         >
           {linkContent}
-        </button>
+        </button>)}
       </li>
     );
   }
@@ -302,7 +351,7 @@ function NavItemRow({
     children: linkContent,
   });
 
-  return <li className={`nxl-item${item.active ? ' active' : ''}`}>{renderedLink}</li>;
+  return <li className={`nxl-item${item.active ? ' active' : ''}`}>{withTooltip(renderedLink)}</li>;
 }
 
 function NavBrand({
@@ -383,6 +432,8 @@ export function NavCore({
   const mobileViewport = useMobileViewport();
   const mobileOffCanvas = mobileViewport === true && !mobileOpen;
   const navigationRef = useRef<HTMLElement>(null);
+  // En móvil el menú siempre se ve completo: los tooltips del mini-menú solo aplican en escritorio.
+  const miniTooltips = (useThemeOptional()?.mini ?? false) && mobileViewport === false;
 
   const keyedSections = useMemo(
     () => assignStableSectionKeys(sections).map(section => ({
@@ -420,23 +471,27 @@ export function NavCore({
   );
   const activeGroupSignature = activeGroupKeys.join('|');
   const allGroupSignature = Array.from(allGroupKeys).join('|');
-  const [openKeys, setOpenKeys] = useState<Set<string>>(
-    () => new Set(activeGroupKeys),
-  );
-
-  useEffect(() => {
-    setOpenKeys(previous => {
-      const next = new Set<string>();
-      previous.forEach(key => {
-        if (allGroupKeys.has(key)) next.add(key);
-      });
-      activeGroupKeys.forEach(key => next.add(key));
-      if (next.size === previous.size && Array.from(next).every(key => previous.has(key))) {
-        return previous;
-      }
-      return next;
+  // DX-017: el ajuste por cambio de ruta/ítems se hace en render («guardar el valor previo»),
+  // no en un efecto: sin render intermedio con grupos desactualizados.
+  const disclosureSignature = `${activeGroupSignature}#${allGroupSignature}`;
+  const [disclosure, setDisclosure] = useState(() => ({
+    signature: disclosureSignature,
+    keys: new Set(activeGroupKeys),
+  }));
+  let openKeys = disclosure.keys;
+  if (disclosure.signature !== disclosureSignature) {
+    const next = new Set<string>();
+    disclosure.keys.forEach(key => {
+      if (allGroupKeys.has(key)) next.add(key);
     });
-  }, [activeGroupSignature, activeGroupKeys, allGroupKeys, allGroupSignature]);
+    activeGroupKeys.forEach(key => next.add(key));
+    openKeys = next;
+    setDisclosure({ signature: disclosureSignature, keys: next });
+  }
+
+  const setOpenKeys = (update: (previous: Set<string>) => Set<string>) => {
+    setDisclosure(current => ({ signature: current.signature, keys: update(current.keys) }));
+  };
 
   const onToggleGroup = (item: ResolvedNavCoreItem, parentKey: string) => {
     setOpenKeys(previous => {
@@ -473,6 +528,29 @@ export function NavCore({
       }
     }
   }, [mobileOffCanvas]);
+
+  // Teclado: flechas arriba/abajo recorren los ítems visibles; Inicio/Fin van al primero y al último.
+  useEffect(() => {
+    const element = navigationRef.current;
+    if (!element) return undefined;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp' && event.key !== 'Home' && event.key !== 'End') return;
+      const target = event.target;
+      if (!(target instanceof HTMLElement) || !target.matches('.nxl-link')) return;
+      const links = visibleNavLinks(element);
+      const index = links.indexOf(target);
+      if (index === -1) return;
+      event.preventDefault();
+      const nextIndex = event.key === 'Home'
+        ? 0
+        : event.key === 'End'
+          ? links.length - 1
+          : (index + (event.key === 'ArrowDown' ? 1 : -1) + links.length) % links.length;
+      links[nextIndex]?.focus();
+    };
+    element.addEventListener('keydown', onKeyDown);
+    return () => element.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   return (
     <nav
@@ -511,6 +589,7 @@ export function NavCore({
                     parentKey=""
                     hiddenByAncestor={mobileOffCanvas}
                     suppressFocusRestore={mobileOffCanvas}
+                    miniTooltips={miniTooltips}
                   />
                 ))}
               </React.Fragment>

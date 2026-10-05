@@ -1,0 +1,26 @@
+/* 2.6 · shell y layout: ThemeToggle, PageHeader sticky y AuthLayout. Solo tokens. */
+
+/* ThemeToggle: menú de cuatro modos; el actual lleva check. */
+.gcu-theme-toggle__menu{min-inline-size:13rem}
+.gcu-theme-toggle__heading{margin:0;padding:var(--gcu-space-1) var(--gcu-space-3);color:var(--gcu-muted);font-size:var(--gcu-font-size-2xs);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-caps);text-transform:uppercase}
+.gcu-theme-toggle__item{display:flex;align-items:center;gap:var(--gcu-space-2)}
+.gcu-theme-toggle__item[aria-pressed="true"]{color:var(--gcu-primary-text);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-theme-toggle__label{display:flex;flex:1;flex-direction:column}
+.gcu-theme-toggle__hint{color:var(--gcu-muted);font-size:var(--gcu-font-size-2xs);font-weight:var(--gcu-font-weight-regular)}
+.gcu-theme-toggle__check{margin-inline-start:auto}
+
+/* PageHeader: sticky por defecto; la sombra del tema solo cuando la barra queda pegada.
+   El `top` lo da el tema (alto del header); con `sticky-top` el resultado es el mismo. */
+.gcu-page-header__sentinel{block-size:1px;margin-block-end:-1px;visibility:hidden;pointer-events:none}
+.page-header.gcu-page-header--sticky{position:sticky;z-index:var(--gcu-z-sticky);box-shadow:none;transition:box-shadow var(--gcu-duration-fast) var(--gcu-ease-standard)}
+.page-header.gcu-page-header--sticky[data-stuck]{box-shadow:var(--gcu-shadow-2)}
+@media (prefers-reduced-motion:reduce){.page-header.gcu-page-header--sticky{transition:none}}
+
+/* AuthLayout: superficie y error accesible con tokens. */
+.gcu-auth .auth-cover-sidebar-inner{background-color:var(--gcu-surface);box-shadow:var(--gcu-shadow-1);border-inline-start:1px solid var(--gcu-border)}
+.gcu-auth__title{margin:0 0 var(--gcu-space-2);color:var(--gcu-text);font-size:var(--gcu-font-size-2xl);line-height:var(--gcu-line-height-2xl);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-tight);text-wrap:balance}
+.gcu-auth__description{margin:0 0 var(--gcu-space-6);color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);text-wrap:pretty}
+.gcu-auth__error{display:flex;align-items:flex-start;gap:var(--gcu-space-2);margin-block-end:var(--gcu-space-4);padding:var(--gcu-space-3);border:1px solid var(--gcu-danger-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-auth__error-icon{flex:none;margin-block-start:var(--gcu-space-0-5)}
+.gcu-auth__footer{margin-block-start:var(--gcu-space-6);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);text-align:center}
+@media (forced-colors:active){.gcu-auth__error{border-color:CanvasText}}

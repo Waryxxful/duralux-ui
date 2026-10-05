@@ -1256,13 +1256,6 @@ $gcu-dark-palettes: (
 		}
 
 		/* <---------------! Authentication !---------------> */
-		.auth-cover-wrapper {
-			.auth-cover-sidebar-inner {
-				box-shadow: $shadow-none;
-				background-color: $dark-theme-color-darker;
-				border-left: 1px solid $dark-theme-color-border;
-			}
-		}
 		.auth-creative-wrapper {
 			.auth-creative-inner {
 				&:after {

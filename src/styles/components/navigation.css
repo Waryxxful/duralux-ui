@@ -1,0 +1,14 @@
+/* Navegación lateral (ShellNav / Sidebar sobre NavCore). Solo tokens.
+   Ítem actual (aria-current="page"): barra de 3 px al inicio + superficie de marca suave.
+   Se pintan con pseudo-elementos para no competir con el fondo de hover del tema: el hover
+   sigue siendo neutro e instantáneo (Craft «Hover Restraint»), el actual se distingue de él. */
+.nxl-navigation .nxl-link[aria-current="page"]{position:relative;isolation:isolate;color:var(--gcu-primary-text)}
+.nxl-navigation .nxl-link[aria-current="page"]::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background-color:var(--gcu-primary-soft)}
+.nxl-navigation .nxl-link[aria-current="page"]::before{content:"";position:absolute;inset-block:var(--gcu-space-2);inset-inline-start:0;inline-size:3px;border-radius:var(--gcu-radius-full);background-color:var(--gcu-primary)}
+.nxl-navigation .nxl-link[aria-current="page"] .nxl-micon{color:var(--gcu-primary-text)}
+/* Foco visible con el anillo del sistema (doble anillo: separa del fondo en los tres temas). */
+.nxl-navigation .nxl-link:focus-visible,.nxl-navigation .b-brand:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+@media (forced-colors:active){
+  .nxl-navigation .nxl-link[aria-current="page"]::before{background-color:Highlight}
+  .nxl-navigation .nxl-link:focus-visible,.nxl-navigation .b-brand:focus-visible{outline:2px solid Highlight}
+}
