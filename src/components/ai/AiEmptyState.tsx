@@ -5,6 +5,8 @@ import type { AiEmptyStateProps } from '../../public/types'
 import { AiAvatar } from './AiAvatar'
 import { SuggestionChips } from './internal/SuggestionChips'
 
+const NO_SUGGESTIONS: ReadonlyArray<string> = []
+
 /**
  * AiEmptyState — primer contacto con el asistente: qué puede hacer y preguntas sugeridas.
  *
@@ -13,7 +15,7 @@ import { SuggestionChips } from './internal/SuggestionChips'
  * Estilos: src/styles/components/ai-empty-state.css.
  */
 export const AiEmptyState = /* @__PURE__ */ forwardRef<HTMLDivElement, AiEmptyStateProps>(function AiEmptyState(
-  { title, description, suggestions = [], onPick, align = 'start', headingLevel = 2, className, ...rest },
+  { title, description, suggestions = NO_SUGGESTIONS, onPick, align = 'start', headingLevel = 2, className, ...rest },
   ref,
 ) {
   if (suggestions.length > 4) log.warn(`AiEmptyState: ${suggestions.length} sugerencias; muestra 3 o 4 para no abrumar.`)
