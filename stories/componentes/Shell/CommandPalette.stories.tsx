@@ -20,7 +20,7 @@ function Demo({ theme }: { theme?: 'light' | 'dark' | 'navy' }) {
       <Button variant="light-brand" startIcon="search" onClick={() => setOpen(true)}>
         Buscar <Kbd keys={['Ctrl', 'K']} />
       </Button>
-      <p className="mt-3 mb-0 text-muted fs-13" role="status">{last ? `Último comando: ${last}` : 'Aún no ejecutas ningún comando.'}</p>
+      <p className="mt-3 mb-0 fs-13" style={{ color: 'var(--gcu-muted)' }} role="status">{last ? `Último comando: ${last}` : 'Aún no ejecutas ningún comando.'}</p>
       <CommandPalette
         items={COMANDOS}
         open={open}
@@ -31,7 +31,9 @@ function Demo({ theme }: { theme?: 'light' | 'dark' | 'navy' }) {
       />
     </div>
   )
-  return theme ? <ThemeScope theme={theme}>{content}</ThemeScope> : content
+  return theme
+    ? <ThemeScope theme={theme} className="rounded-3" style={{ background: 'var(--gcu-surface-subtle)' }}>{content}</ThemeScope>
+    : content
 }
 
 const meta: Meta<typeof CommandPalette> = {

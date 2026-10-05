@@ -11,9 +11,10 @@ const meta: Meta<typeof CallRow> = {
   parameters: {
     docs: { description: { component: 'Llamada de la bandeja: severidad con forma, agente, #ID, origen · foco · fecha, resumen y puntaje (anulado con error grave). Es una opción de CallList; aquí se muestra dentro de un listbox para conservar la semántica.' } },
   },
+  // El primer decorador es el más interno: el listbox envuelve la opción directamente.
   decorators: [
-    conAncho(480),
     (Story) => <div role="listbox" aria-label="Llamada de ejemplo"><Story /></div>,
+    conAncho(480),
   ],
 }
 export default meta

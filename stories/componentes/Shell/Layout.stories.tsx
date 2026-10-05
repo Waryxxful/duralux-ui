@@ -55,23 +55,21 @@ const SECCIONES = [
   },
 ]
 
+// La navegación lateral usa los estilos globales del tema de la plantilla (no se re-tematiza dentro de
+// un ThemeScope): se muestra una sola y el tema se cambia desde la barra de Storybook.
 export const NavegacionTemas: Story = {
-  name: 'ShellNav: ítem actual en tres temas',
+  name: 'ShellNav: ítem actual',
   render: () => (
     <ThemeProvider enableResponsiveMini={false}>
-      <TresTemas>
-        {(tema) => (
-          <div style={{ position: 'relative', height: 360, overflow: 'hidden', transform: 'translateZ(0)' }}>
-            <ShellNav
-              brand={{ href: '/', logoLg: '', logoSm: '', alt: 'GranCRM' }}
-              sections={SECCIONES}
-              pathname="/calidad/cola"
-              onNavigate={(_href, event) => event.preventDefault()}
-              navigationId={`navegacion-${tema}`}
-            />
-          </div>
-        )}
-      </TresTemas>
+      <div style={{ position: 'relative', height: 360, overflow: 'hidden', transform: 'translateZ(0)' }}>
+        <ShellNav
+          brand={{ href: '/', logoLg: '', logoSm: '', alt: 'GranCRM' }}
+          sections={SECCIONES}
+          pathname="/calidad/cola"
+          onNavigate={(_href, event) => event.preventDefault()}
+          navigationId="navegacion-ejemplo"
+        />
+      </div>
     </ThemeProvider>
   ),
 }

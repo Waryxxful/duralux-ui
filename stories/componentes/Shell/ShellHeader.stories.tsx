@@ -43,6 +43,8 @@ function HeaderDemo({ themeMenu = false }: { themeMenu?: boolean }) {
         onMarkAllRead={noop}
         themeMenu={themeMenu}
       />
+      {/* En la app, ShellNav lleva este id: los botones de menú lo referencian con aria-controls. */}
+      <nav id="shell-navigation" aria-label="Navegación principal (ejemplo)" hidden />
     </div>
   )
 }

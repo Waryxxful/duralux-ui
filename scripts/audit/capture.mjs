@@ -44,6 +44,11 @@ const urlFor = (route, theme) => `${storybook}/iframe.html?id=${route}&viewMode=
 const axeSource = readFileSync(resolve('node_modules/axe-core/axe.min.js'), 'utf8')
 
 mkdirSync(out, { recursive: true })
+const runAxe = (page) => page.evaluate(async () => {
+  const r = await window.axe.run(document.querySelector('#storybook-root') ?? document, { resultTypes: ['violations'] })
+  return r.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help, targets: v.nodes.slice(0, 8).map(n => ({ target: n.target.join(' '), summary: (n.failureSummary || '').split('\n').slice(1, 2).join(' ').slice(0, 160) })) }))
+})
+
 
 const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome', headless: true })
 try {
@@ -63,10 +68,16 @@ try {
       await page.waitForTimeout(400)
       await page.screenshot({ path: join(out, `${theme}-${name}.png`), fullPage: true })
       await page.addScriptTag({ content: axeSource })
-      const violations = await page.evaluate(async () => {
-        const r = await window.axe.run(document.querySelector('#storybook-root') ?? document, { resultTypes: ['violations'] })
-        return r.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help, targets: v.nodes.slice(0, 8).map(n => ({ target: n.target.join(' '), summary: (n.failureSummary || '').split('\n').slice(1, 2).join(' ').slice(0, 160) })) }))
-      })
+      // El addon a11y de Storybook también corre axe: si está ocupado, se reintenta.
+      let violations = null
+      for (let attempt = 1; violations === null; attempt++) {
+        try {
+          violations = await runAxe(page)
+        } catch (error) {
+          if (attempt >= 5 || !String(error).includes('already running')) throw error
+          await page.waitForTimeout(700)
+        }
+      }
       axeResults[name] = { violations, consoleErrors: [...errors] }
       log(theme, name, `axe=${violations.length}`, `errores=${errors.length}`)
     }
