@@ -1,0 +1,14 @@
+/* AiErrorState: falla de generación con la pregunta conservada. Acciones en fila desde 28rem. */
+.gcu-ai-error{display:grid;grid-template-columns:auto minmax(0,1fr);gap:var(--gcu-space-2) var(--gcu-space-3);padding:var(--gcu-space-3) var(--gcu-space-4);border:1px solid var(--gcu-danger-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-danger-soft);color:var(--gcu-text)}
+.gcu-ai-error__icon{display:inline-flex;padding-block-start:var(--gcu-space-0-5);color:var(--gcu-danger-text)}
+.gcu-ai-error__body{display:flex;flex-direction:column;gap:var(--gcu-space-1);min-width:0}
+.gcu-ai-error__title{margin:0;font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-ai-error__text{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-error__prompt{margin:var(--gcu-space-1) 0 0;padding:var(--gcu-space-2) var(--gcu-space-3);border-inline-start:3px solid var(--gcu-danger-border);border-radius:var(--gcu-radius-sm);background-color:var(--gcu-surface);color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);overflow-wrap:anywhere}
+.gcu-ai-error__actions{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:var(--gcu-space-2)}
+@container (min-width: 28rem){
+  .gcu-ai-error--inline{grid-template-columns:auto minmax(0,1fr) auto;align-items:center}
+  .gcu-ai-error--inline .gcu-ai-error__icon{padding:0}
+  .gcu-ai-error--inline .gcu-ai-error__actions{grid-column:auto}
+  .gcu-ai-error--card .gcu-ai-error__actions{grid-column:2}
+}

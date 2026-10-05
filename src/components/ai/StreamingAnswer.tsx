@@ -49,8 +49,9 @@ export const StreamingAnswer = /* @__PURE__ */ forwardRef<HTMLDivElement, Stream
   }, [byId, streaming, text])
 
   return (
-    <div {...rest} ref={ref} className={cx('gcu-ai-answer', 'gcu-container', className)} aria-busy={streaming || undefined}>
-      <div className="gcu-ai-answer__text">
+    <div {...rest} ref={ref} className={cx('gcu-ai-answer', 'gcu-container', className)}>
+      {/* aria-busy solo en el texto visible: en la región viva callaría los anuncios por bloque. */}
+      <div className="gcu-ai-answer__text" aria-busy={streaming || undefined}>
         {blocks.map((block, index) => {
           const last = index === blocks.length - 1
           return (
