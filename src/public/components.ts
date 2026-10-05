@@ -91,6 +91,11 @@ export { TaskRows } from '../components/ai/TaskRows'
 export { AgentPlan } from '../components/ai/AgentPlan'
 export { StatusTracker } from '../components/ai/StatusTracker'
 export { WebResults } from '../components/ai/WebResults'
+export { InlineEdit } from '../components/ai/InlineEdit'
+export { DiffView } from '../components/ai/DiffView'
+export { CodeBlock } from '../components/ai/CodeBlock'
+export { InsightCard } from '../components/ai/InsightCard'
+export { wordDiff, lineDiff } from '../components/ai/diffModel'
 import type {
   AlertProps,
   AppLayoutProps,

@@ -1,0 +1,17 @@
+/* DiffView: cambios por archivo con +/− y decisión por archivo. Las líneas llevan signo además de color. */
+.gcu-ai-diff{display:flex;flex-direction:column;gap:var(--gcu-space-3)}
+.gcu-ai-diff__file{overflow:hidden;border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface)}
+.gcu-ai-diff__header{display:flex;flex-wrap:wrap;align-items:center;gap:var(--gcu-space-2);padding:var(--gcu-space-2) var(--gcu-space-3);border-block-end:1px solid var(--gcu-border);background-color:var(--gcu-surface-subtle)}
+.gcu-ai-diff__name{min-inline-size:0;overflow:hidden;color:var(--gcu-text);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-medium);text-overflow:ellipsis;white-space:nowrap}
+.gcu-ai-diff__count{font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-ai-diff__count--add{color:var(--gcu-success-text)}
+.gcu-ai-diff__count--del{color:var(--gcu-danger-text)}
+.gcu-ai-diff__spacer{flex:1}
+.gcu-ai-diff__actions{display:inline-flex;gap:var(--gcu-space-2)}
+.gcu-ai-diff__code{max-block-size:24rem;margin:0;padding:var(--gcu-space-2) 0;overflow:auto;color:var(--gcu-text);font-family:var(--gcu-font-mono);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-sm)}
+.gcu-ai-diff__line{display:block;padding-inline:var(--gcu-space-3);white-space:pre-wrap;overflow-wrap:anywhere}
+.gcu-ai-diff__line--add{background-color:var(--gcu-success-soft);color:var(--gcu-success-text)}
+.gcu-ai-diff__line--del{background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-ai-diff__sign{display:inline-block;inline-size:var(--gcu-space-4);user-select:none}
+.gcu-ai-diff__empty{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-sm)}
+.gcu-ai-diff:has(.gcu-ai-diff__file:only-child) .gcu-ai-diff__file{box-shadow:var(--gcu-shadow-1)}

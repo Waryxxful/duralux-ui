@@ -1,0 +1,10 @@
+/* InlineEdit: sugerencia del asistente con diferencias palabra a palabra. Agregado subrayado en tono
+   de éxito, quitado tachado en tono de peligro: la forma (subrayado/tachado) acompaña al color. */
+.gcu-ai-inline{display:flex;flex-direction:column;gap:var(--gcu-space-2);padding:var(--gcu-space-3);border:1px solid var(--gcu-primary-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface)}
+.gcu-ai-inline__bar{display:inline-flex;align-items:center;gap:var(--gcu-space-1);color:var(--gcu-primary-text);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-ai-inline__text{max-inline-size:68ch;margin:0;padding:var(--gcu-space-2);border-radius:max(0px,calc(var(--gcu-radius-lg) - var(--gcu-space-3)));color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-md);text-wrap:pretty;white-space:pre-wrap}
+.gcu-ai-inline__text:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+.gcu-ai-inline__add{padding-inline:2px;border-radius:var(--gcu-radius-xs);background-color:var(--gcu-success-soft);color:var(--gcu-success-text);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.gcu-ai-inline__del{padding-inline:2px;border-radius:var(--gcu-radius-xs);background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text);text-decoration:line-through}
+.gcu-ai-inline__hint{margin:0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-inline__actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:var(--gcu-space-2)}

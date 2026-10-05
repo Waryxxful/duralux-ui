@@ -1,0 +1,17 @@
+/* InsightCard: métrica + variación + barras de tendencia + explicación del asistente. */
+.gcu-ai-insight{display:flex;flex-direction:column;gap:var(--gcu-space-3);padding:var(--gcu-space-4);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface);box-shadow:var(--gcu-shadow-1)}
+.gcu-ai-insight__label{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-caps);text-transform:uppercase}
+.gcu-ai-insight__figure{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--gcu-space-2)}
+.gcu-ai-insight__value{color:var(--gcu-text);font-size:var(--gcu-font-size-2xl);line-height:var(--gcu-line-height-2xl);font-weight:var(--gcu-font-weight-semibold);letter-spacing:var(--gcu-tracking-tight)}
+.gcu-ai-insight__delta{display:inline-flex;align-items:center;gap:var(--gcu-space-1);padding:var(--gcu-space-0-5) var(--gcu-space-2);border-radius:var(--gcu-radius-full);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-ai-insight__delta--good{background-color:var(--gcu-success-soft);color:var(--gcu-success-text)}
+.gcu-ai-insight__delta--bad{background-color:var(--gcu-danger-soft);color:var(--gcu-danger-text)}
+.gcu-ai-insight__spark{display:flex;align-items:flex-end;gap:var(--gcu-space-1);block-size:var(--gcu-control-h-md)}
+.gcu-ai-insight__bar{flex:1;block-size:var(--gcu-ai-bar,50%);border-radius:var(--gcu-radius-xs) var(--gcu-radius-xs) 0 0;background-color:var(--gcu-primary-soft)}
+.gcu-ai-insight__bar--last{background-color:var(--gcu-status-primary)}
+.gcu-ai-insight__note{display:flex;flex-direction:column;gap:var(--gcu-space-1);padding:var(--gcu-space-3);border-radius:max(0px,calc(var(--gcu-radius-lg) - var(--gcu-space-2)));background-color:var(--gcu-surface-sunken)}
+.gcu-ai-insight__by{display:inline-flex;align-items:center;gap:var(--gcu-space-1);color:var(--gcu-primary-text);font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-ai-insight__text{max-inline-size:68ch;margin:0;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);text-wrap:pretty}
+.gcu-ai-insight__sources{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs)}
+.gcu-ai-insight__action{display:flex;justify-content:flex-end}
+@container (max-width: 20rem){.gcu-ai-insight{padding:var(--gcu-space-3)}.gcu-ai-insight__value{font-size:var(--gcu-font-size-xl);line-height:var(--gcu-line-height-xl)}}

@@ -67,6 +67,10 @@
 @import "./components/ai-agent-plan.css";
 @import "./components/ai-status-tracker.css";
 @import "./components/ai-web-results.css";
+@import "./components/ai-inline-edit.css";
+@import "./components/ai-diff-view.css";
+@import "./components/ai-code-block.css";
+@import "./components/ai-insight-card.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
