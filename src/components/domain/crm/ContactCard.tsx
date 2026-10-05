@@ -5,6 +5,32 @@ import { Avatar } from '../../ui/Avatar'
 import { Tag } from '../../ui/Tag'
 import { headingTag } from '../../ui/internal/indicator'
 
+/** Empresa, correo (`mailto:`) y teléfono (`tel:`), cada uno con ícono y nombre para lectores. */
+function ContactMeta({ company, email, phone }: Pick<ContactCardProps, 'company' | 'email' | 'phone'>) {
+  if (!company && !email && !phone) return null
+  return (
+    <ul className="gcu-contact__meta">
+      {company && (
+        <li><i className="feather-briefcase" aria-hidden="true" /><span className="visually-hidden">Empresa: </span>{company}</li>
+      )}
+      {email && (
+        <li>
+          <i className="feather-mail" aria-hidden="true" />
+          <span className="visually-hidden">Correo: </span>
+          <a className="gcu-contact__mono" href={`mailto:${email}`}>{email}</a>
+        </li>
+      )}
+      {phone && (
+        <li>
+          <i className="feather-phone" aria-hidden="true" />
+          <span className="visually-hidden">Teléfono: </span>
+          <a className="gcu-contact__mono" href={`tel:${phone.replace(/[^\d+]/g, '')}`}>{phone}</a>
+        </li>
+      )}
+    </ul>
+  )
+}
+
 /**
  * ContactCard — ficha 360 de un contacto o cliente: identidad, datos de contacto, etiquetas,
  * cifras y acciones.
@@ -55,27 +81,7 @@ export const ContactCard = /* @__PURE__ */ forwardRef<HTMLElement, ContactCardPr
           <span className="gcu-skeleton gcu-contact__skeleton" />
         ) : (
           <>
-            {(email || phone || company) && (
-              <ul className="gcu-contact__meta">
-                {company && (
-                  <li><i className="feather-briefcase" aria-hidden="true" /><span className="visually-hidden">Empresa: </span>{company}</li>
-                )}
-                {email && (
-                  <li>
-                    <i className="feather-mail" aria-hidden="true" />
-                    <span className="visually-hidden">Correo: </span>
-                    <a className="gcu-contact__mono" href={`mailto:${email}`}>{email}</a>
-                  </li>
-                )}
-                {phone && (
-                  <li>
-                    <i className="feather-phone" aria-hidden="true" />
-                    <span className="visually-hidden">Teléfono: </span>
-                    <a className="gcu-contact__mono" href={`tel:${phone.replace(/[^\d+]/g, '')}`}>{phone}</a>
-                  </li>
-                )}
-              </ul>
-            )}
+            <ContactMeta company={company} email={email} phone={phone} />
             {tags && tags.length > 0 && (
               <ul className="gcu-contact__tags" aria-label="Etiquetas">
                 {tags.map((tag) => <li key={tag}><Tag size="sm">{tag}</Tag></li>)}

@@ -92,6 +92,9 @@ export { TargetBar } from '../components/domain/operations/TargetBar'
 export { QueueCard } from '../components/domain/operations/QueueCard'
 export { AgentStatusBoard } from '../components/domain/operations/AgentStatusBoard'
 export { Heatmap } from '../components/domain/operations/Heatmap'
+export { ContactCard } from '../components/domain/crm/ContactCard'
+export { PipelineBoard } from '../components/domain/crm/PipelineBoard'
+export { Funnel } from '../components/domain/crm/Funnel'
 import type {
   AlertProps,
   AppLayoutProps,

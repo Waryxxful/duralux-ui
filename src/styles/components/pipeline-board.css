@@ -1,0 +1,21 @@
+/* PipelineBoard: columnas por etapa con total; tarjetas arrastrables y movibles con teclado.
+   El tablero se desplaza en horizontal dentro de su contenedor; la columna destino se marca
+   con borde discontinuo (forma) además del tono. */
+.gcu-pipeline{min-width:0}
+.gcu-pipeline__columns{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(15rem,1fr);gap:var(--gcu-space-3);padding-bottom:var(--gcu-space-2)}
+.gcu-pipeline__col{display:flex;flex-direction:column;gap:var(--gcu-space-2);min-width:0;padding:var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-xl);background-color:var(--gcu-surface-sunken)}
+.gcu-pipeline__col--over{border-style:dashed;border-color:var(--gcu-status-primary);background-color:var(--gcu-primary-soft)}
+.gcu-pipeline__head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--gcu-space-2);min-width:0}
+.gcu-pipeline__title{margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--gcu-text);font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-pipeline__total{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);white-space:nowrap}
+.gcu-pipeline__cards{display:flex;flex-direction:column;gap:var(--gcu-space-2);min-height:var(--gcu-space-16)}
+.gcu-pipeline__empty{margin:var(--gcu-space-4) 0;color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);text-align:center}
+.gcu-deal{display:flex;flex-direction:column;align-items:stretch;gap:var(--gcu-space-1);width:100%;padding:var(--gcu-space-3);border:1px solid var(--gcu-border);border-radius:max(0px,calc(var(--gcu-radius-xl) - var(--gcu-space-1)));background-color:var(--gcu-surface);box-shadow:var(--gcu-shadow-1);color:var(--gcu-text);font:inherit;text-align:start;cursor:pointer}
+.gcu-deal[draggable="true"]{cursor:grab}
+@media (hover:hover){.gcu-deal:hover{box-shadow:var(--gcu-shadow-2)}}
+.gcu-deal:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-deal__title{font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium)}
+.gcu-deal__account{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
+.gcu-deal__foot{display:flex;align-items:center;gap:var(--gcu-space-2);margin-top:var(--gcu-space-1)}
+.gcu-deal__value{margin-inline-end:auto;font-size:var(--gcu-font-size-sm);font-weight:var(--gcu-font-weight-semibold)}
+.gcu-deal__idle{padding:0 var(--gcu-space-1);border-radius:var(--gcu-radius-sm);background-color:var(--gcu-warning-soft);color:var(--gcu-warning-text);font-size:var(--gcu-font-size-2xs);line-height:var(--gcu-line-height-2xs);font-weight:var(--gcu-font-weight-medium)}
