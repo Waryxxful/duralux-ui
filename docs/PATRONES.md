@@ -4,7 +4,7 @@ Ocho estructuras de página para las apps de GranCRM. Antes de diseñar una pant
 
 ## Reglas comunes
 
-- **Estructura:** `PageHeader` (con `className="sticky-top"`) como hermano de `<div className="main-content">`, nunca envuelto junto al contenido (ver `PAGE-STRUCTURE.md`). Un solo `h1` por página: el de `PageHeader`.
+- **Estructura:** `PageHeader` (sticky por defecto desde 2.6) como hermano de `<div className="main-content">`, nunca envuelto junto al contenido (ver `PAGE-STRUCTURE.md`). Un solo `h1` por página: el de `PageHeader`.
 - **Una acción primaria por vista** (`variant="primary"`), en el `PageHeader` o en el bloque que la motiva (WelcomeBand, detalle de la bandeja). El resto, `light-brand`. Acciones masivas y de fila, `light-brand` o `danger`.
 - **Grilla:** `DashGrid` con filas permitidas (12 · 8+4 · 7+5 · 6+6 · 4+4+4 · 3+3+3+3, y 4+8 / 5+7). Las celdas son contenedores: lo de adentro responde a su ancho (§12). Breakpoints de viewport solo para el layout de página (`row` / `col-lg-*` cuando la fila no es de DashGrid).
 - **Encabezados:** títulos de bloques de primer nivel con `headingLevel={2}` (StatGroup, QuickTiles, KpiCard); `Card` ya usa `h2`.
@@ -106,6 +106,6 @@ Ocho estructuras de página para las apps de GranCRM. Antes de diseñar una pant
 
 Los patrones se componen solo con componentes existentes. Pendientes detectados al construirlos:
 
-- `PageHeader` todavía no es sticky por defecto (se usa `className="sticky-top"`) ni suprime el borde del título sin breadcrumbs (la story usa una clase local).
+- `PageHeader` no suprime el borde del título sin breadcrumbs (la story usa una clase local).
 - No hay un componente de navegación de secciones para Ajustes: se usa `List` con `active`.
 - No hay una barra de filtros dedicada: se usa una fila flexible (`sb-patron-filtros` en las stories) con `FormField`.

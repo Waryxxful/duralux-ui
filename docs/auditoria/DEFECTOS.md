@@ -22,6 +22,10 @@ Subproyecto: 1 Fundaciones · 2 Núcleo · 3 Nuevos · 4 Patrones · 5 Dominios 
 
 react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 páginas × 3 temas): **color-contrast 0** (antes 20/19/19), aria-prohibited-attr 0, landmark-unique 0; quedan heading-order (estructura de la demo, DX-027) y nested-interactive en gráficos (DX-004). Storybook: 0 violaciones en 21 capturas. Línea base posterior: `docs/auditoria/baseline-2.1.json`. Presupuesto CSS sin artefactos generados: 680 `!important`, 181 `.app-skin-dark`, 367 hex.
 
+## Estado tras 2.8
+
+react-doctor 81/100 (gate: 75). axe en Storybook (patrones, dominios, IA y shell; claro, oscuro y navy): 0 violaciones serias o críticas en los componentes; quedan `landmark-unique` moderado en stories de varias instancias (DX-047). Presupuesto CSS sin cambios en archivos existentes; los 38 CSS nuevos de 2.6–2.8 no usan hex, `!important` ni `.app-skin-dark`.
+
 ## Defectos
 
 | ID | Sev | Área | Defecto | Evidencia | Sub | Estado |
@@ -52,10 +56,10 @@ react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 pá
 | DX-024 | P3 | tooling | `typeof` en runtime en scripts de gate (×3) | `scripts/check-package.mjs:52,56,72` | 1 | no aplica: `scripts/` fuera de lint por política del proyecto (`.oxlintrc.json`, `react-doctor.config.json`) |
 | DX-025 | P3 | tests | Mocks de módulo en tests de charts (×3); aserciones sin comentario (×2) | `test/AreaChartWidget.test.jsx:4`, `test/Charts.contract.test.jsx:5,39`, `test/theme-css.contract.test.ts:367,375` | 2 | parcial: aserciones justificadas (2.1); mocks permitidos en tests por política |
 | DX-026 | P3 | tooling | Regla oxlint interna con aserciones encadenadas y parámetros `unknown` | `tools/oxlint/anti-slop/shared/lexical-type-parameters.ts:5,20` | 1 | no aplica: plugin de lint vendorizado, excluido por política |
-| DX-027 | P3 | demo | Orden de encabezados de la demo (`h3` sin `h2`), 404 en la intro | axe heading-order ×19, consola intro | 2 (migración a Storybook) | abierto |
+| DX-027 | P3 | demo | Orden de encabezados de la demo (`h3` sin `h2`), 404 en la intro | axe heading-order ×19, consola intro | 2 (migración a Storybook) | cerrado 2.6 (demo retirada; Storybook cubre sus páginas) |
 | DX-028 | P3 | seguridad | react-doctor `require-pnpm-hardening` ×2 (el repo construye con npm) | react-doctor | 1 | no aplica: el repo construye con npm |
 | DX-029 | P2 | copy | `Card` trae etiquetas por defecto en inglés (`Refresh`, `Remove`, `Expand`) | `src/components/ui/Card.jsx:58-60` | 2 | cerrado 2.3 (`Card.tsx`: «Actualizar», «Quitar», «Expandir» con `IconButton`) |
-| DX-030 | P2 | copy | Voseo en documentación, comentarios y CLI (CHANGELOG 2.0, README, CLAUDE.md, JSDoc de Button/FormField, `scripts/check-doctor.mjs`): viola la regla de español internacional. Mensajes del gate corregidos en 2.1 | 10 archivos (`grep -rE 'usá|corré|podés'`) | 6 | parcial (docs/ y AGENTS.md limpios en lote DOC; quedan `scripts/check-doctor.mjs` «Corré» y «acá» en comentarios de `src/`) |
+| DX-030 | P2 | copy | Voseo en documentación, comentarios y CLI (CHANGELOG 2.0, README, CLAUDE.md, JSDoc de Button/FormField, `scripts/check-doctor.mjs`): viola la regla de español internacional. Mensajes del gate corregidos en 2.1 | 10 archivos (`grep -rE 'usá|corré|podés'`) | 6 | cerrado 2.8 en `src/`, `scripts/`, tests y CHANGELOG (docs/ y AGENTS.md en lote DOC); README.md y CLAUDE.md quedan a cargo de quien los mantiene |
 | DX-031 | P3 | tests | `Charts.contract.test.jsx` intermitente bajo carga (carga diferida de ApexChart): 1 fallo en 4 corridas completas | `test/Charts.contract.test.jsx` «uses the literal accessible dark chart palette» | 2 | cerrado 2.4 (L6: aserciones de opciones de Apex dentro de `waitFor`, sin tiempos) |
 | DX-032 | P3 | theme | SSR con hidratación: `getServerSnapshot` = false hace que `system` con SO oscuro pinte light un instante y pise el snippet | `src/theme/ThemeProvider.tsx:54` | 2 | abierto |
 | DX-033 | P3 | theme | `setMode` no valida: un consumidor JS con `setMode('sepia')` deja `data-gcu-theme="sepia"` | `src/theme/ThemeProvider.tsx:53` | 2 | abierto |
@@ -66,3 +70,10 @@ react-doctor 68/100 (local 0.9.11; mínimo del gate: 60). axe en la demo (20 pá
 | DX-038 | P3 | theme | Navy Sass agrega un atributo de especificidad: un override de app con el selector del oscuro pierde en navy (alternativa `:where()`) | `_theme-options-dark-theme.scss` | 2 | abierto |
 | DX-039 | P2 | tablas | Celdas de `.table` con texto alineado arriba y controles centrados en la misma fila | story Componentes/Acciones/Button › Acciones en tabla densa | 2 (tablas) | cerrado (L5: `vertical-align:middle` en `.table`, table.css) |
 | DX-040 | P2 | tablas | En oscuro, filas pares de `.table` con texto atenuado (regla de tema heredada de striped) | misma story, tema oscuro | 2 (tablas) | cerrado (L5: sin regla de filas impares ni `.table` atenuada en el oscuro) |
+| DX-041 | P1 | a11y | Header de `AppLayout`: el nombre de la persona heredaba el color del header de la plantilla (#eaebef) y no se leía en el tema claro (1,19:1) | axe color-contrast en patrones (story Ajustes) | 2 | cerrado 2.8 (`shell-layout.css`: `--gcu-text` en el nombre y `--gcu-muted` en el chevron) |
+| DX-042 | P1 | a11y | Títulos de sección del menú lateral con gris fijo #67758a: 3,9:1 en oscuro y navy | axe color-contrast, `.nxl-caption > span` | 2 | cerrado 2.8 (`navigation.css`: `--gcu-muted`) |
+| DX-043 | P2 | a11y | Anillos de foco de 2.7–2.8 hechos con `box-shadow` y `outline:0`: desaparecen en modo de alto contraste | 20 reglas `:focus-visible` en `src/styles/components/` | 3 | cerrado 2.8 (`outline:2px solid transparent`, que forced-colors pinta) |
+| DX-044 | P2 | storybook | Las stories de patrones exportaban sus variantes con desestructuración y el indexador de Storybook las omitía (solo 3 de 27 visibles) | `index.json` de build-storybook | 4 | cerrado 2.8 (exportaciones explícitas) |
+| DX-045 | P3 | theme | Logo de texto «uralux» del `AppLayout` casi invisible en oscuro y navy (asset de la plantilla) | capturas de patrones en oscuro | 2 | abierto |
+| DX-046 | P3 | a11y | `role="meter"` sobre `span`/`div` en TargetBar, QuotaBanner y UsageMeter (react-doctor `prefer-tag-over-role`); `<meter>` nativo no admite el relleno con tokens actual | react-doctor | 3 | abierto (funciona con lectores; evaluar `<meter>` estilizado) |
+| DX-047 | P3 | a11y | `landmark-unique` (moderado) cuando una story muestra varias instancias de AgentStatusBoard, Transcript o PageHeader con el mismo nombre | axe en Storybook | 3 | abierto (solo stories de varias instancias) |

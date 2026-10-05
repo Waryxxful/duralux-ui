@@ -13,5 +13,5 @@
   .nxl-navigation .nxl-link:focus-visible,.nxl-navigation .b-brand:focus-visible{outline:2px solid Highlight}
 }
 
-/* Títulos de sección del menú: el gris fijo de la plantilla (#67758a) queda bajo AA en oscuro. */
+/* Títulos de sección del menú: el gris fijo de la plantilla queda bajo AA en oscuro. */
 .nxl-navigation .navbar-content .nxl-caption.nxl-item > span:not(.badge){color:var(--gcu-muted)}

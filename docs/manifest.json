@@ -1,14 +1,14 @@
 {
   "$comment": "Catálogo legible por máquina de @duralux/ui. Fuente: src/public/components.ts, src/index.ts, src/public/apex.ts, src/public/recharts.ts y src/antd/index.ts. Al agregar o deprecar un componente, actualiza este archivo en el mismo commit.",
   "package": "@duralux/ui",
-  "version": "2.5.0",
+  "version": "2.8.0",
   "entrypoints": {
     "@duralux/ui": "Componentes, layout, shell, tema, log, apiFetch, contrato",
     "@duralux/ui/charts/apex": "Gráficos ApexCharts (peer opcional apexcharts/react-apexcharts)",
     "@duralux/ui/charts/recharts": "Widgets Recharts (peer opcional recharts)",
     "@duralux/ui/antd": "Wrappers antd tematizados (peers opcionales antd ^6, dayjs); requieren DuraluxAntdProvider"
   },
-  "categories": ["accion", "formulario", "dato", "grafico", "feedback", "presentacion", "composicion", "navegacion", "layout", "shell", "tema", "chat", "utilidad"],
+  "categories": ["accion", "formulario", "dato", "grafico", "feedback", "presentacion", "composicion", "navegacion", "layout", "shell", "tema", "chat", "utilidad", "dominio", "ia"],
   "components": [
     { "name": "Button", "import": "@duralux/ui", "category": "accion", "use": "Acción con texto. Una sola variant=\"primary\" por vista; el resto light-brand. loading conserva el ancho.", "avoid": "Navegación a otra URL; botón de solo icono.", "alternative": "LinkButton (navegación), IconButton (solo icono)" },
     { "name": "LinkButton", "import": "@duralux/ui", "category": "accion", "use": "Enlace con apariencia de botón (navega).", "avoid": "Acciones que no cambian de URL.", "alternative": "Button" },
@@ -97,7 +97,7 @@
     { "name": "WelcomeBand", "import": "@duralux/ui", "category": "composicion", "use": "Banda de bienvenida con resumen del día.", "avoid": "Vistas de trabajo profundo.", "alternative": "PageHeader" },
     { "name": "DashGrid", "import": "@duralux/ui", "category": "composicion", "use": "Grilla de tablero por spans (8+4, etc.).", "avoid": "Formularios.", "alternative": "FormField (grilla propia)" },
 
-    { "name": "PageHeader", "import": "@duralux/ui", "category": "layout", "use": "Encabezado de toda página: título, breadcrumbs, acciones (máx. una primaria). Sticky con className=\"sticky-top\" hasta 2.6.", "avoid": "<h1> suelto o CSS sticky propio.", "alternative": "—" },
+    { "name": "PageHeader", "import": "@duralux/ui", "category": "layout", "use": "Encabezado de toda página: título, breadcrumbs, acciones (máx. una primaria). Sticky por defecto desde 2.6 (sombra al quedar pegado; sticky={false} lo desactiva).", "avoid": "<h1> suelto o CSS sticky propio.", "alternative": "—" },
     { "name": "AppLayout", "import": "@duralux/ui", "category": "layout", "use": "Layout standalone con Header y Sidebar.", "avoid": "Satélites montadas en el shell (el shell ya da el layout).", "alternative": "ShellHeader + ShellNav (solo shell)" },
     { "name": "Header", "import": "@duralux/ui", "category": "layout", "use": "Header de app standalone.", "avoid": "Dentro del shell.", "alternative": "ShellHeader" },
     { "name": "Sidebar", "import": "@duralux/ui", "category": "layout", "use": "Menú lateral de app standalone.", "avoid": "Dentro del shell.", "alternative": "ShellNav" },
@@ -150,30 +150,57 @@
 
     { "name": "log", "import": "@duralux/ui", "category": "utilidad", "use": "Logging con prefijo [duralux]; en producción solo error.", "avoid": "console.* directo en componentes.", "alternative": "—" },
     { "name": "deprecate", "import": "@duralux/ui", "category": "utilidad", "use": "Aviso único de deprecación en desarrollo.", "avoid": "Romper la API en 2.x.", "alternative": "—" },
-    { "name": "apiFetch", "import": "@duralux/ui", "category": "utilidad", "use": "fetch con CSRF y credenciales same-origin; emite SESSION_EXPIRED_EVENT.", "avoid": "fetch directo a la API de Django.", "alternative": "—" }
+    { "name": "apiFetch", "import": "@duralux/ui", "category": "utilidad", "use": "fetch con CSRF y credenciales same-origin; emite SESSION_EXPIRED_EVENT.", "avoid": "fetch directo a la API de Django.", "alternative": "—" },
+
+    { "name": "AppSwitcher", "import": "@duralux/ui", "category": "shell", "since": "2.6.0", "use": "Mega-menú «Módulos» del header: apps del manifest agrupadas por categoría." },
+    { "name": "TenantSwitcher", "import": "@duralux/ui", "category": "shell", "since": "2.6.0", "use": "Selector de cliente (cuenta) para administradores SA." },
+    { "name": "NotificationsMenu", "import": "@duralux/ui", "category": "shell", "since": "2.6.0", "use": "Campana del header con el conteo sin leer y la lista de avisos." },
+    { "name": "ProfileMenu", "import": "@duralux/ui", "category": "shell", "since": "2.6.0", "use": "Avatar del usuario con su nombre, correo, perfil y cierre de sesión." },
+    { "name": "ThemeToggle", "import": "@duralux/ui", "category": "shell", "since": "2.6.0", "use": "Elige el tema: claro, oscuro, azul marino o el del sistema." },
+    { "name": "CommandPalette", "import": "@duralux/ui", "category": "shell", "since": "2.6.0", "use": "Paleta de comandos y navegación (Ctrl/Cmd + K)." },
+    { "name": "CriterionRow", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Una fila de la pauta de calidad: resultado, justificación, cita y evidencia." },
+    { "name": "Transcript", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Conversación por turnos (agente / cliente) con marca de tiempo y resaltado." },
+    { "name": "AudioPlayer", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Grabación de una llamada: reproducir/pausar, retroceder y adelantar, velocidad, barra de posición y marcas en los momentos con error." },
+    { "name": "CallRow", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Una llamada de la bandeja de calidad: severidad (forma + texto), agente, #ID, origen · foco · fecha, resumen y puntaje (anulado si hay error grave)." },
+    { "name": "CallList", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Bandeja de llamadas (patrón APG listbox de selección única)." },
+    { "name": "TargetBar", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Cifra contra su meta: barra con la marca de la meta, valor tabular y estado en texto con forma (Severity): «Cumple la meta», «Cerca del umbral», «Bajo la meta»." },
+    { "name": "QueueCard", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Estado en vivo de una cola: en espera, espera más larga, agentes libres y nivel de servicio contra su meta (TargetBar)." },
+    { "name": "AgentStatusBoard", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Presencia en vivo de los agentes, agrupada por estado." },
+    { "name": "Heatmap", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Mapa de calor como tabla accesible (volumen por día y hora, abandono por franja)." },
+    { "name": "ContactCard", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Ficha 360 de un contacto o cliente: identidad, datos de contacto, etiquetas, cifras y acciones." },
+    { "name": "PipelineBoard", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Oportunidades por etapa con total por columna (cantidad y monto)." },
+    { "name": "Funnel", "import": "@duralux/ui", "category": "dominio", "since": "2.7.0", "use": "Embudo de conversión (leads → contactados → calificados → ganados)." },
+    { "name": "AiMessage", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Un turno de la conversación con el asistente." },
+    { "name": "MessageActions", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Copiar, regenerar y valorar una respuesta del asistente." },
+    { "name": "AiEmptyState", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Primer contacto con el asistente: qué puede hacer y preguntas sugeridas." },
+    { "name": "PromptComposer", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Caja para preguntar al asistente." },
+    { "name": "ThinkingIndicator", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "«el asistente está pensando» para esperas cortas (< 3 s)." },
+    { "name": "AiLoader", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Espera larga del asistente con tiempo transcurrido: «Analizando 1.284 llamadas · 8 s»." },
+    { "name": "Citation", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Marca de cita `[n]` en una respuesta, con vista previa de la fuente (Tooltip: al pasar el puntero o al enfocar con teclado)." },
+    { "name": "SourceList", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Fuentes (notas al pie) de una respuesta del asistente, numeradas como sus citas `[n]`." },
+    { "name": "StreamingAnswer", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Respuesta del asistente que llega por partes, con citas `[n]`, fuentes y preguntas de seguimiento." },
+    { "name": "AiErrorState", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Falla de generación: qué pasó, la pregunta original conservada y reintentar." },
+    { "name": "QuotaBanner", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Consultas usadas del día con cuenta regresiva hasta el reinicio." },
+    { "name": "ModelSelector", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Elige el modelo del asistente." },
+    { "name": "UsageMeter", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Uso de la ventana de contexto con desglose (pregunta / respuesta) y costo estimado." },
+    { "name": "VoiceInput", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Dictar la pregunta. Muestra el estado (barras de nivel y tiempo); la captura real la hace la app con `onToggle` (el componente no graba ni envía audio)." },
+    { "name": "AiHistory", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Conversaciones anteriores con el asistente, agrupadas por fecha y con las fijadas arriba." },
+    { "name": "MemoryChips", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Lo que el asistente recuerda de la persona o del equipo; cada recuerdo se puede olvidar." },
+    { "name": "SuggestionBanner", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Sugerencia del asistente dentro de una pantalla, con su fundamento." },
+    { "name": "ReasoningTrace", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Razonamiento del asistente, plegable, con tiempo y pasos numerados." },
+    { "name": "AgentSteps", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Línea de tiempo de las herramientas que usa un agente: estado en texto, duración, argumentos, resultado y llamadas en paralelo (como ToolChip)." },
+    { "name": "ToolChip", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Llamada a una herramienta del agente, compacta y expandible." },
+    { "name": "ApprovalCard", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Aprobación humana antes de una acción con efecto (enviar, actualizar, reasignar)." },
+    { "name": "TaskRows", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Tareas en vivo de un agente con métrica, estado en texto y notas plegables." },
+    { "name": "AgentPlan", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Plan de varios pasos propuesto por el agente, revisable antes de aprobarlo." },
+    { "name": "StatusTracker", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Avance de una operación larga por etapas (en cola → procesando → indexando → listo)." },
+    { "name": "WebResults", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Búsqueda del asistente en la web o en la base de conocimiento: consulta, total, resultados y cuál está leyendo." },
+    { "name": "InlineEdit", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Mejora sugerida por el asistente para un texto (respuesta a un cliente, guion, correo), con diferencias palabra a palabra y aceptar/descartar." },
+    { "name": "DiffView", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Cambios propuestos por archivo o registro (plantillas, reglas, pautas de calidad) con diferencia línea a línea (LCS: respeta orden y líneas repetidas) y aceptar/rechazar por archivo." },
+    { "name": "CodeBlock", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Bloque de código o texto técnico con nombre de archivo, copiar, números de línea y plegado." },
+    { "name": "InsightCard", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Métrica con tendencia y una explicación de la IA de por qué cambió." },
+    { "name": "AiAvatar", "import": "@duralux/ui", "category": "ia", "since": "2.8.0", "use": "Identidad visual del asistente: gradiente de tokens con grano (`.gcu-grain`)." }
   ],
-  "upcoming": {
-    "$comment": "Pendientes de integración: specs aprobados, aún no exportados en esta rama. No usar hasta que aparezcan en src/public/components.ts o src/index.ts.",
-    "status": "pendiente de integración",
-    "specs": [
-      {
-        "spec": "docs/superpowers/specs/2026-10-04-2-6-patrones-shell-design.md",
-        "version": "2.6.0",
-        "components": ["AppSwitcher", "TenantSwitcher", "NotificationsMenu", "ProfileMenu", "ThemeToggle", "CommandPalette"],
-        "changes": ["PageHeader sticky por defecto con sombra al hacer scroll", "Sidebar/ShellNav con ítem activo, mini-menú con Tooltip y teclado", "AuthLayout refinado"],
-        "patterns": ["Cola primero", "Reporte", "Directorio", "Tabla operativa", "Bandeja", "Espacio de trabajo", "Ajustes", "Acceso"]
-      },
-      {
-        "spec": "docs/superpowers/specs/2026-10-04-2-7-dominios-ia-design.md",
-        "version": "2.7.0",
-        "components": ["CriterionRow", "Transcript", "AudioPlayer", "CallRow", "CallList", "TargetBar", "QueueCard", "AgentStatusBoard", "Heatmap", "ContactCard", "PipelineBoard", "Funnel"]
-      },
-      {
-        "spec": "docs/superpowers/specs/2026-10-04-2-7-dominios-ia-design.md",
-        "version": "2.8.0",
-        "components": ["AiMessage", "MessageActions", "AiEmptyState", "PromptComposer", "ThinkingIndicator", "AiLoader", "Citation", "SourceList", "StreamingAnswer", "AiErrorState", "QuotaBanner", "ModelSelector", "UsageMeter", "VoiceInput", "AiHistory", "MemoryChips", "SuggestionBanner", "ReasoningTrace", "AgentSteps", "ToolChip", "ApprovalCard", "TaskRows", "AgentPlan", "StatusTracker", "WebResults", "InlineEdit", "DiffView", "CodeBlock", "InsightCard", "AiAvatar"],
-        "rules": ["Toda acción con efecto pasa por ApprovalCard o AgentPlan", "Respuestas con datos llevan citas [n] y SourceList", "Aviso fijo bajo el compositor", "Nada de datos personales hacia logging"]
-      }
-    ]
-  }
+  "patterns": { "doc": "docs/PATRONES.md", "storybook": "Patrones/*", "items": ["Cola primero", "Reporte", "Directorio", "Tabla operativa", "Bandeja", "Espacio de trabajo", "Ajustes", "Acceso", "Asistente"] },
+  "rules": { "ia": ["Toda acción con efecto pasa por ApprovalCard o AgentPlan", "Respuestas con datos llevan citas [n] y SourceList", "Aviso fijo bajo el compositor", "Nada de datos personales hacia logging"] }
 }

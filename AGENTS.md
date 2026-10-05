@@ -35,7 +35,7 @@ Empieza por la necesidad, no por el nombre. Si dudas, busca en `docs/manifest.js
 | Formulario: búsqueda en lista larga | `SearchableSelect`, `MultiSelect` | `<select>` nativo con cientos de opciones |
 | Formulario: fecha, rango de fechas, hora | `@duralux/ui/antd`: `DatePicker`, `DateRangeFilter`, `TimePicker` | `<input type="date">`, `<select>` de «Últimos 7 días» |
 | Formulario: número con formato es-CL, árbol, cascada, archivos | `/antd`: `NumberInput`, `TreeSelect`, `Cascader`, `FileDrop` | parseo manual |
-| **Navegación:** encabezado de página | `PageHeader` (título, breadcrumbs, acciones), siempre sticky: `className="sticky-top"` hasta que 2.6 lo traiga por defecto (`PAGE-STRUCTURE.md`) | `<h1>` suelto, CSS sticky propio |
+| **Navegación:** encabezado de página | `PageHeader` (título, breadcrumbs, acciones), sticky por defecto desde 2.6, con sombra al quedar pegado (`PAGE-STRUCTURE.md`) | `<h1>` suelto, CSS sticky propio |
 | Navegación: secciones dentro de una vista | `Tabs`, `Accordion` | botones que simulan pestañas |
 | Navegación: accesos rápidos | `QuickTiles`, `QuickLinkGrid` | tarjetas manuales |
 | Navegación: shell (header, menú, tema) | `ShellHeader`, `ShellNav`, `ThemeScope` | `.app-skin-dark` a mano |

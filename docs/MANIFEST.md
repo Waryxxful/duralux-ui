@@ -18,14 +18,10 @@ La fuente es [`manifest.json`](manifest.json): una entrada por componente export
 | `chat` | ChatWindow, ChatSidebar, ChatInputBar, MessageBubble |
 | `utilidad` | log, deprecate, apiFetch |
 
-## Próximos (pendientes de integración)
+## 2.6–2.8 integrados
 
-La clave `upcoming` lista lo especificado pero aún no exportado. **No se usa hasta que aparezca en `src/public/components.ts` o `src/index.ts`.**
-
-- **2.6** (`specs/2026-10-04-2-6-patrones-shell-design.md`): AppSwitcher, TenantSwitcher, NotificationsMenu, ProfileMenu, ThemeToggle, CommandPalette; PageHeader sticky por defecto; patrones de página.
-- **2.7** (`specs/2026-10-04-2-7-dominios-ia-design.md`): dominios de calidad, operación y CRM (Transcript, AudioPlayer, TargetBar, Heatmap, PipelineBoard…).
-- **2.8** (mismo spec): 29 bloques de IA (AiMessage, PromptComposer, StreamingAnswer, ApprovalCard, SourceList…) y AiAvatar.
+Las entradas de 2.6 (shell), 2.7 (`dominio`) y 2.8 (`ia`) están en `components` con `since`. La clave `patterns` lista los patrones de página (`docs/PATRONES.md`, Storybook «Patrones/…») y `rules.ia` las reglas de los componentes de IA.
 
 ## Mantenimiento
 
-Quien agrega, depreca o integra un componente actualiza `manifest.json` en el mismo commit (paso 7 de la receta en `AGENTS.md`). Al integrar 2.6–2.8, se mueven sus entradas de `upcoming` a `components`.
+Quien agrega, depreca o integra un componente actualiza `manifest.json` en el mismo commit (paso 7 de la receta en `AGENTS.md`).
