@@ -82,6 +82,25 @@ export { Switch } from '../components/form/Switch'
 export { Fieldset } from '../components/form/Fieldset'
 export { RadioGroup } from '../components/form/RadioGroup'
 export { ChoiceCard } from '../components/form/ChoiceCard'
+// 2.8 IA conversación
+export { AiAvatar } from '../components/ai/AiAvatar'
+export { AiMessage } from '../components/ai/AiMessage'
+export { MessageActions } from '../components/ai/MessageActions'
+export { AiEmptyState } from '../components/ai/AiEmptyState'
+export { PromptComposer, AI_DISCLAIMER } from '../components/ai/PromptComposer'
+export { ThinkingIndicator } from '../components/ai/ThinkingIndicator'
+export { AiLoader } from '../components/ai/AiLoader'
+export { Citation } from '../components/ai/Citation'
+export { SourceList } from '../components/ai/SourceList'
+export { StreamingAnswer } from '../components/ai/StreamingAnswer'
+export { AiErrorState } from '../components/ai/AiErrorState'
+export { QuotaBanner } from '../components/ai/QuotaBanner'
+export { ModelSelector } from '../components/ai/ModelSelector'
+export { UsageMeter } from '../components/ai/UsageMeter'
+export { VoiceInput } from '../components/ai/VoiceInput'
+export { AiHistory } from '../components/ai/AiHistory'
+export { MemoryChips } from '../components/ai/MemoryChips'
+export { SuggestionBanner } from '../components/ai/SuggestionBanner'
 import type {
   AlertProps,
   AppLayoutProps,
@@ -309,4 +328,30 @@ export type {
   SkeletonProps,
   TagTone,
   TagProps,
+  // 2.8 IA conversación
+  AiAvatarSize,
+  AiAvatarProps,
+  AiMessageSender,
+  AiMessageProps,
+  AiFeedbackValue,
+  MessageActionsProps,
+  AiEmptyStateProps,
+  PromptComposerProps,
+  ThinkingIndicatorProps,
+  AiLoaderProps,
+  AiSource,
+  CitationProps,
+  SourceListProps,
+  StreamingAnswerProps,
+  AiErrorStateProps,
+  QuotaBannerProps,
+  AiModelOption,
+  ModelSelectorProps,
+  UsageMeterProps,
+  VoiceInputProps,
+  AiThread,
+  AiHistoryProps,
+  AiMemoryItem,
+  MemoryChipsProps,
+  SuggestionBannerProps,
 } from './types'

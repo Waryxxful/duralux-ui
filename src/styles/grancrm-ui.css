@@ -57,6 +57,18 @@
 @import "./components/accordion.css";
 @import "./components/drawer.css";
 @import "./components/primitives.css";
+/* 2.8 IA conversación */
+@import "./components/ai-avatar.css";
+@import "./components/ai-message.css";
+@import "./components/ai-empty-state.css";
+@import "./components/prompt-composer.css";
+@import "./components/ai-loader.css";
+@import "./components/ai-answer.css";
+@import "./components/ai-error-state.css";
+@import "./components/ai-usage.css";
+@import "./components/ai-controls.css";
+@import "./components/ai-history.css";
+@import "./components/ai-memory.css";
 
 @font-face{font-family:gcu-feather;src:url("./fonts/feather.woff") format("woff");font-weight:400;font-style:normal;font-display:block}
 /* Inter Variable autoalojada (OFL, ver fonts/INTER-LICENSE.txt). latin cubre español. */
