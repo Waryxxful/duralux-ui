@@ -76,7 +76,7 @@ import {
 
 ### Forms y charts v2
 
-Los controles `SearchableSelect`, `MultiSelect` e `InputGroup` se importan desde el root. Usá `name` en los selects avanzados cuando el formulario deba hacer submit nativo: la librería publica inputs ocultos seguros, uno por valor seleccionado en el multiselect.
+Los controles `SearchableSelect`, `MultiSelect` e `InputGroup` se importan desde el root. Usa `name` en los selects avanzados cuando el formulario deba hacer submit nativo: la librería publica inputs ocultos seguros, uno por valor seleccionado en el multiselect.
 
 ```tsx
 import { FormField, InputGroup, MultiSelect, SearchableSelect } from '@duralux/ui';
@@ -86,7 +86,7 @@ import { FormField, InputGroup, MultiSelect, SearchableSelect } from '@duralux/u
 </FormField>
 ```
 
-Charts no se importan desde el root. Elegí el subpath y los peers necesarios:
+Charts no se importan desde el root. Elige el subpath y los peers necesarios:
 
 ```tsx
 import { ApexChart, ChartCard } from '@duralux/ui/charts/apex';
@@ -111,8 +111,8 @@ import { AreaChartWidget } from '@duralux/ui/charts/recharts';
 
 No inventes tu propio chip de estado. `StatusBadge`/`StatusButton` ya son wrappers
 finos sobre `Badge` (mapean `status: StatusVariant` → variante Bootstrap real) — no
-tienen su propio CSS paralelo. Usá `StatusBadge` cuando tu dominio ya piensa en
-`success/danger/warning/info/secondary`; usá `Badge` directo para cualquier otro caso
+tienen su propio CSS paralelo. Usa `StatusBadge` cuando tu dominio ya piensa en
+`success/danger/warning/info/secondary`; usa `Badge` directo para cualquier otro caso
 (incluida la variante `light`, un chip de alto contraste, no el `bg-light` lavado de
 Bootstrap).
 
@@ -180,8 +180,8 @@ docker compose restart web   # o el proceso de deploy de la app
 
 - [ ] Importa de `@duralux/ui`, no copias
 - [ ] Dependencia pineada a un commit SHA (no `github:Waryxxful/duralux-ui` a secas)
-- [ ] Cero hex literales de diseño (si necesitás un color dark-safe fuera de una clase
-      Bootstrap real, usá `var(--gcu-*, <fallback>)`, no un hex fijo)
+- [ ] Cero hex literales de diseño (si necesitas un color dark-safe fuera de una clase
+      Bootstrap real, usa `var(--gcu-*, <fallback>)`, no un hex fijo)
 - [ ] Cero referencias a family de fuente que no sea Inter — el theme solo carga Inter;
       cualquier otra familia (`Poppins`, `Roboto`, etc.) no está disponible y cae a la
       fuente por defecto del navegador

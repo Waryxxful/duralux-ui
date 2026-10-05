@@ -11,9 +11,9 @@ Se envuelve lo que el sistema **no tiene** o tiene peor. Cada export es un wrapp
 | antd | Duralux |
 |---|---|
 | `Table` | `DataTable` (TanStack) |
-| `Modal`, `Drawer` | `Modal` (un panel lateral nuevo va en el núcleo, no vía antd) |
+| `Modal`, `Drawer` | `Modal`, `Drawer` (2.5) |
 | `Dropdown`, `Tabs`, `Steps` | `Dropdown`, `Tabs`, `ProcessSteps` |
-| `Tooltip` | `IconButton label` / ayuda de `FormField` (un tooltip genérico va en el núcleo) |
+| `Tooltip`, `Segmented`, `Switch` | `Tooltip`, `Segmented`, `Switch` (2.5) |
 | `message`, `notification` | `Toast` |
 | `Form` | `FormField` + controles Duralux |
 | `Card`, `Descriptions`, `Statistic` | `Card`, `DescriptionList`, `KpiCard` / `MiniStatCard` |
