@@ -89,7 +89,7 @@ En una app consumidora: build de la app, revisión visual en DEV en los tres tem
 
 ## Referencias
 
-- `docs/PRINCIPIOS.md`, `docs/REGLAS-DE-DISENO.md`, `docs/TOKENS.md`, `docs/ICONOGRAFIA.md`, `docs/ANTD.md`
+- `docs/PRINCIPIOS.md`, `docs/REGLAS-DE-DISENO.md`, `docs/PATRONES.md` (estructura de página), `docs/TOKENS.md`, `docs/ICONOGRAFIA.md`, `docs/ANTD.md`
 - `docs/manifest.json` / `docs/MANIFEST.md` (catálogo) y `docs/migracion/` (guía por app)
 - `tokens/tokens.json` (fuente de tokens) y `docs/auditoria/DEFECTOS.md` (defectos conocidos)
 - `CHANGELOG.md` (qué cambió en cada versión)

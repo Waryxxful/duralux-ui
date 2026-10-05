@@ -71,7 +71,7 @@ import {
 ```
 
 1. ¿Existe en el paquete? → usalo.
-2. ¿Es genérico y lo necesitarán otras apps? → PR a `duralux-ui` + página en `demo/`.
+2. ¿Es genérico y lo necesitarán otras apps? → PR a `duralux-ui` + story en Storybook (`stories/`).
 3. ¿Es de dominio? → solo en la app.
 
 ### Forms y charts v2
