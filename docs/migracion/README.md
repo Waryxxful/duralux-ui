@@ -14,8 +14,10 @@ Una guía por app consumidora. Cada guía indica el SHA que fija hoy, qué cambi
 | Dashboard de cupos | `dashboard-cupos` | `b2f945d` | 2.0.0 | remoto | no | [dashboard-cupos.md](dashboard-cupos.md) |
 | Chat (dock) | `chat/frontend` | `b2f945d` | 2.0.0 | remoto | no | [chat.md](chat.md) |
 | Chat remoto (`chat-remote`) | `chat-frontend` | `b2f945d` | 2.0.0 | remoto | no | [chat-frontend.md](chat-frontend.md) |
-| WSP Platform | `wsp_platform/frontend` | `2b968ad` | 2.0.0 | remoto | no | [wsp_platform.md](wsp_platform.md) |
-| WSP Demo | `wsp_demo/frontend` | `89b1681` | 1.0.0 | remoto | no | [wsp_demo.md](wsp_demo.md) |
+| WSP Platform | `wsp_platform/frontend` | `2b968ad` (master); `cd062eb` en la rama local `feat/duralux-ui-3` | 2.0.0; 3.0.0 en la rama | remoto | no | [wsp_platform.md](wsp_platform.md) |
+| WSP InTouch | `wsp_intouch/frontend` | `cd062eb` | 3.0.0 | remoto | no | [wsp_intouch.md](wsp_intouch.md) |
+| WSP Cavem | `wsp_cavem/frontend` | `89b1681` | 1.0.0 (llega a 3.0 con la fusión de wsp_demo) | remoto | no | [wsp_cavem.md](wsp_cavem.md) |
+| WSP Demo | `wsp_demo/frontend` | `89b1681` (master); `cd062eb` en la rama `fusion/cavem` | 1.0.0; 3.0.0 en la fusión | remoto | no | [wsp_demo.md](wsp_demo.md) |
 | WSP Pompeyo | `wsp_pompeyo/frontend` | `file:./vendor/duralux-ui` (dist del 2026-06-26) | anterior a 1.0 | remoto | no | [wsp_pompeyo.md](wsp_pompeyo.md) |
 | Scraper | `scraper/frontend` | `6b3757c` | 1.0.0 | remoto | no | [scraper.md](scraper.md) |
 
@@ -89,10 +91,12 @@ Detalle en `CHANGELOG.md`. Lo que más afecta a las apps:
 | e-learning | 21: `Card headerRight` (14), `Table ariaLabel` (6), `StatsCard iconBg` (1) |
 | tablero-ti | 4: `StatsCard iconBg` |
 | dashboard-cupos | 3 sitios: `StatsCard iconBg` (5 objetos que llegan por spread), `Card headerRight` y `noPad` |
-| wsp_demo | 18: `StatsCard iconBg` (8) y `trend` (3), `FormField hint` (7) |
+| wsp_demo | Migrado a 3.0 en la rama `fusion/cavem` (2026-10-07); `master` sigue en 1.0. Ver la guía |
 | wsp_pompeyo | 47 (copia vendorizada anterior a 1.0): `Button outline` (17), `Card headerRight` (11), `FormField hint` (7), `Input icon` (5), `StatsCard iconBg` (4) y `trend` (3) |
 | scraper | 15: `ColoredStatCard bg` (8) y `trend`/`trendUp` (2), `StatsCard iconBg` (4), `Timeline iconBg` (1) |
-| chat, chat-frontend, wsp_platform | Ninguno |
+| wsp_intouch | Migrado a 3.0 en `master` (2026-10-07, `c464e23`) |
+| wsp_cavem | Sin migrar aparte: llega a 3.0 con la fusión de wsp_demo. Ver la guía |
+| chat, chat-frontend, wsp_platform | Ninguno (wsp_platform ya fijado en 3.0 en una rama, ver la guía) |
 
 El detalle por archivo está en la guía de cada app («Bloqueos para 3.0»).
 
