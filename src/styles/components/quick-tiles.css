@@ -9,7 +9,10 @@
 .gcu-quick-tiles__text{display:flex;flex-direction:column;gap:var(--gcu-space-0-5);min-width:0}
 .gcu-quick-tiles__label{font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm);font-weight:var(--gcu-font-weight-medium)}
 .gcu-quick-tiles__description,.gcu-quick-tiles__reason{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs)}
-@media (hover:hover){.gcu-quick-tiles__tile:not(:disabled):hover{border-color:var(--gcu-border-strong);background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+@media (hover:hover){.gcu-quick-tiles__tile:not(:disabled):not(.gcu-quick-tiles__tile--active):hover{border-color:var(--gcu-border-strong);background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+/* Atajo aplicado. Texto sobre --gcu-primary-soft con --gcu-primary-text (AA en claro, oscuro y navy).
+   El borde es --gcu-status-primary: el primario sólido no llega a 3:1 sobre la superficie oscura. */
+.gcu-quick-tiles__tile--active:not(:disabled){border-color:var(--gcu-status-primary);background-color:var(--gcu-primary-soft);color:var(--gcu-primary-text)}
 .gcu-quick-tiles__tile:not(:disabled):active{transform:scale(var(--gcu-press-scale))}
 .gcu-quick-tiles__tile:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
 .gcu-quick-tiles__tile:disabled{cursor:not-allowed;background-color:var(--gcu-surface-subtle)}

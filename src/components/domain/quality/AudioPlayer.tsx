@@ -1,9 +1,9 @@
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import type * as React from 'react'
 import { cx } from '../../../utils/cx'
 import { log } from '../../../utils/log'
 import { isFiniteNumber } from '../../../utils/typeGuards'
-import type { AudioMark, AudioPlayerProps } from '../../../public/types'
+import type { AudioMark, AudioPlayerHandle, AudioPlayerProps } from '../../../public/types'
 import { IconButton } from '../../ui/Button'
 import { clamp, formatDuration, spokenDuration } from '../internal/duration'
 import { nextRate, playerKeyAction, waveHeights } from './qualityModel'
@@ -24,6 +24,8 @@ const rateFormat = /* @__PURE__ */ new Intl.NumberFormat('es-CL', { maximumFract
  * - marks: botones «Ir a 1:23: Promesa incumplida» bajo la barra y su marca sobre la pista.
  * - Sin `src` simula el avance (demos). Errores de carga y de reproducción quedan en el log
  *   y se muestran en texto.
+ * - playerRef expone seek, play, pause y currentTime para saltar a una cita desde afuera.
+ *   El ref del componente sigue siendo el div raíz.
  * Estilos: src/styles/components/audio-player.css.
  */
 export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlayerProps>(function AudioPlayer({
@@ -36,6 +38,7 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
   skipSeconds = 10,
   rates = DEFAULT_RATES,
   label = 'Grabación de la llamada',
+  playerRef,
   className,
   onKeyDown,
   ...rest
@@ -91,32 +94,47 @@ export const AudioPlayer = /* @__PURE__ */ forwardRef<HTMLDivElement, AudioPlaye
     if (audio.current) audio.current.playbackRate = rate
   }, [rate, src])
 
-  const seek = (seconds: number) => {
+  const seek = useCallback((seconds: number) => {
     const next = clamp(seconds, 0, duration)
     updatePosition(next)
     if (audio.current) audio.current.currentTime = next
-  }
+  }, [duration, updatePosition])
 
-  const toggle = () => {
+  const play = useCallback((): Promise<void> | void => {
     const element = audio.current
-    // Con audio real el estado lo dictan los eventos play/pause (también los controles del sistema).
     if (!element) {
-      if (isPlaying) {
-        setPlaying(false)
-        return
-      }
-      if (simulatedEnd) updatePosition(0)
+      if (duration > 0 && positionRef.current >= duration) updatePosition(0)
       setPlaying(true)
       return
     }
-    if (playing) {
-      element.pause()
-      return
-    }
-    element.play().catch((error: Error) => {
+    return element.play().catch((error: Error) => {
       log.warn('AudioPlayer: no se pudo reproducir el audio.', error.message)
       setFailed(true)
     })
+  }, [duration, updatePosition])
+
+  const pause = useCallback(() => {
+    const element = audio.current
+    if (!element) {
+      setPlaying(false)
+      return
+    }
+    element.pause()
+  }, [])
+
+  useImperativeHandle(playerRef ?? undefined, (): AudioPlayerHandle => ({
+    seek,
+    play,
+    pause,
+    get currentTime() {
+      return positionRef.current
+    },
+  }), [seek, play, pause])
+
+  const toggle = () => {
+    // Con audio real el estado lo dictan los eventos play/pause (también los controles del sistema).
+    if (audio.current ? playing : isPlaying) pause()
+    else void play()
   }
 
   const jumpToMark = (mark: AudioMark) => {

@@ -366,6 +366,7 @@ export type {
   TranscriptTurn,
   TranscriptProps,
   AudioMark,
+  AudioPlayerHandle,
   AudioPlayerProps,
   CallId,
   CallSummary,

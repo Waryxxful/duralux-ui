@@ -1,5 +1,6 @@
+import { useRef } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { AudioPlayer } from '../../src'
+import { AudioPlayer, Button, type AudioPlayerHandle } from '../../src'
 import { conAncho } from '../componentes/Nuevos/soporte'
 import { MARCAS } from './datos'
 
@@ -29,4 +30,23 @@ export const SinOnda: Story = {
 export const Angosto: Story = {
   name: 'En un panel angosto',
   parameters: { maxWidth: 320 },
+}
+
+/** Salta al segundo de una cita con `playerRef`, sin reemplazar el ref del contenedor. */
+function SaltoACita() {
+  const player = useRef<AudioPlayerHandle>(null)
+  return (
+    <>
+      <AudioPlayer playerRef={player} duration={312} marks={MARCAS} />
+      <div className="d-flex flex-wrap gap-2 mt-3">
+        <Button variant="light-brand" size="sm" onClick={() => player.current?.seek(14)}>Ir a 0:14, validación incompleta</Button>
+        <Button variant="light-brand" size="sm" onClick={() => player.current?.seek(52)}>Ir a 0:52, promesa sin respaldo</Button>
+      </div>
+    </>
+  )
+}
+
+export const SaltoDesdeUnaCita: Story = {
+  name: 'Salto al minuto de una cita',
+  render: () => <SaltoACita />,
 }

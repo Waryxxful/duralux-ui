@@ -37,6 +37,9 @@ function TileBody({ tile }: { tile: QuickTile }) {
  *
  * - Cada tile es un enlace (`href`) o un botón (`onClick`) con ícono suave por tono, etiqueta
  *   que empieza con verbo («Crear campaña») y descripción opcional.
+ * - active: el atajo aplicado. En un botón pone `aria-pressed`; si algún tile del grupo usa
+ *   `active`, los demás botones quedan en `false`. En un enlace pone `aria-current="page"`.
+ *   Sin `active` en ningún tile, el DOM no agrega esos atributos.
  * - disabled + disabledReason: el motivo se muestra en texto (REGLAS §6).
  * - Responde a su contenedor: 1 columna en angosto, 2 desde 24rem, 3 desde 36rem y 4 desde 48rem.
  *   Hover instantáneo solo con puntero; presión `scale(0.98)`.
@@ -54,6 +57,7 @@ export const QuickTiles = /* @__PURE__ */ forwardRef<HTMLElement, QuickTilesProp
   const seen = new Map<string, number>()
   const Heading = headingTag(headingLevel, 'h3')
   const hasTitle = hasIndicatorContent(title)
+  const groupUsesActive = list.some((tile) => tile.active !== undefined)
 
   return (
     <section
@@ -69,22 +73,33 @@ export const QuickTiles = /* @__PURE__ */ forwardRef<HTMLElement, QuickTilesProp
       )}
       <div className="card-body">
         <ul className="gcu-quick-tiles__grid">
-          {list.map((tile) => (
-            <li key={tileKey(tile, seen)} className="gcu-quick-tiles__item">
-              {tile.href && !tile.disabled ? (
-                <a className="gcu-quick-tiles__tile" href={tile.href} onClick={tile.onClick}><TileBody tile={tile} /></a>
-              ) : (
-                <button
-                  type="button"
-                  className="gcu-quick-tiles__tile"
-                  disabled={tile.disabled || !isFunction(tile.onClick)}
-                  onClick={tile.onClick}
-                >
-                  <TileBody tile={tile} />
-                </button>
-              )}
-            </li>
-          ))}
+          {list.map((tile) => {
+            const tileClass = cx('gcu-quick-tiles__tile', tile.active && 'gcu-quick-tiles__tile--active')
+            return (
+              <li key={tileKey(tile, seen)} className="gcu-quick-tiles__item">
+                {tile.href && !tile.disabled ? (
+                  <a
+                    className={tileClass}
+                    href={tile.href}
+                    onClick={tile.onClick}
+                    aria-current={tile.active ? 'page' : undefined}
+                  >
+                    <TileBody tile={tile} />
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    className={tileClass}
+                    disabled={tile.disabled || !isFunction(tile.onClick)}
+                    onClick={tile.onClick}
+                    aria-pressed={groupUsesActive ? Boolean(tile.active) : undefined}
+                  >
+                    <TileBody tile={tile} />
+                  </button>
+                )}
+              </li>
+            )
+          })}
         </ul>
       </div>
     </section>

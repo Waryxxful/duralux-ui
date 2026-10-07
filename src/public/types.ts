@@ -1430,6 +1430,13 @@ export interface QuickTile {
   disabled?: boolean
   /** Por qué está deshabilitado (texto visible). */
   disabledReason?: React.ReactNode
+  /**
+   * Atajo aplicado, para usar los tiles como filtro.
+   * En un botón pone `aria-pressed="true"`; si algún tile del grupo lo usa, los demás
+   * botones quedan en `aria-pressed="false"`. En un enlace pone `aria-current="page"`.
+   * Sin `active` en ningún tile, el marcado no aparece.
+   */
+  active?: boolean
 }
 
 export interface QuickTilesProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
@@ -1832,6 +1839,21 @@ export interface AudioMark {
   label: string
 }
 
+/**
+ * Control imperativo del reproductor, aparte del `ref` del `div` raíz.
+ * Sirve para saltar al segundo de una cita desde fuera del componente.
+ */
+export interface AudioPlayerHandle {
+  /** Mueve la posición a `seconds`, acotada a [0, duración], actualiza la barra y avisa con `onTimeChange`. */
+  seek(seconds: number): void
+  /** Empieza la reproducción. Sin `src`, arranca la simulación. */
+  play(): Promise<void> | void
+  /** Pausa la reproducción o la simulación. */
+  pause(): void
+  /** Posición actual en segundos. */
+  readonly currentTime: number
+}
+
 export interface AudioPlayerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   /** URL del audio. Sin `src` el reproductor simula el avance (demos y vistas previas). */
   src?: string
@@ -1850,6 +1872,11 @@ export interface AudioPlayerProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   rates?: ReadonlyArray<number>
   /** Nombre accesible del reproductor. Por defecto «Grabación de la llamada». */
   label?: string
+  /**
+   * Control imperativo (`seek`, `play`, `pause`, `currentTime`) para saltar a una cita.
+   * El `ref` del componente sigue apuntando al `div` raíz.
+   */
+  playerRef?: React.Ref<AudioPlayerHandle>
 }
 
 export type CallId = string | number
@@ -2388,6 +2415,12 @@ export interface ApprovalCardProps extends Omit<React.HTMLAttributes<HTMLElement
   status?: ApprovalStatus
   /** Acción destructiva o irreversible: el botón de aprobar usa el tono de peligro. */
   destructive?: boolean
+  /**
+   * Variante del botón de aprobar. Por defecto `primary`.
+   * `light-brand` cuando la vista ya tiene otra acción primaria (por ejemplo «Aplicar todas»).
+   * Con `destructive` el botón sigue en peligro: `destructive` tiene prioridad.
+   */
+  approveVariant?: 'primary' | 'light-brand'
   /** Deshabilita la decisión y explica por qué. */
   disabledReason?: React.ReactNode
 }

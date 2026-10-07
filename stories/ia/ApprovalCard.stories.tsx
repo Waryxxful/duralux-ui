@@ -50,6 +50,14 @@ export const Destructiva: Story = {
   },
 }
 
+export const EnBandeja: Story = {
+  name: 'En una bandeja (light-brand)',
+  args: {
+    approveVariant: 'light-brand',
+    description: 'La vista ya tiene «Aplicar todas» como acción primaria. Aquí cada tarjeta aprueba en light-brand.',
+  },
+}
+
 export const Bloqueada: Story = { args: { disabledReason: 'No tienes permiso para enviar correos masivos. Pide la aprobación a tu supervisor.' } }
 export const Aprobada: Story = { args: { status: 'approved' } }
 export const Descartada: Story = { args: { status: 'rejected' } }

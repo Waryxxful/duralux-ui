@@ -16,13 +16,14 @@ interface ApprovalFooterProps {
   blockedId: string | undefined
   disabledReason: React.ReactNode
   destructive: boolean
+  approveVariant: 'primary' | 'light-brand'
   approveLabel: string
   rejectLabel: string
   onDecide: (next: Exclude<ApprovalStatus, 'pending'>) => void
 }
 
 /** Botones de decisión mientras está pendiente; después, la decisión anunciada en `status`. */
-function ApprovalFooter({ status, blockedId, disabledReason, destructive, approveLabel, rejectLabel, onDecide }: ApprovalFooterProps) {
+function ApprovalFooter({ status, blockedId, disabledReason, destructive, approveVariant, approveLabel, rejectLabel, onDecide }: ApprovalFooterProps) {
   if (status !== 'pending') {
     return (
       <p className="gcu-ai-approval__decided" role="status">
@@ -38,7 +39,7 @@ function ApprovalFooter({ status, blockedId, disabledReason, destructive, approv
       <Button variant="light-brand" size="sm" onClick={() => onDecide('rejected')} disabled={blocked} aria-describedby={blockedId}>
         {rejectLabel}
       </Button>
-      <Button variant={destructive ? 'danger' : 'primary'} size="sm" onClick={() => onDecide('approved')} disabled={blocked} aria-describedby={blockedId}>
+      <Button variant={destructive ? 'danger' : approveVariant} size="sm" onClick={() => onDecide('approved')} disabled={blocked} aria-describedby={blockedId}>
         {approveLabel}
       </Button>
     </div>
@@ -52,7 +53,9 @@ function ApprovalFooter({ status, blockedId, disabledReason, destructive, approv
  *   `onApprove(intent)` u `onReject(intent)`. Quien consume decide y ejecuta en el servidor.
  * - Después de decidir, los botones desaparecen y una región `status` anuncia la decisión (evita
  *   doble emisión). Con `status` controlado, manda el consumidor.
- * - destructive: el botón de aprobar usa tono de peligro. disabledReason: deshabilita y explica.
+ * - destructive: el botón de aprobar usa tono de peligro y gana sobre `approveVariant`.
+ *   approveVariant (`primary` por defecto, o `light-brand`) cambia el aprobar cuando la vista
+ *   ya tiene otra acción primaria. disabledReason: deshabilita y explica.
  * - Logging: solo la decisión y el nombre de la herramienta; nunca los parámetros.
  * Estilos: src/styles/components/ai-approval-card.css.
  */
@@ -71,6 +74,7 @@ export const ApprovalCard = /* @__PURE__ */ forwardRef<HTMLElement, ApprovalCard
   rejectLabel = 'Descartar',
   status: controlledStatus,
   destructive = false,
+  approveVariant = 'primary',
   disabledReason,
   className,
   ...rest
@@ -114,6 +118,7 @@ export const ApprovalCard = /* @__PURE__ */ forwardRef<HTMLElement, ApprovalCard
         blockedId={blocked ? `${baseId}-blocked` : undefined}
         disabledReason={disabledReason}
         destructive={destructive}
+        approveVariant={approveVariant}
         approveLabel={approveLabel}
         rejectLabel={rejectLabel}
         onDecide={decide}

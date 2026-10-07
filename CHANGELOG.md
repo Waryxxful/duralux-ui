@@ -4,6 +4,12 @@ Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe 
 
 ## Sin publicar
 
+### Agregados
+
+- **`QuickTile.active`**: marca el atajo aplicado. En un botón pone `aria-pressed` (los demás botones del grupo quedan en `false` si algún tile usa `active`); en un enlace, `aria-current="page"`. El modificador `gcu-quick-tiles__tile--active` usa el par suave/texto del primario. Sin `active`, el DOM no cambia.
+- **`AudioPlayer` `playerRef`**: expone `AudioPlayerHandle` (`seek`, `play`, `pause`, `currentTime`) para saltar al segundo de una cita. El `ref` del componente sigue apuntando al `div` raíz.
+- **`ApprovalCard` `approveVariant`**: `primary` (por defecto) o `light-brand`. Con `destructive` el botón de aprobar sigue en `danger`.
+
 ### Correcciones
 
 - **Fuente `Inter`**: `grancrm-ui.css` declara también la familia `"Inter"` (alias de los mismos woff2 de Inter Variable). En 2.x la cargaba Google Fonts con ese nombre y las apps la siguen pidiendo en JS (p. ej. `fontFamily` de ApexCharts); sin alias caía a `system-ui`, la leyenda de Apex pasaba a dos líneas y el área de trazado de los gráficos con meta quedaba ~25 px más baja.

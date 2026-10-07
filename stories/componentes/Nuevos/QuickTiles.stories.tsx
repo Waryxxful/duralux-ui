@@ -32,3 +32,21 @@ export const Temas: Story = {
   parameters: { maxWidth: 'none' },
   render: () => <TresTemas>{() => <QuickTiles title="Accesos rápidos" items={items.slice(0, 2)} />}</TresTemas>,
 }
+
+const filtros = [
+  { label: 'Todas', icon: 'feather-layers', onClick: () => {} },
+  { label: 'Bajo la meta', icon: 'feather-alert-triangle', tone: 'warning' as const, description: '12 campañas por debajo', onClick: () => {}, active: true },
+  { label: 'Sin revisar', icon: 'feather-clock', tone: 'info' as const, onClick: () => {} },
+  { label: 'Ver pautas', icon: 'feather-book-open', href: '#pautas' },
+]
+
+export const FiltroAplicado: Story = {
+  name: 'Filtro aplicado',
+  args: { title: 'Atajos', items: filtros },
+}
+
+export const FiltroEnTresTemas: Story = {
+  name: 'Filtro aplicado en tres temas',
+  parameters: { maxWidth: 'none' },
+  render: () => <TresTemas>{() => <QuickTiles title="Atajos" items={filtros} />}</TresTemas>,
+}
