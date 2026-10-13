@@ -6,6 +6,7 @@ Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe 
 
 ### Correcciones
 
+- **Submenús largos del navbar**: `.nxl-menu-visible` ya no tiene `max-height: 500px` ni `overflow: hidden`. Un colapsable con muchos ítems se cortaba en 500 px y los últimos quedaban inaccesibles; ahora se ve completo y el navbar se desplaza (`.navbar-content`). Abrir y cerrar sigue con el fundido de opacidad, sin animar el alto.
 - **Fuente `Inter`**: `grancrm-ui.css` declara también la familia `"Inter"` (alias de los mismos woff2 de Inter Variable). En 2.x la cargaba Google Fonts con ese nombre y las apps la siguen pidiendo en JS (p. ej. `fontFamily` de ApexCharts); sin alias caía a `system-ui`, la leyenda de Apex pasaba a dos líneas y el área de trazado de los gráficos con meta quedaba ~25 px más baja.
 - **`.text-body` en oscuro y navy**: el tema remapea `--bs-body-color`/`--bs-body-color-rgb` al texto del tema (`--gcu-text`). Antes quedaba el gris del claro (#4b5563, ~2,5:1 sobre el fondo oscuro); ahora ≈15:1. El claro no cambia.
 
