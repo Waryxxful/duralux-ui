@@ -42,6 +42,26 @@ En oscuro y navy la elevación se expresa con superficies más claras (`surface-
 - Controles e inputs comparten altura: 32 (sm), 36 (md, por defecto), 40 (lg). Una barra de filtros alinea input, select y botón en la misma fila.
 - La página nunca se desplaza en horizontal: tablas anchas y tableros se desplazan dentro de su contenedor (`.gcu-scroll`).
 
+### Desplazamiento: nunca dos scrolls anidados
+
+Regla nacida en la Pasarela de Correo (`pasarela-correo/DESIGN.md`) y adoptada por el orquestador (`orquestador/DESIGN.md`). Vale para toda app del ecosistema.
+
+- **Un solo scroll por pantalla.** La pantalla cabe en la ventana o se desplaza entera; un elemento nunca se desplaza dentro de una página que también se desplaza (Baymard: las áreas de scroll en línea son un antipatrón).
+- **Listados:** la tabla ocupa exactamente el alto libre de la ventana (medido, `useAltoAjustado`) y es el único scroll, con `Table stickyHeader maxHeight`. La paginación queda a la vista.
+- **Pantallas de trabajo** (editores, maestro-detalle): la página no se desplaza y cada columna lado a lado se desplaza por su cuenta; o, si no hay columnas, se desplaza la página entera y nada dentro.
+- **Teléfono:** las tablas pasan a tarjetas y se desplaza la página; nada de scroll interno (tampoco horizontal).
+- **Pestañas:** pasan a una segunda fila en vez de desplazarse de costado.
+- **Iframes y remotos montados en el shell:** el contenedor mide el alto libre bajo el header (y bajo cualquier franja fija); la página del shell no se desplaza y el único scroll es el del contenido.
+- Lo `position: absolute` dentro de un contenedor con scroll necesita un contenedor posicionado (`position: relative`) o estira la página.
+- **Verificación:** encuesta a 1920×1080, 1440×900, 1280×800, 1024×768 y 390×844 (`orquestador/scripts/encuesta_scroll.js`): sin desborde de página en los listados de escritorio y sin scroll interno en el teléfono.
+
+### Modales y paneles: que quepan sin scroll
+
+- **Se organizan para no desplazarse** en escritorio (desde 1024×768): el contenido se reparte en columnas (`size="lg"`/`"xl"` y grilla de 3–4 campos por fila) antes que apilarse; las listas de opciones van en grilla compacta de casillas (`repeat(auto-fill, minmax(12rem, 1fr))`, ~28 px por fila), no en tarjetas de una por fila.
+- Si con muchas opciones igual no cabe, se agrega búsqueda o un filtro, y el cuerpo del modal (`scrollable`) es el único scroll; el fondo queda bloqueado.
+- **Teléfono:** el modal es el único scroll (fondo bloqueado); nada de un scroll dentro de otro.
+- Lo mismo para paneles laterales, cajones (offcanvas) y menús desplegables largos: buscador o agrupación antes que una lista con scroll propio dentro de una página que se desplaza.
+
 ## 6. Estados de cada componente interactivo
 
 | Estado | Regla |
