@@ -2,6 +2,9 @@
    Frecuente = instantáneo: entra en --gcu-duration-instant (100 ms) y los ítems cambian de fondo sin transición. */
 .dropdown-menu{--gcu-dropdown-inset:var(--gcu-space-2);border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-lg);background-color:var(--gcu-surface-raised);color:var(--gcu-text);box-shadow:var(--gcu-shadow-3)}
 .dropdown-menu.show{animation:gcu-enter var(--gcu-duration-instant) var(--gcu-ease-enter)}
+/* align="end": Bootstrap solo alinea .dropdown-menu-end con Popper (data-bs-popper), que el paquete no usa. Sin esto el menú
+   se abría hacia la derecha y quedaba cortado en el borde de una tabla o de la pantalla. */
+.gcu-dropdown-menu.dropdown-menu-end{right:0;left:auto}
 /* Radio anidado: radio del menú menos la separación lateral del ítem. */
 .dropdown-item{border-radius:max(0px,calc(var(--gcu-radius-lg) - var(--gcu-dropdown-inset)));color:var(--gcu-text);transition:none}
 .dropdown-item:focus,.dropdown-item:focus-visible{background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}
