@@ -42,6 +42,8 @@
 @import "./components/list.css";
 @import "./components/bulk-bar.css";
 @import "./components/active-filters.css";
+@import "./components/filter-chip.css";
+@import "./components/action-menu.css";
 @import "./components/entity-card.css";
 @import "./components/rank-list.css";
 @import "./components/quick-tiles.css";

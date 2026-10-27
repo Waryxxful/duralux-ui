@@ -57,6 +57,7 @@ export { StatGroup } from '../components/data/StatGroup'
 export { List } from '../components/data/List'
 export { BulkBar } from '../components/data/BulkBar'
 export { ActiveFilters } from '../components/data/ActiveFilters'
+export { FilterChip } from '../components/data/FilterChip'
 export { EntityCard } from '../components/composition/EntityCard'
 export { RankList } from '../components/composition/RankList'
 export { QuickTiles } from '../components/composition/QuickTiles'
@@ -75,6 +76,7 @@ export { Kbd } from '../components/ui/Kbd'
 export { Spinner } from '../components/ui/Spinner'
 export { Skeleton } from '../components/ui/Skeleton'
 export { Tag } from '../components/ui/Tag'
+export { ActionMenu } from '../components/ui/ActionMenu'
 export { Switch } from '../components/form/Switch'
 export { Fieldset } from '../components/form/Fieldset'
 export { RadioGroup } from '../components/form/RadioGroup'
@@ -312,6 +314,8 @@ export type {
   BulkBarProps,
   ActiveFilter,
   ActiveFiltersProps,
+  FilterChipOption,
+  FilterChipProps,
   EntityCardProps,
   EntityCardStat,
   RankListItem,
@@ -350,6 +354,8 @@ export type {
   SkeletonProps,
   TagTone,
   TagProps,
+  ActionMenuItem,
+  ActionMenuProps,
   ThemeToggleMode,
   ThemeToggleResolved,
   ThemeToggleProps,

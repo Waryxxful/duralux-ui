@@ -14,6 +14,7 @@
     { "name": "LinkButton", "import": "@duralux/ui", "category": "accion", "use": "Enlace con apariencia de botón (navega).", "avoid": "Acciones que no cambian de URL.", "alternative": "Button" },
     { "name": "IconButton", "import": "@duralux/ui", "category": "accion", "use": "Acción de solo icono en barras y filas; label obligatorio (nombre accesible y tooltip).", "avoid": "Acción principal de la vista o acción poco reconocible por el icono.", "alternative": "Button con startIcon" },
     { "name": "Dropdown", "import": "@duralux/ui", "category": "accion", "use": "Menú de acciones o de opciones secundarias (incluye DropdownMenu).", "avoid": "Elegir un valor de formulario.", "alternative": "Select, SearchableSelect" },
+    { "name": "ActionMenu", "import": "@duralux/ui", "category": "accion", "use": "Menú «⋯» con las acciones de una fila o tarjeta (editar, mover, eliminar).", "avoid": "Una sola acción visible o acciones sobre varias filas.", "alternative": "IconButton, BulkBar" },
     { "name": "DropdownMenu", "import": "@duralux/ui", "category": "accion", "use": "Contenido de menú de Dropdown.", "avoid": "Uso suelto fuera de Dropdown.", "alternative": "Dropdown" },
     { "name": "ConfirmDialog", "import": "@duralux/ui", "category": "feedback", "use": "Confirmar acciones destructivas o irreversibles, nombrando el objeto.", "avoid": "Formularios o contenido largo; window.confirm.", "alternative": "Modal" },
 
@@ -39,6 +40,7 @@
     { "name": "DataTableToolbar", "import": "@duralux/ui", "category": "dato", "use": "Barra de búsqueda, filtros y acciones sobre una tabla.", "avoid": "Filtros de página completa.", "alternative": "ActiveFilters + DateRangeFilter" },
     { "name": "BulkBar", "import": "@duralux/ui", "category": "dato", "use": "Acciones sobre filas seleccionadas.", "avoid": "Acciones de una sola fila.", "alternative": "Acciones de fila de DataTable" },
     { "name": "ActiveFilters", "import": "@duralux/ui", "category": "dato", "use": "Mostrar y quitar filtros aplicados como chips.", "avoid": "Etiquetas de clasificación.", "alternative": "Tag" },
+    { "name": "FilterChip", "import": "@duralux/ui", "category": "dato", "use": "Ficha de filtro en la barra sobre un listado («+ Equipo», «Estado: Vencidas») con panel de casillas o panel propio.", "avoid": "Campos de un formulario.", "alternative": "MultiSelect, ActiveFilters" },
     { "name": "List", "import": "@duralux/ui", "category": "dato", "use": "Lista de ítems con título, meta y acción (bandejas, resultados).", "avoid": "Datos tabulares con columnas comparables.", "alternative": "DataTable" },
     { "name": "DescriptionList", "import": "@duralux/ui", "category": "dato", "use": "Pares etiqueta/valor de una entidad.", "avoid": "Muchas entidades comparadas.", "alternative": "Table" },
     { "name": "KpiCard", "import": "@duralux/ui", "category": "dato", "use": "Una cifra clave con meta, variación o tendencia.", "avoid": "Cifras sin contexto; varias cifras hermanas.", "alternative": "StatGroup" },

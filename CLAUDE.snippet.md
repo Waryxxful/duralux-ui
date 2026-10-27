@@ -19,11 +19,11 @@ import { Button, Card, DataTable, Dropdown } from '@duralux/ui'
 El catálogo evoluciona. La fuente de verdad es el barrel del paquete, sus tipos y
 `node_modules/@duralux/ui/README.md`. Familias principales:
 
-- **Base:** `Button` `LinkButton` `IconButton` `Icon` `Card` `Badge` `Alert` (soporta `soft`) `Modal` `Tabs` `Avatar` `Timeline` `ProgressRing` `Progress` `Dropdown` `DropdownMenu`
+- **Base:** `Button` `LinkButton` `IconButton` `Icon` `Card` `Badge` `Alert` (soporta `soft`) `Modal` `Tabs` `Avatar` `Timeline` `ProgressRing` `Progress` `Dropdown` `DropdownMenu` `ActionMenu`
 - **Feedback:** `EmptyState` `ErrorState` `LoadingState` `Toast`
 - **Stats:** `StatsCard` `MiniStatCard` `ColoredStatCard` (Bootstrap-real) · `StatCard` `StatusBadge` `StatusButton` (GranCRM extras, thin wrappers over `Badge`/`Card`) — no crear un tercer sistema de chips/stat-cards
 - **Forms:** `FormField` `Input` `Select` `Textarea` `Checkbox` `Radio` `FileInput` `InputGroup`
-- **Tablas:** `DataTable` `Table` `ResponsiveTable` `Pagination`
+- **Tablas:** `DataTable` `Table` `ResponsiveTable` `Pagination` `ActiveFilters` `FilterChip`
 - **Charts:** `ApexChart` `ChartCard` `AreaChartWidget` `BarChartWidget` `LineChartWidget` `PieChartWidget`
 - **Chat:** `ChatBubble` `ChatTypingIndicator` `ChatInputBar` `ChatWindow` `ChatSidebar`
 - **Layout y shell:** `AppLayout` `AuthLayout` `PageHeader` `ShellHeader` `ShellNav` `ThemeScope` `ConfirmDialog`

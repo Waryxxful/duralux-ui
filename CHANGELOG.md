@@ -6,6 +6,8 @@ Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe 
 
 ### Agregados
 
+- **`FilterChip`**: ficha de filtro para la barra sobre un listado («Filtrar  + Equipo  + Rol  Estado: Vencidas ▾»). Inactiva: borde punteado, «+» y el nombre; activa: par suave del primario y «Equipo: Ventas, Retención» (desde tres valores, «Ventas y 3 más»). Abre un panel (Dropdown) con casillas y cantidades, búsqueda sin tildes (por defecto con más de 8 opciones), texto vacío y «Quitar el filtro» (vacía con `onChange([])` o llama `onClear`). Con `children` el panel es propio y `valueText` resume el valor. Esc cierra y devuelve el foco. Estilos en `filter-chip.css` (`gcu-filter-chip*`).
+- **`ActionMenu`**: botón «⋯» de acciones de fila (patrón APG menu button) sobre `Dropdown`. Botón cuadrado sin fondo de 32 px (`sm`) o 36 px (`md`) con `label` como nombre y `title`; ítems `menuitem` con ícono, descripción, atajo informativo, `tone="danger"`, `separatorBefore` y `disabled`. ↑/↓/Inicio/Fin recorren los ítems habilitados, elegir cierra, devuelve el foco y llama `onSelect`. Estilos en `action-menu.css` (`gcu-action-menu*`).
 - **`QuickTile.active`**: marca el atajo aplicado. En un botón pone `aria-pressed` (los demás botones del grupo quedan en `false` si algún tile usa `active`); en un enlace, `aria-current="page"`. El modificador `gcu-quick-tiles__tile--active` usa el par suave/texto del primario. Sin `active`, el DOM no cambia.
 - **`AudioPlayer` `playerRef`**: expone `AudioPlayerHandle` (`seek`, `play`, `pause`, `currentTime`) para saltar al segundo de una cita. El `ref` del componente sigue apuntando al `div` raíz.
 - **`ApprovalCard` `approveVariant`**: `primary` (por defecto) o `light-brand`. Con `destructive` el botón de aprobar sigue en `danger`.

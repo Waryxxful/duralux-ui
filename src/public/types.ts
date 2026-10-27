@@ -1356,6 +1356,41 @@ export interface ActiveFiltersProps extends Omit<React.HTMLAttributes<HTMLDivEle
   resultCount?: number
 }
 
+export interface FilterChipOption {
+  value: string
+  label: React.ReactNode
+  /** Texto del resumen y de la búsqueda cuando `label` no es texto. */
+  textValue?: string
+  /** Cantidad de resultados con esta opción (se muestra atenuada). */
+  count?: number
+  disabled?: boolean
+}
+
+export interface FilterChipProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'children'> {
+  /** Nombre del filtro: «Equipo». */
+  label: string
+  /** Opciones (selección múltiple con casillas). */
+  options?: ReadonlyArray<FilterChipOption>
+  value?: ReadonlyArray<string>
+  onChange?: (value: string[]) => void
+  /** Panel propio (una fecha, un rango…) en lugar de la lista de opciones. */
+  children?: React.ReactNode
+  /** Con `children`: texto del valor aplicado («01-09-2026»). Si tiene texto, la ficha se ve activa. */
+  valueText?: string
+  /** Botón «Quitar el filtro» dentro del panel (con opciones, por defecto vacía la selección vía onChange([])). */
+  onClear?: () => void
+  /** Por defecto «Quitar el filtro». */
+  clearLabel?: string
+  /** Por defecto «No hay opciones.». */
+  emptyText?: React.ReactNode
+  /** Caja de búsqueda dentro del panel; por defecto cuando hay más de 8 opciones. */
+  searchable?: boolean
+  /** Por defecto «Buscar…». */
+  searchPlaceholder?: string
+  align?: 'start' | 'end'
+  disabled?: boolean
+}
+
 export interface BulkBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Cantidad seleccionada; con 0 la barra no se muestra. */
   count: number
@@ -1702,6 +1737,34 @@ export interface TagProps extends React.HTMLAttributes<HTMLSpanElement> {
   onRemove?: (event: React.MouseEvent<HTMLButtonElement>) => void
   /** Nombre accesible del botón de quitar. Por defecto «Quitar {texto}». */
   removeLabel?: string
+  disabled?: boolean
+}
+
+export interface ActionMenuItem {
+  key?: string
+  label: React.ReactNode
+  icon?: IconSlot
+  onSelect: () => void
+  /** `danger`: texto en rojo (acciones destructivas). */
+  tone?: 'default' | 'danger'
+  /** Línea divisoria antes del ítem (separa lo destructivo). */
+  separatorBefore?: boolean
+  /** Atajo de teclado mostrado a la derecha («Alt ↑»), solo informativo. */
+  shortcut?: string
+  description?: React.ReactNode
+  disabled?: boolean
+}
+
+export interface ActionMenuProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  items: ReadonlyArray<ActionMenuItem>
+  /** Nombre accesible del botón: «Acciones de la lección 2.3». Obligatorio. */
+  label: string
+  /** Por defecto `end`. */
+  align?: 'start' | 'end'
+  /** Botón de 32 px (`sm`, por defecto) o 36 px (`md`). */
+  size?: 'sm' | 'md'
+  /** Ícono del botón; por defecto `more-horizontal` (feather). */
+  icon?: IconSlot
   disabled?: boolean
 }
 

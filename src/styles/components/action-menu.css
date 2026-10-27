@@ -1,0 +1,23 @@
+/* ActionMenu: botón «⋯» cuadrado sin fondo (hover como Button light) y menú de acciones sobre el
+   .dropdown-menu del tema. Ícono 16 px atenuado; en peligro, ícono y texto en el rojo del tema. */
+.gcu-action-menu{display:inline-flex}
+.gcu-action-menu__trigger{display:inline-flex;align-items:center;justify-content:center;border:0;background-color:transparent;color:var(--gcu-muted)}
+.gcu-action-menu__trigger--sm{width:var(--gcu-control-h-sm);height:var(--gcu-control-h-sm)}
+.gcu-action-menu__trigger--md{width:var(--gcu-control-h-md);height:var(--gcu-control-h-md)}
+@media (hover:hover){.gcu-action-menu__trigger:hover:not(:disabled){background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}}
+.gcu-action-menu__trigger[aria-expanded="true"]{background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}
+.gcu-action-menu__trigger:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-action-menu__trigger-icon{font-size:var(--gcu-font-size-md)}
+.gcu-action-menu__menu{min-width:calc(var(--gcu-space-16) * 3);padding:var(--gcu-space-1)}
+.gcu-action-menu__item{display:flex;align-items:flex-start;gap:var(--gcu-space-2);width:100%;padding:var(--gcu-space-2);text-align:start;font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
+.gcu-action-menu__item:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
+.gcu-action-menu__icon{flex:none;margin-top:var(--gcu-space-0-5);color:var(--gcu-muted);font-size:var(--gcu-font-size-md)}
+.gcu-action-menu__body{display:flex;flex:1;flex-direction:column;min-width:0}
+.gcu-action-menu__label{white-space:nowrap}
+.gcu-action-menu__description{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);white-space:normal}
+.gcu-action-menu__shortcut{flex:none;margin-inline-start:var(--gcu-space-4);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-sm)}
+.gcu-action-menu__item--danger .gcu-action-menu__icon{color:var(--gcu-status-danger)}
+.gcu-action-menu__item:disabled{color:var(--gcu-muted);cursor:not-allowed}
+.gcu-action-menu__item:disabled .gcu-action-menu__icon{color:var(--gcu-text-subtle)}
+.gcu-action-menu__separator{margin:var(--gcu-space-1) 0}
+@media (forced-colors:active){.gcu-action-menu__trigger:focus-visible,.gcu-action-menu__item:focus-visible{outline:2px solid currentColor}}
