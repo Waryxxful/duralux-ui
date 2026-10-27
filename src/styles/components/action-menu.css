@@ -7,7 +7,8 @@
 @media (hover:hover){.gcu-action-menu__trigger:hover:not(:disabled){background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}}
 .gcu-action-menu__trigger[aria-expanded="true"]{background-color:var(--gcu-surface-subtle);color:var(--gcu-text)}
 .gcu-action-menu__trigger:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
-.gcu-action-menu__trigger-icon{font-size:var(--gcu-font-size-md)}
+/* `.btn.btn-sm i` del tema fija los íconos de botón en 10 px: esta regla le gana para que el «⋯» quede en 16 px. */
+.btn.gcu-action-menu__trigger .gcu-action-menu__trigger-icon{font-size:var(--gcu-font-size-md)}
 .gcu-action-menu__menu{min-width:calc(var(--gcu-space-16) * 3);padding:var(--gcu-space-1)}
 .gcu-action-menu__item{display:flex;align-items:flex-start;gap:var(--gcu-space-2);width:100%;padding:var(--gcu-space-2);text-align:start;font-size:var(--gcu-font-size-sm);line-height:var(--gcu-line-height-sm)}
 .gcu-action-menu__item:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
