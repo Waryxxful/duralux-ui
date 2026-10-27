@@ -14,7 +14,10 @@
 .gcu-action-menu__item:focus-visible{outline:0;box-shadow:var(--gcu-focus-ring)}
 .gcu-action-menu__icon{flex:none;margin-top:var(--gcu-space-0-5);color:var(--gcu-muted);font-size:var(--gcu-font-size-md)}
 .gcu-action-menu__body{display:flex;flex:1;flex-direction:column;min-width:0}
-.gcu-action-menu__label{white-space:nowrap}
+/* El tema fija `.dropdown .dropdown-menu{width:225px}`: el menú toma el ancho de su texto más largo (con tope) y, si llega
+   al tope, la etiqueta se parte en vez de salirse del menú. */
+.dropdown.gcu-action-menu .gcu-action-menu__menu{width:max-content;max-width:min(22rem,calc(100vw - var(--gcu-space-8)))}
+.gcu-action-menu__label{white-space:normal;overflow-wrap:anywhere}
 .gcu-action-menu__description{color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-xs);white-space:normal}
 .gcu-action-menu__shortcut{flex:none;margin-inline-start:var(--gcu-space-4);color:var(--gcu-muted);font-size:var(--gcu-font-size-xs);line-height:var(--gcu-line-height-sm)}
 .gcu-action-menu__item--danger .gcu-action-menu__icon{color:var(--gcu-status-danger)}
