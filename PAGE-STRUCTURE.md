@@ -41,6 +41,14 @@ No poner `<PageHeader>` + contenido dentro de un wrapper común (ej.
 visualmente el header del navbar (bug real encontrado: ~38px de gap). `PageHeader` es
 un elemento hermano de `.main-content`, no un hijo del mismo contenedor con padding.
 
+**Regla — cabecera fija solo en páginas largas con la acción principal arriba.**
+`<PageHeader sticky>` va en formularios largos (el «Guardar» vive en la cabecera) y en
+el detalle de un registro cuya acción («Auditar», «Aprobar») está arriba. En listados,
+tableros y reportes no: la cabecera ocupa 65 px o más de cada pantalla sin dar nada a
+cambio. Tampoco en una página que ya tiene su propia barra fija (el cockpit de una
+auditoría con el puntaje y «Guardar»): dos barras fijas apiladas se tapan entre sí. Por
+eso `sticky` viene en `false`.
+
 **Caso de borde — página sin `breadcrumbs` (ej. un Dashboard raíz).** El theme le pone
 al `<h1>` del `PageHeader` un `border-right` fijo para separarlo del breadcrumb
 (`scss/themes/layouts/_nxl-common.scss`). Si la página no pasa `breadcrumbs`, ese borde

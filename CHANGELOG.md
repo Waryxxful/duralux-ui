@@ -4,6 +4,10 @@ Los cambios notables de `@duralux/ui` se registran aquí. Este archivo describe 
 
 ## Sin publicar
 
+### Cambios incompatibles
+
+- **`PageHeader` deja de fijarse por defecto**: `sticky` pasa de `true` a `false`. Regla (`PAGE-STRUCTURE.md`): cabecera fija solo en páginas largas cuya acción principal vive en ella (formularios, detalle). En una auditoría de Call Reviews, la cabecera fija tapaba el cockpit (también fijo) con el puntaje. Migración: pasar `sticky` donde se quiera fija; quien ya pasaba `sticky={false}` puede quitarlo.
+
 ### Agregados
 
 - **`FilterChip`**: ficha de filtro para la barra sobre un listado («Filtrar  + Equipo  + Rol  Estado: Vencidas ▾»). Inactiva: borde punteado, «+» y el nombre; activa: par suave del primario y «Equipo: Ventas, Retención» (desde tres valores, «Ventas y 3 más»). Abre un panel (Dropdown) con casillas y cantidades, búsqueda sin tildes (por defecto con más de 8 opciones), texto vacío y «Quitar el filtro» (vacía con `onChange([])` o llama `onClear`). Con `children` el panel es propio y `valueText` resume el valor. Esc cierra y devuelve el foco. Estilos en `filter-chip.css` (`gcu-filter-chip*`).

@@ -9,7 +9,8 @@
 .gcu-theme-toggle__hint{color:var(--gcu-muted);font-size:var(--gcu-font-size-2xs);font-weight:var(--gcu-font-weight-regular)}
 .gcu-theme-toggle__check{margin-inline-start:auto}
 
-/* PageHeader: sticky por defecto; la sombra del tema solo cuando la barra queda pegada.
+/* PageHeader: sticky solo con `sticky` (páginas largas con la acción principal arriba); la sombra
+   del tema solo cuando la barra queda pegada.
    El `top` lo da el tema (alto del header); con `sticky-top` el resultado es el mismo. */
 .gcu-page-header__sentinel{block-size:1px;margin-block-end:-1px;visibility:hidden;pointer-events:none}
 .page-header.gcu-page-header--sticky{position:sticky;z-index:var(--gcu-z-sticky);box-shadow:none;transition:box-shadow var(--gcu-duration-fast) var(--gcu-ease-standard)}

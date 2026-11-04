@@ -1163,7 +1163,10 @@ export interface PageHeaderProps {
   actions?: React.ReactNode
   className?: string
   children?: React.ReactNode
-  /** Fija la barra al hacer scroll; la sombra aparece solo cuando queda pegada. Por defecto true. */
+  /**
+   * Fija la barra al hacer scroll; la sombra aparece solo cuando queda pegada. Por defecto false:
+   * solo en páginas largas cuya acción principal vive en la cabecera (formularios, detalle).
+   */
   sticky?: boolean
 }
 

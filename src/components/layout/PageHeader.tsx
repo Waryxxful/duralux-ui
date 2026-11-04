@@ -85,8 +85,11 @@ function useStuck(enabled: boolean, sentinel: React.RefObject<HTMLDivElement | n
  *       ul.breadcrumb[aria-label]
  *     .page-header-right.ms-auto > ...actions
  *
- * - Sticky por defecto (`sticky={false}` lo desactiva); la sombra aparece solo cuando la barra
- *   queda pegada al hacer scroll. Quien ya pasa `className="sticky-top"` obtiene lo mismo.
+ * - Fija solo a pedido (`sticky`): en páginas largas cuya acción principal vive en la cabecera
+ *   (formularios con «Guardar», el detalle con «Auditar»). En listados, tableros y en páginas
+ *   que ya tienen su propia barra fija no: dos barras fijas apiladas tapan contenido (en una
+ *   auditoría, el puntaje quedaba bajo la cabecera). La sombra aparece solo cuando la barra
+ *   queda pegada al hacer scroll.
  * - Acciones a la derecha: máximo una primaria.
  * - `subtitle` NO va dentro del page-header (rompe la fila del theme): va debajo como lead.
  * - El ref apunta a la barra `.page-header`.
@@ -98,7 +101,7 @@ export const PageHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, PageHeaderP
   actions,
   className = '',
   children,
-  sticky = true,
+  sticky = false,
 }, forwardedRef) {
   const right = actions ?? children
   const items: ReadonlyArray<CrumbWithIdentity> = isArray(breadcrumbs) ? breadcrumbs : []
