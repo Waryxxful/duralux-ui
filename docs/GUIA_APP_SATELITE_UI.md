@@ -187,6 +187,10 @@ docker compose restart web   # o el proceso de deploy de la app
       fuente por defecto del navegador
 - [ ] Dark mode OK (montado en shell)
 - [ ] Probado montado en shell, no solo standalone
+- [ ] El menú lateral es el **de la app**: `dios.json` declara `nav` con sus pantallas (ruta pública
+      completa en `inner`, íconos `feather-…`, `roles` con los roles actuales `agente`, `supervisor`,
+      `admin_cuenta`, `admin_ti`). Con `nav: []` el shell muestra su menú genérico (Inicio, Cuentas,
+      Usuarios…) y la app parece otra cosa. Se verifica con una captura montada en el shell.
 - [ ] Versión de `@duralux/ui` ≤ shell mayor
 
 ## 8. Scaffold mínimo de remote
