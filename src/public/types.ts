@@ -175,6 +175,30 @@ export interface LoadingStateProps extends React.HTMLAttributes<HTMLDivElement> 
   className?: string
 }
 
+/** Carrusel de diapositivas (imágenes, tarjetas). Se desplaza con scroll-snap nativo: deslizar con el dedo, flechas,
+ *  puntos o miniaturas, y las flechas del teclado con el foco en él. Sin avance automático. */
+export interface CarouselProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'onChange'> {
+  /** Una diapositiva por hijo. Con una sola no hay flechas, contador ni puntos. */
+  children?: React.ReactNode
+  /** Diapositiva visible (controlado). */
+  index?: number
+  /** Diapositiva inicial (no controlado). */
+  defaultIndex?: number
+  onIndexChange?: (index: number) => void
+  /** Ancho de cada diapositiva. Menos de `100%` deja asomar la siguiente (`86%` por defecto). */
+  slideSize?: string
+  /** Nombre de cada diapositiva para lectores de pantalla (por defecto «Imagen 2 de 3»). */
+  slideLabel?: (index: number, total: number) => string
+  /** Texto bajo el carrusel para la diapositiva visible (p. ej. su descripción). */
+  caption?: (index: number) => React.ReactNode
+  /** Acciones al final de la barra (p. ej. «Ampliar»). Se muestran también con una sola diapositiva. */
+  actions?: React.ReactNode
+  /** Miniaturas en lugar de puntos: una por diapositiva, en el mismo orden. */
+  thumbnails?: React.ReactNode[]
+  /** `inverse`: sobre fondo oscuro (vista ampliada). */
+  tone?: 'default' | 'inverse'
+}
+
 export interface ProgressProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   value: number
   max?: number

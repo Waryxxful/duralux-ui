@@ -69,6 +69,7 @@ export { DashGrid } from '../components/composition/DashGrid'
 // 2.5 · Lote N1: controles y estructura.
 export { Tooltip } from '../components/ui/Tooltip'
 export { Segmented } from '../components/ui/Segmented'
+export { Carousel } from '../components/ui/Carousel'
 export { Accordion } from '../components/ui/Accordion'
 export { Drawer } from '../components/ui/Drawer'
 export { Divider } from '../components/ui/Divider'
@@ -339,6 +340,7 @@ export type {
   SegmentedValue,
   SegmentedOption,
   SegmentedProps,
+  CarouselProps,
   SwitchProps,
   FieldsetProps,
   RadioGroupOption,

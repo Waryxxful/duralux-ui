@@ -1,0 +1,36 @@
+/* Carousel (gcu-carousel): scroll-snap nativo, la siguiente asoma (--gcu-carousel-slide < 100%), las no visibles se
+   atenúan. Flechas redondas sobre la imagen, solo donde hay adónde ir; barra con contador, puntos o miniaturas,
+   descripción y acciones. Sin animación con reduced-motion (el scroll suave lo decide el componente). */
+.gcu-carousel{--gcu-carousel-slide:86%;--gcu-carousel-gap:var(--gcu-space-3);display:flex;flex-direction:column;gap:var(--gcu-space-2);min-inline-size:0;color:var(--gcu-text)}
+.gcu-carousel__stage{position:relative}
+.gcu-carousel__viewport{display:flex;gap:var(--gcu-carousel-gap);overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:var(--gcu-radius-lg)}
+.gcu-carousel__viewport::-webkit-scrollbar{display:none}
+.gcu-carousel__viewport:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+.gcu-carousel__slide{flex:0 0 var(--gcu-carousel-slide);min-inline-size:0;scroll-snap-align:start;opacity:.55;transition:opacity var(--gcu-duration-base) var(--gcu-ease-standard)}
+.gcu-carousel__slide:last-child{scroll-snap-align:end}
+.gcu-carousel__slide.is-current{opacity:1}
+.gcu-carousel__single{min-inline-size:0}
+.gcu-carousel__nav{position:absolute;inset-block-start:50%;display:inline-flex;align-items:center;justify-content:center;inline-size:var(--gcu-control-h-lg);block-size:var(--gcu-control-h-lg);padding:0;border:1px solid var(--gcu-border);border-radius:var(--gcu-radius-full);background-color:var(--gcu-surface-raised);color:var(--gcu-text);box-shadow:var(--gcu-shadow-2);font-size:var(--gcu-font-size-lg);transform:translateY(-50%);cursor:pointer}
+.gcu-carousel__nav--prev{inset-inline-start:var(--gcu-space-2)}
+.gcu-carousel__nav--next{inset-inline-end:var(--gcu-space-2)}
+.gcu-carousel__nav:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+@media (hover:hover){.gcu-carousel__nav:hover{background-color:var(--gcu-surface-subtle)}}
+.gcu-carousel__bar{display:flex;align-items:center;flex-wrap:wrap;gap:var(--gcu-space-3);min-inline-size:0}
+.gcu-carousel__count{min-inline-size:3rem;font-size:var(--gcu-font-size-xs);font-weight:var(--gcu-font-weight-semibold);font-variant-numeric:tabular-nums;color:var(--gcu-text)}
+.gcu-carousel__dots{display:inline-flex}
+/* Área de toque de 24 px (WCAG 2.5.8) con un punto de 8 px; el actual se alarga. */
+.gcu-carousel__dot{display:inline-flex;align-items:center;justify-content:center;inline-size:1.5rem;block-size:1.5rem;padding:0;border:0;background:none;cursor:pointer}
+.gcu-carousel__dot::before{content:"";display:block;inline-size:.5rem;block-size:.5rem;border-radius:var(--gcu-radius-full);background-color:var(--gcu-primary-border);transition:inline-size var(--gcu-duration-fast) var(--gcu-ease-standard)}
+.gcu-carousel__dot.is-current::before{inline-size:1.25rem;background-color:var(--gcu-primary)}
+.gcu-carousel__dot:focus-visible{outline:none;border-radius:var(--gcu-radius-sm);box-shadow:var(--gcu-focus-ring)}
+.gcu-carousel__thumbs{display:inline-flex;flex-wrap:wrap;gap:var(--gcu-space-2)}
+.gcu-carousel__thumb{inline-size:6rem;padding:0;overflow:hidden;border:2px solid transparent;border-radius:var(--gcu-radius-md);background:none;opacity:.6;cursor:pointer}
+.gcu-carousel__thumb.is-current{border-color:var(--gcu-primary);opacity:1}
+.gcu-carousel__thumb:focus-visible{outline:none;box-shadow:var(--gcu-focus-ring)}
+.gcu-carousel__caption{flex:1 1 12rem;min-inline-size:0;font-size:var(--gcu-font-size-xs);color:var(--gcu-muted)}
+.gcu-carousel__actions{display:inline-flex;gap:var(--gcu-space-2);margin-inline-start:auto}
+.gcu-carousel--inverse{color:var(--gcu-on-dark)}
+.gcu-carousel--inverse .gcu-carousel__count,.gcu-carousel--inverse .gcu-carousel__caption{color:inherit}
+.gcu-carousel--inverse .gcu-carousel__thumb.is-current{border-color:var(--gcu-primary-border)}
+@media (prefers-reduced-motion:reduce){.gcu-carousel__slide,.gcu-carousel__dot::before{transition:none}}
+@media (forced-colors:active){.gcu-carousel__dot.is-current::before{background-color:Highlight}.gcu-carousel__thumb.is-current{border-color:Highlight}}

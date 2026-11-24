@@ -55,6 +55,7 @@
     { "name": "ScoreHero", "import": "@duralux/ui", "category": "dato", "use": "Puntaje protagonista de una vista.", "avoid": "Listas de puntajes.", "alternative": "Score" },
     { "name": "Person", "import": "@duralux/ui", "category": "dato", "use": "Persona con avatar, nombre y rol/meta.", "avoid": "Solo la imagen.", "alternative": "Avatar" },
     { "name": "RankList", "import": "@duralux/ui", "category": "dato", "use": "Ranking con posición y valor (top agentes, campañas).", "avoid": "Datos sin orden significativo.", "alternative": "List" },
+    { "name": "Carousel", "import": "@duralux/ui", "category": "presentacion", "use": "Varias imágenes o tarjetas en el mismo lugar (2–10): deslizar, flechas, contador y puntos o miniaturas; vista ampliada con thumbnails + slideSize=\"100%\" dentro de Modal.", "avoid": "Contenido que hay que comparar a la vez; avance automático; menús o navegación.", "alternative": "Grilla de tarjetas, Tabs" },
     { "name": "Timeline", "import": "@duralux/ui", "category": "dato", "use": "Secuencia de eventos con tiempo relativo.", "avoid": "Pasos de un proceso.", "alternative": "ProcessSteps, ActivityFeed" },
     { "name": "ActivityFeed", "import": "@duralux/ui", "category": "dato", "use": "Actividad reciente de usuarios o sistema.", "avoid": "Historial con detalle por evento.", "alternative": "Timeline" },
 

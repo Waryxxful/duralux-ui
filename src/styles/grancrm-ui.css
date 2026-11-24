@@ -54,6 +54,7 @@
 @import "./components/dash-grid.css";
 @import "./components/tooltip.css";
 @import "./components/segmented.css";
+@import "./components/carousel.css";
 @import "./components/switch.css";
 @import "./components/fieldset.css";
 @import "./components/accordion.css";
